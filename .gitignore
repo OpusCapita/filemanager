@@ -8,6 +8,7 @@ npm-debug.log
 /lib
 /node_modules
 /.gh-pages-tmp
+/www/demo-fs
 demo.tar.gz
 
 package-lock.json
