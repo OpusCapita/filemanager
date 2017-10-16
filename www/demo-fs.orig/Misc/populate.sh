@@ -2,10 +2,10 @@
 # Created by Ben Okopnik on Wed Jul 16 18:04:33 EDT 2008
 
 ########    User settings     ############
-MAXDIRS=5
-MAXDEPTH=2
-MAXFILES=10
-MAXSIZE=1000
+MAXDIRS=200
+MAXDEPTH=20
+MAXFILES=1000
+MAXSIZE=10
 ######## End of user settings ############
 
 # How deep in the file system are we now?
