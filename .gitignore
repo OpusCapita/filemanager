@@ -8,7 +8,6 @@ npm-debug.log
 /lib
 /node_modules
 /.gh-pages-tmp
-/www/demo-fs
 demo.tar.gz
 
 package-lock.json
@@ -20,3 +19,6 @@ yarn-error.log
 test-results.xml
 /coverage/
 /.nyc_output
+
+/www/demo-fs
+/www/bridges/nodejs/node_modules
