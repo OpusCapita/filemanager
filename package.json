@@ -1,0 +1,105 @@
+{
+  "name": "@opuscapita/react-filemanager",
+  "version": "0.0.1",
+  "description": "React file manager",
+  "scripts": {
+    "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
+    "lint": "eslint src/client",
+    "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
+    "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
+    "npm-build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
+    "npm-publish": "npm run npm-build && update-changelog -- --all && npm-publish",
+    "grails-plugin-build": "rimraf build && npm run npm-build",
+    "grails-plugin-package": "npm run grails-plugin-build && grails-plugin-package",
+    "grails-plugin-install": "npm run grails-plugin-package && grails-plugin-install",
+    "grails-plugin-deploy": "npm run grails-plugin-package && grails-plugin-deploy",
+    "grails-plugin-deploy-release": "npm run grails-plugin-package -- --release && grails-plugin-deploy --release",
+    "publish-release": "npm run grails-plugin-deploy-release && npm run npm-publish -- --release"
+  },
+  "license": "Apache-2.0",
+  "repository": "OpusCapita/react-filemanager",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "react": "^0.14.8 || ^15.4.2",
+    "react-dom": "^0.14.8 || ^15.4.2"
+  },
+  "devDependencies": {
+    "@opuscapita/npm-scripts": "2.0.0",
+    "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
+    "@opuscapita/react-showroom-client": "1.2.10",
+    "@opuscapita/react-showroom-server": "1.3.0",
+    "autoprefixer": "6.7.6",
+    "babel-cli": "6.23.0",
+    "babel-core": "6.23.1",
+    "babel-eslint": "7.1.1",
+    "babel-loader": "6.3.2",
+    "babel-plugin-lodash": "3.2.11",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "babel-preset-es2015": "6.22.0",
+    "babel-preset-react": "6.23.0",
+    "babel-preset-stage-0": "6.22.0",
+    "babel-register": "6.23.0",
+    "chai": "3.5.0",
+    "chai-enzyme": "0.6.1",
+    "compression": "1.6.2",
+    "core-js": "2.5.0",
+    "coveralls": "2.13.1",
+    "cross-env": "5.0.1",
+    "css-loader": "0.26.2",
+    "enzyme": "2.9.1",
+    "eslint": "3.17.0",
+    "eslint-config-opuscapita": "1.0.7",
+    "eslint-plugin-react": "6.10.0",
+    "express": "4.15.1",
+    "file-loader": "0.10.1",
+    "ignore-styles": "5.0.1",
+    "jsdom": "9.12.0",
+    "json-loader": "0.5.4",
+    "less": "2.7.2",
+    "less-loader": "2.2.3",
+    "lodash-webpack-plugin": "0.11.4",
+    "mocha": "3.4.2",
+    "mocha-junit-reporter": "1.13.0",
+    "nyc": "11.1.0",
+    "postcss-loader": "1.3.3",
+    "postcss-modules": "0.6.4",
+    "progress-bar-webpack-plugin": "1.10.0",
+    "raw-loader": "0.5.1",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
+    "react-test-renderer": "15.6.1",
+    "rimraf": "2.6.1",
+    "sinon": "2.1.0",
+    "sinon-chai": "2.9.0",
+    "source-map-loader": "0.1.6",
+    "style-loader": "0.13.2",
+    "url-loader": "0.5.8",
+    "webpack": "2.2.1",
+    "webpack-bundle-analyzer": "2.8.2",
+    "webpack-dev-middleware": "1.10.1",
+    "write-file-webpack-plugin": "3.4.2"
+  },
+  "dependencies": {
+    "prop-types": "15.5.10"
+  },
+  "nyc": {
+    "include": [
+      "src/client/**/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js",
+      "**/*.SCOPE*.js",
+      "**/demo/**/*.js"
+    ],
+    "all": true
+  }
+}
