@@ -48,14 +48,7 @@ if(WEBPACK_BUNDLE_ANALYZE && IS_PRODUCTION_MODE) {
   plugins.push(bundleAnalyzerPlugin);
 }
 
-const entries = [
-  // IE11 - "String.prototype.startsWith" and endsWith methods (local code)
-  "core-js/es6/string.js",
-  // IE11 - "Promise"s - required for autocompletes
-  "core-js/es6/promise.js",
-  // IE11 - Used in "slate-js" dependency code
-  "core-js/es7/array.js"
-];
+const entries = [];
 
 entries.push(
   (IS_PRODUCTION_MODE || IS_LINK_MODE) ?

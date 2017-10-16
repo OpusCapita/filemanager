@@ -89,7 +89,8 @@
     "write-file-webpack-plugin": "3.4.2"
   },
   "dependencies": {
-    "prop-types": "15.5.10"
+    "prop-types": "15.5.10",
+    "react-virtualized": "9.11.1"
   },
   "nyc": {
     "include": [
