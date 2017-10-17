@@ -20,7 +20,7 @@ const server = app.listen(port, host, function(err) {
     logger.error(err);
   }
 
-  logger.error(`Server listening at http://${host}:${port}`);
+  logger.info(`Server listening at http://${host}:${port}`);
 });
 
 process.on('exit', function (){
