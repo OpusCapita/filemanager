@@ -20,5 +20,6 @@ test-results.xml
 /coverage/
 /.nyc_output
 
-/www/demo-fs
-/www/bridges/nodejs/node_modules
+/demo-fs
+/client-react/node_modules
+/server-nodejs/node_modules
