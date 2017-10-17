@@ -1,9 +1,11 @@
 'use strict';
 
-const FS_ROOT = require('path').resolve(__dirname, '../../demo-fs');
-
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || '3001';
+const serverConfig = require('./config/server-config');
+const fsRoot = serverConfig.fsRoot;
+const host = serverConfig.host;
+const port = serverConfig.port;
+const getClientConfig = serverConfig.getClientConfig; // promise
+const logger = require('./logger');
 
 let express = require('express');
 let app = express();
@@ -11,11 +13,16 @@ let bodyParser = require('body-parser');
 let routes = require('./routes');
 
 app.use(bodyParser.json());
-routes(app, FS_ROOT);
+routes(app, { getClientConfig, logger });
 
-const server = app.listen(PORT, HOST, function(err) {
-  if(err) {
-    console.log(err);
+const server = app.listen(port, host, function(err) {
+  if (err) {
+    logger.error(err);
   }
-  console.log(`Server listening at http://${HOST}:${PORT}`);
+
+  logger.error(`Server listening at http://${host}:${port}`);
+});
+
+process.on('exit', function (){
+  logger.warn('Server has been stopped');
 });

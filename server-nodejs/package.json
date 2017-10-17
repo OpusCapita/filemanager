@@ -11,6 +11,8 @@
   "dependencies": {
     "body-parser": "1.18.2",
     "express": "4.16.2",
-    "fs-extra": "^4.0.2"
+    "fs-extra": "^4.0.2",
+    "winston": "^3.0.0-rc0",
+    "winston-logstash": "0.3.0"
   }
 }
