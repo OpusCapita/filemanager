@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start pm2.config.js --no-daemon",
-    "stop": "pm2 stop pm2.config.js"
+    "stop": "pm2 stop pm2.config.js",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +16,11 @@
     "fs-extra": "^4.0.2",
     "pm2": "2.7.1",
     "winston": "^3.0.0-rc0"
+  },
+  "devDependencies": {
+    "babel-eslint": "7.1.1",
+    "eslint": "3.17.0",
+    "eslint-config-opuscapita": "1.0.7",
+    "eslint-plugin-react": "6.10.0"
   }
 }
