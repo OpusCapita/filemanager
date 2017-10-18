@@ -6,8 +6,8 @@ module.exports = {
   apps : [
     // Server application
     {
-      name      : 'filemanager-nodejs-server',
-      script    : 'index.js',
+      name: 'filemanager-server',
+      script: 'index.js',
       watch: ['.'],
       ignore_watch : ['node_modules'],
       env_production : {

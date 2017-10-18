@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start ecosystem.config.js"
+    "start": "pm2 start pm2.config.js --no-daemon"
   },
   "author": "",
   "license": "ISC",
