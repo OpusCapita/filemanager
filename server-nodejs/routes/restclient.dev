@@ -1,0 +1,10 @@
+# Just for fast test responses using Emacs in development
+# https://github.com/pashky/restclient.el
+
+# -*- restclient -*-
+
+:socket = http://localhost:3020
+
+#
+
+GET :socket/client-config
