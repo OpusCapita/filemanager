@@ -9,5 +9,8 @@ module.exports = {
   fsRoot: path.resolve(__dirname, '../../demo-fs'),
   port: process.env.PORT || '3020',
   host: process.env.HOST || 'localhost',
-  getClientConfig: () => fse.readFile(clientConfigPath, 'utf-8')
+  getClientConfig: () => new Promise((resolve, reject) => {
+    let clientConfig = require(clientConfigPath, 'utf-8');
+    resolve(clientConfig);
+  })
 };

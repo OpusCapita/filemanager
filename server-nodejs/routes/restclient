@@ -1,0 +1,7 @@
+# -*- restclient -*-
+
+:socket = http://localhost:3020
+
+#
+
+GET :socket/client-config

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "pm2 start ecosystem.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "body-parser": "1.18.2",
     "express": "4.16.2",
     "fs-extra": "^4.0.2",
+    "pm2": "2.7.1",
     "winston": "^3.0.0-rc0",
     "winston-logstash": "0.3.0"
   }
