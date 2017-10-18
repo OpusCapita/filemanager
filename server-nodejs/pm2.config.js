@@ -8,7 +8,7 @@ module.exports = {
     {
       name: 'filemanager-server',
       script: 'index.js',
-      watch: ['.'],
+      watch: ['./*'],
       ignore_watch: ['node_modules'],
       env_production: {
         NODE_ENV: 'development'

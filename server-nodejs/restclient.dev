@@ -8,3 +8,7 @@
 #
 
 GET :socket/client-config
+
+#
+
+GET :socket/files

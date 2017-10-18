@@ -1,18 +1,26 @@
 'use strict';
 
-const serverConfig = require('./config/server-config');
-const host = serverConfig.host;
-const port = serverConfig.port;
-const getClientConfig = serverConfig.getClientConfig; // promise
-const registerRoutes = require('./routes');
-const logger = require('./logger');
-
+let registerRoutes = require('./routes');
+let logger = require('./logger');
 let express = require('express');
-let app = express();
 let bodyParser = require('body-parser');
 
+let serverConfig = require('./config/server-config');
+let host = serverConfig.host;
+let port = serverConfig.port;
+let getClientConfig = serverConfig.getClientConfig; // promise
+
+
+let app = express();
 app.use(bodyParser.json());
-registerRoutes(app, { getClientConfig, logger });
+
+let options = {
+  getClientConfig,
+  logger,
+  fsRoot: serverConfig.fsRoot
+};
+
+registerRoutes(app, options);
 
 app.listen(port, host, function(err) {
   if (err) {
