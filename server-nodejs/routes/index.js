@@ -6,8 +6,6 @@ let routesToRegister = [
 ];
 
 module.exports = (app, options) => {
-  let { logger } = options;
-
   routesToRegister.forEach(routeToRegister => {
     routeToRegister(app, options);
   });

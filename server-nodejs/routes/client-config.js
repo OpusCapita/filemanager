@@ -13,7 +13,7 @@ module.exports = (app, options) => {
       }).
       catch((err) => {
         logger.error(err);
-        res.status(500).end();;
+        res.status(500).end();
       });
   });
 };

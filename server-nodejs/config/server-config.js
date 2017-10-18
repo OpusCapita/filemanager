@@ -1,7 +1,6 @@
 'use strict';
 
 let path = require('path');
-let fse = require('fs-extra');
 
 const clientConfigPath = path.resolve(__dirname, './client-config.json');
 

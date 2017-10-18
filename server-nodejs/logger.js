@@ -3,7 +3,7 @@
 
 // TODO - fix colorize when winston 3.0.0 will be released
 let { createLogger, format, transports } = require('winston');
-let { combine, timestamp, label, prettyPrint } = format;
+let { combine, timestamp, prettyPrint } = format;
 let path = require('path');
 let logsDir = path.resolve('/var/log/oc-filemanager');
 

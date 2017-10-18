@@ -1,7 +1,6 @@
 'use strict';
 
 const serverConfig = require('./config/server-config');
-const fsRoot = serverConfig.fsRoot;
 const host = serverConfig.host;
 const port = serverConfig.port;
 const getClientConfig = serverConfig.getClientConfig; // promise
@@ -15,7 +14,7 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 registerRoutes(app, { getClientConfig, logger });
 
-const server = app.listen(port, host, function(err) {
+app.listen(port, host, function(err) {
   if (err) {
     logger.error(err);
   }
@@ -23,6 +22,6 @@ const server = app.listen(port, host, function(err) {
   logger.info(`Server listening at http://${host}:${port}`);
 });
 
-process.on('exit', function (){
+process.on('exit', function() {
   logger.warn('Server has been stopped');
 });
