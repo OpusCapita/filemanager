@@ -10,8 +10,8 @@ module.exports = (app, options) => {
 
   app.get('/files*', asyncMiddleware(async (req, res, next) => {
     let { fsRoot } = options;
-    let relativePath = req.params[0] || '.';
-    let absolutePath = path.resolve(fsRoot, './', relativePath);
+    let relativePath = decodeURIComponent(req.params[0] || '.');
+    let absolutePath = path.resolve(fsRoot, './' + relativePath);
 
     logger.info(`Files config for ${absolutePath} requested by ${getClientIp(req)}`);
 
@@ -19,6 +19,10 @@ module.exports = (app, options) => {
       logger.error(err);
       res.status(204).end();
     });
+
+    if (!fileStats) {
+      return;
+    }
 
     let resourceRepresentation = {
       relativePath,
