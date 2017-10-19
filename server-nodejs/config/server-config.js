@@ -2,7 +2,7 @@
 
 let path = require('path');
 
-const clientConfigPath = path.resolve(__dirname, './client-config.json');
+const clientConfigPath = path.resolve(__dirname, './client-config.js');
 
 module.exports = {
   fsRoot: path.resolve(__dirname, '../../demo-fs'),

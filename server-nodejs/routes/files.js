@@ -3,14 +3,15 @@
 let path = require('path');
 let fs = require('fs-extra');
 let getClientIp = require('../utils/get-client-ip');
+let id = require('../utils/id');
 let asyncMiddleware = require('../utils/async-middleware');
 
 module.exports = (app, options) => {
   const { logger } = options;
 
-  app.get('/files*', asyncMiddleware(async (req, res, next) => {
+  app.get('/files*/:id?', asyncMiddleware(async (req, res, next) => {
     let { fsRoot } = options;
-    let relativePath = decodeURIComponent(req.params[0] || '.');
+    let relativePath = id.decode(req.params[0]) || '.';
     let absolutePath = path.resolve(fsRoot, './' + relativePath);
 
     logger.info(`Files config for ${absolutePath} requested by ${getClientIp(req)}`);
