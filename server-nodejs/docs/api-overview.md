@@ -1,5 +1,7 @@
 # Files
 
+REST
+
 | Method                | REST   | URL               | Request                                    | Response                              |
 |-----------------------+--------+-------------------+--------------------------------------------+---------------------------------------|
 | Get client config     | GET    | api/client-config | -                                          | :client-config-resource               |
@@ -7,6 +9,16 @@
 | Get file/dir stats    | GET    | api/files/:id     | -                                          | :file-stats-resource                  |
 | Create new file/dir   | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
 | Delete file/dir       | DELETE | api/files/:id     | -                                          | -                                     |
+
+RPC (all POST requests)
+
+| Method                | URL               | Request                                    | Response                              |
+|-----------------------+-------------------+--------------------------------------------+---------------------------------------|
+| Get client config     | api/client-config | -                                          | :client-config-resource               |
+| Get dir children list | api/children      | { id }                                     | { items: [... :file-stats-resource] } |
+| Get file/dir stats    | api/stats         | { id }                                     | :file-stats-resource                  |
+| Create new file/dir   | api/create        | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
+| Delete file/dir       | api/delete        | { id }                                     | -                                     |
 
 
 ## Get file stats
