@@ -9,6 +9,8 @@
 
 ### Response
 
+#### File stats resouce
+
 ```
 id: <string>,
 title: <string>,
@@ -40,7 +42,7 @@ downloadUrl: <string>
 
 ```
 {
-  <stats resource>
+  <file stats resource>
 }
 ```
 
@@ -79,7 +81,7 @@ If successful, this method returns an empty response body.
 ```
 {
   items: [
-    <stats resource> // TBD
+    <file stats resource> // TBD
   ],
   nextPageToken // TODO in v2
 }
@@ -93,7 +95,7 @@ If successful, this method returns an empty response body.
 ### Response
 
 ```
-  <stats resource>
+  <file stats resource>
 ```
 
 # Client config
