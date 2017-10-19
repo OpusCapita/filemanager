@@ -18,9 +18,9 @@ REST with ids in base64
 | Get client config       | GET    | api/client-config      | -                                   | :client-config-resource               |
 | Get dir children list   | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
 | Get file/dir stats      | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Get file/compressed dir | GET    | api/files/:id/download | -                                   | :binary-data                          |
 | Create new file/dir     | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
 | Delete file/dir         | DELETE | api/files/:id          | -                                   | -                                     |
+| Get file/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
 
 RPC (all POST requests)
 
