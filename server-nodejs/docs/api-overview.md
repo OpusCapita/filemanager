@@ -1,4 +1,14 @@
-# Files 
+# Files
+
+Method | REST | URL | Request | Response
+---|---|---|---|---
+Get client config | GET | api/client-config | - | <client config resource>
+Get children list | GET | api/children | - | { items: [...<file stats resource>] }
+Get single child | GET | api/children/<id> | - | <file stats resource>
+Get file/dir stats | GET | api/files/<id> | - | <file stats resource>
+Create new file/dir | POST | api/files | { parentId, isDir, title, contentForFile } | <file stats resource>
+Delete file/dir | DELETE | api/files/<id> | - | -
+
 
 ## Get file stats
 
