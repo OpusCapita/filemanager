@@ -25,12 +25,12 @@ module.exports = (app, options) => {
     }
 
     let resourceRepresentation = {
-      relativePath,
-      timestamp: new Date().getTime(),
+      id: relativePath, // /home/user/adsfsdf.md 24234klfasdj;fasdk234
+      label: 'file1.md',
       isDirectory: fileStats.isDirectory(),
       createDate: fileStats.birthtime,
       modifiedDate: fileStats.mtime,
-      fileSize: fileStats.size
+      size: fileStats.size
     };
 
     res.status(200).json(resourceRepresentation).end();
