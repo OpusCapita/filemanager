@@ -1,13 +1,12 @@
 # Files
 
-Method | REST | URL | Request | Response
----|---|---|---|---
-Get client config | GET | api/client-config | - | <client config resource>
-Get children list | GET | api/children | - | { items: [...<file stats resource>] }
-Get single child | GET | api/children/<id> | - | <file stats resource>
-Get file/dir stats | GET | api/files/<id> | - | <file stats resource>
-Create new file/dir | POST | api/files | { parentId, isDir, title, contentForFile } | <file stats resource>
-Delete file/dir | DELETE | api/files/<id> | - | -
+| Method                | REST   | URL               | Request                                    | Response                              |
+|-----------------------+--------+-------------------+--------------------------------------------+---------------------------------------|
+| Get client config     | GET    | api/client-config | -                                          | :client-config-resource               |
+| Get dir children list | GET    | api/children/:id  | -                                          | { items: [... :file-stats-resource] } |
+| Get file/dir stats    | GET    | api/files/:id     | -                                          | :file-stats-resource                  |
+| Create new file/dir   | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
+| Delete file/dir       | DELETE | api/files/:id     | -                                          | -                                     |
 
 
 ## Get file stats
@@ -69,14 +68,13 @@ If successful, this method returns an empty response body.
 
 ## Get clildren list
 
-* URL: `api/children`
+* URL: `api/children/id`
 * Method: GET
 
 ### Request
 
 ```
 {
-  id: <string>,
   maxResults: <number>, // TODO in v2
   orderDirection: <string>, // ASC/DESC
   orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'title'.
