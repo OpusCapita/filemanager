@@ -13,14 +13,14 @@ TBD ids for files.
 
 REST with ids in base64
 
-| Method                | REST   | URL                    | Request                                    | Response                              |
-|-----------------------+--------+------------------------+--------------------------------------------+---------------------------------------|
-| Get client config     | GET    | api/client-config      | -                                          | :client-config-resource               |
-| Get dir children list | GET    | api/files/:id/children | :childrenQuery                             | { items: [... :file-stats-resource] } |
-| Get file/dir stats    | GET    | api/files/:id/stats    | -                                          | :file-stats-resource                  |
-| Get file/dir stats    | GET    | api/files/:id/download | -                                          | :binary-data                          |
-| Create new file/dir   | POST   | api/files              | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
-| Delete file/dir       | DELETE | api/files/:id          | -                                          | -                                     |
+| Method                | REST   | URL                    | Request                             | Response                              |
+|-----------------------+--------+------------------------+-------------------------------------+---------------------------------------|
+| Get client config     | GET    | api/client-config      | -                                   | :client-config-resource               |
+| Get dir children list | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
+| Get file/dir stats    | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
+| Get file/dir stats    | GET    | api/files/:id/download | -                                   | :binary-data                          |
+| Create new file/dir   | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
+| Delete file/dir       | DELETE | api/files/:id          | -                                   | -                                     |
 
 RPC (all POST requests)
 
