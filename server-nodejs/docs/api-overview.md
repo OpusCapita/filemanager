@@ -22,8 +22,8 @@ REST with ids in base64
 | Delete file/dir            | DELETE | api/files/:id          | -                                   | -                                     |
 | Get file(s)/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
 | Search file using query    | GET    | api/files/search?q     |                                     | [...:id]                              |
-| Copy file to               | POST   | api/files/:id/copy/    | { copyTo: :id }                     |                                       |
-| Move file to               | POST   | api/files/:id/move/    | { moveTo: :id }                     |                                       |
+| Copy file to destination   | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
+| Move file to destination   | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
 
 RPC (all POST requests)
 
