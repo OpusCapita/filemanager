@@ -2,24 +2,35 @@
 
 REST
 
-| Method                | REST   | URL               | Request                                    | Response                              |
-|-----------------------+--------+-------------------+--------------------------------------------+---------------------------------------|
-| Get client config     | GET    | api/client-config | -                                          | :client-config-resource               |
-| Get dir children list | GET    | api/children/:id  | -                                          | { items: [... :file-stats-resource] } |
-| Get file/dir stats    | GET    | api/files/:id     | -                                          | :file-stats-resource                  |
-| Create new file/dir   | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
-| Delete file/dir       | DELETE | api/files/:id     | -                                          | -                                     |
+| Method              | REST   | URL               | Request                                    | Response                                   |
+|---------------------+--------+-------------------+--------------------------------------------+--------------------------------------------|
+| Get client config   | GET    | api/client-config | -                                          | :client-config-resource                    |
+| Get file/dir stats  | GET    | api/files/:id     | { ?childrenQuery, ?stats }                 | { stats: :file-stats-resource, ?children } |
+| Create new file/dir | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                       |
+| Delete file/dir     | DELETE | api/files/:id     | -                                          | -                                          |
+
+TBD ids for files.
+
+REST with ids in base64
+
+| Method                | REST   | URL                    | Request                                    | Response                              |
+|-----------------------+--------+------------------------+--------------------------------------------+---------------------------------------|
+| Get client config     | GET    | api/client-config      | -                                          | :client-config-resource               |
+| Get dir children list | GET    | api/files/:id/children | :childrenQuery                             | { items: [... :file-stats-resource] } |
+| Get file/dir stats    | GET    | api/files/:id/stats    | -                                          | :file-stats-resource                  |
+| Get file/dir stats    | GET    | api/files/:id/download | -                                          | :binary-data                          |
+| Create new file/dir   | POST   | api/files              | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
+| Delete file/dir       | DELETE | api/files/:id          | -                                          | -                                     |
 
 RPC (all POST requests)
 
 | Method                | URL               | Request                                    | Response                              |
 |-----------------------+-------------------+--------------------------------------------+---------------------------------------|
 | Get client config     | api/client-config | -                                          | :client-config-resource               |
-| Get dir children list | api/children      | { id }                                     | { items: [... :file-stats-resource] } |
+| Get dir children list | api/children      | { id, childrenQuery }                      | { items: [... :file-stats-resource] } |
 | Get file/dir stats    | api/stats         | { id }                                     | :file-stats-resource                  |
 | Create new file/dir   | api/create        | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
 | Delete file/dir       | api/delete        | { id }                                     | -                                     |
-
 
 ## Get file stats
 
@@ -27,6 +38,17 @@ RPC (all POST requests)
 
 * URL: `api/files/id`
 * Method: GET
+
+{
+   ?childrenQuery: {
+     maxResults: <number>, // TODO in v2
+     orderDirection: <string>, // ASC/DESC
+     orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'title'.
+     pageToken: <string>, // TODO in v2
+     searchQuery: <string>, // search TODO in v2
+     searchResursively: <bool> // TODO in v2
+  }
+}
 
 ### Response
 
@@ -39,8 +61,11 @@ isDirectory: <bool>, // TBD type
 createDate: <string>,
 modifyDate: <string>,
 size: <string>,
-md5Checksum: <string> // TODO in v2,
-downloadUrl: <string>
+md5Checksum: <string>, // TODO in v2,
+downloadUrl: <string>,
+?children: [
+  <file stats resource>       
+]
 ```
 
 ## Create new file or directory
@@ -105,17 +130,6 @@ If successful, this method returns an empty response body.
   ],
   nextPageToken // TODO in v2
 }
-```
-
-## Get single child 
-
-* URL: `api/children/id`
-* Method: GET
-
-### Response
-
-```
-  <file stats resource>
 ```
 
 # Client config
