@@ -13,14 +13,17 @@ TBD ids for files.
 
 REST with ids in base64
 
-| Method                  | REST   | URL                    | Request                             | Response                              |
-|-------------------------+--------+------------------------+-------------------------------------+---------------------------------------|
-| Get client config       | GET    | api/client-config      | -                                   | :client-config-resource               |
-| Get dir children list   | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
-| Get file/dir stats      | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Create new file/dir     | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
-| Delete file/dir         | DELETE | api/files/:id          | -                                   | -                                     |
-| Get file/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
+| Method                     | REST   | URL                    | Request                             | Response                              |
+|----------------------------+--------+------------------------+-------------------------------------+---------------------------------------|
+| Get client config          | GET    | api/client-config      | -                                   | :client-config-resource               |
+| Get dir children list      | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
+| Get file/dir stats         | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
+| Create new file/dir        | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
+| Delete file/dir            | DELETE | api/files/:id          | -                                   | -                                     |
+| Get file(s)/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
+| Search file using query    | GET    | api/files/search?q     |                                     | [...:id]                              |
+| Copy file to               | POST   | api/files/:id/copy/    | { copyTo: :id }                     |                                       |
+| Move file to               | POST   | api/files/:id/move/    | { moveTo: :id }                     |                                       |
 
 RPC (all POST requests)
 
