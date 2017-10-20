@@ -1,18 +1,5 @@
 # Files
 
-REST
-
-| Method              | REST   | URL               | Request                                    | Response                                   |
-|---------------------|--------|-------------------|--------------------------------------------|--------------------------------------------|
-| Get client config   | GET    | api/client-config | -                                          | :client-config-resource                    |
-| Get file/dir stats  | GET    | api/files/:id     | { ?childrenQuery, ?stats }                 | { stats: :file-stats-resource, ?children } |
-| Create new file/dir | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                       |
-| Delete file/dir     | DELETE | api/files/:id     | -                                          | -                                          |
-
-TBD ids for files.
-
-REST with ids in base64
-
 | Method                     | REST   | URL                    | Request                             | Response                              |
 |----------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
 | Get client config          | GET    | api/client-config      | -                                   | :client-config-resource               |
@@ -25,15 +12,7 @@ REST with ids in base64
 | Copy file to destination   | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
 | Move file to destination   | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
 
-RPC (all POST requests)
-
-| Method                | URL               | Request                                    | Response                              |
-|-----------------------|-------------------|--------------------------------------------|---------------------------------------|
-| Get client config     | api/client-config | -                                          | :client-config-resource               |
-| Get dir children list | api/children      | { id, childrenQuery }                      | { items: [... :file-stats-resource] } |
-| Get file/dir stats    | api/stats         | { id }                                     | :file-stats-resource                  |
-| Create new file/dir   | api/create        | { parentId, isDir, title, contentForFile } | :file-stats-resource                  |
-| Delete file/dir       | api/delete        | { id }                                     | -                                     |
+NOTE: file/dir id is its path+name in base64.
 
 ## Get file stats
 
@@ -42,6 +21,7 @@ RPC (all POST requests)
 * URL: `api/files/id`
 * Method: GET
 
+```
 {
    ?childrenQuery: {
      maxResults: <number>, // TODO in v2
@@ -52,6 +32,7 @@ RPC (all POST requests)
      searchResursively: <bool> // TODO in v2
   }
 }
+```
 
 ### Response
 
@@ -67,7 +48,7 @@ size: <string>,
 md5Checksum: <string>, // TODO in v2,
 downloadUrl: <string>,
 ?children: [
-  <file stats resource>       
+  <file stats resource>
 ]
 ```
 
