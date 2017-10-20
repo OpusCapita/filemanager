@@ -115,18 +115,10 @@ None.
 
 # Client config
 
-## Get client configuration
-
-* URL: `api/client-config`
-* METHOD: GET
-
-### Request
-
-None.
-
-### Response
+## Client config resource
 
 ```javascript
+{
   "layout": {
     "readOnly": false,
   },
@@ -175,4 +167,20 @@ None.
       "uri": "/img/file-icons/unknown-file.svg"
     }
   }
+}
+```
+
+## Get client configuration
+
+* URL: `api/client-config`
+* METHOD: GET
+
+### Request
+
+None.
+
+### Response
+
+```javascript
+<client config resource>
 ```
