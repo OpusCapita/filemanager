@@ -3,7 +3,7 @@
 REST
 
 | Method              | REST   | URL               | Request                                    | Response                                   |
-|---------------------+--------+-------------------+--------------------------------------------+--------------------------------------------|
+|---------------------|--------|-------------------|--------------------------------------------|--------------------------------------------|
 | Get client config   | GET    | api/client-config | -                                          | :client-config-resource                    |
 | Get file/dir stats  | GET    | api/files/:id     | { ?childrenQuery, ?stats }                 | { stats: :file-stats-resource, ?children } |
 | Create new file/dir | POST   | api/files         | { parentId, isDir, title, contentForFile } | :file-stats-resource                       |
@@ -14,7 +14,7 @@ TBD ids for files.
 REST with ids in base64
 
 | Method                     | REST   | URL                    | Request                             | Response                              |
-|----------------------------+--------+------------------------+-------------------------------------+---------------------------------------|
+|----------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
 | Get client config          | GET    | api/client-config      | -                                   | :client-config-resource               |
 | Get dir children list      | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
 | Get file/dir stats         | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
@@ -28,7 +28,7 @@ REST with ids in base64
 RPC (all POST requests)
 
 | Method                | URL               | Request                                    | Response                              |
-|-----------------------+-------------------+--------------------------------------------+---------------------------------------|
+|-----------------------|-------------------|--------------------------------------------|---------------------------------------|
 | Get client config     | api/client-config | -                                          | :client-config-resource               |
 | Get dir children list | api/children      | { id, childrenQuery }                      | { items: [... :file-stats-resource] } |
 | Get file/dir stats    | api/stats         | { id }                                     | :file-stats-resource                  |
