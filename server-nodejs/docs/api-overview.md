@@ -1,79 +1,61 @@
+# Summary
+
+| Method                        | REST   | URL                    | Request                             | Response                              |
+|-------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
+| Files/dirs search using query | GET    | api/files?q            | -                                   | [...:id]                              |
+| [Create new file/dir](#create-new-file-or-directory) | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
+| [Delete file/dir](#delete-file-or-directory) | DELETE | api/files/:id          | -                                   | -                                     |
+| [Get dir children list](#get-directory-children-list) | GET    | api/files/:id/children | { orderBy, orderDirection, ... }    | { items: [... :file-stats-resource] } |
+| [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
+| Copy file to destination      | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
+| Move file to destination      | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
+| Get file(s)/compressed dir    | GET    | api/download           | [... :id]                           | :binary-data                          |
+| [Get client config](#get-client-configuration) | GET    | api/client-config      | -                                   | :client-config-resource               |
+
+TBD: no "Fiels/dirs search using query" is needed when "Get dir children list" is called on root with searchQuery and searchResursively.
+
+TBD: "Copy/Move file to destination" for dirs also.
+
+NOTE: file/dir ID is its path+name in base64.
+
 # Files
 
-| Method                     | REST   | URL                    | Request                             | Response                              |
-|----------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| Get client config          | GET    | api/client-config      | -                                   | :client-config-resource               |
-| Get dir children list      | GET    | api/files/:id/children | :childrenQuery                      | { items: [... :file-stats-resource] } |
-| Get file/dir stats         | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Create new file/dir        | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
-| Delete file/dir            | DELETE | api/files/:id          | -                                   | -                                     |
-| Get file(s)/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
-| Search file using query    | GET    | api/files?q            |                                     | [...:id]                              |
-| Copy file to destination   | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
-| Move file to destination   | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
+## File stats resouce
 
-NOTE: file/dir id is its path+name in base64.
-
-## Get file stats
-
-### Request
-
-* URL: `api/files/id`
-* Method: GET
-
-```
+```javascript
 {
-   ?childrenQuery: {
-     maxResults: <number>, // TODO in v2
-     orderDirection: <string>, // ASC/DESC
-     orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'title'.
-     pageToken: <string>, // TODO in v2
-     searchQuery: <string>, // search TODO in v2
-     searchResursively: <bool> // TODO in v2
-  }
+  id: <string>,
+  title: <string>,
+  isDirectory: <bool>, // TBD type
+  createDate: <string>,
+  modifyDate: <string>,
+  size: <string>,
+  md5Checksum: <string>, // TODO in v2,
+  downloadUrl: <string>,  // TBD
+  ?children: [<file stats resource>, ...]  // TBD not needed
 }
-```
-
-### Response
-
-#### File stats resouce
-
-```
-id: <string>,
-title: <string>,
-isDirectory: <bool>, // TBD type
-createDate: <string>,
-modifyDate: <string>,
-size: <string>,
-md5Checksum: <string>, // TODO in v2,
-downloadUrl: <string>,
-?children: [
-  <file stats resource>
-]
 ```
 
 ## Create new file or directory
 
-* URL: `api/files`
+* URL: `api/files/:id`  // TBD: parentId instead of id.
 * Method: POST
 
 ### Request
 
-```
+```javascript
 {
-  parentId: <string> // TBD - in URL or request body
-  isDirectory: <bool>
-  title: <string>
-  content: <bytes> // Not for directory
+  // TBD title: <string> must be added if parentId is used in URL.
+  // TBD parentId: <string> must be added if neither id nor parentId are used in URL.
+  isDirectory: <bool>,  // TBD type
+  ?content: <binary-data> // Must be specified for files only.
 }
 ```
 
 ### Response
 
-```
-{
-  <file stats resource>
-}
+```javascript
+<file stats resource>
 ```
 
 ## Delete file or directory
@@ -81,49 +63,70 @@ downloadUrl: <string>,
 * URL: `api/files/id`
 * Method: DELETE
 
+### Request
+
+None.
+
 ### Response
 
 If successful, this method returns an empty response body.
 
-# Children
+## Get directory children list
 
-## Get clildren list
-
-* URL: `api/children/id`
+* URL: `api/files/:id/children`
 * Method: GET
 
 ### Request
 
-```
+```javascript
 {
-  maxResults: <number>, // TODO in v2
-  orderDirection: <string>, // ASC/DESC
   orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'title'.
+  orderDirection: <string>, // ASC/DESC
+  maxResults: <number>, // TODO in v2
   pageToken: <string>, // TODO in v2
-  searchQuery: <string>, // search TODO in v2
+  searchQuery: <string>, // TODO in v2
   searchResursively: <bool> // TODO in v2
 }
 ```
 
 ### Response
 
-```
+```javascript
 {
-  items: [
-    <file stats resource> // TBD
-  ],
+  items: [<file stats resource>, ...],  // TBD list of ids.
   nextPageToken // TODO in v2
 }
 ```
 
+## Get file or directory statistics
+
+* URL: `api/files/:id/stats`
+* Method: GET
+
+### Request
+
+None.
+
+### Response
+
+```
+<file stats resource>
+```
+
 # Client config
 
-## Get client config
+## Get client configuration
 
 * URL: `api/client-config`
 * METHOD: GET
 
-```
+### Request
+
+None.
+
+### Response
+
+```javascript
   "layout": {
     "readOnly": false,
   },
