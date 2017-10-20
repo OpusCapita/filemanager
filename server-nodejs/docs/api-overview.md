@@ -8,7 +8,7 @@
 | Create new file/dir        | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
 | Delete file/dir            | DELETE | api/files/:id          | -                                   | -                                     |
 | Get file(s)/compressed dir | GET    | api/download           | [... :id]                           | :binary-data                          |
-| Search file using query    | GET    | api/files/search?q     |                                     | [...:id]                              |
+| Search file using query    | GET    | api/files?q            |                                     | [...:id]                              |
 | Copy file to destination   | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
 | Move file to destination   | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
 
