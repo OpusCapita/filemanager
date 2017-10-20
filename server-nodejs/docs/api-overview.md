@@ -1,20 +1,15 @@
 # Summary
 
-| Method                        | REST   | URL                    | Request                             | Response                              |
-|-------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| Files/dirs search using query | GET    | api/files?q            | -                                   | [...:id]                              |
-| [Create new file/dir](#create-new-file-or-directory) | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
-| [Delete file/dir](#delete-file-or-directory) | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list) | GET    | api/files/:id/children | { orderBy, orderDirection, ... }    | { items: [... :file-stats-resource] } |
+| Method                                                  | REST   | URL                    | Request                             | Response                              |
+|---------------------------------------------------------+--------+------------------------+-------------------------------------+---------------------------------------|
+| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
+| [Delete file/dir](#delete-file-or-directory)            | DELETE | api/files/:id          | -                                   | -                                     |
+| [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | { orderBy, orderDirection, ... }    | { items: [... :file-stats-resource] } |
 | [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Copy file to destination      | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
-| Move file to destination      | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
-| Get file(s)/compressed dir    | GET    | api/download           | [... :id]                           | :binary-data                          |
-| [Get client config](#get-client-configuration) | GET    | api/client-config      | -                                   | :client-config-resource               |
-
-TBD: no "Fiels/dirs search using query" is needed when "Get dir children list" is called on root with searchQuery and searchResursively.
-
-TBD: "Copy/Move file to destination" for dirs also.
+| Copy file/dir to destination                            | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
+| Move file to destination                                | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
+| Get file(s)/compressed dir                              | GET    | api/download           | [... :id]                           | :binary-data                          |
+| [Get client config](#get-client-configuration)          | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.
 
@@ -32,7 +27,6 @@ NOTE: file/dir ID is its path+name in base64.
   size: <string>,
   md5Checksum: <string>, // TODO in v2,
   downloadUrl: <string>,  // TBD
-  ?children: [<file stats resource>, ...]  // TBD not needed
 }
 ```
 
