@@ -1,13 +1,13 @@
 # Summary
 
 | Method                                                  | REST   | URL                    | Request                             | Response                              |
-|---------------------------------------------------------+--------+------------------------+-------------------------------------+---------------------------------------|
+|---------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
 | [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)            | DELETE | api/files/:id          | -                                   | -                                     |
 | [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | { orderBy, orderDirection, ... }    | { items: [... :file-stats-resource] } |
 | [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
 | Copy file/dir to destination                            | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
-| Move file to destination                                | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
+| Move file/dir to destination                                | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
 | Get file(s)/compressed dir                              | GET    | api/download           | [... :id]                           | :binary-data                          |
 | [Get client config](#get-client-configuration)          | GET    | api/client-config      | -                                   | :client-config-resource               |
 
