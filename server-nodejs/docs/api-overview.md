@@ -21,7 +21,7 @@ NOTE: file/dir ID is its path+name in base64.
 {
   id: <string>,
   title: <string>,
-  isDirectory: <bool>, // TBD type
+  type: <string>, // "dir", "file", etc.
   createDate: <string>,
   modifyDate: <string>,
   size: <string>,
@@ -87,7 +87,7 @@ If successful, this method returns an empty response body.
 
 ```javascript
 {
-  items: [<file stats resource>, ...],  // TBD list of ids.
+  items: [<file stats resource>, ...],
   nextPageToken // TODO in v2
 }
 ```
