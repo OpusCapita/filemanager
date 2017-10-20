@@ -9,9 +9,9 @@ let asyncMiddleware = require('../utils/async-middleware');
 module.exports = (app, options) => {
   const { logger } = options;
 
-  app.get('/files*/:id?', asyncMiddleware(async (req, res, next) => {
+  app.get('/files/:id?', asyncMiddleware(async (req, res, next) => {
     let { fsRoot } = options;
-    let relativePath = id.decode(req.params[0]) || '.';
+    let relativePath = req.params.id ? id.decode(req.params.id) : '.';
     let absolutePath = path.resolve(fsRoot, './' + relativePath);
 
     logger.info(`Files config for ${absolutePath} requested by ${getClientIp(req)}`);
