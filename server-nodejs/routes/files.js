@@ -27,8 +27,8 @@ module.exports = (app, options) => {
 
     let resourceRepresentation = {
       id: relativePath, // /home/user/adsfsdf.md 24234klfasdj;fasdk234
-      label: 'file1.md',
-      isDirectory: fileStats.isDirectory(),
+      title: 'file1.md',
+      kind: fileStats.isDirectory(),
       createDate: fileStats.birthtime,
       modifiedDate: fileStats.mtime,
       size: fileStats.size
