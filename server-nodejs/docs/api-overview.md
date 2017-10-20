@@ -2,12 +2,12 @@
 
 | Method                                                  | REST   | URL                    | Request                             | Response                              |
 |---------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files/:id          | { isDirectory, title, fileContent } | :file-stats-resource                  |
+| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files/:id          | {<br />&nbsp;&nbsp;isDirectory,<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;fileContent<br />} | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)            | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | { orderBy, orderDirection, ... }    | { items: [... :file-stats-resource] } |
+| [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource]<br />} |
 | [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Copy file/dir to destination                            | POST   | api/files/:id/copy/    | { destination: :id }                |                                       |
-| Move file/dir to destination                                | POST   | api/files/:id/move/    | { destination: :id }                |                                       |
+| Copy file/dir to destination                            | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
+| Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | Get file(s)/compressed dir                              | GET    | api/download           | [... :id]                           | :binary-data                          |
 | [Get client config](#get-client-configuration)          | GET    | api/client-config      | -                                   | :client-config-resource               |
 
@@ -79,7 +79,7 @@ If successful, this method returns an empty response body.
   maxResults: <number>, // TODO in v2
   pageToken: <string>, // TODO in v2
   searchQuery: <string>, // TODO in v2
-  searchResursively: <bool> // TODO in v2
+  searchRecursively: <bool> // TODO in v2
 }
 ```
 
