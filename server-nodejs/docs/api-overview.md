@@ -2,7 +2,7 @@
 
 | Method                                                  | REST   | URL                    | Request                             | Response                              |
 |---------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files/:id          | {<br />&nbsp;&nbsp;isDirectory,<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;fileContent<br />} | :file-stats-resource                  |
+| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files              | {<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type<br />} | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)            | DELETE | api/files/:id          | -                                   | -                                     |
 | [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
 | [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
@@ -32,17 +32,17 @@ NOTE: file/dir ID is its path+name in base64.
 
 ## Create new file or directory
 
-* URL: `api/files/:id`  // TBD: parentId instead of id.
+* URL: `api/files`
 * Method: POST
 
 ### Request
 
 ```javascript
 {
-  // TBD title: <string> must be added if parentId is used in URL.
-  // TBD parentId: <string> must be added if neither id nor parentId are used in URL.
-  isDirectory: <bool>,  // TBD type
-  ?content: <binary-data> // Must be specified for files only.
+  title: <string>,
+  parentId: <string>,
+  type: <string>,
+  ?content: <binary-data> // TBD what is instead of content?
 }
 ```
 
