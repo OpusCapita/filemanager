@@ -12,7 +12,14 @@ ListViewItem is
 ### Code Example
 
 ```
-<ListViewItem />
+<ListViewItem
+  iconUrl={''}
+  title="Customer folder"
+  size="355555500000"
+  humanReadableSize={true}
+  lastModified="1508749017098"
+  dateTimePattern="yyyy-MM-dd HH:mm:ss"
+/>
 ```
 
 ### Component Name

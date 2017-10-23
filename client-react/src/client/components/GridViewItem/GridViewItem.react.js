@@ -1,8 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import './GridViewItem.less';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  iconUrl: PropTypes.string,
+  title: PropTypes.string
+};
+const defaultProps = {
+  iconUrl: '',
+  title: ''
+};
 
 export default
 class GridViewItem extends Component {
@@ -12,8 +18,16 @@ class GridViewItem extends Component {
   }
 
   render() {
+    let {
+      iconUrl,
+      title
+    } = this.props;
+
     return (
-      <div className="grid-view-item">
+      <div className="oc-fm-grid-view-item">
+        <div className="oc-fm-grid-view-item__title">
+          {title}
+        </div>
       </div>
     );
   }

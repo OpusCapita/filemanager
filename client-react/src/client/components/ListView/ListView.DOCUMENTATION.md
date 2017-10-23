@@ -12,7 +12,54 @@ ListView is
 ### Code Example
 
 ```
-<ListView />
+<div style={{ width: '640px', height: '480px', border: '1px solid #eee' }}>
+  <ListView
+    items={[
+      { 
+        id: 'directory-1-id',
+        iconUrl: 'https://rawgit.com/OpusCapita/svg-icons/master/svg/folder.svg',
+        title: 'Important documents',
+        size: '48000',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'directory-2-id',
+        iconUrl: 'https://rawgit.com/OpusCapita/svg-icons/master/svg/folder.svg',
+        title: 'Very long directory name Very long directory name',
+        size: '48000',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'excel-document-1-id',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_48x1.svg',
+        title: 'excel-document-1.xls',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'excel-document-2-id',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_48x1.svg',
+        title: 'excel-document-2.xls',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'word-document-1-id',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_48x1.svg',
+        title: 'word-document-1.docx',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'word-document-2-id',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_48x1.svg',
+        title: 'word-document-2.docx',
+        size: '100500',
+        lastModified: '1508755456126',
+      }
+    ]}
+  />
+</div>
 ```
 
 ### Component Name

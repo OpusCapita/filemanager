@@ -1,8 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import './ListViewItem.less';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  iconUrl: PropTypes.string,
+  title: PropTypes.string,
+  size: PropTypes.string,
+  humanReadableSize: PropTypes.bool,
+  lastModified: PropTypes.string,
+  dateTimePattern: PropTypes.string
+};
+const defaultProps = {
+  iconUrl: '',
+  title: "Customer folder",
+  size: "355555500000",
+  humanReadableSize: true,
+  lastModified: "1508749017098",
+  dateTimePattern: "yyyy-MM-dd HH:mm:ss"
+};
 
 export default
 class ListViewItem extends Component {
@@ -13,7 +27,8 @@ class ListViewItem extends Component {
 
   render() {
     return (
-      <div className="list-view-item">
+      <div className="oc-fm__list-view-item">
+
       </div>
     );
   }
