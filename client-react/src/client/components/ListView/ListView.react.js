@@ -2,127 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, SortDirection } from 'react-virtualized';
-import filesize from 'filesize';
-import moment from 'moment';
+import { IconCell, TitleCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
+import Row from './Row.react';
 import { findIndex } from 'lodash';
-
-const IconCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-  return (
-    <div className="oc-fm--list-view__icon-cell">
-      <div
-        className="oc-fm--list-view__icon-cell-image"
-        style={{
-          backgroundImage: `url(${cellData})`
-        }}
-      >
-      </div>
-    </div>
-  );
-};
-
-const TitleCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-  return (
-    <div
-      className="oc-fm--list-view__cell oc-fm--list-view__cell--title"
-      title={cellData}
-    >
-      {cellData}
-    </div>
-  );
-};
-
-const SizeCell = ({ humanReadableSize, isDirectory }) => {
-  return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedSize = (typeof cellData !== 'undefined' && humanReadableSize) ? filesize(cellData) : cellData;
-    return (
-      <div className="oc-fm--list-view__cell">
-        {formattedSize || '—'}
-      </div>
-    );
-  };
-};
-
-const DateTimeCell = ({ locale, dateTimePattern }) => {
-  return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedDateTime = moment().locale(locale).format(dateTimePattern);
-    return (
-      <div className="oc-fm--list-view__cell">
-        {formattedDateTime}
-      </div>
-    );
-  };
-};
-
-const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sortBy, sortDirection })  => {
-  return (
-    <div className="oc-fm--list-view__header-cell">
-      {label}
-    </div>
-  );
-};
-
-const Row = ({ selection }) => ({
-  // Copied from https://github.com/bvaughn/react-virtualized/blob/04d1221133a1c59be24c8af90ae09e46000372b5/source/Table/defaultRowRenderer.js#L1
-  className,
-  columns,
-  index,
-  key,
-  onRowClick,
-  onRowDoubleClick,
-  onRowMouseOut,
-  onRowMouseOver,
-  onRowRightClick,
-  rowData,
-  style
-}) => {
-  const a11yProps = {};
-
-  if (
-    onRowClick ||
-      onRowDoubleClick ||
-      onRowMouseOut ||
-      onRowMouseOver ||
-      onRowRightClick
-  ) {
-    a11yProps['aria-label'] = 'row';
-    a11yProps.tabIndex = 0;
-
-    if (onRowClick) {
-      a11yProps.onClick = event => onRowClick({event, index, rowData});
-    }
-    if (onRowDoubleClick) {
-      a11yProps.onDoubleClick = event =>
-        onRowDoubleClick({event, index, rowData});
-    }
-    if (onRowMouseOut) {
-      a11yProps.onMouseOut = event => onRowMouseOut({event, index, rowData});
-    }
-    if (onRowMouseOver) {
-      a11yProps.onMouseOver = event => onRowMouseOver({event, index, rowData});
-    }
-    if (onRowRightClick) {
-      a11yProps.onContextMenu = event =>
-        onRowRightClick({event, index, rowData});
-    }
-  }
-
-  let isSelected = selection.indexOf(rowData.id) !== -1;
-
-  return (
-    <div
-      {...a11yProps}
-      className={`
-        ReactVirtualized__Table__row
-        oc-fm--list-view__row
-        ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
-      `}
-      key={key}
-      role="row"
-      style={style}>
-      {columns}
-    </div>
-  );
-};
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -184,7 +66,6 @@ class ListView extends Component {
   }
 
   selectRange(fromId, toId) {
-    console.log('ft', fromId, toId);
     let fromIdIndex = findIndex(this.props.items, (o) => o.id === fromId);
     let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
     let selectionOrder = toIdIndex > fromIdIndex ? 1 : -1;
@@ -192,10 +73,9 @@ class ListView extends Component {
       this.props.items.slice(fromIdIndex, toIdIndex + 1) :
       this.props.items.slice(toIdIndex, fromIdIndex + 1);
 
-    let candidates = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
-    // let selection = candidates.filter(id => (this.props.selection.indexOf(id) === -1) || id === fromId);
+    let selection = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
 
-    return candidates;
+    return selection;
   }
 
   handleRowClick = ({ event, index, rowData}) => {
@@ -225,10 +105,6 @@ class ListView extends Component {
 
   handleRowDoubleClick = ({ event, index, rowData }) => {
     this.props.onRowDoubleClick({ event, index, rowData });
-  }
-
-  handleKeyDown() {
-
   }
 
   render() {
