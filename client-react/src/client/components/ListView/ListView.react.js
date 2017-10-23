@@ -207,7 +207,7 @@ class ListView extends Component {
             rowCount={items.length}
             rowGetter={({ index }) => items[index]}
             rowHeight={48}
-            headerHeight={48}
+            headerHeight={36}
             className="oc-fm--list-view"
             gridClassName="oc-fm--list-view__grid"
             rowRenderer={Row({ selection })}
