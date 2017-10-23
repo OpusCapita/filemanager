@@ -4,6 +4,7 @@ import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, SortDirection } from 'react-virtualized';
 import filesize from 'filesize';
 import moment from 'moment';
+import { findIndex } from 'lodash';
 
 const IconCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
   return (
@@ -157,7 +158,11 @@ export default
 class ListView extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+
+    };
+
+    this.rangeSelectionStartedAt = null;
   }
 
   handleSelection(ids) {
@@ -178,15 +183,36 @@ class ListView extends Component {
         concat(this.props.selection.slice(index + 1, this.props.selection.length));
   }
 
+  selectRange(fromId, toId) {
+    console.log('ft', fromId, toId);
+    let fromIdIndex = findIndex(this.props.items, (o) => o.id === fromId);
+    let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
+    let selectionOrder = toIdIndex > fromIdIndex ? 1 : -1;
+    let itemsSlice = selectionOrder === 1 ?
+      this.props.items.slice(fromIdIndex, toIdIndex + 1) :
+      this.props.items.slice(toIdIndex, fromIdIndex + 1);
+
+    let candidates = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
+    // let selection = candidates.filter(id => (this.props.selection.indexOf(id) === -1) || id === fromId);
+
+    return candidates;
+  }
+
   handleRowClick = ({ event, index, rowData}) => {
     let { selection } = this.props;
     let { id } = rowData;
 
     if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
+      this.rangeSelectionStartedAt = id;
       this.props.selection.indexOf(rowData.id) !== -1 ?
         this.handleSelection(this.removeFromSelection(id)) :
         this.handleSelection(this.addToSelection(id));
+    } else if (event.shiftKey) {
+      this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
+      this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
     } else {
+      this.rangeSelectionStartedAt = null;
+
       this.handleSelection([rowData.id]);
     };
 

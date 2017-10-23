@@ -93,6 +93,7 @@
     "@opuscapita/svg-icons": "1.1.1",
     "filesize": "3.5.11",
     "immutable": "3.8.2",
+    "lodash": "4.17.4",
     "moment": "2.19.1",
     "prop-types": "15.6.0",
     "react-contextmenu": "2.8.0",
