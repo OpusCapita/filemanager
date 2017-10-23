@@ -26,7 +26,7 @@ NOTE: file/dir ID is its path+name in base64.
   modifyDate: <string>,
   size: <string>,
   md5Checksum: <string>, // TODO in v2,
-  downloadUrl: <string>,  // TBD
+  downloadUrl: <string>
 }
 ```
 
@@ -40,12 +40,12 @@ NOTE: file/dir ID is its path+name in base64.
 
 FormData instance with the following key/value pairs.
 
-| KEY       | VALUE      |
-|-----------|------------|
-|  title    | <string>   |
-|  parentId | <string>   |
-|  type     | <string>   |
-| ?files    | <FileList> |
+| KEY       | VALUE        |
+|-----------|--------------|
+|  title    | \<string\>   |
+|  parentId | \<string\>   |
+|  type     | \<string\>   |
+| ?files    | \<FileList\> |
 
 ### Response
 
