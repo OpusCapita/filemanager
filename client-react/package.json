@@ -89,6 +89,8 @@
     "write-file-webpack-plugin": "3.4.2"
   },
   "dependencies": {
+    "@opuscapita/react-svg": "2.0.1",
+    "@opuscapita/svg-icons": "1.1.1",
     "filesize": "3.5.11",
     "immutable": "3.8.2",
     "moment": "2.19.1",
