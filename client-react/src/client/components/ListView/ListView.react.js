@@ -160,18 +160,35 @@ class ListView extends Component {
     this.state = {};
   }
 
-  handleSingleSelection = (id) => {
-    // let index = this.state.selection.indexOf(id);
-    // let newSelection = index === -1 ?
-    //     this.state.selection.concat([id]) :
-    //     this.state.selection;
-    this.props.onSelection([id]);
+  handleSelection(ids) {
+    this.props.onSelection(ids);
+  }
+
+  addToSelection(id) {
+    let index = this.props.selection.indexOf(id);
+    return index === -1 ? this.props.selection.concat([id]) : this.props.selection;
+  }
+
+  removeFromSelection(id) {
+    let index = this.props.selection.indexOf(id);
+    return index === -1 ?
+      this.props.selection :
+      [].
+        concat(this.props.selection.slice(0, index)).
+        concat(this.props.selection.slice(index + 1, this.props.selection.length));
   }
 
   handleRowClick = ({ event, index, rowData}) => {
     let { selection } = this.props;
+    let { id } = rowData;
 
-    this.handleSingleSelection(rowData.id);
+    if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
+      this.props.selection.indexOf(rowData.id) !== -1 ?
+        this.handleSelection(this.removeFromSelection(id)) :
+        this.handleSelection(this.addToSelection(id));
+    } else {
+      this.handleSelection([rowData.id]);
+    };
 
     this.props.onRowClick({ event, index, rowData });
   }

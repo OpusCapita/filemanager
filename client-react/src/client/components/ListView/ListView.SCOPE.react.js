@@ -22,14 +22,6 @@ class ListViewScope extends Component {
   }
 
   handleUnselect(id) {
-    let index = this.state.selection.indexOf(id);
-    let selection =  index === -1 ?
-      this.state.selection :
-      [].
-        concat(this.state.selection.slice(0, index)).
-        concat(this.state.selection.slice(index + 1, this.state.selection.length));
-
-    this.setState({ selection });
 
     console.log('remove from selection:', id);
   }
