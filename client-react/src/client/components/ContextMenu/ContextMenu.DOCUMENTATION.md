@@ -30,6 +30,13 @@ ContextMenu is
       <span>Move to…</span>
     </div>
   </MenuItem>
+
+  <MenuItem data={{}} onClick={() => console.log('click')}>
+    <div className="oc-fm--context-menu__item">
+      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('content_copy')} />
+      <span>Copy to…</span>
+    </div>
+  </MenuItem>
   
   <MenuItem data={{}} onClick={() => console.log('click')}>
     <div className="oc-fm--context-menu__item">
@@ -46,7 +53,7 @@ ContextMenu is
   </MenuItem>
 
   <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
+    <div className="oc-fm--context-menu__item oc-fm--context-menu__item--disabled">
       <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('unarchive')} />
       <span>Unarchive</span>
     </div>
