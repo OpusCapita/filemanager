@@ -17,8 +17,7 @@ ListView is
     onRowClick={(data) => console.log('click', data)}
     onRowRightClick={(data) => console.log('right click', data)}
     onRowDoubleClick={(data) => console.log('double click', data)}
-    onSelect={_scope.handleSelect}
-    onUnselect={_scope.handleUnselect}
+    onSelection={_scope.handleSelection}
     selection={_scope.state.selection}
     items={[
       { 
@@ -37,28 +36,28 @@ ListView is
       },
       { 
         id: 'excel-document-1-id',
-        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_48x1.svg',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_16x1.svg',
         title: 'excel-document-1.xls',
         size: '100500',
         lastModified: '1508755456126',
       },
       { 
         id: 'excel-document-2-id',
-        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_48x1.svg',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/excel_16x1.svg',
         title: 'excel-document-2.xls',
         size: '100500',
         lastModified: '1508755456126',
       },
       { 
         id: 'word-document-1-id',
-        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_48x1.svg',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_16x1.svg',
         title: 'word-document-1.docx',
         size: '100500',
         lastModified: '1508755456126',
       },
       { 
         id: 'word-document-2-id',
-        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_48x1.svg',
+        iconUrl: 'https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/svg/word_16x1.svg',
         title: 'word-document-2.docx',
         size: '100500',
         lastModified: '1508755456126',

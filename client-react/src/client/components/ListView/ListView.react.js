@@ -7,12 +7,14 @@ import moment from 'moment';
 
 const IconCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
   return (
-    <div
-      className="oc-fm--list-view__icon-cell"
-      style={{
-        backgroundImage: `url(${cellData})`
-      }}
-    >
+    <div className="oc-fm--list-view__icon-cell">
+      <div
+        className="oc-fm--list-view__icon-cell-image"
+        style={{
+          backgroundImage: `url(${cellData})`
+        }}
+      >
+      </div>
     </div>
   );
 };
@@ -20,7 +22,7 @@ const IconCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrollin
 const TitleCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
   return (
     <div
-      className="oc-fm--list-view__cell"
+      className="oc-fm--list-view__cell oc-fm--list-view__cell--title"
       title={cellData}
     >
       {cellData}
@@ -58,6 +60,69 @@ const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sortBy, sor
   );
 };
 
+const Row = ({ selection }) => ({
+  // Copied from https://github.com/bvaughn/react-virtualized/blob/04d1221133a1c59be24c8af90ae09e46000372b5/source/Table/defaultRowRenderer.js#L1
+  className,
+  columns,
+  index,
+  key,
+  onRowClick,
+  onRowDoubleClick,
+  onRowMouseOut,
+  onRowMouseOver,
+  onRowRightClick,
+  rowData,
+  style
+}) => {
+  const a11yProps = {};
+
+  if (
+    onRowClick ||
+      onRowDoubleClick ||
+      onRowMouseOut ||
+      onRowMouseOver ||
+      onRowRightClick
+  ) {
+    a11yProps['aria-label'] = 'row';
+    a11yProps.tabIndex = 0;
+
+    if (onRowClick) {
+      a11yProps.onClick = event => onRowClick({event, index, rowData});
+    }
+    if (onRowDoubleClick) {
+      a11yProps.onDoubleClick = event =>
+        onRowDoubleClick({event, index, rowData});
+    }
+    if (onRowMouseOut) {
+      a11yProps.onMouseOut = event => onRowMouseOut({event, index, rowData});
+    }
+    if (onRowMouseOver) {
+      a11yProps.onMouseOver = event => onRowMouseOver({event, index, rowData});
+    }
+    if (onRowRightClick) {
+      a11yProps.onContextMenu = event =>
+        onRowRightClick({event, index, rowData});
+    }
+  }
+
+  let isSelected = selection.indexOf(rowData.id) !== -1;
+
+  return (
+    <div
+      {...a11yProps}
+      className={`
+        ReactVirtualized__Table__row
+        oc-fm--list-view__row
+        ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
+      `}
+      key={key}
+      role="row"
+      style={style}>
+      {columns}
+    </div>
+  );
+};
+
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
@@ -74,8 +139,7 @@ const propTypes = {
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
-  onSelect: PropTypes.func,
-  onUnselect: PropTypes.func
+  onSelection: PropTypes.func,
 };
 const defaultProps = {
   items: [],
@@ -86,8 +150,7 @@ const defaultProps = {
   onRowClick: () => {},
   onRowRightClick: () => {},
   onRowDoubleClick: () => {},
-  onSelect: () => {},
-  onUnselect: () => {}
+  onSelection: () => {}
 };
 
 export default
@@ -97,7 +160,19 @@ class ListView extends Component {
     this.state = {};
   }
 
+  handleSingleSelection = (id) => {
+    // let index = this.state.selection.indexOf(id);
+    // let newSelection = index === -1 ?
+    //     this.state.selection.concat([id]) :
+    //     this.state.selection;
+    this.props.onSelection([id]);
+  }
+
   handleRowClick = ({ event, index, rowData}) => {
+    let { selection } = this.props;
+
+    this.handleSingleSelection(rowData.id);
+
     this.props.onRowClick({ event, index, rowData });
   }
 
@@ -109,12 +184,17 @@ class ListView extends Component {
     this.props.onRowDoubleClick({ event, index, rowData });
   }
 
+  handleKeyDown() {
+
+  }
+
   render() {
     let {
       items,
       humanReadableSize,
       locale,
       dateTimePattern,
+      selection,
       onSelection
     } = this.props;
 
@@ -126,11 +206,11 @@ class ListView extends Component {
             height={height}
             rowCount={items.length}
             rowGetter={({ index }) => items[index]}
-            rowHeight={40}
-            headerHeight={40}
+            rowHeight={48}
+            headerHeight={48}
             className="oc-fm--list-view"
             gridClassName="oc-fm--list-view__grid"
-            rowClassName="oc-fm--list-view__row"
+            rowRenderer={Row({ selection })}
             onRowClick={this.handleRowClick}
             onRowRightClick={this.handleRowRightClick}
             onRowDoubleClick={this.handleRowDoubleClick}

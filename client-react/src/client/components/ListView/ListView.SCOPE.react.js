@@ -16,15 +16,9 @@ class ListViewScope extends Component {
     };
   }
 
-  handleSelect(id) {
-    let index = this.state.selection.indexOf(id);
-    let selection = index === -1 ?
-      this.state.selection.concat([id]) :
-      this.state.selection;
-
+  handleSelection = (selection) => {
     this.setState({ selection });
-
-    console.log('add to selection:', id);
+    console.log('current selection:', selection);
   }
 
   handleUnselect(id) {
