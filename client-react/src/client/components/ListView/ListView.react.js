@@ -28,12 +28,12 @@ const TitleCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolli
   );
 };
 
-const SizeCell = ({ humanReadableSize }) => {
+const SizeCell = ({ humanReadableSize, isDirectory }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedSize = humanReadableSize ? filesize(cellData) : cellData;
+    let formattedSize = (typeof cellData !== 'undefined' && humanReadableSize) ? filesize(cellData) : cellData;
     return (
       <div className="oc-fm--list-view__cell">
-        {formattedSize}
+        {formattedSize || '—'}
       </div>
     );
   };
@@ -50,9 +50,18 @@ const DateTimeCell = ({ locale, dateTimePattern }) => {
   };
 };
 
+const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sortBy, sortDirection })  => {
+  return (
+    <div className="oc-fm--list-view__header-cell">
+      {label}
+    </div>
+  );
+};
+
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
+    isDirectory: PropTypes.bool,
     iconUrl: PropTypes.string,
     title: PropTypes.string,
     size: PropTypes.string,
@@ -93,6 +102,7 @@ class ListView extends Component {
             rowCount={items.length}
             rowGetter={({ index }) => items[index]}
             rowHeight={40}
+            headerHeight={40}
             className="oc-fm--list-view"
             gridClassName="oc-fm--list-view__grid"
             rowClassName="oc-fm--list-view__row"
@@ -102,6 +112,7 @@ class ListView extends Component {
               dataKey='iconUrl'
               width={48}
               cellRenderer={IconCell()}
+              headerRenderer={HeaderCell()}
             />
             <Column
               label='Title'
@@ -109,6 +120,7 @@ class ListView extends Component {
               width={200}
               flexGrow={1}
               cellRenderer={TitleCell()}
+              headerRenderer={HeaderCell()}
             />
             <Column
               width={100}
@@ -116,6 +128,7 @@ class ListView extends Component {
               dataKey='size'
               flexGrow={1}
               cellRenderer={SizeCell({ humanReadableSize })}
+              headerRenderer={HeaderCell()}
             />
             <Column
               width={100}
@@ -123,6 +136,7 @@ class ListView extends Component {
               dataKey='lastModified'
               flexGrow={1}
               cellRenderer={DateTimeCell({ locale, dateTimePattern })}
+              headerRenderer={HeaderCell()}
             />
           </Table>
         )}

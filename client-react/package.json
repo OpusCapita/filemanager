@@ -93,6 +93,7 @@
     "immutable": "3.8.2",
     "moment": "2.19.1",
     "prop-types": "15.6.0",
+    "react-contextmenu": "2.8.0",
     "react-redux": "5.0.6",
     "react-sortable-hoc": "0.6.8",
     "react-virtualized": "9.11.1",

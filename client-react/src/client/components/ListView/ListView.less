@@ -11,6 +11,9 @@
 .oc-fm--list-view__cell {
   text-overflow: ellipsis;
   overflow: hidden;
+  &:hover {
+    cursor: default;
+  }
 }
 
 .oc-fm--list-view__icon-cell {
@@ -20,8 +23,13 @@
 }
 
 .oc-fm--list-view__row {
+  border-bottom: 1px solid #f5f5f5;
+
   &:hover {
     background-color: #f5f5f5;
-    cursor: pointer;
   }
+}
+
+.oc-fm--list-view__header-cell {
+  text-transform: none;
 }

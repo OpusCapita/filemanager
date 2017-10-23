@@ -12,21 +12,21 @@ ListView is
 ### Code Example
 
 ```
-<div style={{ width: '640px', height: '480px', border: '1px solid #eee' }}>
+<div style={{ height: '480px', border: '1px solid #eee' }}>
   <ListView
     items={[
       { 
         id: 'directory-1-id',
         iconUrl: 'https://rawgit.com/OpusCapita/svg-icons/master/svg/folder.svg',
+        isDirectory: true,
         title: 'Important documents',
-        size: '48000',
         lastModified: '1508755456126',
       },
       { 
         id: 'directory-2-id',
         iconUrl: 'https://rawgit.com/OpusCapita/svg-icons/master/svg/folder.svg',
+        isDirectory: true,  
         title: 'Very long directory name Very long directory name',
-        size: '48000',
         lastModified: '1508755456126',
       },
       { 
