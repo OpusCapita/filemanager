@@ -14,6 +14,12 @@ ListView is
 ```
 <div style={{ height: '480px', border: '1px solid #eee' }}>
   <ListView
+    onRowClick={(data) => console.log('click', data)}
+    onRowRightClick={(data) => console.log('right click', data)}
+    onRowDoubleClick={(data) => console.log('double click', data)}
+    onSelect={_scope.handleSelect}
+    onUnselect={_scope.handleUnselect}
+    selection={_scope.state.selection}
     items={[
       { 
         id: 'directory-1-id',

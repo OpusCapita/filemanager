@@ -67,22 +67,46 @@ const propTypes = {
     size: PropTypes.string,
     lastModified: PropTypes.string
   })),
+  selection: PropTypes.arrayOf(PropTypes.string),
   humanReadableSize: PropTypes.bool,
   locale: PropTypes.string,
-  dateTimePattern: PropTypes.string
+  dateTimePattern: PropTypes.string,
+  onRowClick: PropTypes.func,
+  onRowRightClick: PropTypes.func,
+  onRowDoubleClick: PropTypes.func,
+  onSelect: PropTypes.func,
+  onUnselect: PropTypes.func
 };
 const defaultProps = {
   items: [],
+  selection: [],
   humanReadableSize: true,
   locale: 'en',
-  dateTimePattern: 'YYYY-MM-dd HH:mm:ss'
+  dateTimePattern: 'YYYY-MM-dd HH:mm:ss',
+  onRowClick: () => {},
+  onRowRightClick: () => {},
+  onRowDoubleClick: () => {},
+  onSelect: () => {},
+  onUnselect: () => {}
 };
 
 export default
 class ListView extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {};
+  }
+
+  handleRowClick = ({ event, index, rowData}) => {
+    this.props.onRowClick({ event, index, rowData });
+  }
+
+  handleRowRightClick = ({ event, index, rowData}) => {
+    this.props.onRowRightClick({ event, index, rowData });
+  }
+
+  handleRowDoubleClick = ({ event, index, rowData }) => {
+    this.props.onRowDoubleClick({ event, index, rowData });
   }
 
   render() {
@@ -90,7 +114,8 @@ class ListView extends Component {
       items,
       humanReadableSize,
       locale,
-      dateTimePattern
+      dateTimePattern,
+      onSelection
     } = this.props;
 
     return (
@@ -106,6 +131,9 @@ class ListView extends Component {
             className="oc-fm--list-view"
             gridClassName="oc-fm--list-view__grid"
             rowClassName="oc-fm--list-view__row"
+            onRowClick={this.handleRowClick}
+            onRowRightClick={this.handleRowRightClick}
+            onRowDoubleClick={this.handleRowDoubleClick}
           >
             <Column
               label='Icon'

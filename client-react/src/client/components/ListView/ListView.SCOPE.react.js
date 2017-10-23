@@ -11,7 +11,33 @@ export default
 class ListViewScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selection: []
+    };
+  }
+
+  handleSelect(id) {
+    let index = this.state.selection.indexOf(id);
+    let selection = index === -1 ?
+      this.state.selection.concat([id]) :
+      this.state.selection;
+
+    this.setState({ selection });
+
+    console.log('add to selection:', id);
+  }
+
+  handleUnselect(id) {
+    let index = this.state.selection.indexOf(id);
+    let selection =  index === -1 ?
+      this.state.selection :
+      [].
+        concat(this.state.selection.slice(0, index)).
+        concat(this.state.selection.slice(index + 1, this.state.selection.length));
+
+    this.setState({ selection });
+
+    console.log('remove from selection:', id);
   }
 
   render() {
