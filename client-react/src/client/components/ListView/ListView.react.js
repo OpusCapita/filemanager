@@ -5,6 +5,7 @@ import { Table, Column, AutoSizer, SortDirection } from 'react-virtualized';
 import { IconCell, TitleCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
 import Row from './Row.react';
 import { findIndex } from 'lodash';
+const clickOutside = require('react-click-outside');
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -22,7 +23,7 @@ const propTypes = {
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
-  onSelection: PropTypes.func,
+  onSelection: PropTypes.func
 };
 const defaultProps = {
   items: [],
@@ -36,6 +37,7 @@ const defaultProps = {
   onSelection: () => {}
 };
 
+@clickOutside
 export default
 class ListView extends Component {
   constructor(props) {
@@ -107,6 +109,44 @@ class ListView extends Component {
     this.props.onRowDoubleClick({ event, index, rowData });
   }
 
+  handleKeyDown =(e) => {
+    e.preventDefault();
+    let { selection } = this.props;
+
+    if (e.which === 38 && !e.shiftKey) { // Up arrow
+      if (!selection.length) {
+        this.handleSelection(this.selectFirstItem());
+      }
+    }
+
+    if (e.which === 40 && !e.shiftKey) { // Down arrow
+      if (!selection.length) {
+        this.handleSelection(this.selectFirstItem());
+      }
+    }
+
+    if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
+
+    }
+
+    if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
+
+    }
+    console.log(e.which);
+  }
+
+  handleClickOutside() {
+    this.handleSelection(this.clearSelection());
+  }
+
+  selectFirstItem() {
+    return this.props.items.length ? this.props.items[0].id : [];
+  }
+
+  clearSelection() {
+    return [];
+  }
+
   render() {
     let {
       items,
@@ -120,6 +160,7 @@ class ListView extends Component {
     return (
       <div
         className="oc-fm--list-view"
+        onKeyDown={this.handleKeyDown}
       >
         <AutoSizer>
           {({ width, height }) => (
