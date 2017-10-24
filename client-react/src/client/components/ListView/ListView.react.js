@@ -27,8 +27,10 @@ const propTypes = {
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
+  onScroll: PropTypes.func,
   onSelection: PropTypes.func,
-  onSort: PropTypes.func
+  onSort: PropTypes.func,
+  onKeyDown: PropTypes.func
 };
 const defaultProps = {
   items: [],
@@ -40,6 +42,7 @@ const defaultProps = {
   onRowClick: () => {},
   onRowRightClick: () => {},
   onRowDoubleClick: () => {},
+  onScroll: () => {},
   onSelection: () => {},
   onSort: () => {},
   sortBy: 'title',
@@ -120,7 +123,8 @@ class ListView extends Component {
   }
 
   handleKeyDown =(e) => {
-    let { selection, items } = this.props;
+    let { selection, items, onKeyDown } = this.props;
+    this.props.onKeyDown(e);
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
       e.preventDefault();
@@ -173,9 +177,8 @@ class ListView extends Component {
     this.containerRef.focus(); // XXX fix for loosing focus on key navigation
   }
 
-  handleScroll = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
+    this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
   }
 
   handleClickOutside = () => {
@@ -294,7 +297,6 @@ class ListView extends Component {
           <div
             className="oc-fm--list-view"
             onKeyDown={this.handleKeyDown}
-            onScroll={this.handleScroll}
             tabIndex="0"
             ref={ref => (this.containerRef = ref)}
           >
@@ -308,6 +310,7 @@ class ListView extends Component {
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
               overscanRowCount={4}
+              onScroll={this.handleScroll}
               scrollToIndex={scrollToIndex}
               sort={this.handleSort}
               sortBy={sortBy}
@@ -327,7 +330,7 @@ class ListView extends Component {
               />
               <Column
                 width={100}
-                label='Size'
+                label='File size'
                 dataKey='size'
                 flexGrow={width > tabletWidth ? 1 : 0}
                 cellRenderer={SizeCell({ humanReadableSize })}
