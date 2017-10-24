@@ -304,6 +304,7 @@ class ListView extends Component {
               headerHeight={48}
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
+              overscanRowCount={4}
               scrollToIndex={scrollToIndex}
               sort={this.handleSort}
               sortBy={sortBy}

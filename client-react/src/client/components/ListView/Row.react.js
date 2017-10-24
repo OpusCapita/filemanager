@@ -1,5 +1,7 @@
 // Copied from https://github.com/bvaughn/react-virtualized/blob/04d1221133a1c59be24c8af90ae09e46000372b5/source/Table/defaultRowRenderer.js#L1
 
+// Sure this component can be optimised using "shouldComponentUpdate"
+
 export default ({ selection, lastSelected }) => ({
   className,
   columns,
