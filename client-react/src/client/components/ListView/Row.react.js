@@ -1,6 +1,6 @@
 // Copied from https://github.com/bvaughn/react-virtualized/blob/04d1221133a1c59be24c8af90ae09e46000372b5/source/Table/defaultRowRenderer.js#L1
 
-export default ({ selection }) => ({
+export default ({ selection, lastSelected }) => ({
   className,
   columns,
   index,
@@ -45,6 +45,8 @@ export default ({ selection }) => ({
   }
 
   let isSelected = selection.indexOf(rowData.id) !== -1;
+  let isLastSelected = lastSelected === rowData.id;
+  console.warn('last selected', rowData.id, lastSelected, isLastSelected);
 
   return (
     <div
@@ -53,6 +55,7 @@ export default ({ selection }) => ({
         ReactVirtualized__Table__row
         oc-fm--list-view__row
         ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
+        ${isLastSelected ? 'oc-fm--list-view__row--last-selected' : ''}
       `}
       key={key}
       role="row"

@@ -49,6 +49,7 @@ class ListView extends Component {
     };
 
     this.rangeSelectionStartedAt = null;
+    this.lastSelected = null;
   }
 
   handleSelection(ids) {
@@ -85,6 +86,7 @@ class ListView extends Component {
   handleRowClick = ({ event, index, rowData}) => {
     let { selection } = this.props;
     let { id } = rowData;
+    this.lastSelected = null;
 
     if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
       this.rangeSelectionStartedAt = id;
@@ -96,7 +98,6 @@ class ListView extends Component {
       this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
     } else {
       this.rangeSelectionStartedAt = null;
-
       this.handleSelection([rowData.id]);
     };
 
@@ -112,17 +113,19 @@ class ListView extends Component {
   }
 
   handleKeyDown =(e) => {
-    let { selection } = this.props;
+    let { selection, items } = this.props;
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
       e.preventDefault();
 
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
+        this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
         let selectionData = this.selectPrev();
+        this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       }
@@ -133,10 +136,12 @@ class ListView extends Component {
 
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
+        this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
         let selectionData = this.selectNext();
+        this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       }
@@ -144,19 +149,24 @@ class ListView extends Component {
 
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
       e.preventDefault();
-
+      let selectionData = this.addPrevToSelection();
+      this.lastSelected = items[selectionData.scrollToIndex].id;
+      this.handleSelection(selectionData.selection);
+      this.scrollToIndex(selectionData.scrollToIndex);
     }
 
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
       e.preventDefault();
-
+      let selectionData = this.addNextToSelection();
+      this.lastSelected = items[selectionData.scrollToIndex].id;
+      this.handleSelection(selectionData.selection);
+      this.scrollToIndex(selectionData.scrollToIndex);
     }
 
     this.containerRef.focus(); // XXX fix for loosing focus on key navigation
   }
 
   handleScroll = (e) => {
-    console.log('scroll!');
     e.preventDefault();
     e.stopPropagation();
   }
@@ -196,6 +206,24 @@ class ListView extends Component {
     return { selection: [prevId], scrollToIndex: prevIndex };
   }
 
+  addNextToSelection = () => {
+    let { selection } = this.props;
+    let nextSelectionData = this.selectNext();
+    return {
+      selection: selection.concat(nextSelectionData.selection),
+      scrollToIndex: nextSelectionData.scrollToIndex
+    };
+  }
+
+  addPrevToSelection = () => {
+    let { selection } = this.props;
+    let prevSelectionData = this.selectPrev();
+    return {
+      selection: prevSelectionData.selection.concat(selection),
+      scrollToIndex: prevSelectionData.scrollToIndex
+    };
+  }
+
   scrollToIndex = (index) => {
     this.setState({ scrollToIndex: index });
   }
@@ -211,6 +239,7 @@ class ListView extends Component {
     } = this.props;
 
     let { scrollToIndex } = this.state;
+    let { rangeSelectionStartedAt, lastSelected } = this;
 
     return (
       <div
@@ -232,7 +261,7 @@ class ListView extends Component {
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
               scrollToIndex={scrollToIndex}
-              rowRenderer={Row({ selection })}
+              rowRenderer={Row({ selection, lastSelected })}
               onRowClick={this.handleRowClick}
               onRowRightClick={this.handleRowRightClick}
               onRowDoubleClick={this.handleRowDoubleClick}
