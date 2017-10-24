@@ -18,12 +18,6 @@ class ListViewScope extends Component {
 
   handleSelection = (selection) => {
     this.setState({ selection });
-    console.log('current selection:', selection);
-  }
-
-  handleUnselect(id) {
-
-    console.log('remove from selection:', id);
   }
 
   render() {

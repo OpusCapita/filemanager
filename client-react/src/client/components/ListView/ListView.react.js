@@ -224,6 +224,40 @@ class ListView extends Component {
     };
   }
 
+  removeLastFromSelection = () => {
+    let { selection, items } = this.props;
+
+    if (selection.length > 1) {
+      let nextSelection = selection.slice(0, selection.length - 1);
+      return {
+        selection: nextSelection,
+        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[nextSelection.length - 1])
+      };
+    } else {
+      return {
+        selection,
+        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
+      };
+    }
+  }
+
+  removeFirstFromSelection = () => {
+    let { selection, items } = this.props;
+
+    if (selection.length > 1) {
+      let nextSelection = selection.slice(1, selection.length);
+      return {
+        selection: nextSelection,
+        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[0])
+      };
+    } else {
+      return {
+        selection,
+        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
+      };
+    }
+  }
+
   scrollToIndex = (index) => {
     this.setState({ scrollToIndex: index });
   }
@@ -242,15 +276,15 @@ class ListView extends Component {
     let { rangeSelectionStartedAt, lastSelected } = this;
 
     return (
-      <div
-        className="oc-fm--list-view"
-        onKeyDown={this.handleKeyDown}
-        onScroll={this.handleScroll}
-        tabIndex="0"
-        ref={ref => (this.containerRef = ref)}
-      >
-        <AutoSizer>
-          {({ width, height }) => (
+      <AutoSizer>
+        {({ width, height }) => (
+          <div
+            className="oc-fm--list-view"
+            onKeyDown={this.handleKeyDown}
+            onScroll={this.handleScroll}
+            tabIndex="0"
+            ref={ref => (this.containerRef = ref)}
+          >
             <Table
               width={width}
               height={height}
@@ -298,9 +332,9 @@ class ListView extends Component {
                 headerRenderer={HeaderCell()}
                 />
             </Table>
-          )}
-        </AutoSizer>
-      </div>
+          </div>
+        )}
+      </AutoSizer>
     );
   }
 }

@@ -46,7 +46,6 @@ export default ({ selection, lastSelected }) => ({
 
   let isSelected = selection.indexOf(rowData.id) !== -1;
   let isLastSelected = lastSelected === rowData.id;
-  console.warn('last selected', rowData.id, lastSelected, isLastSelected);
 
   return (
     <div
