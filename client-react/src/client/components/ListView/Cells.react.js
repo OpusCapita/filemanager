@@ -39,7 +39,7 @@ export const SizeCell = ({ humanReadableSize, isDirectory }) => {
 
 export const DateTimeCell = ({ locale, dateTimePattern }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedDateTime = moment().locale(locale).format(dateTimePattern);
+    let formattedDateTime = moment(new Date().setTime(cellData)).locale(locale).format(dateTimePattern);
     return (
       <div className="oc-fm--list-view__cell">
         {formattedDateTime}
