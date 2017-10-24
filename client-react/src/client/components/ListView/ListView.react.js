@@ -112,12 +112,11 @@ class ListView extends Component {
   }
 
   handleKeyDown =(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
     let { selection } = this.props;
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
+      e.preventDefault();
+
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
         this.handleSelection(selectionData.selection);
@@ -130,6 +129,8 @@ class ListView extends Component {
     }
 
     if (e.which === 40 && !e.shiftKey) { // Down arrow
+      e.preventDefault();
+
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
         this.handleSelection(selectionData.selection);
@@ -142,12 +143,22 @@ class ListView extends Component {
     }
 
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
+      e.preventDefault();
 
     }
 
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
+      e.preventDefault();
 
     }
+
+    this.containerRef.focus(); // XXX fix for loosing focus on key navigation
+  }
+
+  handleScroll = (e) => {
+    console.log('scroll!');
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   handleClickOutside = () => {
@@ -185,12 +196,7 @@ class ListView extends Component {
     return { selection: [prevId], scrollToIndex: prevIndex };
   }
 
-  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
-    // console.log('scroll', clientHeight, scrollHeight, scrollTop);
-  }
-
   scrollToIndex = (index) => {
-    console.log('sti', index);
     this.setState({ scrollToIndex: index });
   }
 
@@ -210,6 +216,9 @@ class ListView extends Component {
       <div
         className="oc-fm--list-view"
         onKeyDown={this.handleKeyDown}
+        onScroll={this.handleScroll}
+        tabIndex="0"
+        ref={ref => (this.containerRef = ref)}
       >
         <AutoSizer>
           {({ width, height }) => (
@@ -222,7 +231,6 @@ class ListView extends Component {
               headerHeight={48}
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
-              onScroll={this.handleScroll}
               scrollToIndex={scrollToIndex}
               rowRenderer={Row({ selection })}
               onRowClick={this.handleRowClick}
