@@ -68,6 +68,48 @@ ListView is
         title: 'image-1.jpg',
         size: '100500',
         lastModified: '1508755456126',
+      },
+      { 
+        id: 'image-2-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/image.svg',
+        title: 'image-2.jpg',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'image-3-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/image.svg',
+        title: 'image-3.jpg',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'image-4-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/image.svg',
+        title: 'image-4.jpg',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'text-document-1-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/insert_drive_file.svg',
+        title: 'text-document-1.txt',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'text-document-2-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/insert_drive_file.svg',
+        title: 'text-document-2.txt',
+        size: '100500',
+        lastModified: '1508755456126',
+      },
+      { 
+        id: 'text-document-3-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/insert_drive_file.svg',
+        title: 'text-document-3.txt',
+        size: '100500',
+        lastModified: '1508755456126',
       }
     ]}
   />
