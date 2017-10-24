@@ -7,6 +7,9 @@ import Row from './Row.react';
 import { findIndex } from 'lodash';
 const clickOutside = require('react-click-outside');
 
+const tabletWidth = 1024;
+const mobileWidth = 640;
+
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
@@ -326,18 +329,20 @@ class ListView extends Component {
                 width={100}
                 label='Size'
                 dataKey='size'
-                flexGrow={1}
+                flexGrow={width > tabletWidth ? 1 : 0}
                 cellRenderer={SizeCell({ humanReadableSize })}
                 headerRenderer={HeaderCell()}
                 />
-              <Column
-                width={100}
-                label='Last modified'
-                dataKey='lastModified'
-                flexGrow={1}
-                cellRenderer={DateTimeCell({ locale, dateTimePattern })}
-                headerRenderer={HeaderCell()}
+              {width > mobileWidth ? (
+                <Column
+                  width={100}
+                  label='Last modified'
+                  dataKey='lastModified'
+                  flexGrow={1}
+                  cellRenderer={DateTimeCell({ locale, dateTimePattern })}
+                  headerRenderer={HeaderCell()}
                 />
+              ) : null}
             </Table>
           </div>
         )}
