@@ -242,56 +242,60 @@ class ListView extends Component {
     } = this.props;
 
     return (
-      <AutoSizer>
-        {({ width, height }) => (
-          <Table
-            width={width}
-            height={height}
-            rowCount={items.length}
-            rowGetter={({ index }) => items[index]}
-            rowHeight={48}
-            headerHeight={36}
-            className="oc-fm--list-view"
-            gridClassName="oc-fm--list-view__grid"
-            rowRenderer={Row({ selection })}
-            onRowClick={this.handleRowClick}
-            onRowRightClick={this.handleRowRightClick}
-            onRowDoubleClick={this.handleRowDoubleClick}
-          >
-            <Column
-              label='Icon'
-              dataKey='iconUrl'
-              width={48}
-              cellRenderer={IconCell()}
-              headerRenderer={HeaderCell()}
-            />
-            <Column
-              label='Title'
-              dataKey='title'
-              width={200}
-              flexGrow={1}
-              cellRenderer={TitleCell()}
-              headerRenderer={HeaderCell()}
-            />
-            <Column
-              width={100}
-              label='Size'
-              dataKey='size'
-              flexGrow={1}
-              cellRenderer={SizeCell({ humanReadableSize })}
-              headerRenderer={HeaderCell()}
-            />
-            <Column
-              width={100}
-              label='Last modified'
-              dataKey='lastModified'
-              flexGrow={1}
-              cellRenderer={DateTimeCell({ locale, dateTimePattern })}
-              headerRenderer={HeaderCell()}
-            />
-          </Table>
-        )}
-      </AutoSizer>
+      <div
+        className="oc-fm--list-view"
+      >
+        <AutoSizer>
+          {({ width, height }) => (
+            <Table
+              width={width}
+              height={height}
+              rowCount={items.length}
+              rowGetter={({ index }) => items[index]}
+              rowHeight={48}
+              headerHeight={48}
+              className="oc-fm--list-view__table"
+              gridClassName="oc-fm--list-view__grid"
+              rowRenderer={Row({ selection })}
+              onRowClick={this.handleRowClick}
+              onRowRightClick={this.handleRowRightClick}
+              onRowDoubleClick={this.handleRowDoubleClick}
+              >
+              <Column
+                label='Icon'
+                dataKey='iconUrl'
+                width={48}
+                cellRenderer={IconCell()}
+                headerRenderer={HeaderCell()}
+                />
+              <Column
+                label='Title'
+                dataKey='title'
+                width={200}
+                flexGrow={1}
+                cellRenderer={TitleCell()}
+                headerRenderer={HeaderCell()}
+                />
+              <Column
+                width={100}
+                label='Size'
+                dataKey='size'
+                flexGrow={1}
+                cellRenderer={SizeCell({ humanReadableSize })}
+                headerRenderer={HeaderCell()}
+                />
+              <Column
+                width={100}
+                label='Last modified'
+                dataKey='lastModified'
+                flexGrow={1}
+                cellRenderer={DateTimeCell({ locale, dateTimePattern })}
+                headerRenderer={HeaderCell()}
+                />
+            </Table>
+          )}
+        </AutoSizer>
+      </div>
     );
   }
 }

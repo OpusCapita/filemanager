@@ -61,6 +61,13 @@ ListView is
         title: 'word-document-2.docx',
         size: '100500',
         lastModified: '1508755456126',
+      },
+      { 
+        id: 'image-1-id',
+        iconUrl: 'https://cdn.rawgit.com/OpusCapita/svg-icons/master/svg/image.svg',
+        title: 'image-1.jpg',
+        size: '100500',
+        lastModified: '1508755456126',
       }
     ]}
   />
