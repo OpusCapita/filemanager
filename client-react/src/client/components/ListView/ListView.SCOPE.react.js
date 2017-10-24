@@ -5,6 +5,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import { SortDirection } from 'react-virtualized';
 
 @showroomScopeDecorator
 export default
@@ -12,12 +13,18 @@ class ListViewScope extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selection: []
+      selection: [],
+      sortBy: 'title',
+      sortDirection: SortDirection.ASC
     };
   }
 
   handleSelection = (selection) => {
     this.setState({ selection });
+  }
+
+  handleSort = ({ sortBy, sortDirection }) => {
+    this.setState({ sortBy, sortDirection });
   }
 
   render() {

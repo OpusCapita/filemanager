@@ -1,27 +1,29 @@
 import moment from 'moment';
 import filesize from 'filesize';
+import SVG from '@opuscapita/react-svg/lib/SVG';
+import { SortDirection } from 'react-virtualized';
 
-export const IconCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
+let sortASCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_down.svg');
+let sortDESCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_up.svg');
+
+export const NameCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
   return (
-    <div className="oc-fm--list-view__icon-cell">
-      <div
-        className="oc-fm--list-view__icon-cell-image"
-        style={{
-          backgroundImage: `url(${cellData})`
-        }}
-      >
+    <div  className="oc-fm--list-view__cell oc-fm--list-view__name-cell">
+      <div className="oc-fm--list-view__name-cell-icon">
+        <div
+          className="oc-fm--list-view__name-cell-icon-image"
+          style={{
+            backgroundImage: `url(${rowData.iconUrl})`
+          }}
+        >
+        </div>
       </div>
-    </div>
-  );
-};
-
-export const TitleCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-  return (
-    <div
-      className="oc-fm--list-view__cell oc-fm--list-view__cell--title"
-      title={cellData}
-    >
-      {cellData}
+      <div
+        className="oc-fm--list-view__cell oc-fm--list-view__name-cell-title"
+        title={cellData}
+      >
+        {cellData}
+      </div>
     </div>
   );
 };
@@ -49,9 +51,15 @@ export const DateTimeCell = ({ locale, dateTimePattern }) => {
 };
 
 export const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sortBy, sortDirection })  => {
+  let sortIconSvg = sortDirection === SortDirection.ASC ? sortASCIcon : sortDESCIcon;
+  let sortIconElement = dataKey === sortBy ? (
+    <SVG svg={sortIconSvg} />
+  ) : null;
+
   return (
     <div className="oc-fm--list-view__header-cell">
       {label}
+      {sortIconElement}
     </div>
   );
 };

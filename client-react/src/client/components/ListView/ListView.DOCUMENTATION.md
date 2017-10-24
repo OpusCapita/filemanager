@@ -18,7 +18,10 @@ ListView is
     onRowRightClick={(data) => console.log('right click', data)}
     onRowDoubleClick={(data) => console.log('double click', data)}
     onSelection={_scope.handleSelection}
+    onSort={_scope.handleSort}
     selection={_scope.state.selection}
+    sortBy={_scope.state.sortBy}
+    sortDirection={_scope.state.sortDirection}
     itemsCount={13}
     items={[
       { 

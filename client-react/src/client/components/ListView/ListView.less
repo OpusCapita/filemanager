@@ -26,21 +26,29 @@
   }
 }
 
-.oc-fm--list-view__cell--title {
-  font-weight: bold;
+.oc-fm--list-view__name-cell {
+  display: flex;
+  align-items: center;
 }
 
-.oc-fm--list-view__icon-cell {
+.oc-fm--list-view__name-cell-title {
+  font-weight: bold;
+  flex: 0 1 auto;
+}
+
+.oc-fm--list-view__name-cell-icon {
   width: 38px;
   height: 38px;
+  margin-right: 10px;
   background: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
 }
 
-.oc-fm--list-view__icon-cell-image {
+.oc-fm--list-view__name-cell-icon-image {
   width: 24px;
   height: 24px;
   background-size: cover;
@@ -53,7 +61,7 @@
     background-color: #f5f5f5;
   }
 
-  &:hover:not(&--selected) .oc-fm--list-view__icon-cell {
+  &:hover:not(&--selected) .oc-fm--list-view__name-cell-icon {
     background-color: transparent;
   }
 }
@@ -80,6 +88,8 @@
 .oc-fm--list-view__header-cell {
   text-transform: none;
   user-select: none;
+  display: flex;
+  align-items: center;
 }
 
 .oc-fm--list-view .ReactVirtualized__Table__headerRow {
@@ -87,6 +97,12 @@
 }
 
 .oc-fm--list-view .ReactVirtualized__Table__row {
+  &:focus {
+    outline: none;
+  }
+}
+
+.oc-fm--list-view .ReactVirtualized__Table__sortableHeaderColumn {
   &:focus {
     outline: none;
   }

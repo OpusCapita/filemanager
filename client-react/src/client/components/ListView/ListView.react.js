@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
-import { Table, Column, AutoSizer, SortDirection } from 'react-virtualized';
-import { IconCell, TitleCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
+import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
+import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
 import Row from './Row.react';
 import { findIndex } from 'lodash';
 const clickOutside = require('react-click-outside');
@@ -24,7 +24,8 @@ const propTypes = {
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
-  onSelection: PropTypes.func
+  onSelection: PropTypes.func,
+  onSort: PropTypes.func
 };
 const defaultProps = {
   items: [],
@@ -36,7 +37,10 @@ const defaultProps = {
   onRowClick: () => {},
   onRowRightClick: () => {},
   onRowDoubleClick: () => {},
-  onSelection: () => {}
+  onSelection: () => {},
+  onSort: () => {},
+  sortBy: 'title',
+  sortDirection: SortDirection.ASC
 };
 
 @clickOutside
@@ -262,6 +266,10 @@ class ListView extends Component {
     this.setState({ scrollToIndex: index });
   }
 
+  handleSort = ({ sortBy, sortDirection }) => {
+    this.props.onSort({ sortBy, sortDirection });
+  }
+
   render() {
     let {
       items,
@@ -269,7 +277,9 @@ class ListView extends Component {
       locale,
       dateTimePattern,
       selection,
-      onSelection
+      onSelection,
+      sortBy,
+      sortDirection
     } = this.props;
 
     let { scrollToIndex } = this.state;
@@ -295,6 +305,9 @@ class ListView extends Component {
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
               scrollToIndex={scrollToIndex}
+              sort={this.handleSort}
+              sortBy={sortBy}
+              sortDirection={sortDirection}
               rowRenderer={Row({ selection, lastSelected })}
               onRowClick={this.handleRowClick}
               onRowRightClick={this.handleRowRightClick}
@@ -302,19 +315,12 @@ class ListView extends Component {
             >
               <Column
                 label='Name'
-                dataKey='iconUrl'
-                width={48}
-                cellRenderer={IconCell()}
-                headerRenderer={HeaderCell()}
-                />
-              <Column
-                label=''
                 dataKey='title'
-                width={200}
+                width={48}
                 flexGrow={1}
-                cellRenderer={TitleCell()}
+                cellRenderer={NameCell()}
                 headerRenderer={HeaderCell()}
-                />
+              />
               <Column
                 width={100}
                 label='Size'
