@@ -301,14 +301,14 @@ class ListView extends Component {
               onRowDoubleClick={this.handleRowDoubleClick}
             >
               <Column
-                label='Icon'
+                label='Name'
                 dataKey='iconUrl'
                 width={48}
                 cellRenderer={IconCell()}
                 headerRenderer={HeaderCell()}
                 />
               <Column
-                label='Title'
+                label=''
                 dataKey='title'
                 width={200}
                 flexGrow={1}
