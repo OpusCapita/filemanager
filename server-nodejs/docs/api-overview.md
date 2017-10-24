@@ -15,13 +15,13 @@ NOTE: file/dir ID is its path+name in base64.
 
 # Files
 
-## File stats resouce
+## File stats resource
 
 ```javascript
 {
   id: <string>,
   title: <string>,
-  type: <string>, // "dir", "file", etc.
+  type: <string>, // "dir", "file", "unknown", etc.
   createDate: <string>,
   modifyDate: <string>,
   size: <string>,
