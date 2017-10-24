@@ -26,7 +26,7 @@ NOTE: file/dir ID is its path+name in base64.
   modifyDate: <string>,
   size: <string>,
   md5Checksum: <string>, // TODO in v2,
-  downloadUrl: <string>,  // TBD
+  downloadUrl: <string>
 }
 ```
 
@@ -34,17 +34,18 @@ NOTE: file/dir ID is its path+name in base64.
 
 * URL: `api/files`
 * Method: POST
+* Content-Type: multipart/form-data
 
 ### Request
 
-```javascript
-{
-  title: <string>,
-  parentId: <string>,
-  type: <string>,
-  ?content: <binary-data> // TBD what is instead of content?
-}
-```
+FormData instance with the following key/value pairs.
+
+| KEY       | VALUE        |
+|-----------|--------------|
+|  title    | \<string\>   |
+|  parentId | \<string\>   |
+|  type     | \<string\>   |
+| ?files    | \<FileList\> |
 
 ### Response
 
