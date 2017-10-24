@@ -1,13 +1,26 @@
 ### Synopsis
 
-ListView is 
-*Write here a short introduction and/or overview that explains **what** component is.*
+ListView is a part of FileManger. Built using [react-virtualized](https://github.com/bvaughn/react-virtualized/blob/master/docs/Table.md) `Table` component.
 
 ### Props Reference
 
-| Name                           | Type                    | Description                                                 |
-| ------------------------------ | :---------------------- | ----------------------------------------------------------- |
-| demoProp                       | string                  | Write a description of the property                         |
+| Name                           | Type                    | Description                                                   |
+| ------------------------------ | :---------------------- | -----------------------------------------------------------   |
+| items                          | array                   | [{ id, isDirectory, iconUrl, title, size, lastModified } ...] |
+| itemsCount                     | number                  | Items total count                                             |
+| selection                      | array                   | [id1, id2, id3, ...]                                          |
+| humanReadableSize              | bool                    | Convert bytes to KB, MB, GB, etc.                             |
+| locale                         | string                  | Used with `momentjs` for `lastModified` column, etc.          |
+| dateTimePattern                | string                  | Used with `momentjs` for `lastModified` column, etc.          |
+| sortBy                         | string                  | Column key                                                    |
+| sortDirection                  | string                  | "ASC" or "DESC"                                               |
+| onRowClick                     | func                    | ({ event, index, rowData}) => {}                              |
+| onRowRightClick                | func                    | ({ event, index, rowData}) => {}                              |
+| onRowDoubleClick               | func                    | ({ event, index, rowData}) => {}                              |
+| onScroll                       | func                    | ({ clientHeight, scrollHeight, scrollTop }) => {}             |
+| onSelection                    | func                    | ([id1, id2, id3, ...]) => {}                                  |
+| onSort                         | func                    | ({ sortBy, sortDirection }) => {}                             |
+| onKeyDown                      | func                    | (e) => {}                                                     |
 
 ### Code Example
 

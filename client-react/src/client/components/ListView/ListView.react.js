@@ -24,6 +24,8 @@ const propTypes = {
   humanReadableSize: PropTypes.bool,
   locale: PropTypes.string,
   dateTimePattern: PropTypes.string,
+  sortBy: 'title',
+  sortDirection: SortDirection.ASC,
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
@@ -39,15 +41,15 @@ const defaultProps = {
   humanReadableSize: true,
   locale: 'en',
   dateTimePattern: 'YYYY-MM-dd HH:mm:ss',
+  sortBy: 'title',
+  sortDirection: SortDirection.ASC,
   onRowClick: () => {},
   onRowRightClick: () => {},
   onRowDoubleClick: () => {},
   onScroll: () => {},
   onSelection: () => {},
   onSort: () => {},
-  onKeyDown: () => {},
-  sortBy: 'title',
-  sortDirection: SortDirection.ASC
+  onKeyDown: () => {}
 };
 
 @clickOutside
