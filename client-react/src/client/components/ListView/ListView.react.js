@@ -16,6 +16,7 @@ const propTypes = {
     size: PropTypes.string,
     lastModified: PropTypes.string
   })),
+  itemsCount: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.string),
   humanReadableSize: PropTypes.bool,
   locale: PropTypes.string,
@@ -27,6 +28,7 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
+  itemsCount: 0,
   selection: [],
   humanReadableSize: true,
   locale: 'en',
@@ -43,7 +45,7 @@ class ListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      scrollToIndex: 0
     };
 
     this.rangeSelectionStartedAt = null;
@@ -111,17 +113,31 @@ class ListView extends Component {
 
   handleKeyDown =(e) => {
     e.preventDefault();
+    e.stopPropagation();
+
     let { selection } = this.props;
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
       if (!selection.length) {
-        this.handleSelection(this.selectFirstItem());
+        let selectionData = this.selectFirstItem();
+        this.handleSelection(selectionData.selection);
+        this.scrollToIndex(selectionData.scrollToIndex);
+      } else {
+        let selectionData = this.selectPrev();
+        this.handleSelection(selectionData.selection);
+        this.scrollToIndex(selectionData.scrollToIndex);
       }
     }
 
     if (e.which === 40 && !e.shiftKey) { // Down arrow
       if (!selection.length) {
-        this.handleSelection(this.selectFirstItem());
+        let selectionData = this.selectFirstItem();
+        this.handleSelection(selectionData.selection);
+        this.scrollToIndex(selectionData.scrollToIndex);
+      } else {
+        let selectionData = this.selectNext();
+        this.handleSelection(selectionData.selection);
+        this.scrollToIndex(selectionData.scrollToIndex);
       }
     }
 
@@ -132,19 +148,50 @@ class ListView extends Component {
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
 
     }
-    console.log(e.which);
   }
 
-  handleClickOutside() {
-    this.handleSelection(this.clearSelection());
+  handleClickOutside = () => {
+    let selectionData = this.clearSelection();
+    this.handleSelection(selectionData.selection);
+    this.scrollToIndex(selectionData.scrollToIndex);
   }
 
-  selectFirstItem() {
-    return this.props.items.length ? this.props.items[0].id : [];
+  selectFirstItem = () => {
+    return {
+      selection: this.props.items.length ? this.props.items[0].id : [],
+      scrollToIndex: 0
+    };
   }
 
-  clearSelection() {
-    return [];
+  clearSelection = () => {
+    return { selection: [], scrollToIndex: this.state.scrollToIndex };
+  }
+
+  selectNext = () => {
+    let { selection, items, itemsCount } = this.props;
+    let currentId = selection[selection.length - 1];
+    let currentIndex = findIndex(items, (o) => o.id === currentId);
+    let nextIndex = currentIndex < itemsCount - 1 ? currentIndex + 1 : currentIndex;
+    let nextId = items[nextIndex].id;
+    return { selection: [nextId], scrollToIndex: nextIndex };
+  }
+
+  selectPrev = () => {
+    let { selection, items, itemsCount } = this.props;
+    let currentId = selection[0];
+    let currentIndex = findIndex(items, (o) => o.id === currentId);
+    let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
+    let prevId = items[prevIndex].id;
+    return { selection: [prevId], scrollToIndex: prevIndex };
+  }
+
+  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
+    // console.log('scroll', clientHeight, scrollHeight, scrollTop);
+  }
+
+  scrollToIndex = (index) => {
+    console.log('sti', index);
+    this.setState({ scrollToIndex: index });
   }
 
   render() {
@@ -156,6 +203,8 @@ class ListView extends Component {
       selection,
       onSelection
     } = this.props;
+
+    let { scrollToIndex } = this.state;
 
     return (
       <div
@@ -173,11 +222,13 @@ class ListView extends Component {
               headerHeight={48}
               className="oc-fm--list-view__table"
               gridClassName="oc-fm--list-view__grid"
+              onScroll={this.handleScroll}
+              scrollToIndex={scrollToIndex}
               rowRenderer={Row({ selection })}
               onRowClick={this.handleRowClick}
               onRowRightClick={this.handleRowRightClick}
               onRowDoubleClick={this.handleRowDoubleClick}
-              >
+            >
               <Column
                 label='Icon'
                 dataKey='iconUrl'

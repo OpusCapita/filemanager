@@ -19,6 +19,7 @@ ListView is
     onRowDoubleClick={(data) => console.log('double click', data)}
     onSelection={_scope.handleSelection}
     selection={_scope.state.selection}
+    itemsCount={13}
     items={[
       { 
         id: 'directory-1-id',
