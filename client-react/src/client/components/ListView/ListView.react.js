@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
-import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
+import { NameCell, SizeCell, DateTimeCell, HeaderCell, NoRowsRenderer } from './Cells.react';
 import Row from './Row.react';
 import { findIndex } from 'lodash';
 const clickOutside = require('react-click-outside');
@@ -24,8 +24,8 @@ const propTypes = {
   humanReadableSize: PropTypes.bool,
   locale: PropTypes.string,
   dateTimePattern: PropTypes.string,
-  sortBy: 'title',
-  sortDirection: SortDirection.ASC,
+  sortBy: PropTypes.string,
+  sortDirection: PropTypes.string,
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
@@ -79,8 +79,8 @@ class ListView extends Component {
     return index === -1 ?
       this.props.selection :
       [].
-        concat(this.props.selection.slice(0, index)).
-        concat(this.props.selection.slice(index + 1, this.props.selection.length));
+      concat(this.props.selection.slice(0, index)).
+      concat(this.props.selection.slice(index + 1, this.props.selection.length));
   }
 
   selectRange(fromId, toId) {
@@ -88,8 +88,8 @@ class ListView extends Component {
     let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
     let selectionOrder = toIdIndex > fromIdIndex ? 1 : -1;
     let itemsSlice = selectionOrder === 1 ?
-      this.props.items.slice(fromIdIndex, toIdIndex + 1) :
-      this.props.items.slice(toIdIndex, fromIdIndex + 1);
+        this.props.items.slice(fromIdIndex, toIdIndex + 1) :
+        this.props.items.slice(toIdIndex, fromIdIndex + 1);
 
     let selection = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
 
@@ -282,6 +282,7 @@ class ListView extends Component {
   render() {
     let {
       items,
+      itemsCount,
       humanReadableSize,
       locale,
       dateTimePattern,
@@ -306,7 +307,7 @@ class ListView extends Component {
             <Table
               width={width}
               height={height}
-              rowCount={items.length}
+              rowCount={itemsCount}
               rowGetter={({ index }) => items[index]}
               rowHeight={48}
               headerHeight={48}
@@ -319,6 +320,7 @@ class ListView extends Component {
               sortBy={sortBy}
               sortDirection={sortDirection}
               rowRenderer={Row({ selection, lastSelected })}
+              noRowsRenderer={NoRowsRenderer()}
               onRowClick={this.handleRowClick}
               onRowRightClick={this.handleRowRightClick}
               onRowDoubleClick={this.handleRowDoubleClick}
