@@ -1,6 +1,6 @@
 ### Synopsis
 
-FileManager is 
+AppBar is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,16 +12,12 @@ FileManager is
 ### Code Example
 
 ```
-<div style={{ height: '480px' }}>
-  <FileManager
-  
-  />
-</div>
+<AppBar />
 ```
 
 ### Component Name
 
-FileManager
+AppBar
 
 ### License
 

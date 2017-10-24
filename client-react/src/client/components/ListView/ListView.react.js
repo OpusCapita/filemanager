@@ -107,6 +107,7 @@ class ListView extends Component {
         this.handleSelection(this.removeFromSelection(id)) :
         this.handleSelection(this.addToSelection(id));
     } else if (event.shiftKey) {
+      this.lastSelected = id;
       this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
       this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
     } else {
