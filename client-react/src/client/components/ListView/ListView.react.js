@@ -45,6 +45,7 @@ const defaultProps = {
   onScroll: () => {},
   onSelection: () => {},
   onSort: () => {},
+  onKeyDown: () => {},
   sortBy: 'title',
   sortDirection: SortDirection.ASC
 };
