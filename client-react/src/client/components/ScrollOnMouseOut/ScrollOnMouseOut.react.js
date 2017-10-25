@@ -39,6 +39,7 @@ class ScrollOnMouseOut extends Component {
   componentDidMount() {
     window.addEventListener('mouseup', this.handleWindowMouseUp);
     window.addEventListener('dragend', this.handleWindowMouseUp);
+    window.addEventListener('drop', this.handleWindowMouseUp);
   }
 
   componentWillUnmount() {
@@ -46,6 +47,7 @@ class ScrollOnMouseOut extends Component {
     this.stopHandleCursorPosition();
     window.removeEventListener('mouseup', this.handleWindowMouseUp);
     window.removeEventListener('dragend', this.handleWindowMouseUp);
+    window.removeEventListener('drop', this.handleWindowMouseUp);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -56,10 +58,8 @@ class ScrollOnMouseOut extends Component {
     }
 
     if (nextState.isCursorAbove && (this.state.isCursorAbove !== nextState.isCursorAbove)) {
-      console.log('above!');
       this.handleCursorAbove();
     } else if (nextState.isCursorBellow && (this.state.isCursorBellow !== nextState.isCursorBellow)) {
-      console.log('bellow!');
       this.handleCursorBellow();
     }
   }
@@ -80,7 +80,7 @@ class ScrollOnMouseOut extends Component {
   stopCaptureCursor = () => {
     this.stopHandleCursorPosition();
     window.removeEventListener('mousemove', this.handleMouseMove, true);
-    window.addEventListener('dragover', this.handleMouseMove, true);
+    window.removeEventListener('dragover', this.handleMouseMove, true);
   }
 
   handleCursorAbove = () => {

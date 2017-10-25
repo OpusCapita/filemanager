@@ -354,6 +354,8 @@ class ListView extends Component {
               clientHeight={clientHeight}
               scrollHeight={scrollHeight}
               scrollTop={scrollTop}
+              topCaptureOffset={40}
+              bottomCaptureOffset={0}
               style={{
                 width: `${width}px`,
                 height: `${height}px`
