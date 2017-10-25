@@ -1,3 +1,5 @@
+// TODO move selection functions to separate file "selection-utils.js" to reduce file size
+
 import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';

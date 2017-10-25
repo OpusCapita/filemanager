@@ -2,16 +2,19 @@ import React, { Component, PropTypes } from 'react';
 import './FileManager.less';
 import ListView from '../ListView';
 import { SortDirection } from 'react-virtualized';
+import nanoid from 'nanoid';
 
 const propTypes = {
   className: PropTypes.string,
-  onGetConfig: PropTypes.func,
-  initialResourceId: PropTypes.string
+  id: PropTypes.string,
+  apiRoot: PropTypes.string,
+  apiVersion: PropTypes.string
 };
 const defaultProps = {
   className: '',
-  onGetConfig: () => new Promise((resolve, reject) => {}),
-  initialResourceId: 'root'
+  id: nanoid(),
+  apiRoot: '',
+  apiVersion: PropTypes.string
 };
 
 export default
@@ -28,13 +31,7 @@ class FileManager extends Component {
   }
 
   componentDidMount = () => {
-    this.getConfig();
-  }
 
-  getConfig = () => {
-    this.props.onGetConfig().
-      then(config => this.setState({ config })).
-      catch(error => this.setState({ error }));
   }
 
   handleSelection = (selection) => {
