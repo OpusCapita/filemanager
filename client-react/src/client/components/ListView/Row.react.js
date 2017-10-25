@@ -3,52 +3,63 @@
 // TODO Sure this component can be optimised using "shouldComponentUpdate"
 
 import React, { Component } from 'react';
-// import { DragSource } from 'react-dnd';
+import { DragSource } from 'react-dnd';
 
-// const rowSource = {
-//   canDrag(props) {
-//     // You can disallow drag based on props
-//     return true;
-//     return props.isReady;
-//   },
+const RowDragSource = {
+  canDrag(props) {
+    // You can disallow drag based on props
+    return true;
+    return props.isReady;
+  },
 
-//   isDragging(props, monitor) {
-//     // If your component gets unmounted while dragged
-//     // (like a card in Kanban board dragged between lists)
-//     // you can implement something like this to keep its
-//     // appearance dragged:
-//     return {};
-//     return monitor.getItem().id === props.id;
-//   },
+  isDragging(props, monitor) {
+    // If your component gets unmounted while dragged
+    // (like a card in Kanban board dragged between lists)
+    // you can implement something like this to keep its
+    // appearance dragged:
+    console.log('is dragging');
+    return true;
+    // return monitor.getItem().id === props.id;
+  },
 
-//   beginDrag(props, monitor, component) {
-//     // Return the data describing the dragged item
-//     const item = { id: props.id };
-//     return item;
-//   },
+  beginDrag(props, monitor, component) {
+    // Return the data describing the dragged item
+    console.log('begin drag');
+    const item = { id: props.id };
 
-//   endDrag(props, monitor, component) {
-//     if (!monitor.didDrop()) {
-//       // You can check whether the drop was successful
-//       // or if the drag ended but nobody handled the drop
-//       return;
-//     }
+    // return item;
+  },
 
-//     // When dropped on a compatible target, do something.
-//     // Read the original dragged item from getItem():
-//     const item = monitor.getItem();
+  endDrag(props, monitor, component) {
+    if (!monitor.didDrop()) {
+      // You can check whether the drop was successful
+      // or if the drag ended but nobody handled the drop
+      return;
+    }
 
-//     // You may also read the drop result from the drop target
-//     // that handled the drop, if it returned an object from
-//     // its drop() method.
-//     const dropResult = monitor.getDropResult();
+    // When dropped on a compatible target, do something.
+    // Read the original dragged item from getItem():
+    const item = monitor.getItem();
 
-//     // This is a good place to call some Flux action
-//     CardActions.moveCardToList(item.id, dropResult.listId);
-//   }
-// };
+    // You may also read the drop result from the drop target
+    // that handled the drop, if it returned an object from
+    // its drop() method.
+    const dropResult = monitor.getDropResult();
 
-// @DragSource(type, spec, collect)
+    // This is a good place to call some Flux action
+    // CardActions.moveCardToList(item.id, dropResult.listId);
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  };
+}
+
+@DragSource('filemanager-resource', RowDragSource, collect)
 class Row extends Component {
   render() {
     let {
@@ -63,7 +74,10 @@ class Row extends Component {
       rowData,
       style,
       selection,
-      lastSelected
+      lastSelected,
+      isDragging,
+      connectDragSource,
+      connectDragPreview
     } = this.props;
 
     const a11yProps = {};
@@ -99,8 +113,12 @@ class Row extends Component {
 
     let isSelected = selection.indexOf(rowData.id) !== -1;
     let isLastSelected = lastSelected === rowData.id;
-
-    return (
+    console.log('isDragging', this.props);
+    console.log('dp', connectDragPreview);
+    console.log('ds', connectDragSource);
+    return connectDragPreview(
+      connectDragSource(
+        (
       <div
         {...a11yProps}
         className={`
@@ -114,7 +132,7 @@ class Row extends Component {
         style={style}>
         {columns}
       </div>
-    );
+        )));
   }
 };
 
