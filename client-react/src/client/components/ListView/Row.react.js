@@ -55,7 +55,6 @@ class Row extends Component {
       className,
       columns,
       index,
-      key,
       onRowClick,
       onRowDoubleClick,
       onRowMouseOut,
@@ -110,7 +109,7 @@ class Row extends Component {
         ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
         ${isLastSelected ? 'oc-fm--list-view__row--last-selected' : ''}
         `}
-        key={key}
+        key={rowData.id}
         role="row"
         style={style}>
         {columns}
