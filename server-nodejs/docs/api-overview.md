@@ -12,7 +12,7 @@
 | Get file(s)/compressed dir                                  | GET    | api/download           | [... :id]                           | :binary-data                          |
 | [Get client config](#get-client-configuration)              | GET    | api/client-config      | -                                   | :client-config-resource               |
 
-NOTE: file/dir ID is its path+name in base64.
+NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
 # Files
 
