@@ -13,8 +13,8 @@ const RowDragSource = {
   },
 
   isDragging(props, monitor) {
-    console.log('is dragging');
-    console.log('item', monitor.getItem());
+    // console.log('is dragging');
+    // console.log('item', monitor.getItem());
     return monitor.getItem().id === props.rowData.id;
   },
 
@@ -25,22 +25,11 @@ const RowDragSource = {
 
   endDrag(props, monitor, component) {
     if (!monitor.didDrop()) {
-      // You can check whether the drop was successful
-      // or if the drag ended but nobody handled the drop
       return;
     }
 
-    // When dropped on a compatible target, do something.
-    // Read the original dragged item from getItem():
     const item = monitor.getItem();
-
-    // You may also read the drop result from the drop target
-    // that handled the drop, if it returned an object from
-    // its drop() method.
     const dropResult = monitor.getDropResult();
-
-    // This is a good place to call some Flux action
-    // CardActions.moveCardToList(item.id, dropResult.listId);
   }
 };
 

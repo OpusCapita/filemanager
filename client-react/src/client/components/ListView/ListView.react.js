@@ -6,8 +6,10 @@ import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
 import { NameCell, SizeCell, DateTimeCell, HeaderCell, NoRowsRenderer } from './Cells.react';
 import Row from './Row.react';
+import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex } from 'lodash';
-const clickOutside = require('react-click-outside');
+import clickOutside from 'react-click-outside';
+
 
 const tabletWidth = 1024;
 const mobileWidth = 640;
@@ -60,7 +62,10 @@ class ListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scrollToIndex: 0
+      scrollToIndex: 0,
+      clientHeight: 0,
+      scrollTop: 0,
+      scrollHeight: 0
     };
 
     this.rangeSelectionStartedAt = null;
@@ -207,6 +212,8 @@ class ListView extends Component {
 
   handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
     this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
+    console.log('sss', scrollHeight, scrollTop);
+    this.setState({ clientHeight, scrollHeight, scrollTop });
   }
 
   handleClickOutside = () => {
@@ -300,6 +307,14 @@ class ListView extends Component {
     this.setState({ scrollToIndex: index });
   }
 
+  handleMouseAbove = (scrollTop) => {
+    this.setState({ scrollTop });
+  }
+
+  handleMouseBellow = (scrollTop) => {
+    this.setState({ scrollTop });
+  }
+
   handleSort = ({ sortBy, sortDirection }) => {
     this.props.onSort({ sortBy, sortDirection });
   }
@@ -317,7 +332,12 @@ class ListView extends Component {
       sortDirection
     } = this.props;
 
-    let { scrollToIndex } = this.state;
+    let {
+      scrollToIndex,
+      clientHeight,
+      scrollHeight,
+      scrollTop
+    } = this.state;
     let { rangeSelectionStartedAt, lastSelected } = this;
 
     return (
@@ -329,54 +349,67 @@ class ListView extends Component {
             tabIndex="0"
             ref={ref => (this.containerRef = ref)}
           >
-            <Table
-              width={width}
-              height={height}
-              rowCount={itemsCount}
-              rowGetter={({ index }) => items[index]}
-              rowHeight={48}
-              headerHeight={48}
-              className="oc-fm--list-view__table"
-              gridClassName="oc-fm--list-view__grid"
-              overscanRowCount={4}
-              onScroll={this.handleScroll}
-              scrollToIndex={scrollToIndex}
-              sort={this.handleSort}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              rowRenderer={Row({ selection, lastSelected })}
-              noRowsRenderer={NoRowsRenderer()}
-              onRowClick={this.handleRowClick}
-              onRowRightClick={this.handleRowRightClick}
-              onRowDoubleClick={this.handleRowDoubleClick}
+            <ScrollOnMouseOut
+              onMouseAbove={this.handleMouseAbove}
+              onMouseBellow={this.handleMouseBellow}
+              clientHeight={clientHeight}
+              scrollHeight={scrollHeight}
+              scrollTop={scrollTop}
+              style={{
+                width: `${width}px`,
+                height: `${height}px`
+              }}
             >
-              <Column
-                label='Name'
-                dataKey='title'
-                width={48}
-                flexGrow={1}
-                cellRenderer={NameCell()}
-                headerRenderer={HeaderCell()}
-              />
-              <Column
-                width={100}
-                label='File size'
-                dataKey='size'
-                flexGrow={width > tabletWidth ? 1 : 0}
-                cellRenderer={SizeCell({ humanReadableSize })}
-                headerRenderer={HeaderCell()}
-                />
-              {width > mobileWidth ? (
+              <Table
+                width={width}
+                height={height}
+                rowCount={itemsCount}
+                rowGetter={({ index }) => items[index]}
+                rowHeight={48}
+                headerHeight={48}
+                className="oc-fm--list-view__table"
+                gridClassName="oc-fm--list-view__grid"
+                overscanRowCount={4}
+                onScroll={this.handleScroll}
+                scrollToIndex={scrollToIndex}
+                scrollTop={scrollTop}
+                sort={this.handleSort}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                rowRenderer={Row({ selection, lastSelected })}
+                noRowsRenderer={NoRowsRenderer()}
+                onRowClick={this.handleRowClick}
+                onRowRightClick={this.handleRowRightClick}
+                onRowDoubleClick={this.handleRowDoubleClick}
+              >
                 <Column
-                  width={100}
-                  label='Last modified'
-                  dataKey='lastModified'
+                  label='Name'
+                  dataKey='title'
+                  width={48}
                   flexGrow={1}
-                  cellRenderer={DateTimeCell({ locale, dateTimePattern })}
+                  cellRenderer={NameCell()}
                   headerRenderer={HeaderCell()}
                 />
-              ) : null}
-            </Table>
+                <Column
+                  width={100}
+                  label='File size'
+                  dataKey='size'
+                  flexGrow={width > tabletWidth ? 1 : 0}
+                  cellRenderer={SizeCell({ humanReadableSize })}
+                  headerRenderer={HeaderCell()}
+                />
+                {width > mobileWidth ? (
+                  <Column
+                    width={100}
+                    label='Last modified'
+                    dataKey='lastModified'
+                    flexGrow={1}
+                    cellRenderer={DateTimeCell({ locale, dateTimePattern })}
+                    headerRenderer={HeaderCell()}
+                    />
+                ) : null}
+              </Table>
+            </ScrollOnMouseOut>
           </div>
         )}
       </AutoSizer>
