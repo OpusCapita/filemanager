@@ -1,15 +1,16 @@
 # Summary
 
-| Method                                                  | REST   | URL                    | Request                             | Response                              |
-|---------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)    | POST   | api/files              | {<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type<br />} | :file-stats-resource                  |
-| [Delete file/dir](#delete-file-or-directory)            | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list)   | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
-| [Get file/dir stats](#get-file-or-directory-statistics) | GET    | api/files/:id/stats    | -                                   | :file-stats-resource                  |
-| Copy file/dir to destination                            | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
-| Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
-| Get file(s)/compressed dir                              | GET    | api/download           | [... :id]                           | :binary-data                          |
-| [Get client config](#get-client-configuration)          | GET    | api/client-config      | -                                   | :client-config-resource               |
+| Method                                                           | REST   | URL                    | Request                             | Response                              |
+|------------------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
+| [Create new file/dir](#create-new-file-or-directory)             | POST   | api/files              | {<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type<br />} | :file-stats-resource                  |
+| [Get file/dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
+| [Get file/dir stats](#get-file-or-directory-statistics)          | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
+| [Delete file/dir](#delete-file-or-directory)                     | DELETE | api/files/:id          | -                                   | -                                     |
+| [Get dir children list](#get-directory-children-list)            | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
+| Copy file/dir to destination                                     | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
+| Move file/dir to destination                                     | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
+| Get file(s)/compressed dir                                       | GET    | api/download           | [... :id]                           | :binary-data                          |
+| [Get client config](#get-client-configuration)                   | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.
 
