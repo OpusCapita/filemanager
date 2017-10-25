@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start pm2.config.js --no-daemon",
-    "stop": "pm2 stop pm2.config.js",
+    "start": "node ./index.js",
     "lint": "eslint ."
   },
   "author": "",

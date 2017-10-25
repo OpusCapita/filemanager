@@ -16,6 +16,7 @@ const port = serverConfig.port;
 const options = {
   getClientConfig: serverConfig.getClientConfig, // promise
   fsRoot: serverConfig.fsRoot,
+  rootTitle: serverConfig.rootTitle,
   logger
 };
 

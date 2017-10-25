@@ -12,6 +12,5 @@ module.exports = (app, options) =>
       catch(err => {
         options.logger.error(err);
         res.status(500).end();
-      });
+      })
   );
-;
