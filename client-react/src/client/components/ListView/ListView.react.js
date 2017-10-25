@@ -86,8 +86,8 @@ class ListView extends Component {
   selectRange(fromId, toId) {
     let fromIdIndex = findIndex(this.props.items, (o) => o.id === fromId);
     let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
-    let selectionOrder = toIdIndex > fromIdIndex ? 1 : -1;
-    let itemsSlice = selectionOrder === 1 ?
+    let selectionDirection = toIdIndex > fromIdIndex ? 1 : -1;
+    let itemsSlice = selectionDirection === 1 ?
         this.props.items.slice(fromIdIndex, toIdIndex + 1) :
         this.props.items.slice(toIdIndex, fromIdIndex + 1);
 
@@ -111,6 +111,7 @@ class ListView extends Component {
       this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
       this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
     } else {
+      this.lastSelected = id;
       this.rangeSelectionStartedAt = null;
       this.handleSelection([rowData.id]);
     };
@@ -127,7 +128,7 @@ class ListView extends Component {
   }
 
   handleKeyDown =(e) => {
-    let { selection, items, onKeyDown } = this.props;
+    let { selection, items, itemsCount, onKeyDown } = this.props;
     this.props.onKeyDown(e);
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
@@ -164,7 +165,13 @@ class ListView extends Component {
 
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
       e.preventDefault();
-      let selectionData = this.addPrevToSelection();
+
+      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+      let nextIdIndex = fromIdIndex > 0 ? fromIdIndex - 1 : 0;
+      let nextId = items[nextIdIndex].id;
+      let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
+
+      let selectionData = selectionDirection === -1 ? this.addPrevToSelection() : this.removeLastFromSelection();
       this.lastSelected = items[selectionData.scrollToIndex].id;
       this.handleSelection(selectionData.selection);
       this.scrollToIndex(selectionData.scrollToIndex);
@@ -172,7 +179,13 @@ class ListView extends Component {
 
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
       e.preventDefault();
-      let selectionData = this.addNextToSelection();
+
+      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+      let nextIdIndex = fromIdIndex + 1 < itemsCount ? fromIdIndex + 1 : itemsCount - 1;
+      let nextId = items[nextIdIndex].id;
+      let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
+
+      let selectionData = selectionDirection === -1 ? this.addNextToSelection() : this.removeFirstFromSelection();
       this.lastSelected = items[selectionData.scrollToIndex].id;
       this.handleSelection(selectionData.selection);
       this.scrollToIndex(selectionData.scrollToIndex);
