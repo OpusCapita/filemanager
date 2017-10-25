@@ -3,7 +3,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-const STRENGTH = 10;
+const STRENGTH = 20;
 const TIMEOUT_TIME = 16;
 
 const propTypes = {
@@ -118,7 +118,6 @@ class ScrollOnMouseOut extends Component {
   }
 
   stopHandleCursorPosition = () => {
-    console.log('clear timeout!', this.timeout);
     window.clearTimeout(this.timeout);
   }
 

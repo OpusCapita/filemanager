@@ -212,7 +212,6 @@ class ListView extends Component {
 
   handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
     this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
-    console.log('sss', scrollHeight, scrollTop);
     this.setState({ clientHeight, scrollHeight, scrollTop });
   }
 
