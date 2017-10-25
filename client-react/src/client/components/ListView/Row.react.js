@@ -13,21 +13,14 @@ const RowDragSource = {
   },
 
   isDragging(props, monitor) {
-    // If your component gets unmounted while dragged
-    // (like a card in Kanban board dragged between lists)
-    // you can implement something like this to keep its
-    // appearance dragged:
     console.log('is dragging');
-    return true;
-    // return monitor.getItem().id === props.id;
+    console.log('item', monitor.getItem());
+    return monitor.getItem().id === props.rowData.id;
   },
 
   beginDrag(props, monitor, component) {
-    // Return the data describing the dragged item
-    console.log('begin drag');
-    const item = { id: props.id };
-
-    // return item;
+    const item = { id: props.rowData.id };
+    return item;
   },
 
   endDrag(props, monitor, component) {
@@ -113,9 +106,7 @@ class Row extends Component {
 
     let isSelected = selection.indexOf(rowData.id) !== -1;
     let isLastSelected = lastSelected === rowData.id;
-    console.log('isDragging', this.props);
-    console.log('dp', connectDragPreview);
-    console.log('ds', connectDragSource);
+
     return connectDragPreview(
       connectDragSource(
         (
@@ -126,6 +117,7 @@ class Row extends Component {
         oc-fm--list-view__row
         ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
         ${isLastSelected ? 'oc-fm--list-view__row--last-selected' : ''}
+        ${isDragging ? 'oc-fm--list-view__row--dragging' : ''}
         `}
         key={rowData.id}
         role="row"
