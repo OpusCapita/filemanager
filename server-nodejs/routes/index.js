@@ -1,6 +1,6 @@
 'use strict';
 
-let routesToRegister = [
+const routesToRegister = [
   require('./client-config'),
   require('./files')
 ];

@@ -1,39 +1,38 @@
 'use strict';
 
-let path = require('path');
-let fs = require('fs-extra');
-let getClientIp = require('../utils/get-client-ip');
-let id = require('../utils/id');
-let asyncMiddleware = require('../utils/async-middleware');
+const path = require('path');
+const fs = require('fs-extra');
 
-module.exports = (app, options) => {
-  const { logger } = options;
+const getClientIp = require('../utils/get-client-ip');
 
-  app.get('/files/:id?', asyncMiddleware(async (req, res, next) => {
-    let { fsRoot } = options;
-    let relativePath = req.params.id ? id.decode(req.params.id) : '.';
-    let absolutePath = path.resolve(fsRoot, './' + relativePath);
+const {
+  encode: path2id,
+  decode: id2path
+} = require('../utils/id');
 
-    logger.info(`Files config for ${absolutePath} requested by ${getClientIp(req)}`);
+module.exports = (app, options) => app.get('api/files/:id/stats', (req, res) => {
+  const id = req.params.id;
+  const absolutePath = path.resolve(options.fsRoot, '.' + id2path(id));
 
-    let fileStats = await fs.stat(absolutePath).catch((err) => {
-      logger.error(err);
+  options.logger.info(`Stat for ${absolutePath} requested by ${getClientIp(req)}`);
+
+  fs.stat(absolutePath).
+    then(stats => {
+      const resourceRepresentation = {
+        id,
+        title: path.basename(absolutePath),
+        type: stats.isDirectory() ?
+          'dir' :
+          (stats.isFile ? 'file' : 'unknown'),
+        createDate: stats.birthtime,
+        modifyDate: stats.mtime,
+        size: stats.size
+      };
+
+      res.json(resourceRepresentation);
+    }).
+    catch(err => {
+      options.logger.error(err);
       res.status(204).end();
     });
-
-    if (!fileStats) {
-      return;
-    }
-
-    let resourceRepresentation = {
-      id: relativePath, // /home/user/adsfsdf.md 24234klfasdj;fasdk234
-      title: 'file1.md',
-      kind: fileStats.isDirectory(),
-      createDate: fileStats.birthtime,
-      modifiedDate: fileStats.mtime,
-      size: fileStats.size
-    };
-
-    res.status(200).json(resourceRepresentation).end();
-  }));
-};
+});

@@ -1,7 +1,6 @@
 'use strict';
 
-let path = require('path');
-
+const path = require('path');
 const clientConfigPath = path.resolve(__dirname, './client-config.js');
 
 module.exports = {
@@ -9,8 +8,8 @@ module.exports = {
   port: process.env.PORT || '3020',
   host: process.env.HOST || 'localhost',
 
-  getClientConfig: () => new Promise((resolve, reject) => {
-    let clientConfig = require(clientConfigPath, 'utf-8');
+  getClientConfig: _ => new Promise((resolve, reject) => {
+    const clientConfig = require(clientConfigPath, 'utf-8');
     resolve(clientConfig);
-  })
+  });
 };

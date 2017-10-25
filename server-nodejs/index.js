@@ -1,23 +1,22 @@
 'use strict';
 
-let registerRoutes = require('./routes');
-let logger = require('./logger');
-let express = require('express');
-let bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-let serverConfig = require('./config/server-config');
-let host = serverConfig.host;
-let port = serverConfig.port;
-let getClientConfig = serverConfig.getClientConfig; // promise
+const registerRoutes = require('./routes');
+const logger = require('./logger');
+const serverConfig = require('./config/server-config');
 
-
-let app = express();
+const app = express();
 app.use(bodyParser.json());
 
-let options = {
-  getClientConfig,
-  logger,
-  fsRoot: serverConfig.fsRoot
+const host = serverConfig.host;
+const port = serverConfig.port;
+
+const options = {
+  getClientConfig: serverConfig.getClientConfig, // promise
+  fsRoot: serverConfig.fsRoot,
+  logger
 };
 
 registerRoutes(app, options);
