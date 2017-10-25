@@ -99,7 +99,7 @@ class ListView extends Component {
   handleRowClick = ({ event, index, rowData}) => {
     let { selection } = this.props;
     let { id } = rowData;
-    this.lastSelected = null;
+    this.lastSelected = id;
 
     if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
       this.rangeSelectionStartedAt = id;
@@ -107,11 +107,9 @@ class ListView extends Component {
         this.handleSelection(this.removeFromSelection(id)) :
         this.handleSelection(this.addToSelection(id));
     } else if (event.shiftKey) {
-      this.lastSelected = id;
       this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
       this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
     } else {
-      this.lastSelected = id;
       this.rangeSelectionStartedAt = null;
       this.handleSelection([rowData.id]);
     };
@@ -167,6 +165,12 @@ class ListView extends Component {
       e.preventDefault();
 
       let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+
+
+      if (fromIdIndex === 0) {
+        return;
+      }
+
       let nextIdIndex = fromIdIndex > 0 ? fromIdIndex - 1 : 0;
       let nextId = items[nextIdIndex].id;
       let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
@@ -181,6 +185,11 @@ class ListView extends Component {
       e.preventDefault();
 
       let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+
+      if (fromIdIndex === itemsCount - 1) {
+        return;
+      }
+
       let nextIdIndex = fromIdIndex + 1 < itemsCount ? fromIdIndex + 1 : itemsCount - 1;
       let nextId = items[nextIdIndex].id;
       let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
@@ -217,7 +226,7 @@ class ListView extends Component {
 
   selectNext = () => {
     let { selection, items, itemsCount } = this.props;
-    let currentId = selection[selection.length - 1];
+    let currentId = this.lastSelected;
     let currentIndex = findIndex(items, (o) => o.id === currentId);
     let nextIndex = currentIndex < itemsCount - 1 ? currentIndex + 1 : currentIndex;
     let nextId = items[nextIndex].id;
@@ -226,7 +235,7 @@ class ListView extends Component {
 
   selectPrev = () => {
     let { selection, items, itemsCount } = this.props;
-    let currentId = selection[0];
+    let currentId = this.lastSelected;
     let currentIndex = findIndex(items, (o) => o.id === currentId);
     let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
     let prevId = items[prevIndex].id;
