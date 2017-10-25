@@ -47,7 +47,7 @@ class ScrollOnMouseOut extends Component {
 
   componentWillUnmount() {
     this.stopCaptureCursor();
-    this.stopHandleCursorPosition();
+    this.clearTimeout();
     window.removeEventListener('mouseup', this.handleWindowMouseUp);
     window.removeEventListener('dragend', this.handleWindowMouseUp);
     window.removeEventListener('drop', this.handleWindowMouseUp);
@@ -81,7 +81,7 @@ class ScrollOnMouseOut extends Component {
   }
 
   stopCaptureCursor = () => {
-    this.stopHandleCursorPosition();
+    this.clearTimeout();
     window.removeEventListener('mousemove', this.handleMouseMove, true);
     window.removeEventListener('dragover', this.handleMouseMove, true);
   }
@@ -92,8 +92,9 @@ class ScrollOnMouseOut extends Component {
     let newScrollTop = scrollTop - STRENGTH < 0 ? 0 : scrollTop - STRENGTH;
 
     this.timeout = window.setTimeout(() => {
+      this.clearTimeout();
       if (!this.state.isCursorBellow && !this.state.isCursorAbove) {
-        this.stopHandleCursorPosition();
+        this.clearTimeout();
         return;
       }
 
@@ -110,8 +111,9 @@ class ScrollOnMouseOut extends Component {
         scrollTop + STRENGTH;
 
     this.timeout = window.setTimeout(() => {
+      this.clearTimeout();
       if (!this.state.isCursorBellow && !this.state.isCursorAbove) {
-        this.stopHandleCursorPosition();
+        this.clearTimeout();
         return;
       }
 
@@ -120,7 +122,7 @@ class ScrollOnMouseOut extends Component {
     }, TIMEOUT_TIME);
   }
 
-  stopHandleCursorPosition = () => {
+  clearTimeout = () => {
     window.clearTimeout(this.timeout);
   }
 
