@@ -7,8 +7,8 @@ const STRENGTH = 20;
 const TIMEOUT_TIME = 16;
 
 const propTypes = {
-  onMouseAbove: PropTypes.func,
-  onMouseBellow: PropTypes.func,
+  onCursorAbove: PropTypes.func,
+  onCursorBellow: PropTypes.func,
   topCaptureOffset: PropTypes.number,
   bottomCaptureOffset: PropTypes.number,
   scrollHeight: PropTypes.number,
@@ -16,10 +16,13 @@ const propTypes = {
   scrollTop: PropTypes.number
 };
 const defaultProps = {
-  onMouseAbove: () => {},
-  onMouseBellow: () => {},
+  onCursorAbove: () => {},
+  onCursorBellow: () => {},
   topCaptureOffset: 12,
-  bottomCaptureOffset: 12
+  bottomCaptureOffset: 12,
+  scrollHeight: 0,
+  clientHeight: 0,
+  scrollTop: 0
 };
 
 export default
@@ -94,7 +97,7 @@ class ScrollOnMouseOut extends Component {
         return;
       }
 
-      this.props.onMouseAbove(newScrollTop);
+      this.props.onCursorAbove(newScrollTop);
       this.handleCursorAbove();
     }, TIMEOUT_TIME);
   }
@@ -112,7 +115,7 @@ class ScrollOnMouseOut extends Component {
         return;
       }
 
-      this.props.onMouseBellow(newScrollTop);
+      this.props.onCursorBellow(newScrollTop);
       this.handleCursorBellow();
     }, TIMEOUT_TIME);
   }
@@ -145,12 +148,12 @@ class ScrollOnMouseOut extends Component {
 
   render() {
     let {
-      onMouseAbove,
-      onMouseBellow,
+      onCursorAbove,
+      onCursorBellow,
       topCaptureOffset,
       bottomCaptureOffset,
-      clientHeight,
       scrollHeight,
+      clientHeight,
       scrollTop,
       ...restProps
     } = this.props;

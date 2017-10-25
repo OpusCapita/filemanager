@@ -13,8 +13,8 @@ ScrollOnMouseOut is
 
 ```
 <ScrollOnMouseOut
-  onScrollToTop={(e, offset) => console.log(offset)}
-  onScrollToBottom={(e, offset) => console.log(offset)}
+  onCursorAbove={() => console.log('above')}
+  onCursorBellow={() => console.log('bellow')}
 >
   <ul style={{ height: '240px', overflow: 'auto' }}>
     <li>item</li>

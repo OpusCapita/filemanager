@@ -306,11 +306,11 @@ class ListView extends Component {
     this.setState({ scrollToIndex: index });
   }
 
-  handleMouseAbove = (scrollTop) => {
+  handleCursorAbove = (scrollTop) => {
     this.setState({ scrollTop });
   }
 
-  handleMouseBellow = (scrollTop) => {
+  handleCursorBellow = (scrollTop) => {
     this.setState({ scrollTop });
   }
 
@@ -349,8 +349,8 @@ class ListView extends Component {
             ref={ref => (this.containerRef = ref)}
           >
             <ScrollOnMouseOut
-              onMouseAbove={this.handleMouseAbove}
-              onMouseBellow={this.handleMouseBellow}
+              onCursorAbove={this.handleCursorAbove}
+              onCursorBellow={this.handleCursorBellow}
               clientHeight={clientHeight}
               scrollHeight={scrollHeight}
               scrollTop={scrollTop}
