@@ -20,8 +20,8 @@ const propTypes = {
     type: PropTypes.string,
     iconUrl: PropTypes.string,
     title: PropTypes.string,
-    size: PropTypes.string,
-    modifyDate: PropTypes.string
+    size: PropTypes.number,
+    modifyDate: PropTypes.number
   })),
   itemsCount: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.string),
