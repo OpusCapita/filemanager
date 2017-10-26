@@ -33,8 +33,7 @@ module.exports = (app, options) => {
       id: path2id(userPath),
       title: userBasename || options.rootTitle,
       createDate: stat.birthtime,
-      modifyDate: stat.mtime,
-      parentId: path2id(path.resolve(userPath, '..'))
+      modifyDate: stat.mtime
     };
 
     if (userParent) {

@@ -57,6 +57,10 @@ class FileManager extends Component {
     this.viewRef.focus();
   }
 
+  clearSelection = () => {
+    this.setState({ selection: [] });
+  }
+
   componentDidMount() {
     let { initialResourceId } = this.props;
     this.navigateToDir(initialResourceId);
@@ -72,6 +76,7 @@ class FileManager extends Component {
     this.setState({ resourceChildren, resourceChildrenCount });
 
     this.stopViewLoading();
+    this.clearSelection();
   }
 
   async getResourceById(id) {
@@ -111,7 +116,7 @@ class FileManager extends Component {
 
   handleResourceItemDoubleClick = ({ event, number, rowData }) => {
     let { loadingView } = this.state;
-    let { id, type } = rowData;
+    let { id, isDirectory } = rowData;
 
     if (loadingView) {
       return;
