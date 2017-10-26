@@ -16,7 +16,9 @@ FileManager is
   <FileManager
     apiRoot={'http://localhost:3020/api'}
     apiVersion="nodejs_v1"
+    dateTimePattern="YYYY-MM-DD HH:mm:ss"
     initialResourceId={''}
+    locale="en"
   />
 </div>
 ```

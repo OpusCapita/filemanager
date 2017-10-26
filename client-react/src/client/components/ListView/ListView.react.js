@@ -45,7 +45,7 @@ const defaultProps = {
   selection: [],
   humanReadableSize: true,
   locale: 'en',
-  dateTimePattern: 'YYYY-MM-dd HH:mm:ss',
+  dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   sortBy: 'title',
   sortDirection: SortDirection.ASC,
   onRowClick: () => {},

@@ -7,18 +7,22 @@ import api from './api';
 console.log('api', api);
 
 const propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
   apiRoot: PropTypes.string,
   apiVersion: PropTypes.string,
-  initialResourceId: PropTypes.string
+  className: PropTypes.string,
+  dateTimePattern: PropTypes.string,
+  id: PropTypes.string,
+  initialResourceId: PropTypes.string,
+  locale: PropTypes.string
 };
 const defaultProps = {
-  className: '',
-  id: nanoid(),
   apiRoot: '',
   apiVersion: 'nodejs_v1',
-  initialResourceId: ''
+  className: '',
+  dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
+  id: nanoid(),
+  initialResourceId: '',
+  locale: 'en'
 };
 
 export default
@@ -32,41 +36,60 @@ class FileManager extends Component {
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
       resource: {},
-      resourceItems: [],
-      resourceItemsCount: 0
+      resourceChildren: [],
+      resourceChildrenCount: 0,
+      loadingView: false
     };
 
     this.api = api[props.apiVersion];
   }
 
-  async componentDidMount() {
+  startViewLoading = () => {
+    this.setState({ loadingView: true });
+  }
+
+  stopViewLoading = () => {
+    this.setState({ loadingView: false });
+  }
+
+  focusView = () => {
+    console.log(this.viewRef);
+    this.viewRef.focus();
+  }
+
+  componentDidMount() {
     let { initialResourceId } = this.props;
     this.navigateToDir(initialResourceId);
   }
 
   async navigateToDir(id) {
+    this.startViewLoading();
+
     let resource = await this.getResourceById(id);
     this.setState({ resource });
 
-    let { resourceItems, resourceItemsCount } = await this.getItemsForId(resource.id);
-    this.setState({ resourceItems, resourceItemsCount });
+    let { resourceChildren, resourceChildrenCount } = await this.getChildrenForId(resource.id);
+    this.setState({ resourceChildren, resourceChildrenCount });
+
+    this.stopViewLoading();
   }
 
   async getResourceById(id) {
     let { apiRoot } = this.props;
     let result = await this.api.getResourceById(apiRoot, id);
+
     return result;
   }
 
-  async getItemsForId(id) {
+  async getChildrenForId(id) {
     let { apiRoot } = this.props;
-    let { resourceItems, resourceItemsCount } = await this.api.getItemsForId(apiRoot, id);
-    return { resourceItems, resourceItemsCount };
+    let { resourceChildren, resourceChildrenCount } = await this.api.getChildrenForId(apiRoot, id);
+    return { resourceChildren, resourceChildrenCount };
   }
 
-  filterResourceItemsByIds(ids) {
-    let { resourceItems } = this.state;
-    let filteredResourceItems = resourceItems.filter((o) => ids.indexOf(o.id) !== -1);
+  filterResourceChildrenByID(ids) {
+    let { resourceChildren } = this.state;
+    let filteredResourceItems = resourceChildren.filter((o) => ids.indexOf(o.id) !== -1);
     return filteredResourceItems;
   }
 
@@ -93,15 +116,17 @@ class FileManager extends Component {
       this.navigateToDir(id);
     }
 
-    this.viewRef.focus();
+    this.focusView();
   }
 
   handleViewKeyDown = (e) => {
-    if (e.which === 13) { // Enter key
+    let { loadingView } = this.state;
+
+    if (e.which === 13 && !loadingView) { // Enter key
       let { selection } = this.state;
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
-        let selectedResourceItems = this.filterResourceItemsByIds(selection);
+        let selectedResourceItems = this.filterResourceChildrenByID(selection);
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {
@@ -110,7 +135,7 @@ class FileManager extends Component {
       }
     }
 
-    if (e.which === 8) { // Backspace key
+    if (e.which === 8 && !loadingView) { // Backspace key
       // Navigate to parent directory
       let { resource } = this.state;
       this.navigateToDir(resource.parentId);
@@ -127,18 +152,31 @@ class FileManager extends Component {
 
   render() {
     let {
-      className
+      apiRoot,
+      apiVersion,
+      className,
+      dateTimePattern,
+      id,
+      initialResourceId,
+      locale
     } = this.props;
 
     let {
       config,
       error,
+      loadingView,
+      resourceChildren,
+      resourceChildrenCount,
       selection,
       sortBy,
-      sortDirection,
-      resourceItems,
-      resourceItemsCount
+      sortDirection
     } = this.state;
+
+    let viewLoadingOverlay = loadingView ? (
+      <div className="oc-fm--file-manager__view-loading-overlay">
+      </div>
+    ) : null;
+
 
     return (
       <div
@@ -146,6 +184,7 @@ class FileManager extends Component {
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
+        {viewLoadingOverlay}
         <ListView
           onKeyDown={this.handleViewKeyDown}
           onRowClick={this.handleResourceItemClick}
@@ -157,8 +196,10 @@ class FileManager extends Component {
           selection={selection}
           sortBy={sortBy}
           sortDirection={sortDirection}
-          items={resourceItems}
-          itemsCount={resourceItemsCount}
+          items={resourceChildren}
+          itemsCount={resourceChildrenCount}
+          locale={locale}
+          dateTimePattern={dateTimePattern}
         />
       </div>
     );
