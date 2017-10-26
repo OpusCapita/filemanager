@@ -55,6 +55,8 @@ FormData instance with the following field name/value pairs.
 <file stats resource>
 ```
 
+A 204 status is returned if a dir with parentId does not exist.
+
 ## Delete file or directory
 
 * URL: `api/files/id`
