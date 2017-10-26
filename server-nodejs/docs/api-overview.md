@@ -2,7 +2,7 @@
 
 | Method                                                      | REST   | URL                    | Request                             | Response                              |
 |-------------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;title,<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type<br />} | :file-stats-resource                  |
+| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?title,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource                  |
 | [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
 | [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
@@ -42,12 +42,12 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
 
 FormData instance with the following field name/value pairs.
 
-| Field Name | Field Value |
-|------------|--------------|
-|  title     | \<string\>   |
-|  parentId  | \<string\>   |
-|  type      | \<string\>   |
-| ?files     | \<FileList\> |
+| Field Name | Field Value  | Comments               |
+|------------|--------------|------------------------|
+|  parentId  | \<string\>   |                        |
+|  type      | \<string\>   |                        |
+| ?title     | \<string\>   | for type==='dir' only  |
+| ?files     | \<FileList\> | for type==='file' only |
 
 ### Response
 
