@@ -120,13 +120,14 @@ class FileManager extends Component {
 
   handleResourceItemDoubleClick = ({ event, number, rowData }) => {
     let { loadingView, resource } = this.state;
-    let { id, isDirectory } = rowData;
+    let { id } = rowData;
 
     if (loadingView) {
       return;
     }
 
-    if (resource.type === 'dir') {
+    let isDirectory = rowData.type === 'dir';
+    if (isDirectory) {
       this.navigateToDir(id, resource.id);
     }
 
