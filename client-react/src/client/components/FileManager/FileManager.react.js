@@ -56,10 +56,6 @@ class FileManager extends Component {
     this.viewRef.focus();
   }
 
-  clearSelection = () => {
-    this.setState({ selection: [] });
-  }
-
   componentDidMount() {
     let { initialResourceId } = this.props;
     this.navigateToDir(initialResourceId);
@@ -149,7 +145,7 @@ class FileManager extends Component {
       }
     }
 
-    if ((e.which === 27 || e.which === 8) && !loadingView) { // Backspace or Esc key
+    if ((e.which === 8) && !loadingView) { // Backspace
       // Navigate to parent directory
       let { resource } = this.state;
       this.navigateToDir(resource.parentId, resource.id);

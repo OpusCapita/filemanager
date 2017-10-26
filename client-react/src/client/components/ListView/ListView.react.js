@@ -237,6 +237,20 @@ class ListView extends Component {
       this.scrollToIndex(selectionData.scrollToIndex);
     }
 
+    if (e.which === 65 && (e.ctrlKey || e.metaKey)) { // Ctrl + A or Command + A
+      // Select all
+      e.preventDefault();
+      let { items } = this.props;
+      let allIds = items.map((o) => o.id);
+      this.handleSelection(allIds);
+    }
+
+    if (e.which === 27) { // Esc
+      // Clear selection
+      e.preventDefault();
+      this.handleSelection([]);
+    }
+
     this.containerRef.focus(); // XXX fix for loosing focus on key navigation
   }
 
