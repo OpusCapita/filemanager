@@ -40,14 +40,14 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
 
 ### Request
 
-FormData instance with the following key/value pairs.
+FormData instance with the following field name/value pairs.
 
-| KEY       | VALUE        |
-|-----------|--------------|
-|  title    | \<string\>   |
-|  parentId | \<string\>   |
-|  type     | \<string\>   |
-| ?files    | \<FileList\> |
+| Field Name | Field Value |
+|------------|--------------|
+|  title     | \<string\>   |
+|  parentId  | \<string\>   |
+|  type      | \<string\>   |
+| ?files     | \<FileList\> |
 
 ### Response
 
