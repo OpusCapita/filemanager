@@ -4,23 +4,24 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
 
 ### Props Reference
 
-| Name                           | Type                    | Description                                                   |
-| ------------------------------ | :---------------------- | -----------------------------------------------------------   |
+| Name                           | Type                    | Description                                                 |
+| ------------------------------ | :---------------------- | ----------------------------------------------------------- |
 | items                          | array                   | [{ id, isDirectory, iconUrl, title, size, modifyDate } ...] |
-| itemsCount                     | number                  | Items total count                                             |
-| selection                      | array                   | [id1, id2, id3, ...]                                          |
-| humanReadableSize              | bool                    | Convert bytes to KB, MB, GB, etc.                             |
+| itemsCount                     | number                  | Items total count                                           |
+| selection                      | array                   | [id1, id2, id3, ...]                                        |
+| humanReadableSize              | bool                    | Convert bytes to KB, MB, GB, etc.                           |
 | locale                         | string                  | Used with `momentjs` for `modifyDate` column, etc.          |
 | dateTimePattern                | string                  | Used with `momentjs` for `modifyDate` column, etc.          |
-| sortBy                         | string                  | Column key                                                    |
-| sortDirection                  | string                  | "ASC" or "DESC"                                               |
-| onRowClick                     | func                    | ({ event, index, rowData}) => {}                              |
-| onRowRightClick                | func                    | ({ event, index, rowData}) => {}                              |
-| onRowDoubleClick               | func                    | ({ event, index, rowData}) => {}                              |
-| onScroll                       | func                    | ({ clientHeight, scrollHeight, scrollTop }) => {}             |
-| onSelection                    | func                    | ([id1, id2, id3, ...]) => {}                                  |
-| onSort                         | func                    | ({ sortBy, sortDirection }) => {}                             |
-| onKeyDown                      | func                    | (e) => {}                                                     |
+| sortBy                         | string                  | Column key                                                  |
+| sortDirection                  | string                  | "ASC" or "DESC"                                             |
+| onRowClick                     | func                    | ({ event, index, rowData}) => {}                            |
+| onRowRightClick                | func                    | ({ event, index, rowData}) => {}                            |
+| onRowDoubleClick               | func                    | ({ event, index, rowData}) => {}                            |
+| onScroll                       | func                    | ({ clientHeight, scrollHeight, scrollTop }) => {}           |
+| onSelection                    | func                    | ([id1, id2, id3, ...]) => {}                                |
+| onSort                         | func                    | ({ sortBy, sortDirection }) => {}                           |
+| onKeyDown                      | func                    | (e) => {}                                                   |
+| onRef                          | func                    | (ref) => {}                                                 |
 
 ### Code Example
 

@@ -87,18 +87,22 @@ class FileManager extends Component {
       this.navigateToDir(id);
     }
 
-    this.containerRef.focus();
+    this.viewRef.focus();
   }
 
   handleViewKeyDown = (e) => {
-
-  }
-
-  handleKeyDown = (e) => {
     if (e.which === 8) { // Backspace key
       let { resource } = this.state;
       this.navigateToDir(resource.parentId);
     }
+  }
+
+  handleKeyDown = (e) => {
+
+  }
+
+  handleViewRef = (ref) => {
+    this.viewRef = ref;
   }
 
   render() {
@@ -121,7 +125,6 @@ class FileManager extends Component {
         className={`oc-fm--file-manager ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
-        tabIndex="0"
       >
         <ListView
           onKeyDown={this.handleViewKeyDown}
@@ -130,6 +133,7 @@ class FileManager extends Component {
           onRowDoubleClick={this.handleResourceItemDoubleClick}
           onSelection={this.handleSelection}
           onSort={this.handleSort}
+          onRef={this.handleViewRef}
           selection={selection}
           sortBy={sortBy}
           sortDirection={sortDirection}

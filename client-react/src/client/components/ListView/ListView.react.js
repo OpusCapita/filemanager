@@ -36,7 +36,8 @@ const propTypes = {
   onScroll: PropTypes.func,
   onSelection: PropTypes.func,
   onSort: PropTypes.func,
-  onKeyDown: PropTypes.func
+  onKeyDown: PropTypes.func,
+  onRef: PropTypes.func
 };
 const defaultProps = {
   items: [],
@@ -53,7 +54,8 @@ const defaultProps = {
   onScroll: () => {},
   onSelection: () => {},
   onSort: () => {},
-  onKeyDown: () => {}
+  onKeyDown: () => {},
+  onRef: () => {}
 };
 
 @clickOutside
@@ -318,6 +320,11 @@ class ListView extends Component {
     this.props.onSort({ sortBy, sortDirection });
   }
 
+  handleRef = (ref) => {
+    this.containerRef = ref;
+    this.props.onRef(ref);
+  }
+
   render() {
     let {
       items,
@@ -346,7 +353,7 @@ class ListView extends Component {
             className="oc-fm--list-view"
             onKeyDown={this.handleKeyDown}
             tabIndex="0"
-            ref={ref => (this.containerRef = ref)}
+            ref={this.handleRef}
           >
             <ScrollOnMouseOut
               onCursorAbove={this.handleCursorAbove}
