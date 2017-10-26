@@ -8,6 +8,7 @@ import api from './api';
 const propTypes = {
   apiRoot: PropTypes.string,
   apiVersion: PropTypes.string,
+  apiInitOption: PropTypes.object,
   className: PropTypes.string,
   dateTimePattern: PropTypes.string,
   id: PropTypes.string,
@@ -17,6 +18,7 @@ const propTypes = {
 const defaultProps = {
   apiRoot: '',
   apiVersion: 'nodejs_v1',
+  apiInitOptions: {},
   className: '',
   dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   id: nanoid(),
@@ -52,12 +54,13 @@ class FileManager extends Component {
   }
 
   focusView = () => {
-    console.log(this.viewRef);
     this.viewRef.focus();
   }
 
-  componentDidMount() {
-    let { initialResourceId } = this.props;
+  async componentDidMount() {
+    let { initialResourceId, apiInitOptions } = this.props;
+
+    await this.api.init(apiInitOptions);
     this.navigateToDir(initialResourceId);
   }
 

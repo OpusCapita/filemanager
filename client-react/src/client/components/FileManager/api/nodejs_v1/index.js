@@ -1,6 +1,10 @@
 import request from 'superagent';
 import id from '../../../../../../../server-nodejs/utils/id';
 
+async function init() {
+
+}
+
 function normalizeResource(resource) {
   return {
     createDate: Date.parse(resource.createDate),
@@ -52,6 +56,7 @@ async function getChildrenForId(apiRoot, id) {
 }
 
 export default {
+  init,
   pathToId,
   idToPath,
   getResourceById,
