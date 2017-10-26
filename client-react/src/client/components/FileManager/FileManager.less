@@ -4,13 +4,21 @@
   position: relative;
 }
 
+@keyframes keyframes-oc-fm--file-manager__view-loading-overlay-appearing {
+  0%   { opacity: 0; }
+  100% { opacity: 0.22; }
+}
+
 .oc-fm--file-manager__view-loading-overlay {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.22);
+  background-color: #000;
+  opacity: 0.22;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   z-index: 2;
   pointer-events: none;
+  animation: keyframes-oc-fm--file-manager__view-loading-overlay-appearing 300ms;
+  animation-timing-function: ease-in-out;
 }

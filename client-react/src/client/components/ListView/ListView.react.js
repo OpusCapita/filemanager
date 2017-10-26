@@ -141,6 +141,10 @@ class ListView extends Component {
     if (e.which === 38 && !e.shiftKey) { // Up arrow
       e.preventDefault();
 
+      if (!itemsCount) {
+        return;
+      }
+
       if (!selection.length) {
         let selectionData = this.selectLastItem();
         this.lastSelected = items[selectionData.scrollToIndex].id;
@@ -157,6 +161,10 @@ class ListView extends Component {
     if (e.which === 40 && !e.shiftKey) { // Down arrow
       e.preventDefault();
 
+      if (!itemsCount) {
+        return;
+      }
+
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
         this.lastSelected = items[selectionData.scrollToIndex].id;
@@ -172,6 +180,10 @@ class ListView extends Component {
 
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
       e.preventDefault();
+
+      if (!itemsCount) {
+        return;
+      }
 
       if (!selection.length) {
         let selectionData = this.selectLastItem();
@@ -194,6 +206,10 @@ class ListView extends Component {
 
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
       e.preventDefault();
+
+      if (!itemsCount) {
+        return;
+      }
 
       if (!selection.length) {
         let selectionData = this.selectFirstItem();
