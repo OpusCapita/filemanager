@@ -8,6 +8,7 @@ function normalizeResource(resource) {
     modifyDate: Date.parse(resource.modifyDate),
     title: resource.title,
     type: resource.type,
+    size: resource.size,
     parentId: resource.parentId
   };
 }
