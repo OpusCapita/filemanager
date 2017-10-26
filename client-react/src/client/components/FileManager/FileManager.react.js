@@ -31,21 +31,37 @@ class FileManager extends Component {
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
-      items: []
+      resource: {},
+      resourceItems: [],
+      resourceItemsCount: 0
     };
 
     this.api = api[props.apiVersion];
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let { initialResourceId } = this.props;
-    this.getItemsForId(initialResourceId);
+    this.navigateToDir(initialResourceId);
   }
 
-  getItemsForId = (id) => {
-    let { api } = this.props;
-    let resource = api.getResourceById(id);
+  async navigateToDir(id) {
+    let resource = await this.getResourceById(id);
+    this.setState({ resource });
 
+    let { resourceItems, resourceItemsCount } = await this.getItemsForId(resource.id);
+    this.setState({ resourceItems, resourceItemsCount });
+  }
+
+  async getResourceById(id) {
+    let { apiRoot } = this.props;
+    let result = await this.api.getResourceById(apiRoot, id);
+    return result;
+  }
+
+  async getItemsForId(id) {
+    let { apiRoot } = this.props;
+    let { resourceItems, resourceItemsCount } = await this.api.getItemsForId(apiRoot, id);
+    return { resourceItems, resourceItemsCount };
   }
 
   handleSelection = (selection) => {
@@ -56,16 +72,33 @@ class FileManager extends Component {
     this.setState({ sortBy, sortDirection });
   }
 
-  handleRowClick = ({ event, number, rowData }) => {
+  handleResourceItemClick = ({ event, number, rowData }) => {
 
   }
 
-  handleRowRightClick = ({ event, number, rowData }) => {
+  handleResourceItemRightClick = ({ event, number, rowData }) => {
 
   }
 
-  handleRowDoubleClick = ({ event, number, rowData }) => {
+  handleResourceItemDoubleClick = ({ event, number, rowData }) => {
+    let { id, type } = rowData;
 
+    if (type === 'dir') {
+      this.navigateToDir(id);
+    }
+
+    this.containerRef.focus();
+  }
+
+  handleViewKeyDown = (e) => {
+
+  }
+
+  handleKeyDown = (e) => {
+    if (e.which === 8) { // Backspace key
+      let { resource } = this.state;
+      this.navigateToDir(resource.parentId);
+    }
   }
 
   render() {
@@ -79,22 +112,29 @@ class FileManager extends Component {
       selection,
       sortBy,
       sortDirection,
-      items
+      resourceItems,
+      resourceItemsCount
     } = this.state;
 
     return (
-      <div className={`oc-fm--file-manager ${className}`}>
+      <div
+        className={`oc-fm--file-manager ${className}`}
+        onKeyDown={this.handleKeyDown}
+        ref={(ref) => (this.containerRef = ref)}
+        tabIndex="0"
+      >
         <ListView
-          onRowClick={this.handleRowClick}
-          onRowRightClick={this.handleRowRightClick}
-          onRowDoubleClick={this.handleRowDoubleClick}
+          onKeyDown={this.handleViewKeyDown}
+          onRowClick={this.handleResourceItemClick}
+          onRowRightClick={this.handleResourceItemRightClick}
+          onRowDoubleClick={this.handleResourceItemDoubleClick}
           onSelection={this.handleSelection}
           onSort={this.handleSort}
           selection={selection}
           sortBy={sortBy}
           sortDirection={sortDirection}
-          items={items}
-          itemsCount={items.length}
+          items={resourceItems}
+          itemsCount={resourceItemsCount}
         />
       </div>
     );

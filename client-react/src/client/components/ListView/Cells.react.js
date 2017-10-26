@@ -14,16 +14,16 @@ export const NameCell = () => ({ cellData, columnData, columnIndex, dataKey, isS
         <div
           className="oc-fm--list-view__name-cell-icon-image"
           style={{
-            backgroundImage: `url(${rowData.iconUrl})`
+            backgroundImage: `url(${rowData.iconUrl || ''})`
           }}
         >
         </div>
       </div>
       <div
         className="oc-fm--list-view__cell oc-fm--list-view__name-cell-title"
-        title={cellData}
+        title={cellData || ''}
       >
-        {cellData}
+        {cellData || ''}
       </div>
     </div>
   );
@@ -31,7 +31,10 @@ export const NameCell = () => ({ cellData, columnData, columnIndex, dataKey, isS
 
 export const SizeCell = ({ humanReadableSize, isDirectory }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedSize = (typeof cellData !== 'undefined' && humanReadableSize) ? filesize(cellData) : cellData;
+    let formattedSize = (typeof cellData !== 'undefined' && humanReadableSize) ?
+      filesize(cellData) :
+      (cellData || '');
+
     return (
       <div className="oc-fm--list-view__cell">
         {formattedSize || '—'}
@@ -42,7 +45,10 @@ export const SizeCell = ({ humanReadableSize, isDirectory }) => {
 
 export const DateTimeCell = ({ locale, dateTimePattern }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
-    let formattedDateTime = moment(new Date().setTime(cellData)).locale(locale).format(dateTimePattern);
+    let formattedDateTime = cellData ?
+      moment(new Date().setTime(cellData)).locale(locale).format(dateTimePattern) :
+      '';
+
     return (
       <div className="oc-fm--list-view__cell">
         {formattedDateTime}

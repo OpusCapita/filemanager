@@ -14,7 +14,7 @@ FileManager is
 ```
 <div style={{ height: '480px' }}>
   <FileManager
-    apiRoot={'http://localhost:3020'}
+    apiRoot={'http://localhost:3020/api'}
     apiVersion="nodejs_v1"
     initialResourceId={''}
   />

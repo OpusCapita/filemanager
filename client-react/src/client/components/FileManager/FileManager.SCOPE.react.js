@@ -5,6 +5,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
 
 @showroomScopeDecorator
 export default
@@ -17,7 +19,9 @@ class FileManagerScope extends Component {
   render() {
     return (
       <div>
-        {this._renderChildren()}
+        <DragDropContextProvider backend={HTML5Backend}>
+          {this._renderChildren()}
+        </DragDropContextProvider>
       </div>
     );
   }

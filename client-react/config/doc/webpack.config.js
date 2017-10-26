@@ -107,7 +107,14 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['es2017', 'es2015', 'stage-0', 'react'],
-            plugins: ['transform-regenerator', 'transform-decorators-legacy', 'lodash']
+            plugins: [
+              ['transform-runtime', {
+                "polyfill": false,
+                "regenerator": true
+              }],
+              'transform-decorators-legacy',
+              'lodash'
+            ]
           }
         }],
         include: [

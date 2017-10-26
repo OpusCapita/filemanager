@@ -17,11 +17,11 @@ const mobileWidth = 640;
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
-    isDirectory: PropTypes.bool,
+    type: PropTypes.string,
     iconUrl: PropTypes.string,
     title: PropTypes.string,
     size: PropTypes.string,
-    lastModified: PropTypes.string
+    modifyDate: PropTypes.string
   })),
   itemsCount: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.string),
@@ -403,7 +403,7 @@ class ListView extends Component {
                   <Column
                     width={100}
                     label='Last modified'
-                    dataKey='lastModified'
+                    dataKey='modifyDate'
                     flexGrow={1}
                     cellRenderer={DateTimeCell({ locale, dateTimePattern })}
                     headerRenderer={HeaderCell()}

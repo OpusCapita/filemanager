@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 const getClientIp = require('../utils/get-client-ip');
+const console = { log: () => {}};
 
 const {
   encode: path2id,
@@ -29,11 +30,13 @@ module.exports = (app, options) => {
       userPath = (userParent === '/' ? '/' : userParent + '/') + userBasename;
     }
 
+    console.log(stat);
     const resource = {
       id: path2id(userPath),
       title: userBasename || options.rootTitle,
-      createDate: stat.birthtime,
-      modifyDate: stat.mtime
+      createDate: stat.birthtimeMs,
+      modifyDate: stat.mtimeMs,
+      parentId: path2id(path.resolve(userPath, '..'))
     };
 
     if (userParent) {
