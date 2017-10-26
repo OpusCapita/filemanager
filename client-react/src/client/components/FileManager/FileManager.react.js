@@ -4,7 +4,6 @@ import ListView from '../ListView';
 import { SortDirection } from 'react-virtualized';
 import nanoid from 'nanoid';
 import api from './api';
-console.log('api', api);
 
 const propTypes = {
   apiRoot: PropTypes.string,
@@ -128,7 +127,7 @@ class FileManager extends Component {
 
     let isDirectory = rowData.type === 'dir';
     if (isDirectory) {
-      this.navigateToDir(id, resource.id);
+      this.navigateToDir(id);
     }
 
     this.focusView();
@@ -145,7 +144,7 @@ class FileManager extends Component {
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {
-          this.navigateToDir(selectedResourceItems[0].id, resource.id);
+          this.navigateToDir(selectedResourceItems[0].id);
         }
       }
     }

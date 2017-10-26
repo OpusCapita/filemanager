@@ -74,6 +74,13 @@ class ListView extends Component {
     this.lastSelected = null;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selection.length === 1) {
+      // When FileManager navigates to parent dir, this last selected should be rigth
+      this.lastSelected = nextProps.selection[0];
+    }
+  }
+
   handleSelection(ids) {
     this.props.onSelection(ids);
   }
