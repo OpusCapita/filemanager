@@ -64,11 +64,17 @@ class FileManager extends Component {
     return { resourceItems, resourceItemsCount };
   }
 
+  filterResourceItemsByIds(ids) {
+    let { resourceItems } = this.state;
+    let filteredResourceItems = resourceItems.filter((o) => ids.indexOf(o.id) !== -1);
+    return filteredResourceItems;
+  }
+
   handleSelection = (selection) => {
     this.setState({ selection });
   }
 
-  handleSort = ({ sortBy, sortDirection }) => {
+  handlepSort = ({ sortBy, sortDirection }) => {
     this.setState({ sortBy, sortDirection });
   }
 
@@ -91,7 +97,21 @@ class FileManager extends Component {
   }
 
   handleViewKeyDown = (e) => {
+    if (e.which === 13) { // Enter key
+      let { selection } = this.state;
+      if (selection.length === 1) {
+        // Navigate to selected resource if selected resource is single and is directory
+        let selectedResourceItems = this.filterResourceItemsByIds(selection);
+        let isDirectory = selectedResourceItems[0].type === 'dir';
+
+        if (isDirectory) {
+          this.navigateToDir(selectedResourceItems[0].id);
+        }
+      }
+    }
+
     if (e.which === 8) { // Backspace key
+      // Navigate to parent directory
       let { resource } = this.state;
       this.navigateToDir(resource.parentId);
     }
