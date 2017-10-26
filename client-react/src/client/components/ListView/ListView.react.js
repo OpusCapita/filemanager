@@ -1,4 +1,5 @@
 // TODO move selection functions to separate file "selection-utils.js" to reduce file size
+// TODO - handle shiftKey + [Home|End|PageUp|PageDown] for select many files
 
 import React, { Component, PropTypes } from 'react';
 import './ListView.less';
