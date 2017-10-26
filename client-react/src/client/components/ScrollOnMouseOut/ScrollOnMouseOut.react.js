@@ -3,7 +3,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-const STRENGTH = 20;
+const SCROLL_STRENGTH = 20;
 const TIMEOUT_TIME = 16;
 
 const propTypes = {
@@ -89,7 +89,7 @@ class ScrollOnMouseOut extends Component {
   handleCursorAbove = () => {
     let { clientHeight, scrollHeight, scrollTop } = this.props;
 
-    let newScrollTop = scrollTop - STRENGTH < 0 ? 0 : scrollTop - STRENGTH;
+    let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
 
     this.timeout = window.setTimeout(() => {
       this.clearTimeout();
@@ -106,9 +106,9 @@ class ScrollOnMouseOut extends Component {
   handleCursorBellow = () => {
     let { clientHeight, scrollHeight, scrollTop } = this.props;
 
-    let newScrollTop = scrollTop + STRENGTH > scrollHeight - clientHeight ?
+    let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
         scrollHeight - clientHeight :
-        scrollTop + STRENGTH;
+        scrollTop + SCROLL_STRENGTH;
 
     this.timeout = window.setTimeout(() => {
       this.clearTimeout();

@@ -11,8 +11,9 @@ import { findIndex } from 'lodash';
 import clickOutside from 'react-click-outside';
 
 
-const tabletWidth = 1024;
-const mobileWidth = 640;
+const TABLET_WIDTH = 1024;
+const MOBILE_WIDTH = 640;
+const SCROLL_STRENGTH = 80;
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -251,6 +252,53 @@ class ListView extends Component {
       this.handleSelection([]);
     }
 
+
+    if (e.which === 33) { // PageUp
+      // Scroll top
+      e.preventDefault();
+      e.stopPropagation();
+
+      let { clientHeight, scrollHeight, scrollTop } = this.state;
+      let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
+
+      this.setState({ scrollTop: newScrollTop });
+    }
+
+    if (e.which === 34) { // PageDown
+      // Scroll bottom
+      e.preventDefault();
+      e.stopPropagation();
+
+      let { clientHeight, scrollHeight, scrollTop } = this.state;
+      let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
+        scrollHeight - clientHeight :
+        scrollTop + SCROLL_STRENGTH;
+
+      this.setState({ scrollTop: newScrollTop });
+    }
+
+    if (e.which === 36) { // Home
+      // Scroll to first item
+      e.preventDefault();
+      e.stopPropagation();
+
+      let { items } = this.props;
+      let { clientHeight, scrollHeight, scrollTop } = this.state;
+      let newScrollTop = 0;
+      this.setState({ scrollTop: newScrollTop });
+    }
+
+    if (e.which === 35) { // End
+      // Scroll to first item
+      e.preventDefault();
+      e.stopPropagation();
+
+      let { items } = this.props;
+      let { clientHeight, scrollHeight, scrollTop } = this.state;
+      let newScrollTop = scrollHeight - clientHeight;
+      this.setState({ scrollTop: newScrollTop });
+    }
+
     this.containerRef.focus(); // XXX fix for loosing focus on key navigation
   }
 
@@ -448,11 +496,11 @@ class ListView extends Component {
                   width={100}
                   label='File size'
                   dataKey='size'
-                  flexGrow={width > tabletWidth ? 1 : 0}
+                  flexGrow={width > TABLET_WIDTH ? 1 : 0}
                   cellRenderer={SizeCell({ humanReadableSize })}
                   headerRenderer={HeaderCell()}
                 />
-                {width > mobileWidth ? (
+                {width > MOBILE_WIDTH ? (
                   <Column
                     width={100}
                     label='Last modified'
