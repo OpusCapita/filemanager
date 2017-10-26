@@ -66,17 +66,21 @@ class FileManager extends Component {
     this.navigateToDir(initialResourceId);
   }
 
-  async navigateToDir(id) {
+  async navigateToDir(toId, fromId) {
     this.startViewLoading();
 
-    let resource = await this.getResourceById(id);
+    let resource = await this.getResourceById(toId);
     this.setState({ resource });
 
     let { resourceChildren, resourceChildrenCount } = await this.getChildrenForId(resource.id);
-    this.setState({ resourceChildren, resourceChildrenCount });
+
+    this.setState({
+      resourceChildren,
+      resourceChildrenCount,
+      selection: typeof fromId !== 'undefined' ? [fromId] : []
+    });
 
     this.stopViewLoading();
-    this.clearSelection();
   }
 
   async getResourceById(id) {
@@ -115,7 +119,7 @@ class FileManager extends Component {
   }
 
   handleResourceItemDoubleClick = ({ event, number, rowData }) => {
-    let { loadingView } = this.state;
+    let { loadingView, resource } = this.state;
     let { id, isDirectory } = rowData;
 
     if (loadingView) {
@@ -123,14 +127,14 @@ class FileManager extends Component {
     }
 
     if (type === 'dir') {
-      this.navigateToDir(id);
+      this.navigateToDir(id, resource.id);
     }
 
     this.focusView();
   }
 
   handleViewKeyDown = (e) => {
-    let { loadingView } = this.state;
+    let { loadingView, resource } = this.state;
 
     if (e.which === 13 && !loadingView) { // Enter key
       let { selection } = this.state;
@@ -140,15 +144,15 @@ class FileManager extends Component {
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {
-          this.navigateToDir(selectedResourceItems[0].id);
+          this.navigateToDir(selectedResourceItems[0].id, resource.id);
         }
       }
     }
 
-    if (e.which === 8 && !loadingView) { // Backspace key
+    if ((e.which === 27 || e.which === 8) && !loadingView) { // Backspace or Esc key
       // Navigate to parent directory
       let { resource } = this.state;
-      this.navigateToDir(resource.parentId);
+      this.navigateToDir(resource.parentId, resource.id);
     }
   }
 
