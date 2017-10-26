@@ -126,7 +126,7 @@ class FileManager extends Component {
       return;
     }
 
-    if (type === 'dir') {
+    if (resource.type === 'dir') {
       this.navigateToDir(id, resource.id);
     }
 
