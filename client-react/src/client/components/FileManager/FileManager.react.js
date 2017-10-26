@@ -3,18 +3,22 @@ import './FileManager.less';
 import ListView from '../ListView';
 import { SortDirection } from 'react-virtualized';
 import nanoid from 'nanoid';
+import api from './api';
+console.log('api', api);
 
 const propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
   apiRoot: PropTypes.string,
-  apiVersion: PropTypes.string
+  apiVersion: PropTypes.string,
+  initialResourceId: PropTypes.string
 };
 const defaultProps = {
   className: '',
   id: nanoid(),
   apiRoot: '',
-  apiVersion: PropTypes.string
+  apiVersion: 'nodejs_v1',
+  initialResourceId: ''
 };
 
 export default
@@ -26,11 +30,21 @@ class FileManager extends Component {
       error: null,
       selection: [],
       sortBy: 'title',
-      sortDirection: SortDirection.ASC
+      sortDirection: SortDirection.ASC,
+      items: []
     };
+
+    this.api = api[props.apiVersion];
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
+    let { initialResourceId } = this.props;
+    this.getItemsForId(initialResourceId);
+  }
+
+  getItemsForId = (id) => {
+    let { api } = this.props;
+    let resource = api.getResourceById(id);
 
   }
 
@@ -64,7 +78,8 @@ class FileManager extends Component {
       error,
       selection,
       sortBy,
-      sortDirection
+      sortDirection,
+      items
     } = this.state;
 
     return (
@@ -78,7 +93,8 @@ class FileManager extends Component {
           selection={selection}
           sortBy={sortBy}
           sortDirection={sortDirection}
-          itemsCount={0}
+          items={items}
+          itemsCount={items.length}
         />
       </div>
     );
