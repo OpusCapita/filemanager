@@ -96,7 +96,8 @@ class FileManager extends Component {
   }
 
   handleApiInitFail = () => {
-    this.setState({ apiInititalized: false, resource: {}, resourceChildren: [] });
+    this.setState({ apiInititalized: false, resourceChildren: [] });
+    this.monitorApiAvailability();
   }
 
   handleApiSignInSuccess = () => {
@@ -104,7 +105,8 @@ class FileManager extends Component {
   }
 
   handleApiSignInFail = () => {
-    this.setState({ apiSignedIn: false, resource: {}, resourceChildren: [] });
+    this.monitorApiAvailability();
+    this.setState({ apiSignedIn: false, resourceChildren: [] });
   }
 
   async navigateToDir(toId, fromId) {
