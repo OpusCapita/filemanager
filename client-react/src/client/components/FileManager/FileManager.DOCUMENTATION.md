@@ -51,17 +51,14 @@ FileManager is
       locale="en"
       signInRenderer={() => (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <strong style={{ marginBottom: '24px' }}>Google Drive</strong>
+          <strong style={{ marginBottom: '12px' }}>Google Drive</strong>
           <button
-            className="btn btn-default"
+            className="btn btn-primary"
             type="button"
             onClick={window.googleDriveSignIn}
             style={{ marginBottom: '8px' }}
           >
             Sign in
-          </button>
-          <button className="btn btn-default" type="button" onClick={window.googleDriveSignOut}>
-            Sign out
           </button>
         </div>
       )}
