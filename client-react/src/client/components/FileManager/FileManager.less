@@ -11,6 +11,11 @@
   100% { background-color: rgba(0, 0, 0, 0.78); }
 }
 
+@keyframes keyframes-oc-fm--file-manager__view-loading-overlay-spinner-appearing {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .oc-fm--file-manager__view-loading-overlay {
   position: absolute;
   display: flex;
@@ -31,4 +36,7 @@
 .oc-fm--file-manager__view-loading-overlay-spinner {
   width: 48px;
   height: 48px;
+
+  animation: keyframes-oc-fm--file-manager__view-loading-overlay-spinner-appearing 240ms;
+  animation-timing-function: ease-in-out;
 }
