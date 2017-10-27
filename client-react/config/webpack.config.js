@@ -9,6 +9,7 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const PACKAGE_VERSION = require('../package.json').version;
 const PACKAGE_NAME = require('../package.json').name;
+const env = require('../.env');
 const HOST = require('../.env').HOST;
 const PORT = require('../.env').PORT;
 const NODE_ENV = process.env.NODE_ENV;
@@ -22,7 +23,12 @@ let plugins = [
     new webpack.DefinePlugin({
       'process.env.HOST': JSON.stringify(HOST),
       'process.env.PORT': JSON.stringify(PORT),
-      'process.env.NODE_ENV': `"${NODE_ENV}"`
+      'process.env.NODE_ENV': `"${NODE_ENV}"`,
+
+
+      'process.env.CLIENT_ID': JSON.stringify(env.CLIENT_ID),
+      'process.env.API_SECRET': JSON.stringify(env.API_SECRET),
+      'process.env.API_KEY': JSON.stringify(env.API_KEY)
     }),
     new LodashModuleReplacementPlugin()
 ];

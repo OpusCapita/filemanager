@@ -27,11 +27,19 @@ FileManager is
 
 {/*GOOGLE_DRIVE_EXAMPLE*/}
 
+{/*GOOGLE_DRIVE_AUTH_OPTIONS*/}
+<span style={{ display: 'none' }}>
+{window.googleDriveApiInitOptions = JSON.stringify({
+  ...window.env,
+  DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
+  SCOPES: 'https://www.googleapis.com/auth/drive.metadata.readonly'
+}, null, 4)}
+</span>
+
 <div style={{ height: '480px' }}>
   <FileManager
     apiRoot={''}
-    apiInitOptions={{
-    }}
+    apiInitOptions={JSON.parse(window.googleDriveApiInitOptions)}
     apiVersion="google_drive_v2"
     dateTimePattern="YYYY-MM-DD HH:mm:ss"
     initialResourceId={''}
