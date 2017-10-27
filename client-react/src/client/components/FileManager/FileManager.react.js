@@ -39,7 +39,9 @@ class FileManager extends Component {
       resource: {},
       resourceChildren: [],
       resourceChildrenCount: 0,
-      loadingView: false
+      loadingView: false,
+      apiInitialized: false,
+      apiSignedIn: false
     };
 
     this.api = api[props.apiVersion];
@@ -60,8 +62,30 @@ class FileManager extends Component {
   async componentDidMount() {
     let { initialResourceId, apiInitOptions } = this.props;
 
-    await this.api.init(apiInitOptions);
+    await this.api.init({
+      ...apiInitOptions,
+      onInitSuccess: this.handleApiInitSuccess,
+      onInitFail: this.handleApiInitFail,
+      onSignInSuccess: this.handleApiSignInSuccess,
+      onSignInFail: this.handleApiSignInFail
+    });
     this.navigateToDir(initialResourceId);
+  }
+
+  handleApiInitSuccess = () => {
+    this.setState({ apiInitialized: true });
+  }
+
+  handleApiInitFail = () => {
+    this.setState({ apiInititalized: false });
+  }
+
+  handleApiSignInSuccess = () => {
+    this.setState({ apiSignedIn: true });
+  }
+
+  handleApiSignInFail = () => {
+    this.setState({ apiSignedIn: false });
   }
 
   async navigateToDir(toId, fromId) {
@@ -182,11 +206,24 @@ class FileManager extends Component {
       resourceChildrenCount,
       selection,
       sortBy,
-      sortDirection
+      sortDirection,
+      apiInitialized,
+      apiSignedIn
     } = this.state;
 
-    let viewLoadingOverlay = loadingView ? (
+    let viewLoadingOverlayMessage = '';
+
+    if (!apiInitialized) {
+      viewLoadingOverlayMessage = 'Problems with server connection';
+    }
+
+    if (!apiSignedIn) {
+      viewLoadingOverlayMessage = 'Not authenticated';
+    }
+
+    let viewLoadingOverlay = (loadingView || viewLoadingOverlayMessage) ? (
       <div className="oc-fm--file-manager__view-loading-overlay">
+        {viewLoadingOverlayMessage}
       </div>
     ) : null;
 

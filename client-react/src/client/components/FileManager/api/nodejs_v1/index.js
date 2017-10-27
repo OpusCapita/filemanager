@@ -1,8 +1,9 @@
 import request from 'superagent';
 import id from '../../../../../../../server-nodejs/utils/id';
 
-async function init() {
-
+async function init(options) {
+  options.onInitSuccess();
+  options.onSignInSuccess();
 }
 
 function normalizeResource(resource) {

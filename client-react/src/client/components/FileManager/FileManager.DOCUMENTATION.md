@@ -13,7 +13,6 @@ FileManager is
 
 ```
 {/*NODE_JS_EXAMPLE*/}
-{/*
 <div style={{ height: '480px' }}>
   <FileManager
     apiRoot={'http://localhost:3020/api'}
@@ -23,7 +22,6 @@ FileManager is
     locale="en"
   />
 </div>
-*/}
 
 {/*GOOGLE_DRIVE_EXAMPLE*/}
 
@@ -36,7 +34,7 @@ FileManager is
 }, null, 4)}
 </span>
 
-<div style={{ height: '480px' }}>
+<div style={{ height: '480px', marginTop: '30px' }}>
   <FileManager
     apiRoot={''}
     apiInitOptions={JSON.parse(window.googleDriveApiInitOptions)}

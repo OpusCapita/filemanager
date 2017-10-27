@@ -24,35 +24,43 @@ function appendGoogleApiScript() {
   });
 }
 
-function updateSigninStatus(isSignedIn) {
+function updateSigninStatus(isSignedIn, options) {
   if (isSignedIn) {
-    console.log('Google Drive Login Success');
+    options.onSignInSuccess('Google Drive sign-in success');
+    console.log('Google Drive sign-in Success');
   } else {
-    console.log('Google Drive Login Failed');
+    options.onSignInFail('Google Drive sign-in fail');
+    console.log('Google Drive sign-in fail');
   }
 
   signedIn = isSignedIn;
 }
 
 // Initializes the API client library and sets up sign-in state listeners.
-async function initClient({ API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES }) {
+async function initClient(options) {
   await window.gapi.client.init({
-    apiKey: API_KEY,
-    clientId: CLIENT_ID,
-    discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES
+    apiKey: options.API_KEY,
+    clientId: options.CLIENT_ID,
+    discoveryDocs: options.DISCOVERY_DOCS,
+    scope: options.SCOPES
   });
 
   if (!window.gapi.auth2.getAuthInstance()) {
+    options.onInitFail('Can\'t init Google API client');
     console.log('Can\'t init Google API client');
     return;
   }
 
+  options.onInitSuccess('Google API client successfully initialized');
   // Listen for sign-in state changes.
-  window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+  window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSigninStatus(isSignedIn, options));
+
+  if (!window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
+    window.gapi.auth2.getAuthInstance().signIn();
+  }
 
   // Handle the initial sign-in state.
-  updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get());
+  updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
 }
 
 // On load, called to load the auth2 library and API client library.
@@ -61,7 +69,6 @@ async function handleClientLoad(options) {
 }
 
 async function init(options) {
-  console.log('opts', options);
   await appendGoogleApiScript().catch((error) => {
     console.error('Cant append Google API script tag', error);
   });
@@ -80,6 +87,7 @@ function idToPath(id) {
 }
 
 async function getResourceById(apiRoot, id) {
+  console.log('hello');
   return {};
   let route = `${apiRoot}/files/${id}`;
   let method = 'GET';
