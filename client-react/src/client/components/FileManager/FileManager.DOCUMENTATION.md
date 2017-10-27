@@ -59,6 +59,7 @@ FileManager is
             style={{
               marginBottom: '8px',
               border: 'none',
+              borderRadius: '2px',
               boxShadow: '0 2px 16px rgba(0, 0, 0, 0.25), 0px 1px 4px rgba(0, 0, 0, 0.15)'
             }}
           >
