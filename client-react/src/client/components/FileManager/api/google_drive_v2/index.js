@@ -12,6 +12,8 @@ function appendGoogleApiScript() {
     let script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://apis.google.com/js/api.js';
+    script.async = true;
+    script.defer = true;
     document.body.appendChild(script);
     script.addEventListener('load', () => {
       console.log('Google API Script successfully fetched');
