@@ -78,6 +78,35 @@ async function init(options) {
 }
 
 function normalizeResource(resource) {
+  if (resource === null) {
+    return {
+      createDate: '',
+      id: 'googleDriveRoot',
+      modifyDate: '',
+      title: 'Root',
+      type: 'dir',
+      size: 0,
+      parentId: ''
+    };
+  }
+
+  // console.log('res', resource);
+  let type = '';
+  if (resource.mimeType === 'application/vnd.google-apps.folder') {
+    type = 'dir';
+  } else {
+    type = 'file';
+  }
+
+  return {
+    createDate: Date.parse(resource.createdDate),
+    id: resource.id,
+    modifyDate: Date.parse(resource.modifiedDate),
+    title: resource.title,
+    type: type,
+    size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
+    parentId: resource.parentId
+  };
 }
 
 function pathToId(path) {
@@ -87,27 +116,26 @@ function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
-  return {};
-  let route = `${apiRoot}/files/${id}`;
-  let method = 'GET';
-  let response = await request(method, route).catch((error) => {
-    console.error(`Filemanager. getResourceById(${id})`, error);
-  });
+  if (id === '') {
+    return normalizeResource(null);
+  }
 
-  let resource = response.body;
-  return normalizeResource(resource);
+  let response =  await window.gapi.client.drive.files.get({
+    fileId: id,
+    // maxResults: 1
+  });
+  console.log(response);
+  return {};
+  // let resource = response.body;
+  // return normalizeResource(resource);
 }
 
 async function getChildrenForId(options, id) {
-  let response =  await window.gapi.client.drive.files.get({ fileId: ''}).catch((error) => {
-    console.error(`Filemanager. getChildrenForId(${id})`, error);
-  });
-  console.log(response);
-  return [];
-  let resourceChildrenCount = response.body.length;
-  let rawResourceChildren = response.body;
-  let resourceChildren = rawResourceChildren.map((o) => normalizeResource(o));
-  return { resourceChildren, resourceChildrenCount };
+  if (id === 'googleDriveRoot') {
+    let response =  await window.gapi.client.drive.files.list({ q: `'root' in parents` });
+    let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o, parentId: id }));
+    return { resourceChildren };
+  }
 }
 
 function signIn() {

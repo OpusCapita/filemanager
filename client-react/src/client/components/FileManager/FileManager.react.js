@@ -38,7 +38,6 @@ class FileManager extends Component {
       sortDirection: SortDirection.ASC,
       resource: {},
       resourceChildren: [],
-      resourceChildrenCount: 0,
       loadingView: false,
       apiInitialized: false,
       apiSignedIn: false
@@ -110,15 +109,14 @@ class FileManager extends Component {
 
   async navigateToDir(toId, fromId) {
     this.startViewLoading();
-
     let resource = await this.getResourceById(toId);
     this.setState({ resource });
 
-    let { resourceChildren, resourceChildrenCount } = await this.getChildrenForId(resource.id);
+    let { resourceChildren } = await this.getChildrenForId(resource.id);
+    console.log('rc', resourceChildren);
 
     this.setState({
       resourceChildren,
-      resourceChildrenCount,
       selection: typeof fromId !== 'undefined' ? [fromId] : []
     });
 
@@ -127,6 +125,7 @@ class FileManager extends Component {
 
   async getResourceById(id) {
     let { api, apiOptions } = this.props;
+    console.log('typef', typeof id);
     let result = await api.getResourceById(apiOptions, id);
 
     return result;
@@ -134,8 +133,8 @@ class FileManager extends Component {
 
   async getChildrenForId(id) {
     let { api, apiOptions } = this.props;
-    let { resourceChildren, resourceChildrenCount } = await api.getChildrenForId(apiOptions, id);
-    return { resourceChildren, resourceChildrenCount };
+    let { resourceChildren } = await api.getChildrenForId(apiOptions, id);
+    return { resourceChildren };
   }
 
   filterResourceChildrenByID(ids) {
@@ -224,7 +223,6 @@ class FileManager extends Component {
       error,
       loadingView,
       resourceChildren,
-      resourceChildrenCount,
       selection,
       sortBy,
       sortDirection,
@@ -267,7 +265,7 @@ class FileManager extends Component {
           sortBy={sortBy}
           sortDirection={sortDirection}
           items={resourceChildren}
-          itemsCount={resourceChildrenCount}
+          itemsCount={resourceChildren ? resourceChildren.length : 0}
           locale={locale}
           dateTimePattern={dateTimePattern}
         />

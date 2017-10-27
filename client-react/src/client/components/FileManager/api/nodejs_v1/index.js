@@ -50,10 +50,9 @@ async function getChildrenForId(options, id) {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
   });
 
-  let resourceChildrenCount = response.body.length;
   let rawResourceChildren = response.body;
   let resourceChildren = rawResourceChildren.map((o) => normalizeResource(o));
-  return { resourceChildren, resourceChildrenCount };
+  return { resourceChildren };
 }
 
 export default {
