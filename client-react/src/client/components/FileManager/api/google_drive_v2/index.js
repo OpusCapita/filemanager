@@ -112,10 +112,21 @@ async function getChildrenForId(options, id) {
   return { resourceChildren, resourceChildrenCount };
 }
 
+function signIn() {
+  window.gapi.auth2.getAuthInstance().signIn();
+}
+
+function signOut() {
+  window.gapi.auth2.getAuthInstance().signOut();
+}
+
+
 export default {
   init,
   pathToId,
   idToPath,
   getResourceById,
-  getChildrenForId
+  getChildrenForId,
+  signIn,
+  signOut
 };

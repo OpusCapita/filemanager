@@ -15,6 +15,7 @@ FileManager is
 {/*NODE_JS_EXAMPLE*/}
 <div style={{ height: '480px' }}>
   <FileManager
+    api={_scope.apis.nodejs_v1}
     apiOptions={{
       apiRoot: 'http://localhost:3020/api'
     }}
@@ -36,8 +37,14 @@ FileManager is
 }, null, 4)}
 </span>
 
-<div style={{ height: '480px', marginTop: '30px' }}>
+<div style={{ marginTop: '30px' }}>
+  <button type="button" onClick={_scope.googleDriveSignIn}>SignIn Google Drive </button>
+  <button type="button" onClick={_scope.googleDriveSignOut}>SignOut Google Drive </button>
+</div>
+
+<div style={{ height: '480px', marginTop: '15px' }}>
   <FileManager
+    api={_scope.apis.google_drive_v2}
     apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
     apiVersion="google_drive_v2"
     dateTimePattern="YYYY-MM-DD HH:mm:ss"

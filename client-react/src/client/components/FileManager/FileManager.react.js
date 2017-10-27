@@ -6,7 +6,7 @@ import nanoid from 'nanoid';
 import api from './api';
 
 const propTypes = {
-  apiVersion: PropTypes.string,
+  api: PropTypes.object,
   apiOptions: PropTypes.object,
   className: PropTypes.string,
   dateTimePattern: PropTypes.string,
@@ -15,7 +15,7 @@ const propTypes = {
   locale: PropTypes.string
 };
 const defaultProps = {
-  apiVersion: 'nodejs_v1',
+  api: 'nodejs_v1',
   apiOptions: {},
   className: '',
   dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
@@ -41,8 +41,6 @@ class FileManager extends Component {
       apiInitialized: false,
       apiSignedIn: false
     };
-
-    this.api = api[props.apiVersion];
   }
 
   startViewLoading = () => {
@@ -58,9 +56,9 @@ class FileManager extends Component {
   }
 
   async componentDidMount() {
-    let { initialResourceId, apiOptions } = this.props;
+    let { initialResourceId, apiOptions, api } = this.props;
 
-    await this.api.init({
+    await api.init({
       ...apiOptions,
       onInitSuccess: this.handleApiInitSuccess,
       onInitFail: this.handleApiInitFail,
@@ -104,15 +102,15 @@ class FileManager extends Component {
   }
 
   async getResourceById(id) {
-    let { apiOptions } = this.props;
-    let result = await this.api.getResourceById(apiOptions, id);
+    let { api, apiOptions } = this.props;
+    let result = await api.getResourceById(apiOptions, id);
 
     return result;
   }
 
   async getChildrenForId(id) {
-    let { apiOptions } = this.props;
-    let { resourceChildren, resourceChildrenCount } = await this.api.getChildrenForId(apiOptions, id);
+    let { api, apiOptions } = this.props;
+    let { resourceChildren, resourceChildrenCount } = await api.getChildrenForId(apiOptions, id);
     return { resourceChildren, resourceChildrenCount };
   }
 
@@ -189,7 +187,7 @@ class FileManager extends Component {
 
   render() {
     let {
-      apiVersion,
+      api,
       className,
       dateTimePattern,
       id,
