@@ -4,6 +4,8 @@ import ListView from '../ListView';
 import { SortDirection } from 'react-virtualized';
 import nanoid from 'nanoid';
 import api from './api';
+import SVG from '@opuscapita/react-svg/lib/SVG';
+let spinnerIcon = require('!!raw-loader!../img/spinners/spinner.svg');
 
 const propTypes = {
   api: PropTypes.object,
@@ -233,19 +235,23 @@ class FileManager extends Component {
       apiSignedIn
     } = this.state;
 
-    let viewLoadingOverlayMessage = '';
+    let viewLoadingElement = '';
 
     if (!apiInitialized) {
-      viewLoadingOverlayMessage = 'Problems with server connection';
+      viewLoadingElement = 'Problems with server connection';
     }
 
     if (!apiSignedIn) {
-      viewLoadingOverlayMessage = signInRenderer ? signInRenderer() : 'Not authenticated';
+      viewLoadingElement = signInRenderer ? signInRenderer() : 'Not authenticated';
     }
 
-    let viewLoadingOverlay = (loadingView || viewLoadingOverlayMessage) ? (
+    if (loadingView) {
+      viewLoadingElement = (<SVG svg={spinnerIcon} className="oc-fm--file-manager__view-loading-overlay-spinner" />);
+    }
+
+    let viewLoadingOverlay = (viewLoadingElement) ? (
       <div className="oc-fm--file-manager__view-loading-overlay">
-        {viewLoadingOverlayMessage}
+        {viewLoadingElement}
       </div>
     ) : null;
 
