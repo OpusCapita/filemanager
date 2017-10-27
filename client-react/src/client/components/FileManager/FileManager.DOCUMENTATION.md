@@ -56,7 +56,11 @@ FileManager is
             className="btn btn-primary"
             type="button"
             onClick={window.googleDriveSignIn}
-            style={{ marginBottom: '8px' }}
+            style={{
+              marginBottom: '8px',
+              border: 'none',
+              boxShadow: '0 2px 16px rgba(0, 0, 0, 0.25), 0px 1px 4px rgba(0, 0, 0, 0.15)'
+            }}
           >
             Sign in
           </button>
