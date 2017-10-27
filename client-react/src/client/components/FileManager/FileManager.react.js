@@ -221,6 +221,7 @@ class FileManager extends Component {
       config,
       error,
       loadingView,
+      resource,
       resourceChildren,
       selection,
       sortBy,
