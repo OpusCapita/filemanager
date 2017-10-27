@@ -11,7 +11,6 @@ import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex } from 'lodash';
 import clickOutside from 'react-click-outside';
 
-
 const TABLET_WIDTH = 1024;
 const MOBILE_WIDTH = 640;
 const SCROLL_STRENGTH = 80;
@@ -20,7 +19,6 @@ const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     type: PropTypes.string,
-    iconUrl: PropTypes.string,
     title: PropTypes.string,
     size: PropTypes.number,
     modifyDate: PropTypes.number
