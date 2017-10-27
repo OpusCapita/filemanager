@@ -5,18 +5,49 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import { ContextMenuTrigger, MenuItem } from "react-contextmenu";
+import SVG from '@opuscapita/react-svg/lib/SVG';
+
+window.MenuItem = MenuItem;
+window.SVG = SVG;
+
+function requireAll(requireContext) {
+  return requireContext.keys().map(key => ({
+    name: key.replace(/(\.svg$|^\.\/)/gi, ''),
+    svg: requireContext(key)
+  }));
+}
+
+let icons = requireAll(require.context('!!raw-loader!@opuscapita/svg-icons/lib', true, /.*\.svg$/));
 
 @showroomScopeDecorator
 export default
 class ContextMenuScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { icons };
   }
+
+  getIcon(name) {
+    return this.state.icons.filter(icon => icon.name === name)[0].svg;
+  }
+
 
   render() {
     return (
       <div>
+        <ContextMenuTrigger id="oc-fm--contextmenu-sample">
+          <div
+            style={{
+              padding: '24px',
+              textAlign: 'center',
+              color: '#fff',
+              backgroundColor: '#333'
+            }}
+          >
+            Right click here
+          </div>
+        </ContextMenuTrigger>
         {this._renderChildren()}
       </div>
     );

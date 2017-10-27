@@ -1,0 +1,28 @@
+.oc-fm--file-manager {
+  border: 1px solid #eee;
+  height: 100%;
+  position: relative;
+}
+
+@keyframes keyframes-oc-fm--file-manager__view-loading-overlay-appearing {
+  0% { background-color: rgba(0, 0, 0, 0.0); }
+  100% { background-color: rgba(0, 0, 0, 0.75); }
+}
+
+.oc-fm--file-manager__view-loading-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: keyframes-oc-fm--file-manager__view-loading-overlay-appearing 300ms;
+  animation-timing-function: ease-in-out;
+}

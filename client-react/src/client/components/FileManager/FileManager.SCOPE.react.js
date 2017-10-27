@@ -5,28 +5,15 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import { SortDirection } from 'react-virtualized';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 
 @showroomScopeDecorator
 export default
-class ListViewScope extends Component {
+class FileManagerScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selection: [],
-      sortBy: 'title',
-      sortDirection: SortDirection.ASC
-    };
-  }
-
-  handleSelection = (selection) => {
-    this.setState({ selection });
-  }
-
-  handleSort = ({ sortBy, sortDirection }) => {
-    this.setState({ sortBy, sortDirection });
+    this.state = {};
   }
 
   render() {
@@ -40,9 +27,9 @@ class ListViewScope extends Component {
   }
 }
 
-ListViewScope.contextTypes = {
+FileManagerScope.contextTypes = {
   i18n: PropTypes.object
 };
-ListViewScope.childContextTypes = {
+FileManagerScope.childContextTypes = {
   i18n: PropTypes.object
 };

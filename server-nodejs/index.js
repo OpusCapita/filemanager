@@ -1,23 +1,28 @@
 'use strict';
 
-let registerRoutes = require('./routes');
-let logger = require('./logger');
-let express = require('express');
-let bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-let serverConfig = require('./config/server-config');
-let host = serverConfig.host;
-let port = serverConfig.port;
-let getClientConfig = serverConfig.getClientConfig; // promise
+const registerRoutes = require('./routes');
+const logger = require('./logger');
+const serverConfig = require('./config/server-config');
 
-
-let app = express();
+const app = express();
 app.use(bodyParser.json());
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
-let options = {
-  getClientConfig,
-  logger,
-  fsRoot: serverConfig.fsRoot
+const host = serverConfig.host;
+const port = serverConfig.port;
+
+const options = {
+  getClientConfig: serverConfig.getClientConfig, // promise
+  fsRoot: serverConfig.fsRoot,
+  rootTitle: serverConfig.rootTitle,
+  logger
 };
 
 registerRoutes(app, options);

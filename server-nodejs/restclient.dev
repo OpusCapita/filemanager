@@ -3,12 +3,20 @@
 
 # -*- restclient -*-
 
-:socket = http://localhost:3020
+:socket = http://localhost:3020/api
 
 #
-
-GET :socket/client-config
-
-#
-
+# get root stats
 GET :socket/files
+
+#
+# get root
+GET :socket/files/Lw
+
+#
+# get root children
+GET :socket/files/Lw/children
+
+#
+# get root children
+GET :socket/files/Lw/children
