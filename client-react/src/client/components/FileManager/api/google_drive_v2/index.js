@@ -86,7 +86,7 @@ function pathToId(path) {
 function idToPath(id) {
 }
 
-async function getResourceById(apiRoot, id) {
+async function getResourceById(options, id) {
   return {};
   let route = `${apiRoot}/files/${id}`;
   let method = 'GET';
@@ -98,7 +98,7 @@ async function getResourceById(apiRoot, id) {
   return normalizeResource(resource);
 }
 
-async function getChildrenForId(apiRoot, id) {
+async function getChildrenForId(options, id) {
   return [];
   let route = `${apiRoot}/files/${id}/children`;
   let method = 'GET';
