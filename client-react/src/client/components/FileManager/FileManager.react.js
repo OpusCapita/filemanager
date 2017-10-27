@@ -12,7 +12,8 @@ const propTypes = {
   dateTimePattern: PropTypes.string,
   id: PropTypes.string,
   initialResourceId: PropTypes.string,
-  locale: PropTypes.string
+  locale: PropTypes.string,
+  signInRenderer: PropTypes.func
 };
 const defaultProps = {
   api: 'nodejs_v1',
@@ -21,7 +22,8 @@ const defaultProps = {
   dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   id: nanoid(),
   initialResourceId: '',
-  locale: 'en'
+  locale: 'en',
+  signInRenderer: null
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -214,7 +216,8 @@ class FileManager extends Component {
       dateTimePattern,
       id,
       initialResourceId,
-      locale
+      locale,
+      signInRenderer
     } = this.props;
 
     let {
@@ -237,7 +240,7 @@ class FileManager extends Component {
     }
 
     if (!apiSignedIn) {
-      viewLoadingOverlayMessage = 'Not authenticated';
+      viewLoadingOverlayMessage = signInRenderer ? signInRenderer() : 'Not authenticated';
     }
 
     let viewLoadingOverlay = (loadingView || viewLoadingOverlayMessage) ? (

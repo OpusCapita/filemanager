@@ -17,7 +17,7 @@ FileManager is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
-  <div style={{ height: '480px', minWidth: '320px', flex: '1', padding: '4px' }}>
+  <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileManager
       api={_scope.apis.nodejs_v1}
       apiOptions={{
@@ -41,7 +41,7 @@ FileManager is
   }, null, 4)}
   </span>
   
-  <div style={{ height: '480px', minWidth: '320px', flex: '1', padding: '4px' }}>
+  <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileManager
       api={_scope.apis.google_drive_v2}
       apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
@@ -49,20 +49,35 @@ FileManager is
       dateTimePattern="YYYY-MM-DD HH:mm:ss"
       initialResourceId={''}
       locale="en"
+      signInRenderer={() => (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+          <strong style={{ marginBottom: '24px' }}>Google Drive</strong>
+          <button
+            className="btn btn-default"
+            type="button"
+            onClick={window.googleDriveSignIn}
+            style={{ marginBottom: '8px' }}
+          >
+            Sign in
+          </button>
+          <button className="btn btn-default" type="button" onClick={window.googleDriveSignOut}>
+            Sign out
+          </button>
+        </div>
+      )}
     />
   </div>
 
 </div>
-
-<div style={{ marginTop: '15px', display: 'flex', justifyContent: 'flex-end' }}>
-  <button type="button" onClick={_scope.googleDriveSignIn} style={{ marginRight: '8px' }}>
-    SignIn Google Drive
-  </button>
-  <button type="button" onClick={_scope.googleDriveSignOut}>
-    SignOut Google Drive
-  </button>
-</div>
-
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+    <strong style={{ marginRight: '8px' }}>Google Drive</strong>
+    <button type="button" onClick={window.googleDriveSignIn} style={{ marginRight: '8px' }}>
+      Sign in
+    </button>
+    <button type="button" onClick={window.googleDriveSignOut}>
+      Sign out
+    </button>
+  </div>
 </div>
 ```
 

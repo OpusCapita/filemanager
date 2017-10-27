@@ -57,10 +57,6 @@ async function initClient(options) {
   // Listen for sign-in state changes.
   window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSigninStatus(isSignedIn, options));
 
-  if (!window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-    window.gapi.auth2.getAuthInstance().signIn();
-  }
-
   // Handle the initial sign-in state.
   updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
 }

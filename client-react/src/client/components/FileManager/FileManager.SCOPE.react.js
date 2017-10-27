@@ -17,6 +17,9 @@ class FileManagerScope extends Component {
     this.state = {};
 
     this.apis = apis;
+
+    window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
+    window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
   }
 
   googleDriveSignIn() {
