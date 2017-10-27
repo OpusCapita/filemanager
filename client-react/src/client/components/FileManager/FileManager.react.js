@@ -24,6 +24,8 @@ const defaultProps = {
   locale: 'en'
 };
 
+const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
+
 export default
 class FileManager extends Component {
   constructor(props) {
@@ -55,8 +57,29 @@ class FileManager extends Component {
     this.viewRef.focus();
   }
 
+  handleApiReady = () => {
+    let { initialResourceId } = this.props;
+    let resourceId = this.state.resource.id;
+    let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
+    this.navigateToDir(idToNavigate);
+  }
+
+  monitorApiAvailability = () => {
+    clearTimeout(this.apiAvailabilityTimeout);
+
+    this.apiAvailabilityTimeout = setTimeout(() => {
+      let { apiInitialized, apiSignedIn } = this.state;
+      if (apiInitialized && apiSignedIn) {
+        this.handleApiReady();
+      } else {
+        this.monitorApiAvailability();
+      }
+    }, MONITOR_API_AVAILABILITY_TIMEOUT);
+  }
+
   async componentDidMount() {
     let { initialResourceId, apiOptions, api } = this.props;
+    let { apiInitialized, apiSignedIn } = this.state;
 
     await api.init({
       ...apiOptions,
@@ -65,7 +88,8 @@ class FileManager extends Component {
       onSignInSuccess: this.handleApiSignInSuccess,
       onSignInFail: this.handleApiSignInFail
     });
-    this.navigateToDir(initialResourceId);
+
+    this.monitorApiAvailability();
   }
 
   handleApiInitSuccess = () => {

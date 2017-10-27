@@ -99,13 +99,11 @@ async function getResourceById(options, id) {
 }
 
 async function getChildrenForId(options, id) {
-  return [];
-  let route = `${apiRoot}/files/${id}/children`;
-  let method = 'GET';
-  let response = await request(method, route).catch((error) => {
+  let response =  await window.gapi.client.drive.files.get({ fileId: ''}).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
   });
-
+  console.log(response);
+  return [];
   let resourceChildrenCount = response.body.length;
   let rawResourceChildren = response.body;
   let resourceChildren = rawResourceChildren.map((o) => normalizeResource(o));
