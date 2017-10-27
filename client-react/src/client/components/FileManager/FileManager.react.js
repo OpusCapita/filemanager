@@ -96,7 +96,7 @@ class FileManager extends Component {
   }
 
   handleApiInitFail = () => {
-    this.setState({ apiInititalized: false });
+    this.setState({ apiInititalized: false, resource: {}, resourceChildren: [] });
   }
 
   handleApiSignInSuccess = () => {
@@ -104,7 +104,7 @@ class FileManager extends Component {
   }
 
   handleApiSignInFail = () => {
-    this.setState({ apiSignedIn: false });
+    this.setState({ apiSignedIn: false, resource: {}, resourceChildren: [] });
   }
 
   async navigateToDir(toId, fromId) {
@@ -124,9 +124,7 @@ class FileManager extends Component {
 
   async getResourceById(id) {
     let { api, apiOptions } = this.props;
-    console.log('typef', typeof id);
     let result = await api.getResourceById(apiOptions, id);
-
     return result;
   }
 
