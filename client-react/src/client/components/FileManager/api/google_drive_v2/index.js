@@ -81,7 +81,7 @@ function normalizeResource(resource) {
   if (resource === null) {
     return {
       createDate: '',
-      id: 'googleDriveRoot',
+      id: '',
       modifyDate: '',
       title: 'Root',
       type: 'dir',
@@ -90,22 +90,14 @@ function normalizeResource(resource) {
     };
   }
 
-  // console.log('res', resource);
-  let type = '';
-  if (resource.mimeType === 'application/vnd.google-apps.folder') {
-    type = 'dir';
-  } else {
-    type = 'file';
-  }
-
   return {
     createDate: Date.parse(resource.createdDate),
     id: resource.id,
     modifyDate: Date.parse(resource.modifiedDate),
     title: resource.title,
-    type: type,
+    type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
-    parentId: resource.parentId
+    parentId: typeof resource.parents[0] === 'undefined' ? '' : resource.parents[0].id
   };
 }
 
@@ -120,22 +112,18 @@ async function getResourceById(options, id) {
     return normalizeResource(null);
   }
 
-  let response =  await window.gapi.client.drive.files.get({
-    fileId: id,
-    // maxResults: 1
-  });
-  console.log(response);
-  return {};
-  // let resource = response.body;
-  // return normalizeResource(resource);
+  let response =  await window.gapi.client.drive.files.get({ fileId: id });
+  let resource = normalizeResource({ ...response.result, parentId: id });
+  return resource;
 }
 
 async function getChildrenForId(options, id) {
-  if (id === 'googleDriveRoot') {
-    let response =  await window.gapi.client.drive.files.list({ q: `'root' in parents` });
-    let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o, parentId: id }));
-    return { resourceChildren };
-  }
+  let response =  await window.gapi.client.drive.files.list({
+    q: `'${id === '' ? 'root' : id}' in parents`
+  });
+
+  let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
+  return { resourceChildren };
 }
 
 function signIn() {

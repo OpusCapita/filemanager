@@ -113,7 +113,6 @@ class FileManager extends Component {
     this.setState({ resource });
 
     let { resourceChildren } = await this.getChildrenForId(resource.id);
-    console.log('rc', resourceChildren);
 
     this.setState({
       resourceChildren,
