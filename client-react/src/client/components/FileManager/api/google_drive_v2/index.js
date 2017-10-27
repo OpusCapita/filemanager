@@ -87,7 +87,6 @@ function idToPath(id) {
 }
 
 async function getResourceById(apiRoot, id) {
-  console.log('hello');
   return {};
   let route = `${apiRoot}/files/${id}`;
   let method = 'GET';

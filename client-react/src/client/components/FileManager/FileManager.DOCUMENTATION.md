@@ -15,7 +15,9 @@ FileManager is
 {/*NODE_JS_EXAMPLE*/}
 <div style={{ height: '480px' }}>
   <FileManager
-    apiRoot={'http://localhost:3020/api'}
+    apiOptions={{
+      apiRoot: 'http://localhost:3020/api'
+    }}
     apiVersion="nodejs_v1"
     dateTimePattern="YYYY-MM-DD HH:mm:ss"
     initialResourceId={''}
@@ -36,8 +38,7 @@ FileManager is
 
 <div style={{ height: '480px', marginTop: '30px' }}>
   <FileManager
-    apiRoot={''}
-    apiInitOptions={JSON.parse(window.googleDriveApiInitOptions)}
+    apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
     apiVersion="google_drive_v2"
     dateTimePattern="YYYY-MM-DD HH:mm:ss"
     initialResourceId={''}

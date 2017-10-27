@@ -6,9 +6,8 @@ import nanoid from 'nanoid';
 import api from './api';
 
 const propTypes = {
-  apiRoot: PropTypes.string,
   apiVersion: PropTypes.string,
-  apiInitOption: PropTypes.object,
+  apiOptions: PropTypes.object,
   className: PropTypes.string,
   dateTimePattern: PropTypes.string,
   id: PropTypes.string,
@@ -16,9 +15,8 @@ const propTypes = {
   locale: PropTypes.string
 };
 const defaultProps = {
-  apiRoot: '',
   apiVersion: 'nodejs_v1',
-  apiInitOptions: {},
+  apiOptions: {},
   className: '',
   dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   id: nanoid(),
@@ -60,10 +58,10 @@ class FileManager extends Component {
   }
 
   async componentDidMount() {
-    let { initialResourceId, apiInitOptions } = this.props;
+    let { initialResourceId, apiOptions } = this.props;
 
     await this.api.init({
-      ...apiInitOptions,
+      ...apiOptions,
       onInitSuccess: this.handleApiInitSuccess,
       onInitFail: this.handleApiInitFail,
       onSignInSuccess: this.handleApiSignInSuccess,
@@ -106,15 +104,15 @@ class FileManager extends Component {
   }
 
   async getResourceById(id) {
-    let { apiRoot } = this.props;
-    let result = await this.api.getResourceById(apiRoot, id);
+    let { apiOptions } = this.props;
+    let result = await this.api.getResourceById(apiOptions, id);
 
     return result;
   }
 
   async getChildrenForId(id) {
-    let { apiRoot } = this.props;
-    let { resourceChildren, resourceChildrenCount } = await this.api.getChildrenForId(apiRoot, id);
+    let { apiOptions } = this.props;
+    let { resourceChildren, resourceChildrenCount } = await this.api.getChildrenForId(apiOptions, id);
     return { resourceChildren, resourceChildrenCount };
   }
 
@@ -175,7 +173,9 @@ class FileManager extends Component {
     if ((e.which === 8) && !loadingView) { // Backspace
       // Navigate to parent directory
       let { resource } = this.state;
-      this.navigateToDir(resource.parentId, resource.id);
+      if (resource.parentId) {
+        this.navigateToDir(resource.parentId, resource.id);
+      }
     }
   }
 
@@ -189,7 +189,6 @@ class FileManager extends Component {
 
   render() {
     let {
-      apiRoot,
       apiVersion,
       className,
       dateTimePattern,
@@ -226,7 +225,6 @@ class FileManager extends Component {
         {viewLoadingOverlayMessage}
       </div>
     ) : null;
-
 
     return (
       <div

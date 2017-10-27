@@ -32,8 +32,8 @@ function idToPath(id) {
   });
 }
 
-async function getResourceById(apiRoot, id) {
-  let route = `${apiRoot}/files/${id}`;
+async function getResourceById(options, id) {
+  let route = `${options.apiRoot}/files/${id}`;
   let method = 'GET';
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getResourceById(${id})`, error);
@@ -43,8 +43,8 @@ async function getResourceById(apiRoot, id) {
   return normalizeResource(resource);
 }
 
-async function getChildrenForId(apiRoot, id) {
-  let route = `${apiRoot}/files/${id}/children`;
+async function getChildrenForId(options, id) {
+  let route = `${options.apiRoot}/files/${id}/children`;
   let method = 'GET';
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
