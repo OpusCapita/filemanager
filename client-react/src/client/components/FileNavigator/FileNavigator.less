@@ -1,4 +1,4 @@
-.oc-fm--file-manager {
+.oc-fm--file-navigator {
   border: 1px solid #eee;
   height: 100%;
   position: relative;
@@ -6,17 +6,17 @@
   background-color: #fff;
 }
 
-@keyframes keyframes-oc-fm--file-manager__view-loading-overlay-appearing {
+@keyframes keyframes-oc-fm--file-navigator__view-loading-overlay-appearing {
   0% { background-color: rgba(0, 0, 0, 0.0); }
   100% { background-color: rgba(0, 0, 0, 0.78); }
 }
 
-@keyframes keyframes-oc-fm--file-manager__view-loading-overlay-spinner-appearing {
+@keyframes keyframes-oc-fm--file-navigator__view-loading-overlay-spinner-appearing {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-.oc-fm--file-manager__view-loading-overlay {
+.oc-fm--file-navigator__view-loading-overlay {
   position: absolute;
   display: flex;
   align-items: center;
@@ -29,14 +29,14 @@
   top: 0;
   bottom: 0;
   z-index: 2;
-  animation: keyframes-oc-fm--file-manager__view-loading-overlay-appearing 240ms;
+  animation: keyframes-oc-fm--file-navigator__view-loading-overlay-appearing 240ms;
   animation-timing-function: ease-in-out;
 }
 
-.oc-fm--file-manager__view-loading-overlay-spinner {
+.oc-fm--file-navigator__view-loading-overlay-spinner {
   width: 48px;
   height: 48px;
 
-  animation: keyframes-oc-fm--file-manager__view-loading-overlay-spinner-appearing 240ms;
+  animation: keyframes-oc-fm--file-navigator__view-loading-overlay-spinner-appearing 240ms;
   animation-timing-function: ease-in-out;
 }

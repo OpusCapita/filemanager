@@ -11,7 +11,7 @@ import apis from './api';
 
 @showroomScopeDecorator
 export default
-class FileManagerScope extends Component {
+class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -41,9 +41,9 @@ class FileManagerScope extends Component {
   }
 }
 
-FileManagerScope.contextTypes = {
+FileNavigatorScope.contextTypes = {
   i18n: PropTypes.object
 };
-FileManagerScope.childContextTypes = {
+FileNavigatorScope.childContextTypes = {
   i18n: PropTypes.object
 };

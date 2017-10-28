@@ -1,6 +1,6 @@
 ### Synopsis
 
-FileManager is 
+FileNavigator is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -18,7 +18,7 @@ FileManager is
 
   {/*NODE_JS_EXAMPLE*/}
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
-    <FileManager
+    <FileNavigator
       api={_scope.apis.nodejs_v1}
       apiOptions={{
         apiRoot: 'http://localhost:3020/api'
@@ -42,7 +42,7 @@ FileManager is
   </span>
   
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
-    <FileManager
+    <FileNavigator
       api={_scope.apis.google_drive_v2}
       apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
       apiVersion="google_drive_v2"
@@ -91,7 +91,7 @@ FileManager is
 
 ### Component Name
 
-FileManager
+FileNavigator
 
 ### License
 

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import './FileManager.less';
+import './FileNavigator.less';
 import ListView from '../ListView';
 import { SortDirection } from 'react-virtualized';
 import nanoid from 'nanoid';
@@ -31,7 +31,7 @@ const defaultProps = {
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
 
 export default
-class FileManager extends Component {
+class FileNavigator extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -248,18 +248,18 @@ class FileManager extends Component {
     // Don't remove!
     // if (showSpinner) {
     //   viewLoadingElement = null;
-    //   (<SVG svg={spinnerIcon} className="oc-fm--file-manager__view-loading-overlay-spinner" />);
+    //   (<SVG svg={spinnerIcon} className="oc-fm--file-navigator__view-loading-overlay-spinner" />);
     // }
 
     let viewLoadingOverlay = (viewLoadingElement) ? (
-      <div className="oc-fm--file-manager__view-loading-overlay">
+      <div className="oc-fm--file-navigator__view-loading-overlay">
         {viewLoadingElement}
       </div>
     ) : null;
 
     return (
       <div
-        className={`oc-fm--file-manager ${className}`}
+        className={`oc-fm--file-navigator ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
@@ -287,5 +287,5 @@ class FileManager extends Component {
   }
 }
 
-FileManager.propTypes = propTypes;
-FileManager.defaultProps = defaultProps;
+FileNavigator.propTypes = propTypes;
+FileNavigator.defaultProps = defaultProps;
