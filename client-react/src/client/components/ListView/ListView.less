@@ -1,4 +1,4 @@
-@keyframes keyframes-oc-fm--list-view-appearing {
+@keyframes keyframes-oc-fm--list-view-row-appearing {
   0% { opacity: 0; }
   100% { opacity: 1 }
 }
@@ -7,8 +7,6 @@
   will-change: opacity;
   height: 100%;
   width: 100%;
-  animation: keyframes-oc-fm--list-view-appearing 300ms;
-  animation-timing-function: ease-in-out;
 
   &:focus {
     outline: none;
@@ -76,6 +74,9 @@
   &:hover:not(&--selected) .oc-fm--list-view__name-cell-icon {
     background-color: transparent;
   }
+
+  animation: keyframes-oc-fm--list-view-row-appearing 150ms;
+  animation-timing-function: ease-in-out;
 }
 
 .oc-fm--list-view__row--selected {

@@ -33,7 +33,7 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
     onRowDoubleClick={(data) => console.log('double click', data)}
     onSelection={_scope.handleSelection}
     onSort={_scope.handleSort}
-    loading={true}
+    loading={false}
     selection={_scope.state.selection}
     sortBy={_scope.state.sortBy}
     sortDirection={_scope.state.sortDirection}

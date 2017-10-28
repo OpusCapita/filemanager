@@ -482,7 +482,7 @@ class ListView extends Component {
                 headerHeight={HEADER_HEIGHT}
                 className="oc-fm--list-view__table"
                 gridClassName="oc-fm--list-view__grid"
-                overscanRowCount={4}
+                overscanRowCount={10}
                 onScroll={this.handleScroll}
                 scrollToIndex={scrollToIndex}
                 scrollTop={scrollTop}
@@ -501,7 +501,7 @@ class ListView extends Component {
                   width={48}
                   flexGrow={1}
                   cellRenderer={NameCell({ loading })}
-                  headerRenderer={HeaderCell({ loading })}
+                  headerRenderer={HeaderCell({ loading: false })}
                 />
                 <Column
                   width={100}
@@ -509,7 +509,7 @@ class ListView extends Component {
                   dataKey='size'
                   flexGrow={width > TABLET_WIDTH ? 1 : 0}
                   cellRenderer={SizeCell({ humanReadableSize, loading })}
-                  headerRenderer={loading ? () => null : HeaderCell({ loading })}
+                  headerRenderer={HeaderCell({ loading: false })}
                 />
                 {width > MOBILE_WIDTH ? (
                   <Column
@@ -518,7 +518,7 @@ class ListView extends Component {
                     dataKey='modifyDate'
                     flexGrow={1}
                     cellRenderer={DateTimeCell({ locale, dateTimePattern, loading })}
-                    headerRenderer={loading ? () => null : HeaderCell({ loading })}
+                    headerRenderer={HeaderCell({ loading: false })}
                   />
                 ) : null}
               </Table>

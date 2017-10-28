@@ -235,7 +235,7 @@ class FileManager extends Component {
       apiSignedIn
     } = this.state;
 
-    let viewLoadingElement = '';
+    let viewLoadingElement = null;
 
     if (!apiInitialized) {
       viewLoadingElement = 'Problems with server connection';
@@ -245,9 +245,11 @@ class FileManager extends Component {
       viewLoadingElement = signInRenderer ? signInRenderer() : 'Not authenticated';
     }
 
-    if (loadingView) {
-      viewLoadingElement = (<SVG svg={spinnerIcon} className="oc-fm--file-manager__view-loading-overlay-spinner" />);
-    }
+    // Don't remove!
+    // if (showSpinner) {
+    //   viewLoadingElement = null;
+    //   (<SVG svg={spinnerIcon} className="oc-fm--file-manager__view-loading-overlay-spinner" />);
+    // }
 
     let viewLoadingOverlay = (viewLoadingElement) ? (
       <div className="oc-fm--file-manager__view-loading-overlay">
@@ -270,6 +272,7 @@ class FileManager extends Component {
           onSelection={this.handleSelection}
           onSort={this.handleSort}
           onRef={this.handleViewRef}
+          loading={loadingView}
           selection={selection}
           sortBy={sortBy}
           sortDirection={sortDirection}
