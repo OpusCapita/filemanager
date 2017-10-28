@@ -4,10 +4,10 @@ import SVG from '@opuscapita/react-svg/lib/SVG';
 let arrowIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
 
 const propTypes = {
-  items: PropTypes.shape({
+  items: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     onClick: PropTypes.func
-  })
+  }))
 };
 const defaultProps = {
   items: []
@@ -29,7 +29,7 @@ class LocationBar extends Component {
       ) : null;
 
       return (
-        <div className="oc-fm--location-bar__item">
+        <div key={i} className="oc-fm--location-bar__item">
           <div
             className={`
               oc-fm--location-bar__item-title
