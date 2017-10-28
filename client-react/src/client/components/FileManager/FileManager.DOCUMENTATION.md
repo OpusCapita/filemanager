@@ -1,6 +1,6 @@
 ### Synopsis
 
-SearchBar is 
+FileManager is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,12 +12,12 @@ SearchBar is
 ### Code Example
 
 ```
-<SearchBar />
+<FileManager />
 ```
 
 ### Component Name
 
-SearchBar
+FileManager
 
 ### License
 

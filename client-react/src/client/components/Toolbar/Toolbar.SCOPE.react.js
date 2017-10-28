@@ -8,7 +8,7 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 
 @showroomScopeDecorator
 export default
-class SearchBarScope extends Component {
+class ToolbarScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,9 +23,9 @@ class SearchBarScope extends Component {
   }
 }
 
-SearchBarScope.contextTypes = {
+ToolbarScope.contextTypes = {
   i18n: PropTypes.object
 };
-SearchBarScope.childContextTypes = {
+ToolbarScope.childContextTypes = {
   i18n: PropTypes.object
 };

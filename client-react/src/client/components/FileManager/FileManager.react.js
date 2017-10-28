@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import './SearchBar.less';
+import './FileManager.less';
 
 const propTypes = {};
 const defaultProps = {};
 
 export default
-class SearchBar extends Component {
+class FileManager extends Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -13,11 +13,11 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <div className="search-bar">
+      <div className="file-manager">
       </div>
     );
   }
 }
 
-SearchBar.propTypes = propTypes;
-SearchBar.defaultProps = defaultProps;
+FileManager.propTypes = propTypes;
+FileManager.defaultProps = defaultProps;

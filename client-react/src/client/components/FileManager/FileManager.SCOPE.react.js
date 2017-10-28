@@ -8,7 +8,7 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 
 @showroomScopeDecorator
 export default
-class AppBarScope extends Component {
+class FileManagerScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,9 +23,9 @@ class AppBarScope extends Component {
   }
 }
 
-AppBarScope.contextTypes = {
+FileManagerScope.contextTypes = {
   i18n: PropTypes.object
 };
-AppBarScope.childContextTypes = {
+FileManagerScope.childContextTypes = {
   i18n: PropTypes.object
 };

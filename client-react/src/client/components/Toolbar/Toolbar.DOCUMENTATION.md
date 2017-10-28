@@ -1,6 +1,6 @@
 ### Synopsis
 
-AppBar is 
+Toolbar is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,12 +12,12 @@ AppBar is
 ### Code Example
 
 ```
-<AppBar />
+<Toolbar />
 ```
 
 ### Component Name
 
-AppBar
+Toolbar
 
 ### License
 

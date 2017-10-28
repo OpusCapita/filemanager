@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import './AppBar.less';
+import './Toolbar.less';
 
 const propTypes = {};
 const defaultProps = {};
 
 export default
-class AppBar extends Component {
+class Toolbar extends Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -13,11 +13,11 @@ class AppBar extends Component {
 
   render() {
     return (
-      <div className="app-bar">
+      <div className="toolbar">
       </div>
     );
   }
 }
 
-AppBar.propTypes = propTypes;
-AppBar.defaultProps = defaultProps;
+Toolbar.propTypes = propTypes;
+Toolbar.defaultProps = defaultProps;
