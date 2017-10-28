@@ -8,7 +8,7 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 
 @showroomScopeDecorator
 export default
-class AddressBarScope extends Component {
+class LocationBarScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,9 +23,9 @@ class AddressBarScope extends Component {
   }
 }
 
-AddressBarScope.contextTypes = {
+LocationBarScope.contextTypes = {
   i18n: PropTypes.object
 };
-AddressBarScope.childContextTypes = {
+LocationBarScope.childContextTypes = {
   i18n: PropTypes.object
 };

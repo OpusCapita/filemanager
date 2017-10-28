@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import './AddressBar.less';
+import './LocationBar.less';
 
 const propTypes = {};
 const defaultProps = {};
 
 export default
-class AddressBar extends Component {
+class LocationBar extends Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -13,11 +13,11 @@ class AddressBar extends Component {
 
   render() {
     return (
-      <div className="address-bar">
+      <div className="location-bar">
       </div>
     );
   }
 }
 
-AddressBar.propTypes = propTypes;
-AddressBar.defaultProps = defaultProps;
+LocationBar.propTypes = propTypes;
+LocationBar.defaultProps = defaultProps;

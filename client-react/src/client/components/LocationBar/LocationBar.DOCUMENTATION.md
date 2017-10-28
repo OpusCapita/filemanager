@@ -1,6 +1,6 @@
 ### Synopsis
 
-AddressBar is 
+LocationBar is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,12 +12,12 @@ AddressBar is
 ### Code Example
 
 ```
-<AddressBar />
+<LocationBar />
 ```
 
 ### Component Name
 
-AddressBar
+LocationBar
 
 ### License
 
