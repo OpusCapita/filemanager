@@ -9,12 +9,14 @@ import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
-import { findIndex } from 'lodash';
+import { findIndex, range } from 'lodash';
 import clickOutside from 'react-click-outside';
 
 const TABLET_WIDTH = 1024;
 const MOBILE_WIDTH = 640;
 const SCROLL_STRENGTH = 80;
+const ROW_HEIGHT = 48;
+const HEADER_HEIGHT = 48;
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -25,7 +27,6 @@ const propTypes = {
     modifyDate: PropTypes.number
   })),
   loading: PropTypes.bool,
-  itemsCount: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.string),
   humanReadableSize: PropTypes.bool,
   locale: PropTypes.string,
@@ -43,7 +44,6 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
-  itemsCount: 0,
   loading: false,
   selection: [],
   humanReadableSize: true,
@@ -145,13 +145,13 @@ class ListView extends Component {
   }
 
   handleKeyDown = (e) => {
-    let { selection, items, itemsCount, onKeyDown } = this.props;
+    let { selection, items, onKeyDown } = this.props;
     this.props.onKeyDown(e);
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
       e.preventDefault();
 
-      if (!itemsCount) {
+      if (!items.length) {
         return;
       }
 
@@ -171,7 +171,7 @@ class ListView extends Component {
     if (e.which === 40 && !e.shiftKey) { // Down arrow
       e.preventDefault();
 
-      if (!itemsCount) {
+      if (!items.length) {
         return;
       }
 
@@ -191,7 +191,7 @@ class ListView extends Component {
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
       e.preventDefault();
 
-      if (!itemsCount) {
+      if (!items.length) {
         return;
       }
 
@@ -217,7 +217,7 @@ class ListView extends Component {
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
       e.preventDefault();
 
-      if (!itemsCount) {
+      if (!items.length) {
         return;
       }
 
@@ -230,7 +230,7 @@ class ListView extends Component {
       }
 
       let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
-      let nextIdIndex = fromIdIndex + 1 < itemsCount ? fromIdIndex + 1 : itemsCount - 1;
+      let nextIdIndex = fromIdIndex + 1 < items.length ? fromIdIndex + 1 : items.length - 1;
       let nextId = items[nextIdIndex].id;
       let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
 
@@ -316,13 +316,13 @@ class ListView extends Component {
   }
 
   selectFirstItem = () => ({
-    selection: this.props.itemsCount ? [this.props.items[0].id] : [],
+    selection: this.props.items.length ? [this.props.items[0].id] : [],
     scrollToIndex: 0
   });
 
   selectLastItem = () => ({
-    selection: this.props.itemsCount ? [this.props.items[this.props.itemsCount - 1].id] : [],
-    scrollToIndex: this.props.itemsCount - 1
+    selection: this.props.items.length ? [this.props.items[this.props.items.length - 1].id] : [],
+    scrollToIndex: this.props.items.length - 1
   });
 
   clearSelection = () => ({
@@ -331,16 +331,16 @@ class ListView extends Component {
   });
 
   selectNext = () => {
-    let { selection, items, itemsCount } = this.props;
+    let { selection, items } = this.props;
     let currentId = this.lastSelected;
     let currentIndex = findIndex(items, (o) => o.id === currentId);
-    let nextIndex = currentIndex < itemsCount - 1 ? currentIndex + 1 : currentIndex;
+    let nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
     let nextId = items[nextIndex].id;
     return { selection: [nextId], scrollToIndex: nextIndex };
   }
 
   selectPrev = () => {
-    let { selection, items, itemsCount } = this.props;
+    let { selection, items } = this.props;
     let currentId = this.lastSelected;
     let currentIndex = findIndex(items, (o) => o.id === currentId);
     let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
@@ -424,7 +424,6 @@ class ListView extends Component {
   render() {
     let {
       items,
-      itemsCount,
       loading,
       humanReadableSize,
       locale,
@@ -443,9 +442,18 @@ class ListView extends Component {
     } = this.state;
     let { rangeSelectionStartedAt, lastSelected } = this;
 
+    let itemsToRender = null;
+    if (loading && this.containerHeight) {
+      // Generate items for "loading placeholder"
+      let itemsCount = Math.floor(this.containerHeight / ROW_HEIGHT - 1);
+      itemsToRender = range(itemsCount).map((o) => ({}));
+    } else {
+      itemsToRender = items;
+    };
+
     return (
       <AutoSizer>
-        {({ width, height }) => (
+        {({ width, height }) => (this.containerHeight = height) && (
           <div
             className="oc-fm--list-view"
             onKeyDown={this.handleKeyDown}
@@ -468,10 +476,10 @@ class ListView extends Component {
               <Table
                 width={width}
                 height={height}
-                rowCount={itemsCount}
-                rowGetter={({ index }) => items[index]}
-                rowHeight={48}
-                headerHeight={48}
+                rowCount={itemsToRender.length}
+                rowGetter={({ index }) => itemsToRender[index]}
+                rowHeight={ROW_HEIGHT}
+                headerHeight={HEADER_HEIGHT}
                 className="oc-fm--list-view__table"
                 gridClassName="oc-fm--list-view__grid"
                 overscanRowCount={4}
