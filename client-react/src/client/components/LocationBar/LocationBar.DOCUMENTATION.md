@@ -12,7 +12,24 @@ LocationBar is
 ### Code Example
 
 ```
-<LocationBar />
+<LocationBar 
+  items={[
+    { title: 'Item 1', onClick: () => console.log('click item 1') },
+    { title: 'Item 2', onClick: () => console.log('click item 2') },
+    { 
+      title: 'Long item long item long item long item long item long item', 
+      onClick: () => console.log('click item long item')
+    },
+    { 
+      title: 'Long item long item long item long item long item long item', 
+      onClick: () => console.log('click item long item')
+    },
+    { 
+      title: 'Long item long item long item long item long item long item', 
+      onClick: () => console.log('click item long item')
+    }
+  ]}
+/>
 ```
 
 ### Component Name
