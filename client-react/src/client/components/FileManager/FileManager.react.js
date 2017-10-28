@@ -277,6 +277,7 @@ class FileManager extends Component {
           itemsCount={resourceChildren ? resourceChildren.length : 0}
           locale={locale}
           dateTimePattern={dateTimePattern}
+
         />
       </div>
     );

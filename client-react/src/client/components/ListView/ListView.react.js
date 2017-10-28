@@ -5,7 +5,8 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
-import { NameCell, SizeCell, DateTimeCell, HeaderCell, NoRowsRenderer } from './Cells.react';
+import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
+import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex } from 'lodash';
@@ -478,7 +479,7 @@ class ListView extends Component {
                 sortBy={sortBy}
                 sortDirection={sortDirection}
                 rowRenderer={Row({ selection, lastSelected })}
-                noRowsRenderer={NoRowsRenderer()}
+                noRowsRenderer={NoFilesFoundStub}
                 onRowClick={this.handleRowClick}
                 onRowRightClick={this.handleRowRightClick}
                 onRowDoubleClick={this.handleRowDoubleClick}

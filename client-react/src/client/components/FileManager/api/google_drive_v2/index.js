@@ -67,9 +67,7 @@ async function handleClientLoad(options) {
 }
 
 async function init(options) {
-  await appendGoogleApiScript().catch((error) => {
-    console.error('Cant append Google API script tag', error);
-  });
+  await appendGoogleApiScript();
 
   console.log('Try auth on Google Drive API');
   await handleClientLoad(options);

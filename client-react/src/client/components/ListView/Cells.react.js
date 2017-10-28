@@ -4,7 +4,6 @@ import SVG from '@opuscapita/react-svg/lib/SVG';
 import { SortDirection } from 'react-virtualized';
 import { getIcon } from './icons';
 
-let nothingToShowIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/add_to_photos.svg');
 let sortASCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_down.svg');
 let sortDESCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_up.svg');
 
@@ -70,18 +69,3 @@ export const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sort
     </div>
   );
 };
-
-export const NoRowsRenderer = () => () => (
-  <div className="oc-fm--list-view__no-rows">
-    <SVG
-      className="oc-fm--list-view__no-rows-icon"
-      svg={nothingToShowIcon}
-    />
-    <div className="oc-fm--list-view__no-rows-title">
-      Nothing to show
-    </div>
-    <div className="oc-fm--list-view__no-rows-sub-title">
-      Drop files here or use "New" button
-    </div>
-  </div>
-);
