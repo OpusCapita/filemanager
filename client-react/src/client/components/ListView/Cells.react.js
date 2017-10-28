@@ -7,7 +7,19 @@ import { getIcon } from './icons';
 let sortASCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_down.svg');
 let sortDESCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_up.svg');
 
-export const NameCell = () => ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
+const LoadingCell = () => (
+  <div className="oc-fm--list-view__cell oc-fm--list-view__cell--loading">
+    <div className="oc-fm--list-view__cell-loading-content">&nbsp;</div>
+  </div>
+);
+
+export const NameCell = ({ loading }) => ({
+  cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex
+}) => {
+  if (loading) {
+    return (<LoadingCell />);
+  }
+
   let { svg, fill } = getIcon(rowData);
   return (
     <div  className="oc-fm--list-view__cell oc-fm--list-view__name-cell">
@@ -28,8 +40,12 @@ export const NameCell = () => ({ cellData, columnData, columnIndex, dataKey, isS
   );
 };
 
-export const SizeCell = ({ humanReadableSize, isDirectory }) => {
+export const SizeCell = ({ humanReadableSize, isDirectory, loading }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
+    if (loading) {
+      return (<LoadingCell />);
+    }
+
     let formattedSize = (typeof cellData !== 'undefined' && humanReadableSize) ?
       filesize(cellData) :
       (cellData || '');
@@ -42,8 +58,12 @@ export const SizeCell = ({ humanReadableSize, isDirectory }) => {
   };
 };
 
-export const DateTimeCell = ({ locale, dateTimePattern }) => {
+export const DateTimeCell = ({ locale, dateTimePattern, loading }) => {
   return ({ cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }) => {
+    if (loading) {
+      return (<LoadingCell />);
+    }
+
     let formattedDateTime = cellData ?
       moment(new Date().setTime(cellData)).locale(locale).format(dateTimePattern) :
       '';
@@ -56,7 +76,11 @@ export const DateTimeCell = ({ locale, dateTimePattern }) => {
   };
 };
 
-export const HeaderCell = () => ({ columnData, dataKey, disableSort, label, sortBy, sortDirection })  => {
+export const HeaderCell = ({ loading }) => ({ columnData, dataKey, disableSort, label, sortBy, sortDirection })  => {
+  if (loading) {
+    return (<LoadingCell />);
+  }
+
   let sortIconSvg = sortDirection === SortDirection.ASC ? sortASCIcon : sortDESCIcon;
   let sortIconElement = dataKey === sortBy ? (
     <SVG svg={sortIconSvg} />

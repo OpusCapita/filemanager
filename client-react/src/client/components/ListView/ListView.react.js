@@ -24,6 +24,7 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
+  loading: PropTypes.bool,
   itemsCount: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.string),
   humanReadableSize: PropTypes.bool,
@@ -43,6 +44,7 @@ const propTypes = {
 const defaultProps = {
   items: [],
   itemsCount: 0,
+  loading: false,
   selection: [],
   humanReadableSize: true,
   locale: 'en',
@@ -423,6 +425,7 @@ class ListView extends Component {
     let {
       items,
       itemsCount,
+      loading,
       humanReadableSize,
       locale,
       dateTimePattern,
@@ -478,7 +481,7 @@ class ListView extends Component {
                 sort={this.handleSort}
                 sortBy={sortBy}
                 sortDirection={sortDirection}
-                rowRenderer={Row({ selection, lastSelected })}
+                rowRenderer={Row({ selection, lastSelected, loading })}
                 noRowsRenderer={NoFilesFoundStub}
                 onRowClick={this.handleRowClick}
                 onRowRightClick={this.handleRowRightClick}
@@ -489,16 +492,16 @@ class ListView extends Component {
                   dataKey='title'
                   width={48}
                   flexGrow={1}
-                  cellRenderer={NameCell()}
-                  headerRenderer={HeaderCell()}
+                  cellRenderer={NameCell({ loading })}
+                  headerRenderer={HeaderCell({ loading })}
                 />
                 <Column
                   width={100}
                   label='File size'
                   dataKey='size'
                   flexGrow={width > TABLET_WIDTH ? 1 : 0}
-                  cellRenderer={SizeCell({ humanReadableSize })}
-                  headerRenderer={HeaderCell()}
+                  cellRenderer={SizeCell({ humanReadableSize, loading })}
+                  headerRenderer={loading ? () => null : HeaderCell({ loading })}
                 />
                 {width > MOBILE_WIDTH ? (
                   <Column
@@ -506,9 +509,9 @@ class ListView extends Component {
                     label='Last modified'
                     dataKey='modifyDate'
                     flexGrow={1}
-                    cellRenderer={DateTimeCell({ locale, dateTimePattern })}
-                    headerRenderer={HeaderCell()}
-                    />
+                    cellRenderer={DateTimeCell({ locale, dateTimePattern, loading })}
+                    headerRenderer={loading ? () => null : HeaderCell({ loading })}
+                  />
                 ) : null}
               </Table>
             </ScrollOnMouseOut>

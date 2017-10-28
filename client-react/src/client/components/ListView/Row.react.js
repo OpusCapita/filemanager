@@ -57,6 +57,7 @@ class Row extends Component {
       style,
       selection,
       lastSelected,
+      loading,
       isDragging,
       connectDragSource,
       connectDragPreview
@@ -104,9 +105,10 @@ class Row extends Component {
         className={`
         ReactVirtualized__Table__row
         oc-fm--list-view__row
-        ${isSelected ? 'oc-fm--list-view__row--selected' : ''}
-        ${isLastSelected ? 'oc-fm--list-view__row--last-selected' : ''}
-        ${isDragging ? 'oc-fm--list-view__row--dragging' : ''}
+        ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
+        ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
+        ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
+        ${loading ? 'oc-fm--list-view__row--loading' : ''}
         `}
         key={rowData.id}
         role="row"
@@ -117,10 +119,11 @@ class Row extends Component {
   }
 };
 
-export default ({ selection, lastSelected }) => (props) => (
+export default ({ selection, lastSelected, loading }) => (props) => (
   <Row
     {...props}
     selection={selection}
     lastSelected={lastSelected}
+    loading={loading}
   />
 );
