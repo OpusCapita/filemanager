@@ -110,7 +110,12 @@ class FileNavigator extends Component {
 
   handleApiSignInFail = () => {
     this.monitorApiAvailability();
-    this.setState({ apiSignedIn: false, resourceChildren: [] });
+    this.setState({
+      apiSignedIn: false,
+      selection: [],
+      resource: [],
+      resourceChildren: []
+    });
   }
 
   async navigateToDir(toId, fromId) {
