@@ -64,7 +64,7 @@ For directory creation:
 <file stats resource>
 ```
 
-For files creation:
+For file(s) creation:
 
 ```javascript
 [<file stats resource>, ...]
