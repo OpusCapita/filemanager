@@ -1,16 +1,19 @@
-FROM node:6
+FROM node:6.9.3
 MAINTAINER OpusCapita
 
 # ------------------------
 # Azure SSH Server support
 # ------------------------
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils \
-    apt-get update \
-    && apt-get install -y --no-install-recommends openssh-server \
+RUN apt update \
+    && apt install -y --no-install-recommends openssh-server curl \
     && echo "root:Docker!" | chpasswd
 
 COPY sshd_config /etc/ssh/
+
+COPY init_container.sh /bin/
+
+RUN chmod 755 /bin/init_container.sh
 
 EXPOSE 2222 80
 
@@ -26,4 +29,4 @@ COPY . /root/app
 EXPOSE 3000
 EXPOSE 3020
 
-CMD /root/app/start-demo.sh
+CMD ["/bin/init_container.sh"]
