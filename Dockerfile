@@ -24,6 +24,6 @@ WORKDIR /root/app
 
 COPY . /root/app
 
-EXPOSE 80 3020 2222
+EXPOSE 3000
 
 CMD ["sh /root/app/start-demo.sh"]
