@@ -2,14 +2,14 @@
 
 | Method                                                      | REST   | URL                    | Request                             | Response                              |
 |-------------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?title,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource                  |
+| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?title,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource<br />or<br />[... :file-stats-resource]                  |
 | [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
 | [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
 | [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
 | Copy file/dir to destination                                | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
-| Get file(s)/compressed dir                                  | GET    | api/download           | [... :id]                           | :binary-data                          |
+| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
 | [Get client config](#get-client-configuration)              | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
@@ -22,13 +22,20 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
 {
   id: <string>,
   title: <string>,
-  type: <string>, // "dir", "file", "unknown", etc.
+  type: <string>, // "dir" or "file"
   createDate: <string>,
   modifyDate: <string>,
   ?size: <string>, // for files only
   ?parentId: <string>, // for non-root only
   md5Checksum: <string>, // TODO in v2
-  downloadUrl: <string>
+  downloadUrl: <string>,
+  capabilities: {
+    canListChildren: <boolean>,
+    canAddChildren: <boolean>,
+    canRemoveChildren: <boolean>,
+    canDelete: <boolean>,
+    canDownload: <boolean>
+  }
 }
 ```
 
@@ -51,8 +58,16 @@ FormData instance with the following field name/value pairs.
 
 ### Response
 
+For directory creation:
+
 ```javascript
 <file stats resource>
+```
+
+For file(s) creation:
+
+```javascript
+[<file stats resource>, ...]
 ```
 
 A 204 status is returned if a dir with parentId does not exist.
@@ -111,6 +126,25 @@ None.
 ```
 <file stats resource>
 ```
+
+## Get file(s)/compressed dir
+
+* URL: `api/download`
+* Method: GET
+* Content-Type: application/zip
+* Content-Disposition: attachment; filename="\<string\>"
+
+### Request
+
+```
+?items=:id&items=:id...
+```
+
+When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
+
+### Response
+
+Binary data.
 
 # Client config
 
