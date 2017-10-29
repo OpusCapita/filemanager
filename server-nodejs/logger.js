@@ -1,13 +1,12 @@
 'use strict';
 
-
 // TODO - fix colorize when winston 3.0.0 will be released
-let { createLogger, format, transports } = require('winston');
-let { combine, timestamp, prettyPrint } = format;
-let path = require('path');
-let logsDir = path.resolve('/var/log/oc-filemanager');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, prettyPrint } = format;
+const path = require('path');
+const logsDir = path.resolve('/var/log/oc-filemanager');
 
-let logger = createLogger({
+const logger = createLogger({
   format: combine(
     timestamp(),
     prettyPrint()

@@ -5,19 +5,36 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import { SortDirection } from 'react-virtualized';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
 
 @showroomScopeDecorator
 export default
 class ListViewScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selection: [],
+      sortBy: 'title',
+      sortDirection: SortDirection.ASC
+    };
+  }
+
+  handleSelection = (selection) => {
+    this.setState({ selection });
+  }
+
+  handleSort = ({ sortBy, sortDirection }) => {
+    this.setState({ sortBy, sortDirection });
   }
 
   render() {
     return (
       <div>
-        {this._renderChildren()}
+        <DragDropContextProvider backend={HTML5Backend}>
+          {this._renderChildren()}
+        </DragDropContextProvider>
       </div>
     );
   }
