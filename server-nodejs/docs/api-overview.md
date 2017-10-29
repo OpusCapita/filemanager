@@ -58,8 +58,16 @@ FormData instance with the following field name/value pairs.
 
 ### Response
 
+For directory creation:
+
 ```javascript
 <file stats resource>
+```
+
+For files creation:
+
+```javascript
+[<file stats resource>, ...]
 ```
 
 A 204 status is returned if a dir with parentId does not exist.
