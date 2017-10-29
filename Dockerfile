@@ -4,7 +4,9 @@ MAINTAINER OpusCapita
 # ------------------------
 # Azure SSH Server support
 # ------------------------
-RUN apt-get update \
+
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils \
+    apt-get update \
     && apt-get install -y --no-install-recommends openssh-server \
     && echo "root:Docker!" | chpasswd
 
