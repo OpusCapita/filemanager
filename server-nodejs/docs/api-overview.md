@@ -9,7 +9,7 @@
 | [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
 | Copy file/dir to destination                                | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
-| Get file(s)/compressed dir                                  | GET    | api/download           | [... :id]                           | :binary-data                          |
+| [Get file(s)/compressed dir](#get-file-s-compressed-dir) | GET    | api/download           | ?items=<id>&items=<id>...                          | :binary-data                          |
 | [Get client config](#get-client-configuration)              | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
@@ -126,6 +126,25 @@ None.
 ```
 <file stats resource>
 ```
+
+## Get file(s)/compressed dir
+
+* URL: `api/download`
+* Method: GET
+* Content-Type: application/zip
+* Content-Disposition: attachment; filename="<string>"
+
+### Request
+
+```
+?items=<id>&items=<id>...
+```
+
+All items _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
+
+### Response
+
+Binary data.
 
 # Client config
 
