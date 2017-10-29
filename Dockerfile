@@ -15,8 +15,6 @@ COPY init_container.sh /bin/
 
 RUN chmod 755 /bin/init_container.sh
 
-EXPOSE 2222 80
-
 # ------------------------
 # App
 # ------------------------
@@ -26,7 +24,8 @@ WORKDIR /root/app
 
 COPY . /root/app
 
-EXPOSE 3000
-EXPOSE 3020
+ENV PORT 80
+
+EXPOSE 80 3020 2222
 
 CMD ["/bin/init_container.sh"]
