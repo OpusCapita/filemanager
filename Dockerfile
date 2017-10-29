@@ -19,11 +19,11 @@ MAINTAINER OpusCapita
 # App
 # ------------------------
 
-RUN mkdir /root/app
-WORKDIR /root/app
+RUN mkdir /app
+WORKDIR /app
 
-COPY . /root/app
+COPY . /app
 
 EXPOSE 3000
 
-CMD ["sh /root/app/start-demo.sh"]
+CMD ["sh /app/start-demo.sh"]
