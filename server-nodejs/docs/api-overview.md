@@ -22,13 +22,20 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
 {
   id: <string>,
   title: <string>,
-  type: <string>, // "dir", "file", "unknown", etc.
+  type: <string>, // "dir" or "file"
   createDate: <string>,
   modifyDate: <string>,
   ?size: <string>, // for files only
   ?parentId: <string>, // for non-root only
   md5Checksum: <string>, // TODO in v2
-  downloadUrl: <string>
+  downloadUrl: <string>,
+  capabilities: {
+    canListChildren: <boolean>,
+    canAddChildren: <boolean>,
+    canRemoveChildren: <boolean>,
+    canDelete: <boolean>,
+    canDownload: <boolean>
+  }
 }
 ```
 
