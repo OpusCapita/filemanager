@@ -199,7 +199,7 @@ class FileNavigator extends Component {
       }
     }
 
-    if ((e.which === 8) && !loadingView) { // Backspace
+    if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow (temporary)
       // Navigate to parent directory
       let { resource } = this.state;
       if (resource.parentId) {
