@@ -140,7 +140,7 @@ None.
 ?items=:id&items=:id...
 ```
 
-All items _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
+When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
 
 ### Response
 
