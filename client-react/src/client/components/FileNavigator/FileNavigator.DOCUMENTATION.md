@@ -17,6 +17,7 @@ FileNavigator is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
+  {/*
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.apis.nodejs_v1}
@@ -29,7 +30,7 @@ FileNavigator is
       locale="en"
     />
   </div>
-  
+  */}
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   
   {/*GOOGLE_DRIVE_AUTH_OPTIONS*/}
