@@ -21,30 +21,31 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run:
-          name: lint
-          command: npm run lint
-
-      - run:
-          name: test
-          command: |
-            mkdir junit
-            npm test -- --reporter mocha-junit-reporter
-
-          environment:
-            MOCHA_FILE: junit/test-results.xml
-
-      - store_test_results:
-          path: junit
-
-      - store_artifacts:
-          path: junit
-  update-gh-pages:
+#      - run:
+#          name: lint
+#          command: npm run lint
+#
+#      - run:
+#          name: test
+#          command: |
+#            mkdir junit
+#            npm test -- --reporter mocha-junit-reporter
+#
+#          environment:
+#            MOCHA_FILE: junit/test-results.xml
+#
+#      - store_test_results:
+#          path: junit
+#
+#      - store_artifacts:
+#          path: junit
+  build-demo-docker-image:
     docker:
       - image: circleci/node:6
     working_directory: ~/repo
     steps:
       - checkout
+      - setup_remote_docker
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -61,12 +62,14 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
-          name: build-gh-pages
-          command: ./scripts/gh-pages/build.sh
+          name: build-docker-image
+          command: docker build -t opuscapita/filemanager-demo .
 
       - run:
-          name: deploy-gh-pages
-          command: ./scripts/gh-pages/deploy.sh .gh-pages-tmp
+          name: deploy-docker-image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push opuscapita/filemanager-demo:latest
 
 workflows:
   version: 2
@@ -77,10 +80,10 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-      - update-gh-pages:
+      - build-demo-docker-image:
           requires:
             - build
           filters:
             branches:
-              ignore:
-                - gh-pages
+              only:
+                - master
