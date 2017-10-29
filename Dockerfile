@@ -24,8 +24,6 @@ WORKDIR /root/app
 
 COPY . /root/app
 
-ENV PORT 80
-
 EXPOSE 80 3020 2222
 
 CMD ["/bin/init_container.sh"]

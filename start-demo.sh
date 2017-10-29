@@ -1,4 +1,4 @@
 #!/bin/sh
 
-(cd client-react && npm start) &
+(export PORT=80 && cd client-react && npm start) &
 (cd server-nodejs && npm start)
