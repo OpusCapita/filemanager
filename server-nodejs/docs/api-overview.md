@@ -132,7 +132,7 @@ None.
 * URL: `api/download`
 * Method: GET
 * Content-Type: application/zip
-* Content-Disposition: attachment; filename="<string>"
+* Content-Disposition: attachment; filename="\<string\>"
 
 ### Request
 
