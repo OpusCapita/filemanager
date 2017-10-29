@@ -69,7 +69,7 @@ jobs:
           name: deploy-docker-image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push opuscapita/filemanager-demo:latest
+            docker push ockvolkovich/filemanager-demo:latest
 
 workflows:
   version: 2
