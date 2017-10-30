@@ -213,6 +213,12 @@ class FileNavigator extends Component {
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
         let selectedResourceItems = this.filterResourceChildrenByID(selection);
+
+        if (!selectedResourceItems[0]) {
+          // Fix for fast selection updates
+          return;
+        }
+        
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {

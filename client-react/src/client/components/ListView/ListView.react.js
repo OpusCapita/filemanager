@@ -165,6 +165,7 @@ class ListView extends Component {
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
+        console.log('b', selection, items);
         let selectionData = this.selectPrev();
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
@@ -343,6 +344,12 @@ class ListView extends Component {
     let { selection, items } = this.props;
     let currentId = this.lastSelected;
     let currentIndex = findIndex(items, (o) => o.id === currentId);
+
+    if (currentIndex <= -1) {
+      // Fix for fast selection updates
+      return { selection, scrollToIndex: 0 };
+    }
+
     let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
     let prevId = items[prevIndex].id;
     return { selection: [prevId], scrollToIndex: prevIndex };
