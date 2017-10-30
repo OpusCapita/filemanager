@@ -22,12 +22,12 @@ let listViewLayout = (renderOptions) => ([
       width={100}
       dataKey="size"
       label="File size"
-      flexGrow={renderOptions.clientWidth > TABLET_WIDTH ? 1 : 0}
+      flexGrow={renderOptions.width > TABLET_WIDTH ? 1 : 0}
       cellRenderer={SizeCell(renderOptions)}
       headerRenderer={HeaderCell(renderOptions)}
       disableSort={true}
     />
-  ), (renderOptions.clientWidth > MOBILE_WIDTH) && (
+  ), (renderOptions.width > MOBILE_WIDTH) && (
     <Column
       key="modifyDate"
       width={100}

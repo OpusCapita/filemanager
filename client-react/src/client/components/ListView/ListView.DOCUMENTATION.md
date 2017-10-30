@@ -38,36 +38,40 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
     sortBy={_scope.state.sortBy}
     sortDirection={_scope.state.sortDirection}
     layout={(renderOptions) => ([
-      {
-        width: 48,
-        label: 'Title',
-        dataKey: 'title',
-        flexGrow: 1,
-        cellRenderer: NameCell(renderOptions),
-        headerRenderer: HeaderCell(renderOptions),
-        disableSort: false,
-        hidden: false
-      },
-      {
-        width: 100,
-        dataKey: 'size',
-        label: 'File size',
-        flexGrow: renderOptions.clientWidth > 1024 ? 1 : 0,
-        cellRenderer: SizeCell(renderOptions),
-        headerRenderer: HeaderCell(renderOptions),
-        disableSort: true,
-        hidden: false
-      },
-      {
-        width: 100,
-        dataKey: 'modifyDate',
-        label: 'Last modified',
-        flexGrow: 1,
-        cellRenderer: DateTimeCell(renderOptions),
-        headerRenderer: HeaderCell(renderOptions),
-        disableSort: true,
-        hidden: renderOptions.clientWidth < 480
-      }
+      (
+        <Column
+          key="title"
+          dataKey="title"
+          width={48}
+          label="Title"
+          flexGrow={1}
+          cellRenderer={NameCell(renderOptions)}
+          headerRenderer={HeaderCell(renderOptions)}
+          disableSort={false}
+        />
+      ), (
+        <Column
+          key="size"
+          width={100}
+          dataKey="size"
+          label="File size"
+          flexGrow={renderOptions.width > 1024 ? 1 : 0}
+          cellRenderer={SizeCell(renderOptions)}
+          headerRenderer={HeaderCell(renderOptions)}
+          disableSort={true}
+        />
+      ), (renderOptions.width > 320) && (
+        <Column
+          key="modifyDate"
+          width={100}
+          dataKey="modifyDate"
+          label="Last modified"
+          flexGrow={1}
+          cellRenderer={DateTimeCell(renderOptions)}
+          headerRenderer={HeaderCell(renderOptions)}
+          disableSort={true}
+        />
+      )
     ])}
     items={[
       { 

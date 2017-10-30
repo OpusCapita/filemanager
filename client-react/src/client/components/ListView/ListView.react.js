@@ -502,7 +502,7 @@ class ListView extends Component {
                 onRowRightClick={this.handleRowRightClick}
                 onRowDoubleClick={this.handleRowDoubleClick}
               >
-                {layout({ ...columnsOptions, clientWidth: width })}
+                {layout({ ...columnsOptions, width, height })}
               </Table>
             </ScrollOnMouseOut>
           </div>
