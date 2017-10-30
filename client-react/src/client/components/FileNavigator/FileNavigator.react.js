@@ -3,6 +3,7 @@ import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import { SortDirection } from 'react-virtualized';
+import { findIndex } from 'lodash';
 import nanoid from 'nanoid';
 import api from './api';
 import SVG from '@opuscapita/react-svg/lib/SVG';
@@ -42,7 +43,7 @@ class FileNavigator extends Component {
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
       resource: {},
-      resourceParents: [],
+      resourceLocation: [],
       resourceChildren: [],
       loadingView: false,
       apiInitialized: false,
@@ -120,6 +121,11 @@ class FileNavigator extends Component {
     });
   }
 
+  handleLocationBarChange = (id) => {
+    let { resource, resourceLocation } = this.state;
+    this.navigateToDir(id, resource.id);
+  }
+
   async navigateToDir(toId, fromId) {
     this.startViewLoading();
     let resource = await this.getResourceById(toId);
@@ -127,9 +133,10 @@ class FileNavigator extends Component {
 
     let { resourceChildren } = await this.getChildrenForId(resource.id);
     let resourceParents = await this.getParentsForId(resource.id);
+    let resourceLocation = resourceParents.concat(resource);
 
     this.setState({
-      resourceParents,
+      resourceLocation,
       resourceChildren,
       selection: typeof fromId !== 'undefined' ? [fromId] : []
     });
@@ -241,7 +248,7 @@ class FileNavigator extends Component {
       error,
       loadingView,
       resource,
-      resourceParents,
+      resourceLocation,
       resourceChildren,
       selection,
       sortBy,
@@ -272,10 +279,10 @@ class FileNavigator extends Component {
       </div>
     ) : null;
 
-    let locationItems = resourceParents.map((o) => ({
+    let locationItems = resourceLocation.map((o) => ({
       title: o.title,
-      onClick: () => this.navigateToDir(o.id)
-    })).concat([{ title: resource.title, onClick: () => this.navigateToDir(resource.id) }]);
+      onClick: () => this.handleLocationBarChange(o.id)
+    }));
 
     return (
       <div

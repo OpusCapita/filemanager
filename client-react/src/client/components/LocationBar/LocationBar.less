@@ -25,9 +25,14 @@
   margin-left: -4px;
   user-select: none;
 
-  &:hover {
+  &:hover,
+  &:focus {
     cursor: pointer;
     background-color: #f5f5f5;
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 

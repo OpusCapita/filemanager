@@ -81,7 +81,7 @@ function normalizeResource(resource) {
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
-    parentId: typeof resource.parents[0] === 'undefined' ? '' : resource.parents[0].id
+    parentId: typeof resource.parents[0] === 'undefined' ? 'root' : resource.parents[0].id
   };
 }
 
@@ -116,7 +116,7 @@ async function getParentsForId(options, id, result = []) {
 
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id === '' ? 'root' : id}' in parents`
+    q: `'${id}' in parents`
   });
 
   let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
