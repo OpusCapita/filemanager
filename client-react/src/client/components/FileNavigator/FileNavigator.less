@@ -1,9 +1,17 @@
 .oc-fm--file-navigator {
-  border: 1px solid #eee;
   height: 100%;
   position: relative;
   overflow: hidden;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.oc-fm--file-navigator__view {
+  border: 1px solid #eee;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes keyframes-oc-fm--file-navigator__view-loading-overlay-appearing {

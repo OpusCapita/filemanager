@@ -1,16 +1,6 @@
 import request from 'superagent';
 import id from '../../../../../../../server-nodejs/utils/id';
 
-const ROOT_RESOURCE = {
-  createDate: '',
-  id: '',
-  modifyDate: '',
-  title: 'Root',
-  type: 'dir',
-  size: 0,
-  parentId: ''
-};
-
 let signedIn = false;
 
 function appendGoogleApiScript() {
@@ -84,10 +74,6 @@ async function init(options) {
 }
 
 function normalizeResource(resource) {
-  if (resource === null) {
-    return ROOT_RESOURCE;
-  }
-
   return {
     createDate: Date.parse(resource.createdDate),
     id: resource.id,
@@ -106,29 +92,26 @@ function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
-  if (id === '') {
-    return normalizeResource(null);
-  }
-
   let response =  await window.gapi.client.drive.files.get({ fileId: id });
   let resource = normalizeResource({ ...response.result, parentId: id });
   return resource;
 }
 
-async function getParentsForId(options, id, result = [ROOT_RESOURCE]) {
-  if (!id) {
+async function getParentsForId(options, id, result = []) {
+  if (id === 'root') {
     return result;
   }
 
   let response = await window.gapi.client.drive.parents.list({ fileId: id });
-  let parentId = typeof response.result.items[0] === 'undefined' ? null : response.result.items[0].id;
+  let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
 
-  if (parentId !== null) {
-    let parent = await getResourceById(options, parentId);
-    return await getParentsForId(options, parentId, result.concat([parent]));
+  if (parentId === 'root') {
+    return result;
   }
 
-  return result;
+  let parent = await getResourceById(options, parentId);
+
+  return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
 async function getChildrenForId(options, id) {

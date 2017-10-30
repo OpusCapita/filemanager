@@ -48,7 +48,7 @@ FileNavigator is
       apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
       apiVersion="google_drive_v2"
       dateTimePattern="YYYY-MM-DD HH:mm:ss"
-      initialResourceId={''}
+      initialResourceId="root"
       locale="en"
       signInRenderer={() => (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>

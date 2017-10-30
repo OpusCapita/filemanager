@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './FileNavigator.less';
 import ListView from '../ListView';
+import LocationBar from '../LocationBar';
 import { SortDirection } from 'react-virtualized';
 import nanoid from 'nanoid';
 import api from './api';
@@ -41,6 +42,7 @@ class FileNavigator extends Component {
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
       resource: {},
+      resourceParents: [],
       resourceChildren: [],
       loadingView: false,
       apiInitialized: false,
@@ -124,20 +126,20 @@ class FileNavigator extends Component {
     this.setState({ resource });
 
     let { resourceChildren } = await this.getChildrenForId(resource.id);
+    let resourceParents = await this.getParentsForId(resource.id);
 
     this.setState({
+      resourceParents,
       resourceChildren,
       selection: typeof fromId !== 'undefined' ? [fromId] : []
     });
 
     this.stopViewLoading();
-    this.setParentsForId(resource.id);
   }
 
-  async setParentsForId(id) {
+  async getParentsForId(id) {
     let { api, apiOptions } = this.props;
-    let resourceParents = await api.getParentsForId(apiOptions, id);
-    this.setState({ resourceParents });
+    return await api.getParentsForId(apiOptions, id);
   }
 
   async getResourceById(id) {
@@ -239,6 +241,7 @@ class FileNavigator extends Component {
       error,
       loadingView,
       resource,
+      resourceParents,
       resourceChildren,
       selection,
       sortBy,
@@ -269,31 +272,43 @@ class FileNavigator extends Component {
       </div>
     ) : null;
 
+    let locationItems = resourceParents.map((o) => ({
+      title: o.title,
+      onClick: () => this.navigateToDir(o.id)
+    })).concat([resource]);
+
     return (
       <div
         className={`oc-fm--file-navigator ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
-        {viewLoadingOverlay}
-        <ListView
-          onKeyDown={this.handleViewKeyDown}
-          onRowClick={this.handleResourceItemClick}
-          onRowRightClick={this.handleResourceItemRightClick}
-          onRowDoubleClick={this.handleResourceItemDoubleClick}
-          onSelection={this.handleSelection}
-          onSort={this.handleSort}
-          onRef={this.handleViewRef}
-          loading={loadingView}
-          selection={selection}
-          sortBy={sortBy}
-          sortDirection={sortDirection}
-          items={resourceChildren}
-          itemsCount={resourceChildren ? resourceChildren.length : 0}
-          locale={locale}
-          dateTimePattern={dateTimePattern}
+        <div className="oc-fm--file-navigator__location-bar">
+          <LocationBar
+            items={locationItems}
+          />
+        </div>
 
-        />
+        <div className="oc-fm--file-navigator__view">
+          {viewLoadingOverlay}
+          <ListView
+            onKeyDown={this.handleViewKeyDown}
+            onRowClick={this.handleResourceItemClick}
+            onRowRightClick={this.handleResourceItemRightClick}
+            onRowDoubleClick={this.handleResourceItemDoubleClick}
+            onSelection={this.handleSelection}
+            onSort={this.handleSort}
+            onRef={this.handleViewRef}
+            loading={loadingView}
+            selection={selection}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            items={resourceChildren}
+            itemsCount={resourceChildren ? resourceChildren.length : 0}
+            locale={locale}
+            dateTimePattern={dateTimePattern}
+          />
+        </div>
       </div>
     );
   }
