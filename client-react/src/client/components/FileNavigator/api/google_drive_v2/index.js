@@ -126,7 +126,8 @@ async function getParentsForId(options, id, result = []) {
 
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id}' in parents`
+    q: `'${id}' in parents`,
+    fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents)'
   });
 
   let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
