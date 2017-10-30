@@ -82,6 +82,11 @@ class ListView extends Component {
       // When FileNavigator navigates to parent dir, this last selected should be rigth
       this.lastSelected = nextProps.selection[0];
     }
+
+    if (this.props.loading !== nextProps.loading) {
+      // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
+      this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
+    }
   }
 
   handleSelection(ids) {
@@ -258,7 +263,6 @@ class ListView extends Component {
     if (e.which === 33) { // PageUp
       // Scroll top
       e.preventDefault();
-      e.stopPropagation();
 
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
@@ -269,7 +273,6 @@ class ListView extends Component {
     if (e.which === 34) { // PageDown
       // Scroll bottom
       e.preventDefault();
-      e.stopPropagation();
 
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
@@ -282,7 +285,6 @@ class ListView extends Component {
     if (e.which === 36) { // Home
       // Scroll to first item
       e.preventDefault();
-      e.stopPropagation();
 
       let { items } = this.props;
       let { clientHeight, scrollHeight, scrollTop } = this.state;
@@ -293,7 +295,6 @@ class ListView extends Component {
     if (e.which === 35) { // End
       // Scroll to first item
       e.preventDefault();
-      e.stopPropagation();
 
       let { items } = this.props;
       let { clientHeight, scrollHeight, scrollTop } = this.state;

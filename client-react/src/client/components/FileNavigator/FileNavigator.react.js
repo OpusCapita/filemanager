@@ -206,6 +206,7 @@ class FileNavigator extends Component {
 
   handleViewKeyDown = (e) => {
     let { loadingView, resource } = this.state;
+    console.log(e.which);
 
     if (e.which === 13 && !loadingView) { // Enter key
       let { selection } = this.state;
