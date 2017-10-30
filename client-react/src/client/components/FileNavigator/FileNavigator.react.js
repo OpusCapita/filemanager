@@ -208,7 +208,7 @@ class FileNavigator extends Component {
     let { loadingView, resource } = this.state;
     console.log(e.which);
 
-    if (e.which === 13 && !loadingView) { // Enter key
+    if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
       let { selection } = this.state;
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
@@ -221,7 +221,7 @@ class FileNavigator extends Component {
       }
     }
 
-    if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow (temporary)
+    if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow
       // Navigate to parent directory
       let { resource } = this.state;
       if (resource.parentId) {
