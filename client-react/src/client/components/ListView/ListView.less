@@ -1,5 +1,3 @@
-@import "../assets/loading-overlay";
-
 @keyframes keyframes-oc-fm--list-view-row-appearing {
   0% { opacity: 0; }
   100% { opacity: 1 }
@@ -15,11 +13,6 @@
   }
 }
 
-.oc-fm--list-view__cell-loading-content {
-  .oc-fm--loading-pattern;
-  background-color: #f5f5f5;
-  position: relative;
-}
 
 .oc-fm--list-view__table {
 
@@ -31,43 +24,6 @@
   }
 }
 
-.oc-fm--list-view__cell {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  user-select: none;
-  &:hover {
-    cursor: default;
-  }
-}
-
-.oc-fm--list-view__name-cell {
-  display: flex;
-  align-items: center;
-}
-
-.oc-fm--list-view__name-cell-title {
-  font-weight: bold;
-  flex: 0 1 auto;
-}
-
-.oc-fm--list-view__name-cell-icon {
-  width: 38px;
-  height: 38px;
-  margin-right: 10px;
-  background: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-}
-
-.oc-fm--list-view__name-cell-icon-image {
-  width: 24px;
-  height: 24px;
-  background-size: cover;
-}
-
 .oc-fm--list-view__row {
   border-bottom: 1px solid #f5f5f5;
 
@@ -75,7 +31,7 @@
     background-color: #f5f5f5;
   }
 
-  &:hover:not(&--selected) .oc-fm--list-view__name-cell-icon {
+  &:hover:not(&--selected) .oc-fm--name-cell__icon {
     background-color: transparent;
   }
 
@@ -107,13 +63,6 @@
 .oc-fm--list-view__row--dragging {
   opacity: 0.78;
   background-color: #f5f5f5;
-}
-
-.oc-fm--list-view__header-cell {
-  text-transform: none;
-  user-select: none;
-  display: flex;
-  align-items: center;
 }
 
 .oc-fm--list-view .ReactVirtualized__Table__headerRow {

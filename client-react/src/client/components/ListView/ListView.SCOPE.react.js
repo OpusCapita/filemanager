@@ -8,12 +8,13 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import { SortDirection, Column } from 'react-virtualized';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
-import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
+import Cell from '../Cell';
+import NameCell from '../NameCell';
+import HeaderCell from '../HeaderCell';
 
 window.Column = Column;
+window.Cell = Cell;
 window.NameCell = NameCell;
-window.SizeCell = SizeCell;
-window.DateTimeCell = DateTimeCell;
 window.HeaderCell = HeaderCell;
 
 @showroomScopeDecorator
