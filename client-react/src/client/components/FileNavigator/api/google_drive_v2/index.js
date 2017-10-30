@@ -115,7 +115,7 @@ async function getResourceById(options, id) {
   return resource;
 }
 
-async function getParentsForId(id, result = ['']) {
+async function getParentsForId(options, id, result = [ROOT_RESOURCE]) {
   if (!id) {
     return result;
   }
@@ -124,7 +124,8 @@ async function getParentsForId(id, result = ['']) {
   let parentId = typeof response.result.items[0] === 'undefined' ? null : response.result.items[0].id;
 
   if (parentId !== null) {
-    return await getParentsForId(parentId, result.concat([parentId]));
+    let parent = await getResourceById(options, parentId);
+    return await getParentsForId(options, parentId, result.concat([parent]));
   }
 
   return result;

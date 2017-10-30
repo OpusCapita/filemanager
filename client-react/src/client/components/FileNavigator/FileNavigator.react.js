@@ -136,7 +136,7 @@ class FileNavigator extends Component {
 
   async setParentsForId(id) {
     let { api, apiOptions } = this.props;
-    let resourceParents = await api.getParentsForId(id);
+    let resourceParents = await api.getParentsForId(apiOptions, id);
     this.setState({ resourceParents });
   }
 
