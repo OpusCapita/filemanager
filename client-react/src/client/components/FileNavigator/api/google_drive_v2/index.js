@@ -1,6 +1,16 @@
 import request from 'superagent';
 import id from '../../../../../../../server-nodejs/utils/id';
 
+const ROOT_RESOURCE = {
+  createDate: '',
+  id: '',
+  modifyDate: '',
+  title: 'Root',
+  type: 'dir',
+  size: 0,
+  parentId: ''
+};
+
 let signedIn = false;
 
 function appendGoogleApiScript() {
@@ -75,15 +85,7 @@ async function init(options) {
 
 function normalizeResource(resource) {
   if (resource === null) {
-    return {
-      createDate: '',
-      id: '',
-      modifyDate: '',
-      title: 'Root',
-      type: 'dir',
-      size: 0,
-      parentId: ''
-    };
+    return ROOT_RESOURCE;
   }
 
   return {
@@ -113,6 +115,21 @@ async function getResourceById(options, id) {
   return resource;
 }
 
+async function getParentsForId(id, result = ['']) {
+  if (!id) {
+    return result;
+  }
+
+  let response = await window.gapi.client.drive.parents.list({ fileId: id });
+  let parentId = typeof response.result.items[0] === 'undefined' ? null : response.result.items[0].id;
+
+  if (parentId !== null) {
+    return await getParentsForId(parentId, result.concat([parentId]));
+  }
+
+  return result;
+}
+
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
     q: `'${id === '' ? 'root' : id}' in parents`
@@ -137,6 +154,7 @@ export default {
   idToPath,
   getResourceById,
   getChildrenForId,
+  getParentsForId,
   signIn,
   signOut
 };

@@ -131,6 +131,13 @@ class FileNavigator extends Component {
     });
 
     this.stopViewLoading();
+    this.setParentsForId(resource.id);
+  }
+
+  async setParentsForId(id) {
+    let { api, apiOptions } = this.props;
+    let resourceParents = await api.getParentsForId(id);
+    this.setState({ resourceParents });
   }
 
   async getResourceById(id) {
