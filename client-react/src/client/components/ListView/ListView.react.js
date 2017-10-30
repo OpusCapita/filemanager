@@ -4,7 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
-import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
+import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
@@ -502,27 +502,7 @@ class ListView extends Component {
                 onRowRightClick={this.handleRowRightClick}
                 onRowDoubleClick={this.handleRowDoubleClick}
               >
-                {layout({ ...columnsOptions, clientWidth: width }).map((column) => {
-                  if (column.hidden) {
-                    return null;
-                  }
-
-                  return (
-                    <Column
-                      key={column.dataKey}
-                      width={column.width}
-                      maxWidth={typeof column.maxWidth === 'undefined' ? 0 : column.maxWidth}
-                      minWidth={typeof column.minWidth === 'undefined' ? 0 : column.minWidth}
-                      label={column.label}
-                      dataKey={column.dataKey}
-                      flexGrow={column.flexGrow || 0}
-                      flexShrink={column.flexShrink || 1}
-                      cellRenderer={column.cellRenderer}
-                      headerRenderer={column.headerRenderer}
-                      disableSort={column.disableSort}
-                    />
-                  );
-                })}
+                {layout({ ...columnsOptions, clientWidth: width })}
               </Table>
             </ScrollOnMouseOut>
           </div>
