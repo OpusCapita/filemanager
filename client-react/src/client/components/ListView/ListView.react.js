@@ -5,15 +5,12 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, Column, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
-import { NameCell, SizeCell, DateTimeCell, HeaderCell } from './Cells.react';
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
 import clickOutside from 'react-click-outside';
 
-const TABLET_WIDTH = 1024;
-const MOBILE_WIDTH = 640;
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 48;
 const HEADER_HEIGHT = 48;
