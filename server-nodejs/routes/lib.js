@@ -56,18 +56,31 @@ const checkTitle = title => {
   return title;
 };
 
+const getAncestors = userPath => {
+  // The function returns array of input path ancestors, starting with '/' and ending with path's parent
+  // (path itself is not included),
+  // or [] for '/'.
+
+  const rez = [userPath];
+
+  while (rez[0] !== '/') {
+    rez.unshift(rez[0].replace(/\/[^/]+$/, '') || '/');
+  }
+
+  return rez.slice(0, -1);
+}
+
 const stat2resource = (options, pathInfo) => stat => {
-  let userPath, userParent, userBasename; // For root, userPath === '/', userParent and userBasename are falsy.
+  let userPath, userBasename; // For root: userPath === '/', userBasename falsy.
 
   if (typeof pathInfo === 'string') {
     userPath = pathInfo;
 
     if (userPath !== '/') {
-      userParent = path.dirname(userPath);
-      userBasename = path.basename(userPath);
+      userBasename = userPath.slice(userPath.lastIndexOf('/') + 1);
     }
   } else {
-    userParent = pathInfo.dir;
+    const userParent = pathInfo.dir;
     userBasename = pathInfo.basename;
     userPath = userParent ?
       (userParent === '/' ? '/' : userParent + '/') + userBasename :
@@ -85,13 +98,13 @@ const stat2resource = (options, pathInfo) => stat => {
       canListChildren: true,
       canAddChildren: true,
       canRemoveChildren: true,
-      canDelete: !!userParent,
+      canDelete: userPath !== '/',
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };
 
-  if (userParent) {
-    resource.parentId = path2id(userParent);
+  if (userPath !== '/') {
+    resource.ancestors = getAncestors(userPath).map(path2id);
   }
 
   if (stat.isDirectory()) {
@@ -99,9 +112,6 @@ const stat2resource = (options, pathInfo) => stat => {
   } else if (stat.isFile()) {
     resource.type = TYPE_FILE;
     resource.size = stat.size;
-    // TBD: in "downloadUrl" Google includes protocol, ip, port, etc.
-    // TBD: What the need if dir and files selection download is constructed by a client anyway.
-    resource.downloadUrl = `/api/download?items=${id}`;
   } else {
     throw new Error(UNKNOWN_RESOURCE_TYPE_ERROR);
   }
