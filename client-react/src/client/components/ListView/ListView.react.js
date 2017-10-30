@@ -24,11 +24,9 @@ const propTypes = {
     modifyDate: PropTypes.number
   })),
   layout: PropTypes.func,
+  layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
   selection: PropTypes.arrayOf(PropTypes.string),
-  humanReadableSize: PropTypes.bool,
-  locale: PropTypes.string,
-  dateTimePattern: PropTypes.string,
   sortBy: PropTypes.string,
   sortDirection: PropTypes.string,
   onRowClick: PropTypes.func,
@@ -43,11 +41,9 @@ const propTypes = {
 const defaultProps = {
   items: [],
   layout: () => [],
+  layoutOptions: {},
   loading: false,
   selection: [],
-  humanReadableSize: true,
-  locale: 'en',
-  dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   sortBy: 'title',
   sortDirection: SortDirection.ASC,
   onRowClick: () => {},
@@ -431,10 +427,8 @@ class ListView extends Component {
     let {
       items,
       layout,
+      layoutOptions,
       loading,
-      humanReadableSize,
-      locale,
-      dateTimePattern,
       selection,
       onSelection,
       sortBy,
@@ -456,12 +450,6 @@ class ListView extends Component {
       itemsToRender = range(itemsCount).map((o) => ({}));
     } else {
       itemsToRender = items;
-    };
-
-    let columnsOptions = {
-      locale,
-      dateTimePattern,
-      loading
     };
 
     return (
@@ -508,7 +496,7 @@ class ListView extends Component {
                 onRowRightClick={this.handleRowRightClick}
                 onRowDoubleClick={this.handleRowDoubleClick}
               >
-                {layout({ ...columnsOptions, width, height })}
+                {layout({ ...layoutOptions, loading, width, height })}
               </Table>
             </ScrollOnMouseOut>
           </div>

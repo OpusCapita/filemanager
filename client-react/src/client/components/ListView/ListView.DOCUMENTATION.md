@@ -7,11 +7,7 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
 | Name                           | Type                    | Description                                                 |
 | ------------------------------ | :---------------------- | ----------------------------------------------------------- |
 | items                          | array                   | [{ id, isDirectory, title, size, modifyDate } ...]          |
-| itemsCount                     | number                  | Items total count                                           |
 | selection                      | array                   | [id1, id2, id3, ...]                                        |
-| humanReadableSize              | bool                    | Convert bytes to KB, MB, GB, etc.                           |
-| locale                         | string                  | Used with `momentjs` for `modifyDate` column, etc.          |
-| dateTimePattern                | string                  | Used with `momentjs` for `modifyDate` column, etc.          |
 | sortBy                         | string                  | Column key                                                  |
 | sortDirection                  | string                  | "ASC" or "DESC"                                             |
 | onRowClick                     | func                    | ({ event, index, rowData}) => {}                            |
@@ -37,6 +33,11 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
     selection={_scope.state.selection}
     sortBy={_scope.state.sortBy}
     sortDirection={_scope.state.sortDirection}
+    layoutOptions={{
+      locale: 'en',
+      dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
+      humanReadableSize: true
+    }}
     layout={(renderOptions) => ([
       (
         <Column

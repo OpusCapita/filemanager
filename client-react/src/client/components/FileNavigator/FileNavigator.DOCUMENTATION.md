@@ -24,9 +24,7 @@ FileNavigator is
       apiOptions={{
         apiRoot: 'http://localhost:3020/api'
       }}
-      dateTimePattern="YYYY-MM-DD HH:mm:ss"
       initialResourceId={'Lw'}
-      locale="en"
     />
   </div>
   */}
@@ -45,10 +43,9 @@ FileNavigator is
     <FileNavigator
       api={_scope.connectors.google_drive_v2.api}
       apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
-      dateTimePattern="YYYY-MM-DD HH:mm:ss"
       initialResourceId="root"
-      locale="en"
       listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
+      viewLayoutOptions={_scope.connectors.google_drive_v2.viewLayoutOptions}
       signInRenderer={() => (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           <strong

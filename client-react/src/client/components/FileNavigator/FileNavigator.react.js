@@ -12,22 +12,20 @@ const propTypes = {
   api: PropTypes.object,
   apiOptions: PropTypes.object,
   className: PropTypes.string,
-  dateTimePattern: PropTypes.string,
   id: PropTypes.string,
   initialResourceId: PropTypes.string,
-  locale: PropTypes.string,
   listViewLayout: PropTypes.func,
+  viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func
 };
 const defaultProps = {
   api: 'nodejs_v1',
   apiOptions: {},
   className: '',
-  dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
   id: nanoid(),
   initialResourceId: '',
-  locale: 'en',
   listViewLayout: () => {},
+  viewLayoutOptions: {},
   signInRenderer: null
 };
 
@@ -248,11 +246,10 @@ class FileNavigator extends Component {
     let {
       api,
       className,
-      dateTimePattern,
       id,
       initialResourceId,
-      locale,
       listViewLayout,
+      viewLayoutOptions,
       signInRenderer
     } = this.props;
 
@@ -327,9 +324,7 @@ class FileNavigator extends Component {
             sortDirection={sortDirection}
             items={resourceChildren}
             layout={listViewLayout}
-            itemsCount={resourceChildren ? resourceChildren.length : 0}
-            locale={locale}
-            dateTimePattern={dateTimePattern}
+            layoutOptions={viewLayoutOptions}
           />
         </div>
       </div>
