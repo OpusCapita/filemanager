@@ -50,9 +50,32 @@ async function getChildrenForId(options, id) {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
   });
 
-  let rawResourceChildren = response.body;
+  let rawResourceChildren = response.body.items;
   let resourceChildren = rawResourceChildren.map((o) => normalizeResource(o));
   return { resourceChildren };
+}
+
+async function getParentsForId(options, id, result = []) {
+  let resource = await getResourceById(options, id);
+
+  console.log('res', resource);
+
+  if (!resource.ancestors) {
+    return result;
+  }
+  // let response = await window.gapi.client.drive.parents.list({
+  //   fileId: id,
+  //   fields: 'items(id)'
+  // });
+  // let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
+
+  // if (parentId === 'root') {
+  //   return result;
+  // }
+
+  // let parent = await getResourceById(options, parentId);
+
+  // return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
 export default {
@@ -60,5 +83,6 @@ export default {
   pathToId,
   idToPath,
   getResourceById,
-  getChildrenForId
+  getChildrenForId,
+  getParentsForId
 };

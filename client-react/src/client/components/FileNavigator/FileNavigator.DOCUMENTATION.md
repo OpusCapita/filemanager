@@ -26,7 +26,7 @@ FileNavigator is
       }}
       apiVersion="nodejs_v1"
       dateTimePattern="YYYY-MM-DD HH:mm:ss"
-      initialResourceId={''}
+      initialResourceId={'Lw'}
       locale="en"
     />
   </div>
