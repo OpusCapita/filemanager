@@ -1,7 +1,43 @@
-import id from '../../../../../../../server-nodejs/utils/id';
+import id from '../../../../../server-nodejs/utils/id';
 
 let signedIn = false;
-let userAgent = window.navigator.userAgent + ' (gzip)';
+
+let listViewLayout = (renderOptions) => ([
+  {
+    width: 48,
+    label: 'Title',
+    dataKey: 'title',
+    flexGrow: 1,
+    cellRenderer: NameCell(renderOptions),
+    headerRenderer: HeaderCell(renderOptions),
+    disableSort: false,
+    hidden: false
+  },
+  {
+    width: 100,
+    dataKey: 'size',
+    label: 'File size',
+    flexGrow: renderOptions.clientWidth > TABLET_WIDTH ? 1 : 0,
+    cellRenderer: SizeCell(renderOptions),
+    headerRenderer: HeaderCell(renderOptions),
+    disableSort: true,
+    hidden: false
+  },
+  {
+    width: 100,
+    dataKey: 'modifyDate',
+    label: 'Last modified',
+    flexGrow: 1,
+    cellRenderer: DateTimeCell(renderOptions),
+    headerRenderer: HeaderCell(renderOptions),
+    disableSort: true,
+    hidden: renderOptions.clientWidth < MOBILE_WIDTH
+  }
+]);
+
+let initiallSortBy = 'title';
+let initiallSortDirection = 'ASC';
+/* RENDER DEFINITION END */
 
 function appendGoogleApiScript() {
   if (window.gapi) {
@@ -94,10 +130,6 @@ function idToPath(id) {
 async function getResourceById(options, id) {
   let response =  await window.gapi.client.drive.files.get({
     fileId: id,
-    headers: {
-      'Accept-Encoding' : 'gzip',
-      'User-Agent': userAgent
-    },
     fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents'
   });
   let resource = normalizeResource({ ...response.result, parentId: id });
@@ -141,7 +173,6 @@ function signIn() {
 function signOut() {
   window.gapi.auth2.getAuthInstance().signOut();
 }
-
 
 export default {
   init,

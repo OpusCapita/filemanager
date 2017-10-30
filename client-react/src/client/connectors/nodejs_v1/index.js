@@ -1,5 +1,5 @@
 import request from 'superagent';
-import id from '../../../../../../../server-nodejs/utils/id';
+import id from '../../../../../server-nodejs/utils/id';
 
 async function init(options) {
   options.onInitSuccess();

@@ -20,11 +20,10 @@ FileNavigator is
   {/*
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
-      api={_scope.apis.nodejs_v1}
+      api={_scope.connectors.nodejs_v1}
       apiOptions={{
         apiRoot: 'http://localhost:3020/api'
       }}
-      apiVersion="nodejs_v1"
       dateTimePattern="YYYY-MM-DD HH:mm:ss"
       initialResourceId={'Lw'}
       locale="en"
@@ -44,12 +43,12 @@ FileNavigator is
   
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
-      api={_scope.apis.google_drive_v2}
+      api={_scope.connectors.google_drive_v2.api}
       apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
-      apiVersion="google_drive_v2"
       dateTimePattern="YYYY-MM-DD HH:mm:ss"
       initialResourceId="root"
       locale="en"
+      listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
       signInRenderer={() => (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           <strong

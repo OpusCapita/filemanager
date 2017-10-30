@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
-import apis from './api';
+import connectors from '../../connectors';
 
 @showroomScopeDecorator
 export default
@@ -16,7 +16,7 @@ class FileNavigatorScope extends Component {
     super(props);
     this.state = {};
 
-    this.apis = apis;
+    this.connectors = connectors;
 
     window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);

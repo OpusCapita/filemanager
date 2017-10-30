@@ -5,7 +5,6 @@ import LocationBar from '../LocationBar';
 import { SortDirection } from 'react-virtualized';
 import { findIndex } from 'lodash';
 import nanoid from 'nanoid';
-import api from './api';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
 
@@ -17,6 +16,7 @@ const propTypes = {
   id: PropTypes.string,
   initialResourceId: PropTypes.string,
   locale: PropTypes.string,
+  listViewLayout: PropTypes.func,
   signInRenderer: PropTypes.func
 };
 const defaultProps = {
@@ -27,6 +27,7 @@ const defaultProps = {
   id: nanoid(),
   initialResourceId: '',
   locale: 'en',
+  listViewLayout: () => {},
   signInRenderer: null
 };
 
@@ -206,7 +207,6 @@ class FileNavigator extends Component {
 
   handleViewKeyDown = (e) => {
     let { loadingView, resource } = this.state;
-    console.log(e.which);
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
       let { selection } = this.state;
@@ -246,6 +246,7 @@ class FileNavigator extends Component {
       id,
       initialResourceId,
       locale,
+      listViewLayout,
       signInRenderer
     } = this.props;
 
@@ -319,6 +320,7 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
+            layout={listViewLayout}
             itemsCount={resourceChildren ? resourceChildren.length : 0}
             locale={locale}
             dateTimePattern={dateTimePattern}

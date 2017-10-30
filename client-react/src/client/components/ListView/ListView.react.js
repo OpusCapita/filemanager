@@ -26,6 +26,7 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
+  layout: PropTypes.func,
   loading: PropTypes.bool,
   selection: PropTypes.arrayOf(PropTypes.string),
   humanReadableSize: PropTypes.bool,
@@ -44,6 +45,7 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
+  layout: () => [],
   loading: false,
   selection: [],
   humanReadableSize: true,
@@ -425,6 +427,7 @@ class ListView extends Component {
   render() {
     let {
       items,
+      layout,
       loading,
       humanReadableSize,
       locale,
@@ -450,6 +453,12 @@ class ListView extends Component {
       itemsToRender = range(itemsCount).map((o) => ({}));
     } else {
       itemsToRender = items;
+    };
+
+    let columnsOptions = {
+      locale,
+      dateTimePattern,
+      loading
     };
 
     return (
@@ -496,32 +505,27 @@ class ListView extends Component {
                 onRowRightClick={this.handleRowRightClick}
                 onRowDoubleClick={this.handleRowDoubleClick}
               >
-                <Column
-                  label='Name'
-                  dataKey='title'
-                  width={48}
-                  flexGrow={1}
-                  cellRenderer={NameCell({ loading })}
-                  headerRenderer={HeaderCell({ loading: false })}
-                />
-                <Column
-                  width={100}
-                  label='File size'
-                  dataKey='size'
-                  flexGrow={width > TABLET_WIDTH ? 1 : 0}
-                  cellRenderer={SizeCell({ humanReadableSize, loading })}
-                  headerRenderer={HeaderCell({ loading: false })}
-                />
-                {width > MOBILE_WIDTH ? (
-                  <Column
-                    width={100}
-                    label='Last modified'
-                    dataKey='modifyDate'
-                    flexGrow={1}
-                    cellRenderer={DateTimeCell({ locale, dateTimePattern, loading })}
-                    headerRenderer={HeaderCell({ loading: false })}
-                  />
-                ) : null}
+                {layout({ ...columnsOptions, clientWidth: width }).map((column) => {
+                  if (column.hidden) {
+                    return null;
+                  }
+
+                  return (
+                    <Column
+                      key={column.dataKey}
+                      width={column.width}
+                      maxWidth={typeof column.maxWidth === 'undefined' ? 0 : column.maxWidth}
+                      minWidth={typeof column.minWidth === 'undefined' ? 0 : column.minWidth}
+                      label={column.label}
+                      dataKey={column.dataKey}
+                      flexGrow={column.flexGrow || 0}
+                      flexShrink={column.flexShrink || 1}
+                      cellRenderer={column.cellRenderer}
+                      headerRenderer={column.headerRenderer}
+                      disableSort={column.disableSort}
+                    />
+                  );
+                })}
               </Table>
             </ScrollOnMouseOut>
           </div>
