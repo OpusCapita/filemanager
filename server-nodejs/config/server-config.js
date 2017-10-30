@@ -9,6 +9,7 @@ module.exports = {
   port: process.env.PORT || '3020',
   host: process.env.HOST || 'localhost',
 
+  // TBD: is clientConfig needed?
   getClientConfig: _ => new Promise((resolve, reject) => {
     const clientConfig = require(clientConfigPath, 'utf-8');
     resolve(clientConfig);

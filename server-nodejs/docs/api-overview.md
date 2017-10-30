@@ -26,9 +26,8 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
   createDate: <string>,
   modifyDate: <string>,
   ?size: <string>, // for files only
-  ?parentId: <string>, // for non-root only
+  ?ancestors: [<string>, ...], // for non-root only, IDs of ancestors starting with root ID and ending with parent ID.
   md5Checksum: <string>, // TODO in v2
-  downloadUrl: <string>,
   capabilities: {
     canListChildren: <boolean>,
     canAddChildren: <boolean>,
