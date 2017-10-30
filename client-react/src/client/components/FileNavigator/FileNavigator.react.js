@@ -275,7 +275,7 @@ class FileNavigator extends Component {
     let locationItems = resourceParents.map((o) => ({
       title: o.title,
       onClick: () => this.navigateToDir(o.id)
-    })).concat([resource]);
+    })).concat([{ title: resource.title, onClick: () => this.navigateToDir(resource.id) }]);
 
     return (
       <div
