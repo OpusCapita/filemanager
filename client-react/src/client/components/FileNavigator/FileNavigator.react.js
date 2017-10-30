@@ -7,7 +7,7 @@ import { findIndex } from 'lodash';
 import nanoid from 'nanoid';
 import api from './api';
 import SVG from '@opuscapita/react-svg/lib/SVG';
-let spinnerIcon = require('!!raw-loader!../img/spinners/spinner.svg');
+let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
 
 const propTypes = {
   api: PropTypes.object,
@@ -45,6 +45,7 @@ class FileNavigator extends Component {
       resource: {},
       resourceLocation: [],
       resourceChildren: [],
+      loadingResourceLocation: false,
       loadingView: false,
       apiInitialized: false,
       apiSignedIn: false
@@ -52,7 +53,7 @@ class FileNavigator extends Component {
   }
 
   startViewLoading = () => {
-    this.setState({ loadingView: true });
+    this.setState({ loadingView: true, loadingResourceLocation: true });
   }
 
   stopViewLoading = () => {
@@ -132,16 +133,20 @@ class FileNavigator extends Component {
     this.setState({ resource });
 
     let { resourceChildren } = await this.getChildrenForId(resource.id);
-    let resourceParents = await this.getParentsForId(resource.id);
-    let resourceLocation = resourceParents.concat(resource);
 
     this.setState({
-      resourceLocation,
       resourceChildren,
       selection: typeof fromId !== 'undefined' ? [fromId] : []
     });
 
     this.stopViewLoading();
+    this.setParentsForResource(resource);
+  }
+
+  async setParentsForResource(resource) {
+    let resourceParents = await this.getParentsForId(resource.id);
+    let resourceLocation = resourceParents.concat(resource);
+    this.setState({ resourceLocation, loadingResourceLocation: false });
   }
 
   async getParentsForId(id) {
@@ -247,6 +252,7 @@ class FileNavigator extends Component {
       config,
       error,
       loadingView,
+      loadingResourceLocation,
       resource,
       resourceLocation,
       resourceChildren,
@@ -293,6 +299,7 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__location-bar">
           <LocationBar
             items={locationItems}
+            loading={loadingResourceLocation}
           />
         </div>
 

@@ -1,7 +1,7 @@
-import request from 'superagent';
 import id from '../../../../../../../server-nodejs/utils/id';
 
 let signedIn = false;
+let userAgent = window.navigator.userAgent + ' (gzip)';
 
 function appendGoogleApiScript() {
   if (window.gapi) {
@@ -92,7 +92,14 @@ function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
-  let response =  await window.gapi.client.drive.files.get({ fileId: id });
+  let response =  await window.gapi.client.drive.files.get({
+    fileId: id,
+    headers: {
+      'Accept-Encoding' : 'gzip',
+      'User-Agent': userAgent
+    },
+    fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents'
+  });
   let resource = normalizeResource({ ...response.result, parentId: id });
   return resource;
 }
@@ -102,7 +109,10 @@ async function getParentsForId(options, id, result = []) {
     return result;
   }
 
-  let response = await window.gapi.client.drive.parents.list({ fileId: id });
+  let response = await window.gapi.client.drive.parents.list({
+    fileId: id,
+    fields: 'items(id)'
+  });
   let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
 
   if (parentId === 'root') {

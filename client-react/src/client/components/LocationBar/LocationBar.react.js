@@ -7,10 +7,12 @@ const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     onClick: PropTypes.func
-  }))
+  })),
+  loading: PropTypes.bool
 };
 const defaultProps = {
-  items: []
+  items: [],
+  loading: false
 };
 
 export default
@@ -21,7 +23,17 @@ class LocationBar extends Component {
   }
 
   render() {
-    let { items } = this.props;
+    let { items, loading } = this.props;
+
+    if (!items.length) {
+      return (
+        <div className="oc-fm--location-bar__item">
+          <div className={`oc-fm--location-bar__item-title oc-fm--location-bar__item-title--disabled`}>
+            <span>&nbsp;</span>
+          </div>
+        </div>
+      );
+    }
 
     let itemsElement = items.map((item, i) => {
       let arrow = i < items.length - 1 ? (
@@ -34,6 +46,7 @@ class LocationBar extends Component {
             className={`
               oc-fm--location-bar__item-title
               ${i === items.length - 1 ? 'oc-fm--location-bar__item-title--last': ''}
+              ${loading ? 'oc-fm--location-bar__item-title--loading': ''}
             `}
             tabIndex="0"
             title={item.title}

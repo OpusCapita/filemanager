@@ -1,3 +1,5 @@
+@import "../assets/loading-overlay";
+
 @keyframes keyframes-oc-fm--location-bar-item-appearing {
   0% { opacity: 0; }
   100% { opacity: 1 }
@@ -43,8 +45,16 @@
   }
 }
 
+.oc-fm--location-bar__item-title--disabled {
+  pointer-events: none;
+}
+
 .oc-fm--location-bar__item-title--last {
   color: inherit;
+}
+
+.oc-fm--location-bar__item-title--loading {
+  .oc-fm--loading-pattern;
 }
 
 .oc-fm--location-bar__item-arrow {

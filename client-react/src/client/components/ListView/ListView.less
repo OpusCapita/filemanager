@@ -1,3 +1,5 @@
+@import "../assets/loading-overlay";
+
 @keyframes keyframes-oc-fm--list-view-row-appearing {
   0% { opacity: 0; }
   100% { opacity: 1 }
@@ -14,7 +16,9 @@
 }
 
 .oc-fm--list-view__cell-loading-content {
+  .oc-fm--loading-pattern;
   background-color: #f5f5f5;
+  position: relative;
 }
 
 .oc-fm--list-view__table {
