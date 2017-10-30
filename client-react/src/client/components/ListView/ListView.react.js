@@ -165,7 +165,6 @@ class ListView extends Component {
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
-        console.log('b', selection, items);
         let selectionData = this.selectPrev();
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
