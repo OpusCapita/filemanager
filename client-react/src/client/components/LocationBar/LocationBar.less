@@ -1,3 +1,8 @@
+@keyframes keyframes-oc-fm--location-bar-item-appearing {
+  0% { opacity: 0; }
+  100% { opacity: 1 }
+}
+
 .oc-fm--location-bar {
   display: flex;
 }
@@ -6,10 +11,12 @@
   display: flex;
   align-items: center;
 
-
   &:first-child .oc-fm--location-bar__item-title {
     margin-left: 0;
   }
+
+  animation: keyframes-oc-fm--location-bar-item-appearing 150ms;
+  animation-timing-function: ease-in-out;
 }
 
 .oc-fm--location-bar__item-title {
