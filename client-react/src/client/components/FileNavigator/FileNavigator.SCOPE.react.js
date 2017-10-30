@@ -23,11 +23,11 @@ class FileNavigatorScope extends Component {
   }
 
   googleDriveSignIn() {
-    apis.google_drive_v2.signIn();
+    connectors.google_drive_v2.api.signIn();
   }
 
   googleDriveSignOut() {
-    apis.google_drive_v2.signOut();
+    connectors.google_drive_v2.api.signOut();
   }
 
   render() {
