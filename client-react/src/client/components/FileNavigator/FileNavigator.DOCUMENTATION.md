@@ -17,17 +17,18 @@ FileNavigator is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
-  {/*
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
-      api={_scope.connectors.nodejs_v1}
+      api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
         apiRoot: 'http://localhost:3020/api'
       }}
       initialResourceId={'Lw'}
+      listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
+      viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
     />
   </div>
-  */}
+
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   
   {/*GOOGLE_DRIVE_AUTH_OPTIONS*/}
