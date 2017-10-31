@@ -12,7 +12,15 @@ NameCell is
 ### Code Example
 
 ```
-<NameCell />
+{React.createElement(NameCell({
+  loading: false,
+  getIcon: () => ({ 
+   svg: `<svg viewBox="0 0 120 120" version="1.1">
+      <circle cx="60" cy="60" r="50"/>
+    </svg>`, 
+   fill: '#333' 
+  })
+}), { cellData: 'File name' })}
 ```
 
 ### Component Name

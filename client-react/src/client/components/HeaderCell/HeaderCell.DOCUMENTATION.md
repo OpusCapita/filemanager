@@ -12,7 +12,10 @@ HeaderCell is
 ### Code Example
 
 ```
-<HeaderCell />
+{React.createElement(
+  HeaderCell(), 
+  { dataKey: 'title', sortBy: 'title', sortDirection: 'ASC', label: 'Title' }
+)}
 ```
 
 ### Component Name

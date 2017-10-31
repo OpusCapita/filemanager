@@ -7,9 +7,13 @@ export default (viewLayoutOptions) => (cellProps) => {
     return (<LoadingCell />);
   }
 
+  let data = viewLayoutOptions.getData ?
+    viewLayoutOptions.getData(viewLayoutOptions, cellProps) :
+    cellProps.cellData;
+
   return (
     <div className="oc-fm--cell">
-      {viewLayoutOptions.getData(viewLayoutOptions, cellProps)}
+      {data}
     </div>
   );
 }

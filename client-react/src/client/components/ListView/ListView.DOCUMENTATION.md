@@ -36,9 +36,15 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
     layoutOptions={{
       locale: 'en',
       dateTimePattern: 'YYYY-MM-DD HH:mm:ss',
-      humanReadableSize: true
+      humanReadableSize: true,
+      getIcon: () => ({ 
+        svg: `<svg viewBox="0 0 120 120" version="1.1">
+        <circle cx="60" cy="60" r="50"/>
+        </svg>`, 
+        fill: '#333' 
+      })
     }}
-    layout={(renderOptions) => ([
+    layout={(viewLayoutOptions) => ([
       (
         <Column
           key="title"
@@ -46,8 +52,8 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
           width={48}
           label="Title"
           flexGrow={1}
-          cellRenderer={NameCell(renderOptions)}
-          headerRenderer={HeaderCell(renderOptions)}
+          cellRenderer={NameCell(viewLayoutOptions)}
+          headerRenderer={HeaderCell(viewLayoutOptions)}
           disableSort={false}
         />
       ), (
@@ -56,20 +62,20 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
           width={100}
           dataKey="size"
           label="File size"
-          flexGrow={renderOptions.width > 1024 ? 1 : 0}
-          cellRenderer={SizeCell(renderOptions)}
-          headerRenderer={HeaderCell(renderOptions)}
+          flexGrow={viewLayoutOptions.width > 1024 ? 1 : 0}
+          cellRenderer={Cell(viewLayoutOptions)}
+          headerRenderer={HeaderCell(viewLayoutOptions)}
           disableSort={true}
         />
-      ), (renderOptions.width > 320) && (
+      ), (viewLayoutOptions.width > 320) && (
         <Column
           key="modifyDate"
           width={100}
           dataKey="modifyDate"
           label="Last modified"
           flexGrow={1}
-          cellRenderer={DateTimeCell(renderOptions)}
-          headerRenderer={HeaderCell(renderOptions)}
+          cellRenderer={Cell(viewLayoutOptions)}
+          headerRenderer={HeaderCell(viewLayoutOptions)}
           disableSort={true}
         />
       )

@@ -12,7 +12,10 @@ Cell is
 ### Code Example
 
 ```
-<Cell />
+{React.createElement(Cell({
+ loading: false,
+ getData: ({}, cellProps) => `${cellProps.cellData} world!`
+ }), { cellData: 'Hello' })}
 ```
 
 ### Component Name
