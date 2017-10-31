@@ -14,7 +14,8 @@ function normalizeResource(resource) {
     title: resource.title,
     type: resource.type,
     size: resource.size,
-    ancestors: resource.ancestors
+    ancestors: resource.ancestors,
+    parentId: resource.ancestors ? resource.ancestors[resource.ancestors.length - 1] : null
   };
 }
 

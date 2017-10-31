@@ -22,7 +22,10 @@ let serverOptions = {
   stats: {colors: true}
 };
 
-fs.mkdirSync(path.resolve(__dirname, './static'));
+try {
+  fs.mkdirSync(path.resolve(__dirname, './static'));
+} catch(e) {}
+
 fs.writeFileSync(
   path.resolve(__dirname, './static/env.js'),
   'window.env = ' + JSON.stringify(env) + ';'
