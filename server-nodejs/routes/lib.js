@@ -10,7 +10,7 @@ const {
 const {
   TYPE_FILE,
   TYPE_DIR
-} = require('../../shared/constants');
+} = require('../constants');
 
 const UNKNOWN_RESOURCE_TYPE_ERROR = 'Unknown resource type';
 

@@ -10,7 +10,7 @@ const {
   stat2resource
 } = require('./lib');
 
-const { TYPE_DIR } = require('../../shared/constants');
+const { TYPE_DIR } = require('../constants');
 
 module.exports = ({ options, req, res }) => {
   const id = req.params.id;

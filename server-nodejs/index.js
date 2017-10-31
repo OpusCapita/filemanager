@@ -1,4 +1,5 @@
 module.exports = {
   middleware: require('./middleware'),
-  server: require('./server')
+  server: require('./server'),
+  logger: require('./logger')
 };

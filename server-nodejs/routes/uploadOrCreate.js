@@ -15,7 +15,7 @@ const {
 const {
   TYPE_FILE,
   TYPE_DIR
-} = require('../../shared/constants');
+} = require('../constants');
 
 let fsRoot;
 

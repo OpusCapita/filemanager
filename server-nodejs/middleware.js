@@ -18,5 +18,6 @@ module.exports = function(app, config = require('./config/server-config')) {
     };
 
     registerRoutes(app, options);
+    next();
   };
 };
