@@ -62,7 +62,7 @@ For directory creation:
 <file stats resource>
 ```
 
-For file(s) creation:
+For file(s) upload:
 
 ```javascript
 [<file stats resource>, ...]
