@@ -20,6 +20,8 @@ test-results.xml
 /coverage/
 /.nyc_output
 
-/demo/demo-fs
 /client-react/node_modules
 /server-nodejs/node_modules
+/demo/node_modules
+/demo/demo-fs
+/demo/static
