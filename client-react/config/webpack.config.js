@@ -20,16 +20,15 @@ const WEBPACK_BUNDLE_ANALYZE = process.env.WEBPACK_BUNDLE_ANALYZE;
 let plugins = [
     new ProgressBarPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.HOST': JSON.stringify(HOST),
-      'process.env.PORT': JSON.stringify(PORT),
-      'process.env.NODE_ENV': `"${NODE_ENV}"`,
-
-      'process.env.SERVER_URL': JSON.stringify(env.SERVER_URL),
-      'process.env.CLIENT_ID': JSON.stringify(env.CLIENT_ID),
-      'process.env.API_SECRET': JSON.stringify(env.API_SECRET),
-      'process.env.API_KEY': JSON.stringify(env.API_KEY)
-    }),
+    new webpack.EnvironmentPlugin([
+      'NODE_ENV',
+      'HOST',
+      'PORT',
+      'SERVER_URL',
+      'CLIENT_ID',
+      'API_SECRET',
+      'API_KEY',
+    ]),
     new LodashModuleReplacementPlugin()
 ];
 
