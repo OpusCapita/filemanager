@@ -14,4 +14,4 @@ WORKDIR /demo
 
 EXPOSE 3020
 
-CMD ["./start-demo.sh"]
+CMD ["./start.sh"]
