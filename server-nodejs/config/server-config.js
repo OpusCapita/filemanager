@@ -4,7 +4,7 @@ const path = require('path');
 const clientConfigPath = path.resolve(__dirname, './client-config.js');
 
 module.exports = {
-  fsRoot: path.resolve(__dirname, '../../demo-fs'),
+  fsRoot: path.resolve(__dirname, '../../demo/demo-fs'),
   rootTitle: 'Customization area',
   port: process.env.PORT || '3020',
   host: process.env.HOST || 'localhost',
