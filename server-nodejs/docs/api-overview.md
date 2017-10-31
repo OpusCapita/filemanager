@@ -10,11 +10,10 @@
 | Copy file/dir to destination                                | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
-| [Get client config](#get-client-configuration)              | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
-# Files
+# API
 
 ## File stats resource
 
@@ -128,91 +127,16 @@ None.
 
 ## Get file(s)/compressed dir
 
-* URL: `api/download`
+* URL: `api/download?items=:id&items=:id...`
 * Method: GET
-* Content-Type: application/zip
-* Content-Disposition: attachment; filename="\<string\>"
 
 ### Request
-
-```
-?items=:id&items=:id...
-```
 
 When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
 
 ### Response
 
+* Content-Type: application/zip
+* Content-Disposition: attachment; filename="\<string\>"
+
 Binary data.
-
-# Client config
-
-## Client config resource
-
-```javascript
-{
-  "layout": {
-    "readOnly": false,
-  },
-  "fileIcons": {
-    "wordDocument": {
-      "pattern": ["\\.(doc|docx)", "i"],
-      "uri": "/img/file-icons/word-file.svg"
-    },
-    "excelDocument": {
-      "pattern": ["\\.(xls|xlsx)", "i"],
-      "uri": "/img/file-icons/excel-file.svg"
-    },
-    "pdfDocument": {
-      "pattern": ["\\.(pdf)", "i"],
-      "uri": "/img/file-icons/pdf-file.svg"
-    },
-    "textDocument": {
-      "pattern": ["\\.(txt)", "i"],
-      "uri": "/img/file-icons/text-file.svg"
-    },
-    "jsCode": {
-      "pattern": ["\\.(js|jsx|mjs)", "i"],
-      "uri": "/img/file-icons/js-file.svg"
-    },
-    "gspCode": {
-      "pattern": ["\\.(gsp)", "i"],
-      "uri": "/img/file-icons/gsp-file.svg"
-    },
-    "sound": {
-      "pattern": ["\\.(wav|wma|mp3|ogg|flac|aiff)", "i"],
-      "uri": "/img/file-icons/sound-file.svg"
-    },
-    "video": {
-      "pattern": ["\\.(webm|mkv|flv|vob|avi|wmv|mpg|mpeg|mpv|m4v)", "i"],
-      "uri": "/img/file-icons/video-file.svg"
-    },
-    "compressed": {
-      "pattern": ["\\.(gz|tar|rar|g?zip)$", "i"],
-      "uri": "/img/file-icons/compressed.svg"
-    },
-    "directory": {
-      "uri": "/img/file-icons/directory.svg"
-    },
-    "unknown": {
-      "pattern": ["\\.*", "i"],
-      "uri": "/img/file-icons/unknown-file.svg"
-    }
-  }
-}
-```
-
-## Get client configuration
-
-* URL: `api/client-config`
-* METHOD: GET
-
-### Request
-
-None.
-
-### Response
-
-```javascript
-<client config resource>
-```
