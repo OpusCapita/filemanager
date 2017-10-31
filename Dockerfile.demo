@@ -8,10 +8,10 @@ RUN mkdir /demo && mkdir /server-nodejs
 COPY ./server-nodejs /server-nodejs
 COPY ./demo /demo
 
-RUN /demo/populate-demo-fs.sh && cp /demo/start-demo.sh /server-nodejs
+RUN cd demo && ./populate-demo-fs.sh
 
-WORKDIR /server-nodejs
+WORKDIR /demo
 
 EXPOSE 3020
 
-CMD ["sh /demo/start-demo.sh"]
+CMD ["sh /server-nodejs/start-demo.sh"]

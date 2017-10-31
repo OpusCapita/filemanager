@@ -22,7 +22,4 @@ module.exports = (app, options) => {
 
   app.route('/api/download').
     get(connect('./download'));
-
-  app.route('/api/client-config').
-    get(connect('./client-config'));
 };

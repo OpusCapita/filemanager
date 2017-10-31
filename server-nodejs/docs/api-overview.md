@@ -10,7 +10,6 @@
 | Copy file/dir to destination                                | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
 | [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
-| [Get client config](#get-client-configuration)              | GET    | api/client-config      | -                                   | :client-config-resource               |
 
 NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
@@ -204,15 +203,3 @@ Binary data.
 
 ## Get client configuration
 
-* URL: `api/client-config`
-* METHOD: GET
-
-### Request
-
-None.
-
-### Response
-
-```javascript
-<client config resource>
-```

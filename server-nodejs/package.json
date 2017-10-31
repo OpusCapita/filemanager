@@ -1,10 +1,10 @@
 {
-  "name": "@opuscapita/filemanager-nodejs-bridge",
+  "name": "@opuscapita/filemanager-server",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./index.js",
+    "start": "node -e \"require('./index').run()\"",
     "lint": "eslint ."
   },
   "author": "",

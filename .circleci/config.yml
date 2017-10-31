@@ -67,7 +67,7 @@ jobs:
 
       - run:
           name: build-docker-image
-          command: docker build -t ockvolkovich/filemanager-demo .
+          command: docker build -f Dockerfile.demo -t ockvolkovich/filemanager-demo .
 
       - run:
           name: deploy-docker-image
