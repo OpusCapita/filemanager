@@ -18,18 +18,18 @@ const IS_LINK_MODE = NODE_ENV === 'link';
 const WEBPACK_BUNDLE_ANALYZE = process.env.WEBPACK_BUNDLE_ANALYZE;
 
 let plugins = [
-    new ProgressBarPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.EnvironmentPlugin([
-      'NODE_ENV',
-      'HOST',
-      'PORT',
-      'SERVER_URL',
-      'CLIENT_ID',
-      'API_SECRET',
-      'API_KEY',
-    ]),
-    new LodashModuleReplacementPlugin()
+  new ProgressBarPlugin(),
+  new webpack.NoEmitOnErrorsPlugin(),
+  new webpack.EnvironmentPlugin([
+    'NODE_ENV',
+    'HOST',
+    'PORT',
+    'SERVER_URL',
+    'CLIENT_ID',
+    'API_SECRET',
+    'API_KEY',
+  ]),
+  new LodashModuleReplacementPlugin()
 ];
 
 if(IS_LINK_MODE) {

@@ -25,4 +25,5 @@ test-results.xml
 /demo/demo-fs
 /demo/static
 /client-react/.gh-pages-tmp
+/client-react/www/static
 /demo/.gh-pages-tmp

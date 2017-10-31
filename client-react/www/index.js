@@ -3,11 +3,12 @@
 const compression = require('compression');
 const express = require('express');
 const fs = require('fs');
-const host = require('../.env').HOST;
 const path = require('path');
+const host = require('../.env').HOST;
 const port = require('../.env').PORT;
 const webpack = require('webpack');
 const compiler = webpack(require('../config/webpack.config'));
+const env = require('../.env');
 
 const app = express();
 
@@ -21,8 +22,15 @@ let serverOptions = {
   stats: {colors: true}
 };
 
+fs.mkdirSync(path.resolve(__dirname, './static'));
+fs.writeFileSync(
+  path.resolve(__dirname, './static/env.js'),
+  'window.env = ' + JSON.stringify(env) + ';'
+);
+
 app.use(compression());
 app.use(require('webpack-dev-middleware')(compiler, serverOptions));
+app.use(express.static(path.resolve(__dirname, './static')));
 
 app.get('/', function(req, res) {
   res.sendFile(path.normalize(__dirname + '/index.html'));
