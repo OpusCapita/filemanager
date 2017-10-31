@@ -1,29 +1,17 @@
+# Docker context should be "<repo-root>"
+
 FROM node:6.9.3
 MAINTAINER OpusCapita
 
-# ------------------------
-# Azure SSH Server support
-# ------------------------
+RUN mkdir /demo && mkdir /server-nodejs
 
-# RUN apt update \
-#     && apt install -y --no-install-recommends openssh-server curl \
-#     && echo "root:Docker!" | chpasswd
-#
-# COPY sshd_config /etc/ssh/
-#
-# COPY init_container.sh /bin/
-#
-# RUN chmod 755 /bin/init_container.sh
+COPY ./server-nodejs /server-nodejs
+COPY ./demo /demo
 
-# ------------------------
-# App
-# ------------------------
+RUN /demo/populate-demo-fs.sh && cp /demo/start-demo.sh /server-nodejs
 
-RUN mkdir /app
-WORKDIR /app
+WORKDIR /server-nodejs
 
-COPY . /app
+EXPOSE 3020
 
-EXPOSE 3000
-
-CMD ["sh /app/start-demo.sh"]
+CMD ["sh /demo/start-demo.sh"]
