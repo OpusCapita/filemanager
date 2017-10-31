@@ -25,7 +25,7 @@ let plugins = [
       'process.env.PORT': JSON.stringify(PORT),
       'process.env.NODE_ENV': `"${NODE_ENV}"`,
 
-
+      'process.env.SERVER_URL': JSON.stringify(env.SERVER_URL),
       'process.env.CLIENT_ID': JSON.stringify(env.CLIENT_ID),
       'process.env.API_SECRET': JSON.stringify(env.API_SECRET),
       'process.env.API_KEY': JSON.stringify(env.API_KEY)

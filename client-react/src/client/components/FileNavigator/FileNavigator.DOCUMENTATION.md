@@ -21,7 +21,7 @@ FileNavigator is
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
-        apiRoot: 'http://localhost:3020/api'
+        apiRoot: `${window.env.SERVER_URL}/api`
       }}
       initialResourceId={'Lw'}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
