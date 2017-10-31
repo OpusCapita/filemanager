@@ -31,19 +31,15 @@ FileNavigator is
 
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   
-  {/*GOOGLE_DRIVE_AUTH_OPTIONS*/}
-  <span style={{ display: 'none' }}>
-  {window.googleDriveApiInitOptions = JSON.stringify({
-    ...window.env,
-    DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
-    SCOPES: 'https://www.googleapis.com/auth/drive.metadata.readonly'
-  }, null, 4)}
-  </span>
-  
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.google_drive_v2.api}
-      apiOptions={JSON.parse(window.googleDriveApiInitOptions)}
+      apiOptions={{
+        CLIENT_ID: window.env.CLIENT_ID,
+        API_KEY: window.env.API_KEY,
+        DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
+        SCOPES: 'https://www.googleapis.com/auth/drive.metadata.readonly'
+      }}
       initialResourceId="root"
       listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
       viewLayoutOptions={_scope.connectors.google_drive_v2.viewLayoutOptions}
