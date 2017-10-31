@@ -7,7 +7,6 @@ npm-debug.log
 /build
 /lib
 /node_modules
-/.gh-pages-tmp
 demo.tar.gz
 
 package-lock.json
@@ -25,3 +24,5 @@ test-results.xml
 /demo/node_modules
 /demo/demo-fs
 /demo/static
+/client-react/.gh-pages-tmp
+/demo/.gh-pages-tmp

@@ -66,6 +66,10 @@ jobs:
 #          key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
+          name: build-client-static
+          command: cd client-react && sh ./scripts/gh-pages/build.sh && mv ./.gh-pages-tmp ../demo && mv ../demo/.gh-pages-tmp ../demo/static
+
+      - run:
           name: build-docker-image
           command: docker build -f Dockerfile.demo -t ockvolkovich/filemanager-demo:lastest .
 

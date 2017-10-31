@@ -21,6 +21,8 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(express.static(__dirname + '/static'));
+
 app.listen(port, host, function(err) {
   if (err) {
     logger.error(err);
