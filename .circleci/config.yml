@@ -43,11 +43,6 @@ jobs:
     docker:
       - image: circleci/node:6
     working_directory: ~/repo
-    environment:
-      SERVER_URL: $SERVER_URL
-      API_KEY: $API_KEY
-      API_SECRET: $API_SECRET
-      CLIENT_ID: $CLIENT_ID
     steps:
       - checkout
       - setup_remote_docker
@@ -77,6 +72,10 @@ jobs:
       - run:
           name: build-client-static
           command: |
+            export SERVER_URL &&
+            export API_KEY &&
+            export API_SECRET &&
+            export CLIENT_ID &&
             cd client-react &&
             sh ./scripts/gh-pages/build.sh &&
             mv ./.gh-pages-tmp ../demo && mv ../demo/.gh-pages-tmp ../demo/static
