@@ -4,7 +4,7 @@
 ########    User settings     ############
 MAXDIRS=5
 MAXDEPTH=4
-MAXFILES=10
+MAXFILES=20
 MAXSIZE=10
 ######## End of user settings ############
 
