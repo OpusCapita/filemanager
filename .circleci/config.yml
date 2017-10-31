@@ -60,6 +60,10 @@ jobs:
           name: install-dependencies-server-nodejs
           command: (cd server-nodejs && yarn install)
 
+      - run:
+          name: install-dependencies-demo
+          command: (cd demo && yarn install)
+
 #      - save_cache:
 #          paths:
 #            - node_modules
