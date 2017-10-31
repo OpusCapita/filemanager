@@ -52,8 +52,8 @@ FormData instance with the following field name/value pairs.
 |------------|--------------|------------------------|
 |  parentId  | \<string\>   |                        |
 |  type      | \<string\>   |                        |
-| ?title     | \<string\>   | for type==='dir' only  |
-| ?files     | \<FileList\> | for type==='file' only |
+| ?title     | \<string\>   | for type 'dir' only  |
+| ?files     | \<FileList\> | for type 'file' only |
 
 ### Response
 
