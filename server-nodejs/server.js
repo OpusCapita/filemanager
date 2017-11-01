@@ -9,7 +9,7 @@ function run(serverConfig = config) {
   const host = serverConfig.host;
   const port = serverConfig.port;
 
-  app.use(filemanagerMiddleware(app, serverConfig));
+  app.use(filemanagerMiddleware(serverConfig));
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');

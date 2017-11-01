@@ -1,23 +1,17 @@
 'use strict';
 
-const bodyParser = require('body-parser');
-const registerRoutes = require('./routes');
+const router = require('./router');
 const logger = require('./logger');
 
-module.exports = function(app, config = require('./config/server-config')) {
-  return function(req, res, next) {
-    app.use(bodyParser.json());
+module.exports = function(config = require('./config/server-config')) {
+  const host = config.host;
+  const port = config.port;
 
-    const host = config.host;
-    const port = config.port;
-
-    const options = {
-      fsRoot: config.fsRoot,
-      rootTitle: config.rootTitle,
-      logger
-    };
-
-    registerRoutes(app, options);
-    next();
+  const options = {
+    fsRoot: config.fsRoot,
+    rootTitle: config.rootTitle,
+    logger
   };
+
+  return router(options);
 };
