@@ -78,14 +78,14 @@ function normalizeResource(resource) {
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
-    parentId: typeof resource.parents[0] === 'undefined' ? 'root' : resource.parents[0].id
+    parents: resource.parents
   };
 }
 
-function pathToId(path) {
+async function pathToId(path) {
 }
 
-function idToPath(id) {
+async function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
@@ -93,7 +93,7 @@ async function getResourceById(options, id) {
     fileId: id,
     fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents'
   });
-  let resource = normalizeResource({ ...response.result, parentId: id });
+  let resource = normalizeResource({ ...response.result  });
   return resource;
 }
 
@@ -115,6 +115,14 @@ async function getParentsForId(options, id, result = []) {
   let parent = await getResourceById(options, parentId);
 
   return await getParentsForId(options, parentId, [parent].concat(result));
+}
+
+async function getParentIdForResource(options, resource) {
+  if (!resource.parents && !resource.parents[0]) {
+    return 'root';
+  }
+
+  return resource.parents[0].id;
 }
 
 async function getChildrenForId(options, id) {
@@ -142,6 +150,7 @@ export default {
   getResourceById,
   getChildrenForId,
   getParentsForId,
+  getParentIdForResource,
   signIn,
   signOut
 };

@@ -67,11 +67,16 @@ async function getParentsForId(options, id) {
   return parents;
 }
 
+async function getParentIdForResource(options, resource) {
+  return resource.parentId;
+}
+
 export default {
   init,
   pathToId,
   idToPath,
   getResourceById,
   getChildrenForId,
-  getParentsForId
+  getParentsForId,
+  getParentIdForResource
 };

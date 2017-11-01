@@ -179,15 +179,15 @@ class FileNavigator extends Component {
     this.setState({ sortBy, sortDirection });
   }
 
-  handleResourceItemClick = ({ event, number, rowData }) => {
+  handleResourceItemClick = async ({ event, number, rowData }) => {
 
   }
 
-  handleResourceItemRightClick = ({ event, number, rowData }) => {
+  handleResourceItemRightClick = async ({ event, number, rowData }) => {
 
   }
 
-  handleResourceItemDoubleClick = ({ event, number, rowData }) => {
+  handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
     let { loadingView, resource } = this.state;
     let { id } = rowData;
 
@@ -203,7 +203,8 @@ class FileNavigator extends Component {
     this.focusView();
   }
 
-  handleViewKeyDown = (e) => {
+  handleViewKeyDown = async (e) => {
+    let { api, apiOptions } = this.props;
     let { loadingView, resource } = this.state;
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
@@ -216,7 +217,7 @@ class FileNavigator extends Component {
           // Fix for fast selection updates
           return;
         }
-        
+
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {
@@ -228,8 +229,9 @@ class FileNavigator extends Component {
     if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow
       // Navigate to parent directory
       let { resource } = this.state;
-      if (resource.parentId) {
-        this.navigateToDir(resource.parentId, resource.id);
+      let parentId = await api.getParentIdForResource(apiOptions, resource);
+      if (parentId) {
+        this.navigateToDir(parentId, resource.id);
       }
     }
   }
