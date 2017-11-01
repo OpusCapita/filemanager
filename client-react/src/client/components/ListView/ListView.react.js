@@ -10,6 +10,7 @@ import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
 import clickOutside from 'react-click-outside';
+import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 48;
@@ -23,6 +24,7 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
+  contextMenuId: PropTypes.string,
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
@@ -40,6 +42,7 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
+  contextMenuId: nanoid(),
   layout: () => [],
   layoutOptions: {},
   loading: false,
@@ -426,6 +429,7 @@ class ListView extends Component {
   render() {
     let {
       items,
+      contextMenuId,
       layout,
       layoutOptions,
       loading,
@@ -490,7 +494,7 @@ class ListView extends Component {
                 sort={this.handleSort}
                 sortBy={sortBy}
                 sortDirection={sortDirection}
-                rowRenderer={Row({ selection, lastSelected, loading })}
+                rowRenderer={Row({ selection, lastSelected, loading, contextMenuId })}
                 noRowsRenderer={NoFilesFoundStub}
                 onRowClick={this.handleRowClick}
                 onRowRightClick={this.handleRowRightClick}

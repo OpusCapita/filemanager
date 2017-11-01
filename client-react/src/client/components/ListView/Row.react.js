@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { DragSource } from 'react-dnd';
+import { ContextMenuTrigger, MenuItem } from "react-contextmenu";
 
 const RowDragSource = {
   canDrag(props) {
@@ -60,7 +61,8 @@ class Row extends Component {
       loading,
       isDragging,
       connectDragSource,
-      connectDragPreview
+      connectDragPreview,
+      contextMenuId
     } = this.props;
 
     const a11yProps = {};
@@ -97,33 +99,36 @@ class Row extends Component {
     let isSelected = selection.indexOf(rowData.id) !== -1;
     let isLastSelected = lastSelected === rowData.id;
 
-    return connectDragPreview(
-      connectDragSource(
-        (
-      <div
-        {...a11yProps}
-        className={`
-        ReactVirtualized__Table__row
-        oc-fm--list-view__row
-        ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
-        ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
-        ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
-        ${loading ? 'oc-fm--list-view__row--loading' : ''}
-        `}
-        key={rowData.id}
-        role="row"
-        style={style}>
-        {columns}
-      </div>
-        )));
+    return (
+      <ContextMenuTrigger id={contextMenuId}>
+        {connectDragPreview(connectDragSource((
+          <div
+            {...a11yProps}
+            className={`
+            ReactVirtualized__Table__row
+            oc-fm--list-view__row
+            ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
+            ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
+            ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
+            ${loading ? 'oc-fm--list-view__row--loading' : ''}
+            `}
+            key={rowData.id}
+            role="row"
+            style={style}>
+            {columns}
+          </div>
+        )))}
+      </ContextMenuTrigger>
+    );
   }
 };
 
-export default ({ selection, lastSelected, loading }) => (props) => (
+export default ({ selection, lastSelected, loading, contextMenuId }) => (props) => (
   <Row
     {...props}
     selection={selection}
     lastSelected={lastSelected}
     loading={loading}
+    contextMenuId={contextMenuId}
   />
 );

@@ -78,7 +78,8 @@ function normalizeResource(resource) {
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
-    parents: resource.parents
+    parents: resource.parents,
+    capabilities: resource.capabilities
   };
 }
 
@@ -91,7 +92,7 @@ async function idToPath(id) {
 async function getResourceById(options, id) {
   let response =  await window.gapi.client.drive.files.get({
     fileId: id,
-    fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents'
+    fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities'
   });
   let resource = normalizeResource({ ...response.result  });
   return resource;
@@ -128,11 +129,15 @@ async function getParentIdForResource(options, resource) {
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
     q: `'${id}' in parents`,
-    fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents)'
+    fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities)'
   });
 
   let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
   return { resourceChildren };
+}
+
+async function getCapabilitiesForResource(options, resource) {
+  return resource.capabilities || [];
 }
 
 async function signIn() {
@@ -151,6 +156,7 @@ export default {
   getChildrenForId,
   getParentsForId,
   getParentIdForResource,
+  getCapabilitiesForResource,
   signIn,
   signOut
 };
