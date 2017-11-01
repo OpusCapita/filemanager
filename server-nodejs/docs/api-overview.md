@@ -2,13 +2,12 @@
 
 | Method                                                      | REST   | URL                    | Request                             | Response                              |
 |-------------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?title,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource<br />or<br />[... :file-stats-resource]                  |
+| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?name,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource<br />or<br />[... :file-stats-resource]                  |
 | [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
 | [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
 | [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
-| Copy file/dir to destination                                | POST   | api/files/:id/copy/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
-| Move file/dir to destination                                | POST   | api/files/:id/move/    | {<br />&nbsp;&nbsp;destination: :id<br />}                |                                       |
+| [Rename and/or copy/move file/dir to destination](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
 | [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
 
 NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
@@ -20,12 +19,12 @@ NOTE: file/dir ID is its path+name in base64.  There is no trailing slash for di
 ```javascript
 {
   id: <string>,
-  title: <string>,
+  name: <string>,
   type: <string>, // "dir" or "file"
-  createDate: <string>,
-  modifyDate: <string>,
+  createdTime: <string>,
+  modifiedTime: <string>,
   ?size: <string>, // for files only
-  ?ancestors: [<string>, ...], // for non-root only, IDs of ancestors starting with root ID and ending with parent ID.
+  ?parentId: <string>, // for non-root only
   md5Checksum: <string>, // TODO in v2
   capabilities: {
     canListChildren: <boolean>,
@@ -51,7 +50,7 @@ FormData instance with the following field name/value pairs.
 |------------|--------------|------------------------|
 |  parentId  | \<string\>   |                        |
 |  type      | \<string\>   |                        |
-| ?title     | \<string\>   | for type 'dir' only  |
+| ?name      | \<string\>   | for type 'dir' only  |
 | ?files     | \<FileList\> | for type 'file' only |
 
 ### Response
@@ -92,7 +91,7 @@ If successful, this method returns an empty response body.
 
 ```javascript
 {
-  orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'title'.
+  orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'name'.
   orderDirection: <string>, // ASC/DESC
   maxResults: <number>, // TODO in v2
   pageToken: <string>, // TODO in v2
@@ -141,3 +140,26 @@ When multiple items, all _must_ be from the same folder.  Both folder and file i
 
 Binary data.
 
+## Rename and/or copy/move file/dir to destination
+
+* URL: `api/files/:id`
+* Method: PATCH
+
+### Request
+
+```javascript
+{
+  ?parents: [<string>, ...], // IDs of parents. For move/copy only.
+  ?name: <string> // New file/dir name. For rename only.
+}
+```
+
+When moving a file/dir, **parents** array has destination parent ID only.
+
+When copying a file/dir, **parents** array has both current parent ID and destination parent ID.
+
+### Response
+
+```
+<file stats resource>
+```
