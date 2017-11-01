@@ -1,8 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import './DocumentExport.less';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  onHide: PropTypes.func,
+  onChange: PropTypes.func
+};
+const defaultProps = {
+  onHide: () => {},
+  onChange: () => {}
+};
 
 export default
 class DocumentExport extends Component {
@@ -12,9 +18,17 @@ class DocumentExport extends Component {
   }
 
   render() {
+    let { onHide, onChange } = this.props;
+
     return (
-      <div className="document-export">
-        CHOOSE DOCUMENT EXPORT TYPE
+      <div className="oc-fm--dialog">
+        <div className="oc-fm--dialog__header">
+          <div>Document type</div>
+        </div>
+
+        <button type="button" className="oc-fm--dialog__button" onClick={onHide}>
+          Cancel
+        </button>
       </div>
     );
   }

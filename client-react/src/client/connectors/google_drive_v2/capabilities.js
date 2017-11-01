@@ -14,22 +14,19 @@ export default (apiOptions, { showDialog, hideDialog }) => ([
         icon={{ svg: downloadIcon }}
         onClick={() => api.downloadResources(resources, {
           onChooseDocumentExportType: (props) => {
-            showDialog(<DocumentExport {...props} />);
+            showDialog((
+              <DocumentExport
+                onHide={hideDialog}
+                onChange={(result) => console.log('change:', result)}
+                {...props}
+              />
+            ));
           }
         })}
       >
         <span>Download</span>
       </ContextMenuItem>
-    ),
-    dialogs: (apiOptions, props) => ({
-      download: (apiOptions, { onDialogEnd, resources }) => (
-        <div>
-          <button type="button" onClick={() => onDialogEnd('success')}>Success</button>
-          <button type="button" onClick={() => onDialogEnd('fail')}>Fail</button>
-          <button type="button" onClick={() => console.log(resources)}>Log resources</button>
-        </div>
-      )
-    })
+    )
   },
   {
     id: 'canDelete',
