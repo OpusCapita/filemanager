@@ -6,7 +6,7 @@ async function init(options) {
   options.onSignInSuccess();
 }
 
-function normalizeResource(resource) {
+async function normalizeResource(resource) {
   return {
     createDate: Date.parse(resource.createDate),
     id: resource.id,
@@ -19,14 +19,14 @@ function normalizeResource(resource) {
   };
 }
 
-function pathToId(path) {
+async function pathToId(path) {
   return new Promise((resolve, reject) => {
     let id = id.decode(path);
     resolve(id);
   });
 }
 
-function idToPath(id) {
+async function idToPath(id) {
   return new Promise((resolve, reject) => {
     let path = id.encode(id);
     resolve(path);
@@ -41,7 +41,7 @@ async function getResourceById(options, id) {
   });
 
   let resource = response.body;
-  return normalizeResource(resource);
+  return await normalizeResource(resource);
 }
 
 async function getChildrenForId(options, id) {
@@ -52,7 +52,7 @@ async function getChildrenForId(options, id) {
   });
 
   let rawResourceChildren = response.body.items;
-  let resourceChildren = rawResourceChildren.map((o) => normalizeResource(o));
+  let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => await normalizeResource(o)));
   return { resourceChildren };
 }
 

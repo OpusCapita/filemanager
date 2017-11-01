@@ -236,11 +236,11 @@ class FileNavigator extends Component {
     }
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = async (e) => {
 
   }
 
-  handleViewRef = (ref) => {
+  handleViewRef = async (ref) => {
     this.viewRef = ref;
   }
 

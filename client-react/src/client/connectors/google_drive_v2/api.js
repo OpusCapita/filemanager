@@ -1,6 +1,6 @@
 let signedIn = false;
 
-function appendGoogleApiScript() {
+async function appendGoogleApiScript() {
   if (window.gapi) {
     return false;
   };
@@ -23,7 +23,7 @@ function appendGoogleApiScript() {
   });
 }
 
-function updateSigninStatus(isSignedIn, options) {
+async function updateSigninStatus(isSignedIn, options) {
   if (isSignedIn) {
     options.onSignInSuccess('Google Drive sign-in success');
     console.log('Google Drive sign-in Success');
@@ -135,11 +135,11 @@ async function getChildrenForId(options, id) {
   return { resourceChildren };
 }
 
-function signIn() {
+async function signIn() {
   window.gapi.auth2.getAuthInstance().signIn();
 }
 
-function signOut() {
+async function signOut() {
   window.gapi.auth2.getAuthInstance().signOut();
 }
 
