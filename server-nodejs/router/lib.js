@@ -21,90 +21,71 @@ const id2path = id => {
     throw new Error('Invalid path, it must be non-empty string');
   }
 
-  if (userPath.charAt(0) !== '/') {
-    throw new Error('Invalid path, it must start with "/"');
+  if (userPath.charAt(0) !== path.sep) {
+    throw new Error(`Invalid path, it must start with "${path.sep}"`);
   }
 
-  if (/.\/$/.test(userPath)) {
-    throw new Error('Invalid path, it must not end with "/"');
+  if (userPath !== path.sep && userPath.slice(-1) === path.sep) {
+    throw new Error(`Invalid path, it must not end with "${path.sep}"`);
   }
 
-  if (~userPath.indexOf('\\')) {
-    throw new Error('Invalid path, it must not contain "\\"');
-  }
-
-  if (~userPath.indexOf('//')) {
-    throw new Error('Invalid path, it must not contain two "/" in a row');
+  if (userPath.includes(path.sep + path.sep)) {
+    throw new Error(`Invalid path, it must not contain two "${path.sep}" in a row`);
   }
 
   return userPath;
 };
 
-const checkTitle = title => {
-  if (!title) {
-    throw new Error('Title must not be empty');
+const checkName = name => {
+  if (!name) {
+    throw new Error('Name must not be empty');
   }
 
-  if (typeof title !== 'string') {
-    throw new Error('Title must be a string');
+  if (typeof name !== 'string') {
+    throw new Error('Name must be a string');
   }
 
-  if (~title.indexOf(path.sep) || ~title.indexOf('/')) {
-    throw new Error('Unable to create title with forbidden symbols');
+  if (name.includes(path.sep)) {
+    throw new Error('Unable to create name with forbidden symbols');
   }
 
-  return title;
+  return name;
 };
 
-const getAncestors = userPath => {
-  // The function returns array of input path ancestors, starting with '/' and ending with path's parent
-  // (path itself is not included),
-  // or [] for '/'.
-
-  const rez = [userPath];
-
-  while (rez[0] !== '/') {
-    rez.unshift(rez[0].replace(/\/[^/]+$/, '') || '/');
-  }
-
-  return rez.slice(0, -1);
-}
-
 const stat2resource = (options, pathInfo) => stat => {
-  let userPath, userBasename; // For root: userPath === '/', userBasename falsy.
+  let userPath, userBasename, userParent; // For root: userPath === path.sep, userBasename and userParent are falsy.
 
   if (typeof pathInfo === 'string') {
     userPath = pathInfo;
 
-    if (userPath !== '/') {
-      userBasename = userPath.slice(userPath.lastIndexOf('/') + 1);
+    if (userPath !== path.sep) {
+      userBasename = path.basename(userPath);
+      userParent = path.dirname(userPath);
     }
   } else {
-    const userParent = pathInfo.dir;
+    userParent = pathInfo.dir;
     userBasename = pathInfo.basename;
-    userPath = userParent ?
-      (userParent === '/' ? '/' : userParent + '/') + userBasename :
-      '/';
+    userPath = userParent ? path.join(userParent, userBasename) : path.sep;
   }
 
   const id = path2id(userPath);
 
   const resource = {
     id,
-    title: userBasename || options.rootTitle,
-    createDate: stat.birthtime,
-    modifyDate: stat.mtime,
+    name: userBasename || options.rootName,
+    createdTime: stat.birthtime,
+    modifiedTime: stat.mtime,
     capabilities: {
       canListChildren: true,
       canAddChildren: true,
       canRemoveChildren: true,
-      canDelete: userPath !== '/',
+      canDelete: !!userParent,
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };
 
-  if (userPath !== '/') {
-    resource.ancestors = getAncestors(userPath).map(path2id);
+  if (userParent) {
+    resource.parentId = path2id(userParent);
   }
 
   if (stat.isDirectory()) {
@@ -120,7 +101,7 @@ const stat2resource = (options, pathInfo) => stat => {
 }
 module.exports = {
   UNKNOWN_RESOURCE_TYPE_ERROR,
-  checkTitle,
+  checkName,
   id2path,
   path2id,
   stat2resource
