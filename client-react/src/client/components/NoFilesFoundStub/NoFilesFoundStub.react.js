@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import './NoFilesFoundStub.less';
+import SVG from '@opuscapita/react-svg/lib/SVG';
 let nothingToShowIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/add_to_photos.svg');
 
 export default () => (

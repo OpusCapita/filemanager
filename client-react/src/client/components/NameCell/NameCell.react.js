@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import './NameCell.less';
+import SVG from '@opuscapita/react-svg/lib/SVG';
 import LoadingCell from '../LoadingCell';
 
 export default ({ loading, getIcon }) => (cellProps) => {

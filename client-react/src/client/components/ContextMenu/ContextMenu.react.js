@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, Children } from 'react';
 import './ContextMenu.less';
-import { ContextMenu as Menu, MenuItem } from "react-contextmenu";
+import { ContextMenu as Menu } from "react-contextmenu";
 
 const propTypes = {
   triggerId: PropTypes.string

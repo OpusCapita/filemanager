@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
+import ContextMenu from '../ContextMenu';
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
@@ -25,6 +26,7 @@ const propTypes = {
     modifyDate: PropTypes.number
   })),
   contextMenuId: PropTypes.string,
+  contextMenuChildren: PropTypes.arrayOf(PropTypes.node),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
@@ -43,6 +45,7 @@ const propTypes = {
 const defaultProps = {
   items: [],
   contextMenuId: nanoid(),
+  contextMenuChildren: [],
   layout: () => [],
   layoutOptions: {},
   loading: false,
@@ -430,6 +433,7 @@ class ListView extends Component {
     let {
       items,
       contextMenuId,
+      contextMenuChildren,
       layout,
       layoutOptions,
       loading,
@@ -503,6 +507,9 @@ class ListView extends Component {
                 {layout({ ...layoutOptions, loading, width, height })}
               </Table>
             </ScrollOnMouseOut>
+            <ContextMenu triggerId={contextMenuId}>
+              {contextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+            </ContextMenu>
           </div>
         )}
       </AutoSizer>
