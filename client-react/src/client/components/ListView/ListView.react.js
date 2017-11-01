@@ -143,6 +143,10 @@ class ListView extends Component {
   }
 
   handleRowRightClick = ({ event, index, rowData}) => {
+    if (this.props.selection.indexOf(rowData.id) === -1) {
+      this.handleSelection([rowData.id]);
+    }
+
     this.props.onRowRightClick({ event, index, rowData });
   }
 

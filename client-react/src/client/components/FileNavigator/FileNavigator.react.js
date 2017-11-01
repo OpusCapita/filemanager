@@ -11,6 +11,7 @@ let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
 const propTypes = {
   api: PropTypes.object,
   apiOptions: PropTypes.object,
+  capabilities: PropTypes.func,
   className: PropTypes.string,
   id: PropTypes.string,
   initialResourceId: PropTypes.string,
@@ -21,8 +22,9 @@ const propTypes = {
 const defaultProps = {
   api: 'nodejs_v1',
   apiOptions: {},
+  capabilities: () => [],
   className: '',
-  id: nanoid(),
+  id: '',
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
@@ -41,6 +43,7 @@ class FileNavigator extends Component {
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
+      dialogElement: null,
       resource: {},
       resourceLocation: [],
       resourceChildren: [],
@@ -237,18 +240,32 @@ class FileNavigator extends Component {
   }
 
   handleKeyDown = async (e) => {
-
+    if (e.which === 27) { // Esc
+      if (this.state.dialogElement) {
+        this.hideDialog();
+      }
+    }
   }
 
   handleViewRef = async (ref) => {
     this.viewRef = ref;
   }
 
+  showDialog = (dialogElement) => {
+    this.setState({ dialogElement });
+  }
+
+  hideDialog = () => {
+    this.setState({ dialogElement: null });
+  }
+
   render() {
     let {
       api,
+      apiOptions,
       className,
       id,
+      capabilities,
       initialResourceId,
       listViewLayout,
       viewLayoutOptions,
@@ -258,6 +275,7 @@ class FileNavigator extends Component {
     let {
       config,
       error,
+      dialogElement,
       loadingView,
       loadingResourceLocation,
       resource,
@@ -280,6 +298,10 @@ class FileNavigator extends Component {
       viewLoadingElement = signInRenderer ? signInRenderer() : 'Not authenticated';
     }
 
+    if (dialogElement) {
+      viewLoadingElement = dialogElement;
+    }
+
     // Don't remove!
     // if (showSpinner) {
     //   viewLoadingElement = null;
@@ -297,6 +319,15 @@ class FileNavigator extends Component {
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
+    // TODO replace it by method "getCapabilities" for performace reason
+    let resources = resourceChildren.filter(o => selection.some((s) => s === o.id));
+    let contextMenuChildren = capabilities(apiOptions, {
+      showDialog: this.showDialog,
+      hideDialog: this.hideDialog
+    }).
+      filter(capability => capability.shouldBeAvailable(apiOptions, resources)).
+      map(capability => capability.contextMenuRenderer(apiOptions, resources));
+
     return (
       <div
         className={`oc-fm--file-navigator ${className}`}
@@ -313,6 +344,7 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
+            contextMenuId={id}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -325,6 +357,7 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
+            contextMenuChildren={contextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           />

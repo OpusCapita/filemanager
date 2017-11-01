@@ -1,3 +1,6 @@
+import agent from 'superagent';
+import { downloadFile } from '../utils/download';
+
 let signedIn = false;
 
 async function appendGoogleApiScript() {
@@ -79,7 +82,9 @@ function normalizeResource(resource) {
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
     parents: resource.parents,
-    capabilities: resource.capabilities
+    capabilities: resource.capabilities,
+    downloadUrl: resource.downloadUrl,
+    mimeType: resource.mimeType
   };
 }
 
@@ -91,8 +96,8 @@ async function idToPath(id) {
 
 async function getResourceById(options, id) {
   let response =  await window.gapi.client.drive.files.get({
-    fileId: id,
-    fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities'
+    fileId: id
+    // fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl'
   });
   let resource = normalizeResource({ ...response.result  });
   return resource;
@@ -104,8 +109,8 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let response = await window.gapi.client.drive.parents.list({
-    fileId: id,
-    fields: 'items(id)'
+    fileId: id
+    // fields: 'items(id)'
   });
   let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
 
@@ -128,8 +133,8 @@ async function getParentIdForResource(options, resource) {
 
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id}' in parents`,
-    fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities)'
+    q: `'${id}' in parents`
+    // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
 
   let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
@@ -138,6 +143,36 @@ async function getChildrenForId(options, id) {
 
 async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
+}
+
+async function downloadResource(resource, { onChooseDocumentExportType }) {
+  let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+  let isGoogleDocument = resource.mimeType === 'application/vnd.google-apps.document';
+
+  if (isGoogleDocument) {
+    onChooseDocumentExportType({ resource });
+  }
+
+  let request = agent.
+    get(`https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`).
+    set('Authorization', `Bearer ${accessToken}`).
+    responseType('blob').
+    end((err, res) => {
+      if (err) {
+        return console.error('Failed to download resource:', resource.id, err);
+      }
+      downloadFile(res.body, resource.title);
+    });
+}
+
+async function downloadResources(resources, { onChooseDocumentExportType }) {
+  if (resources.length === 1) {
+    return downloadResource(resources[0], { onChooseDocumentExportType });
+  }
+
+  resources.forEach(async (resource) => {
+
+  });
 }
 
 async function signIn() {
@@ -157,6 +192,7 @@ export default {
   getParentsForId,
   getParentIdForResource,
   getCapabilitiesForResource,
+  downloadResources,
   signIn,
   signOut
 };

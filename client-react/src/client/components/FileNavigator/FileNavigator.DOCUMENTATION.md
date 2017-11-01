@@ -17,6 +17,7 @@ FileNavigator is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
+  {/*
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
@@ -28,18 +29,21 @@ FileNavigator is
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
     />
   </div>
+  */}
 
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   
   <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
+      id="google_drive_filemanager"
       api={_scope.connectors.google_drive_v2.api}
       apiOptions={{
         CLIENT_ID: window.env.CLIENT_ID,
         API_KEY: window.env.API_KEY,
         DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
-        SCOPES: 'https://www.googleapis.com/auth/drive.metadata.readonly'
+        SCOPES: 'https://www.googleapis.com/auth/drive'
       }}
+      capabilities={_scope.connectors.google_drive_v2.capabilities}
       initialResourceId="root"
       listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
       viewLayoutOptions={_scope.connectors.google_drive_v2.viewLayoutOptions}
