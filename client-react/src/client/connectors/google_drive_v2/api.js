@@ -118,7 +118,7 @@ async function getParentsForId(options, id, result = []) {
 }
 
 async function getParentIdForResource(options, resource) {
-  if (!resource.parents && !resource.parents[0]) {
+  if (!resource.parents.length) {
     return 'root';
   }
 
