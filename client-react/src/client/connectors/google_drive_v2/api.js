@@ -186,6 +186,10 @@ async function downloadResources(resources) {
   });
 }
 
+async function removeResources() {
+
+}
+
 async function signIn() {
   window.gapi.auth2.getAuthInstance().signIn();
 }
@@ -204,6 +208,7 @@ export default {
   getParentIdForResource,
   getCapabilitiesForResource,
   downloadResources,
+  removeResources,
   signIn,
   signOut
 };

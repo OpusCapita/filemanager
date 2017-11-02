@@ -8,7 +8,7 @@ let deleteIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/delete.svg');
 export default (apiOptions, { showDialog, hideDialog }) => ([
   {
     id: 'canDownload',
-    shouldBeAvailable: (apiOptions, resources) => resources.length >= 1,
+    shouldBeAvailable: (apiOptions, resources) => resources.length === 1 && resources[0].type !== 'dir',
     contextMenuRenderer: (apiOptions, resources) => (
       <ContextMenuItem
         icon={{ svg: downloadIcon }}
