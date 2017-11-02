@@ -97,11 +97,11 @@ async function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
-  let response =  await window.gapi.client.drive.files.get({
+  let response = await window.gapi.client.drive.files.get({
     fileId: id
     // fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl'
   });
-  let resource = normalizeResource({ ...response.result  });
+  let resource = normalizeResource({ ...response.result });
   return resource;
 }
 
@@ -135,7 +135,7 @@ async function getParentIdForResource(options, resource) {
 
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id}' in parents`
+    q: `'${id}' in parents and trashed = false`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
 
@@ -185,6 +185,14 @@ async function downloadResources(resources) {
   });
 }
 
+async function createFolder(apiOptions, parentId, folderName) {
+  await window.gapi.client.drive.files.insert({
+    title: folderName,
+    parents: [parentId],
+    mimeType: 'application/vnd.google-apps.folder'
+  });
+}
+
 async function removeResources() {
 
 }
@@ -206,6 +214,7 @@ export default {
   getParentsForId,
   getParentIdForResource,
   getCapabilitiesForResource,
+  createFolder,
   downloadResources,
   removeResources,
   signIn,

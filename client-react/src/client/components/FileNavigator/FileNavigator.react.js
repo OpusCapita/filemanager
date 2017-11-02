@@ -316,13 +316,25 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let resources = resourceChildren.filter(o => selection.some((s) => s === o.id));
+    let selectedResources = resourceChildren.filter(o => selection.some((s) => s === o.id));
     let contextMenuChildren = capabilities(apiOptions, {
       showDialog: this.showDialog,
       hideDialog: this.hideDialog
     }).
-      filter(capability => capability.shouldBeAvailable(apiOptions, resources)).
-      map(capability => capability.contextMenuRenderer(apiOptions, resources));
+    filter(capability => capability.shouldBeAvailable(apiOptions, {
+      selection,
+      selectedResources,
+      resource,
+      resourceChildren,
+      resourceLocation
+    })).
+    map(capability => capability.contextMenuRenderer(apiOptions, {
+      selection,
+      selectedResources,
+      resource,
+      resourceChildren,
+      resourceLocation
+    }));
 
     return (
       <div

@@ -14,7 +14,7 @@
 }
 
 .oc-fm--dialog__content {
-  width: 240px;
+  width: 320px;
   max-width: 100%;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 
 .oc-fm--dialog__button {
   padding: 6px 12px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   border: none;
   border-radius: 2px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
@@ -42,18 +42,24 @@
   white-space: nowrap;
   user-select: none;
 
-  &:hover,
+  &:hover:not([disabled]),
   &:focus {
     background-color: #c56300;
     outline: none;
+  }
+
+  &[disabled] {
+    background-color: #ccc;
+    color: #555;
+    box-shadow: none;
   }
 }
 
 .oc-fm--dialog__button--default {
   color: #333;
   background-color: #fff;
-  &:focus,
-  &:hover {
+  &:focus:not([disabled]),
+  &:hover:not([disabled]) {
     background-color: #e5e5e5;
   }
 }
@@ -61,8 +67,8 @@
 .oc-fm--dialog__button--primary {
   color: #fff;
   background-color: #e70;
-  &:focus,
-  &:hover {
+  &:focus:not([disabled]),
+  &:hover:not([disabled]) {
     background-color: #c56300;
   }
 }
@@ -72,13 +78,17 @@
   font-size: 14px;
   padding: 6px 12px;
   border-radius: 2px;
-  border: none;
+  border: 1px solid transparent;
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
 
   &:focus {
     outline: none;
   }
+}
+
+.oc-fm--dialog__input--error {
+//  border-color: #DD2515;
 }
 
 .oc-fm--dialog__input--margin-bottom {
@@ -101,4 +111,22 @@
 
 .oc-fm--dialog__horizontal-group--to-right {
   justify-content: flex-end;
+}
+
+.oc-fm--dialog__validation-error {
+  font-size: 12px;
+  background: #DD2515;
+  padding: 4px 8px;
+  border-radius: 2px;
+  text-align: center;
+  font-weight: bold;
+  width: 100%;
+  opacity: 1;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
+  transition: opacity 80ms ease-in-out;
+}
+
+.oc-fm--dialog__validation-error--hidden {
+  opacity: 0;
+  transition: opacity 80ms ease-in-out;
 }
