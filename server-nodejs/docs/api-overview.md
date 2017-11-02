@@ -149,14 +149,16 @@ Binary data.
 
 ```javascript
 {
-  ?parents: [<string>, ...], // IDs of parents. For move/copy only.
-  ?name: <string> // New file/dir name. For rename only.
+  ?parents: [<string>, ...],
+  ?name: <string>
 }
 ```
 
-When moving a file/dir, **parents** array has destination parent ID only.
+When moving a file/dir, **parents** array has destination parent ID only.  **name**, if specified, gives a new name in destination.
 
-When copying a file/dir, **parents** array has both current parent ID and destination parent ID.
+When copying a file/dir, **parents** array has both current parent ID and destination parent ID.  **name**, if specified, gives a new name in destination.
+
+When renaming a file/dir, **parents** parameter is not set or empty array.
 
 ### Response
 
