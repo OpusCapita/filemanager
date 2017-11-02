@@ -1,0 +1,196 @@
+#%RAML 1.0
+title: File manager
+description: File manager
+version: 0.0.1
+baseUri: http://localhost
+mediaType:
+  - application/json
+protocols:
+  - HTTP
+  - HTTPS
+types:
+  FileStatsResource: !include FileStatsResource.raml
+  FileList:
+    type: array
+    items: file
+    uniqueItems: false
+
+/api:
+  description:
+
+  /files:
+    post:
+      description: Create new file or directory
+      headers:
+        Content-Type:
+          pattern: ^multipart/form-data$
+          example: multipart/form-data
+      body:
+        application/json:
+          properties:
+            parentId:
+              type: string
+              required: true
+            type:
+              type: string
+              required: true
+            name:
+              type: string
+              description: for type 'dir' only
+              required: false
+            files:
+              type: FileList
+              description: for type 'file' only
+              required: false
+      responses:
+        200:
+          description:
+          body:
+            application/json:
+              type: FileStatsResource | FileStatsResource[]
+        204:
+          description: A 204 status is returned if a dir with parentId does not exist.
+          body:
+            properties:
+              error:
+            example:
+              error: No Content
+
+    get:
+      description: Get dir stats for root
+      responses:
+        200:
+          description:
+          body:
+            application/json:
+              type: FileStatsResource
+        204:
+          description:
+          body:
+            properties:
+              error:
+            example:
+              error: No Content
+
+    /{id}:
+      get:
+        description: Get file or directory statistics
+        responses:
+          200:
+            description:
+            body:
+              application/json:
+                type: FileStatsResource
+          204:
+            body:
+              properties:
+                error:
+              example:
+                error: No Content
+
+      delete:
+        description: Delete file or directory
+        responses:
+          200:
+            description: If successful, this method returns an empty response body.
+            body:
+              type: nil
+          204:
+            body:
+              properties:
+                error:
+              example:
+                error: No Content
+
+      patch:
+        description: |
+          Rename and/or copy/move file/dir to destination
+          When moving a file/dir, parents array has destination parent ID only.
+          name, if specified, gives a new name in destination.
+          When copying a file/dir, parents array has both current parent ID and destination parent ID.
+          name, if specified, gives a new name in destination.
+          When renaming a file/dir, parents parameter is not set or empty array.
+        body:
+          application/json:
+            properties:
+              parents: string[]
+              name: string
+        responses:
+          200:
+            description:
+            body:
+              application/json:
+                type: FileStatsResource
+          204:
+            body:
+              properties:
+                error:
+              example:
+                error: No Content
+
+      /children:
+        get:
+          description: Get directory children list
+          queryParameters:
+            orderBy:
+              type: string
+              description: one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'name'
+              required: false
+            orderDirection:
+              type: string
+              description: ASC/DESC
+              required: false
+            maxResults:
+              type: number
+              required: false
+            pageToken:
+              type: string
+              required: false
+            searchQuery:
+              type: string
+              required: false
+            searchRecursively:
+              type: boolean
+              required: false
+          responses:
+            200:
+              description:
+              body:
+                application/json:
+                  type: object
+                  properties:
+                    items: FileStatsResource[]
+                    nextPageToken:
+            204:
+              body:
+                properties:
+                  error:
+                example:
+                  error: No Content
+
+  /download:
+    get:
+      description: Get file(s)/compressed dir
+      queryParameters:
+        items:
+          description: |
+            When multiple items, all must be from the same folder.
+            Both folder and file ids are allowed in items array.
+          type: string[]
+      responses:
+        200:
+          description:
+          headers:
+            Content-Disposition:
+              pattern: ^attachment; filename="[\w\.\-]+\.[\w\.]+"$
+              example: attachment; filename="archive.zip"
+          body:
+            application/zip:
+              description: Binary data
+              type: file
+        204:
+          body:
+            properties:
+              error:
+            example:
+              error: No Content

@@ -1,0 +1,23 @@
+type: object
+properties:
+  id: string
+  name: string
+  type: string
+  createdTime: string
+  size:
+    description: for files only
+    type: string
+    required: false
+  parentId:
+    description: for non-root only
+    type: string
+    required: false
+  md5Checksum: string
+  capabilities:
+    type: object
+    properties:
+      canListChildren: boolean
+      canAddChildren: boolean
+      canRemoveChildren: boolean
+      canDelete: boolean
+      canDownload: boolean
