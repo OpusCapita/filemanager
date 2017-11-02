@@ -1,6 +1,6 @@
 ### Synopsis
 
-DocumentExport is 
+SetNameDialog is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,12 +12,12 @@ DocumentExport is
 ### Code Example
 
 ```
-<DocumentExport />
+<SetNameDialog />
 ```
 
 ### Component Name
 
-DocumentExport
+SetNameDialog
 
 ### License
 

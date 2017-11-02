@@ -1,0 +1,104 @@
+.oc-fm--dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 24px;
+  width: 100%;
+  height: 100%;
+
+  &:focus {
+    outline:none;
+  }
+}
+
+.oc-fm--dialog__content {
+  width: 240px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.oc-fm--dialog__header {
+  font-weight: bold;
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 12px;
+  text-shadow: rgba(0, 0, 0, 0.75) 0px 2px 16px, rgba(0, 0, 0, 0.50) 0px 1px 4px;
+}
+
+.oc-fm--dialog__button {
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
+  color: #333;
+  background-color: #000;
+  font-size: 14px;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover,
+  &:focus {
+    background-color: #c56300;
+    outline: none;
+  }
+}
+
+.oc-fm--dialog__button--default {
+  color: #333;
+  background-color: #fff;
+  &:focus,
+  &:hover {
+    background-color: #e5e5e5;
+  }
+}
+
+.oc-fm--dialog__button--primary {
+  color: #fff;
+  background-color: #e70;
+  &:focus,
+  &:hover {
+    background-color: #c56300;
+  }
+}
+
+.oc-fm--dialog__input {
+  color: #333;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: none;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.oc-fm--dialog__input--margin-bottom {
+  margin-bottom: 12px;
+}
+
+.oc-fm--dialog__horizontal-group {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.oc-fm--dialog__horizontal-group > .oc-fm--dialog__button {
+  margin-right: 8px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.oc-fm--dialog__horizontal-group--to-right {
+  justify-content: flex-end;
+}

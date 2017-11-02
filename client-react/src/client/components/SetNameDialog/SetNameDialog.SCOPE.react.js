@@ -8,7 +8,7 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 
 @showroomScopeDecorator
 export default
-class DocumentExportScope extends Component {
+class SetNameDialogScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,9 +23,9 @@ class DocumentExportScope extends Component {
   }
 }
 
-DocumentExportScope.contextTypes = {
+SetNameDialogScope.contextTypes = {
   i18n: PropTypes.object
 };
-DocumentExportScope.childContextTypes = {
+SetNameDialogScope.childContextTypes = {
   i18n: PropTypes.object
 };

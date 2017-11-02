@@ -240,11 +240,7 @@ class FileNavigator extends Component {
   }
 
   handleKeyDown = async (e) => {
-    if (e.which === 27) { // Esc
-      if (this.state.dialogElement) {
-        this.hideDialog();
-      }
-    }
+
   }
 
   handleViewRef = async (ref) => {

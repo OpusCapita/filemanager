@@ -148,7 +148,6 @@ async function getCapabilitiesForResource(options, resource) {
 }
 
 async function downloadResource(resource) {
-  console.log(resource);
   let { mimeType } = resource;
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
   let isGoogleDocument = checkIsGoogleDocument(mimeType);
