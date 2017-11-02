@@ -1,5 +1,6 @@
 import agent from 'superagent';
 import { downloadFile } from '../utils/download';
+import { getExportMimeType, checkIsGoogleDocument } from './document-export-types';
 
 let signedIn = false;
 
@@ -84,7 +85,8 @@ function normalizeResource(resource) {
     parents: resource.parents,
     capabilities: resource.capabilities,
     downloadUrl: resource.downloadUrl,
-    mimeType: resource.mimeType
+    mimeType: resource.mimeType,
+    exportLinks: resource.exportLinks
   };
 }
 
@@ -145,29 +147,38 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource(resource, { onChooseDocumentExportType }) {
+async function downloadResource(resource) {
+  console.log(resource);
+  let { mimeType } = resource;
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-  let isGoogleDocument = resource.mimeType === 'application/vnd.google-apps.document';
+  let isGoogleDocument = checkIsGoogleDocument(mimeType);
 
+  let downloadUrl = '';
+  let title = '';
+  let content = '';
   if (isGoogleDocument) {
-    onChooseDocumentExportType({ resource });
+    let { exportMimeType, extension } = getExportMimeType(mimeType);
+    downloadUrl = resource.exportLinks[exportMimeType];
+    title = `${resource.title}.${extension}`;
+  } else {
+    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
+    title = resource.title;
   }
 
-  let request = agent.
-    get(`https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`).
+  agent.get(downloadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     responseType('blob').
     end((err, res) => {
       if (err) {
-        return console.error('Failed to download resource:', resource.id, err);
+        return console.error('Failed to download resource:', err);
       }
-      downloadFile(res.body, resource.title);
+      downloadFile(res.body, title);
     });
 }
 
-async function downloadResources(resources, { onChooseDocumentExportType }) {
+async function downloadResources(resources) {
   if (resources.length === 1) {
-    return downloadResource(resources[0], { onChooseDocumentExportType });
+    return downloadResource(resources[0]);
   }
 
   resources.forEach(async (resource) => {

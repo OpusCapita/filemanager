@@ -1,53 +1,35 @@
-let defaultFill = '#333';
-
-let documentMimeTypes = [
-  {
-    title: 'HTML',
-    mimeType: 'text/html',
-    icon: { svg: '', fill: defaultFill }
-  },
-  {
-    title: 'PDF',
-    mimeType: 'application/pdf',
-    icon: { svg: '', fill: defaultFill }
-  },
-  {
-    title: 'MS Word',
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    icon: { svg: '', fill: defaultFill }
-  },
-];
-
-let sheetMimeTypes = [
-  {
-    title: 'HTML',
-    mimeType: 'text/html',
-    icon: { svg: '', fill: defaultFill }
-  },
-  {
-    title: 'PDF',
-    mimeType: 'application/pdf',
-    icon: { svg: '', fill: defaultFill }
-  },
-  {
-    title: 'MS Word',
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    icon: { svg: '', fill: defaultFill }
-  },
-];
-
-function getMimeTypes(mimeType) {
-  if (mimeType === 'application/vnd.google-apps.document') {
-    return documentMimeTypes;
-  } else if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-    if (mimeType === 'application/vnd.google-apps.document') {
-      return sheetMimeTypes;
-    }
+function getExportMimeType(mimeType) {
+  switch (mimeType) {
+    case 'application/vnd.google-apps.document':
+      return ({
+        exportMimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        extension: 'docx'
+      }); break;
+    case 'application/vnd.google-apps.spreadsheet':
+      return ({
+        exportMimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        extension: 'xlsx'
+      }); break;
+    case 'application/vnd.google-apps.presentation':
+      return ({
+        exportMimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        extension: 'pptx'
+      }); break;
+    default: ({ exportMimeType: 'text/plain', extension: '' });
   }
+};
+
+function checkIsGoogleDocument(mimeType) {
+  return (
+    mimeType === 'application/vnd.google-apps.document' ||
+    mimeType === 'application/vnd.google-apps.spreadsheet' ||
+    mimeType === 'application/vnd.google-apps.presentation'
+  );
 }
 
 export {
-  getExportMimeTypes
+  getExportMimeType,
+  checkIsGoogleDocument
 }
 
 /*

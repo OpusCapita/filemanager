@@ -12,17 +12,7 @@ export default (apiOptions, { showDialog, hideDialog }) => ([
     contextMenuRenderer: (apiOptions, resources) => (
       <ContextMenuItem
         icon={{ svg: downloadIcon }}
-        onClick={() => api.downloadResources(resources, {
-          onChooseDocumentExportType: (props) => {
-            showDialog((
-              <DocumentExport
-                onHide={hideDialog}
-                onChange={(result) => console.log('change:', result)}
-                {...props}
-              />
-            ));
-          }
-        })}
+        onClick={() => api.downloadResources(resources)}
       >
         <span>Download</span>
       </ContextMenuItem>
