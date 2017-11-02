@@ -188,7 +188,7 @@ async function downloadResources(resources) {
 async function createFolder(apiOptions, parentId, folderName) {
   await window.gapi.client.drive.files.insert({
     title: folderName,
-    parents: [parentId],
+    parents: [{ id: parentId }],
     mimeType: 'application/vnd.google-apps.folder'
   });
 }
