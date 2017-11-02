@@ -111,7 +111,7 @@ If successful, this method returns an empty response body.
 
 ## Get file or directory statistics
 
-* URL: `api/files/:id/stats`
+* URL: `api/files/:id`
 * Method: GET
 
 ### Request
