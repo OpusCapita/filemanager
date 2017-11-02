@@ -152,7 +152,7 @@ Binary data.
   ?parents: [<string>, ...],
   ?name: <string>,
   ?options: {
-    ?overwrite: <boolean>  // overwrite existing file/dir, false bydefault
+    ?overwrite: <boolean>  // overwrite existing file/dir, false by default
   }
 }
 ```
