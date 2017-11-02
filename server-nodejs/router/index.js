@@ -35,6 +35,7 @@ module.exports = options => {
 
   router.route('/api/files/:id').
     get(connect('./statResource', _ => ({ path: reqPath }))).
+    patch(connect('./renameCopyMove', _ => ({ path: reqPath }))).
     delete(connect('./remove', _ => ({ path: reqPath })));
 
   router.route('/api/files').
