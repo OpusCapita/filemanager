@@ -1,8 +1,0 @@
-Kinds of resource
-
-* relativePath <string> - relative to `fs-root`
-* timestamp <string> - UNIX notation
-* isDirectory <bool>
-* createDate <string> - UNIX notation
-* modifiedDate <string> - UNIX notation
-* fileSize <string> - bytes

@@ -18,7 +18,7 @@ module.exports = ({ options, req, res }) => {
     return;
   }
 
-  const absPaths = reqPaths.map(reqPath => path.resolve(options.fsRoot, '.' + reqPath.replace(/\//g, path.sep)));
+  const absPaths = reqPaths.map(reqPath => path.join(options.fsRoot, reqPath));
   options.logger.info(`Download ${absPaths} requested by ${getClientIp(req)}`);
 
   if (absPaths.length === 1) {
@@ -28,9 +28,9 @@ module.exports = ({ options, req, res }) => {
           res.zip({
             files: [{
               path: absPaths[0],
-              name: absPaths[0] === options.fsRoot ? options.rootTitle : path.basename(absPaths[0])
+              name: absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])
             }],
-            filename: (absPaths[0] === options.fsRoot ? options.rootTitle : path.basename(absPaths[0])) + '.zip'
+            filename: (absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])) + '.zip'
           });
         } else {
           res.download(absPaths[0]);
@@ -43,6 +43,10 @@ module.exports = ({ options, req, res }) => {
 
     return;
   }
+
+  /* ████████████████████████████████████████████████████████████████████ *\
+   * ███ Download muliple files/dirs by packing them into zip archive ███ *
+  \* ████████████████████████████████████████████████████████████████████ */
 
   const parentPath = path.dirname(absPaths[0]);
 
@@ -57,7 +61,7 @@ module.exports = ({ options, req, res }) => {
       path: absPath,
       name: path.basename(absPath)
     })),
-    filename: (parentPath === options.fsRoot ? options.rootTitle : path.basename(parentPath)) + '.zip'
+    filename: (parentPath === options.fsRoot ? options.rootName : path.basename(parentPath)) + '.zip'
   }).
     catch(err => {
       options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);

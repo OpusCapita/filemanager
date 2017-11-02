@@ -7,7 +7,7 @@ const multer = require('multer');
 const getClientIp = require('../utils/get-client-ip');
 
 const {
-  checkTitle,
+  checkName,
   id2path,
   stat2resource
 } = require('./lib');
@@ -22,22 +22,22 @@ let fsRoot;
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      const { title, parentId, type } = req.body;
+      const { name, parentId, type } = req.body;
 
       if (type !== TYPE_FILE) {
         cb(new Error('type ${type} conflicts with files field requested by ${getClientIp(req)}'));
         return;
       }
 
-      if (title) {
-        cb(new Error('title ${title} conflicts with files field requested by ${getClientIp(req)}'));
+      if (name) {
+        cb(new Error('name ${name} conflicts with files field requested by ${getClientIp(req)}'));
         return;
       }
 
       let parentPath;
 
       try {
-        parentPath = path.resolve(fsRoot, '.' + id2path(parentId).replace(/\//g, path.sep));
+        parentPath = path.join(fsRoot, id2path(parentId));
       } catch (err) {
         cb(err);
         return;
@@ -49,7 +49,7 @@ const upload = multer({
     },
     filename(req, file, cb) {
       try {
-        checkTitle(file.originalname);
+        checkName(file.originalname);
       } catch (err) {
         cb(err);
         return;
@@ -71,29 +71,28 @@ module.exports = ({ options, req, res }) => {
       return;
     }
 
-    const { title, parentId, type } = req.body;
+    const { name, parentId, type } = req.body;
+    let reqParentPath;
+
+    try {
+      reqParentPath = id2path(parentId);
+    } catch (err) {
+      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
+      res.status(204).end();
+      return;
+    }
 
     if (type === TYPE_DIR) {
       try {
-        checkTitle(title);
+        checkName(name);
       } catch (err) {
         options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
         res.status(204).end();
         return;
       }
 
-      let reqParentPath;
-
-      try {
-        reqParentPath = id2path(parentId);
-      } catch (err) {
-        options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-        res.status(204).end();
-        return;
-      }
-
-      const parentPath = path.resolve(options.fsRoot, '.' + reqParentPath.replace(/\//g, path.sep));
-      const dirPath = parentPath + path.sep + title;
+      const parentPath = path.join(options.fsRoot, reqParentPath);
+      const dirPath = path.join(parentPath, name);
       options.logger.info(`Create dir ${dirPath} requested by ${getClientIp(req)}`);
 
       fs.access(parentPath). // Check whether parent exists.
@@ -101,7 +100,7 @@ module.exports = ({ options, req, res }) => {
         then(_ => fs.stat(dirPath)).
         then(stat2resource(options, {
           dir: reqParentPath,
-          basename: title
+          basename: name
         })).
         then(resource => res.json(resource)).
         catch(err => {
@@ -109,8 +108,8 @@ module.exports = ({ options, req, res }) => {
           res.status(204).end();
         });
     } else if (type === TYPE_FILE) {
-      if (title) {
-        options.logger.error(`ERROR: title ${title} conflicts with type requested by ${getClientIp(req)}`);
+      if (name) {
+        options.logger.error(`name ${name} conflicts with type requested by ${getClientIp(req)}`);
         res.status(204).end();
         return;
       }
@@ -120,7 +119,7 @@ module.exports = ({ options, req, res }) => {
       Promise.all(req.files.map(({ path, filename }) =>
         fs.stat(path).
           then(stat2resource(options, {
-            dir: parentId,
+            dir: reqParentPath,
             basename: filename
           }))
       )).
@@ -130,7 +129,7 @@ module.exports = ({ options, req, res }) => {
           res.status(204).end();
         })
     } else {
-      options.logger.error(`ERROR: unable to create title of invalid type ${type} requested by ${getClientIp(req)}`);
+      options.logger.error(`Unable to create name of invalid type ${type} requested by ${getClientIp(req)}`);
       res.status(204).end();
     }
   });
