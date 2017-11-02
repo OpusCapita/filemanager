@@ -8,7 +8,7 @@ let downloadIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/file_download
 let deleteIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/delete.svg');
 let createFolderIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/create_new_folder.svg');
 
-export default (apiOptions, { showDialog, hideDialog }) => ([
+export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ([
   {
     id: 'createFolder',
     shouldBeAvailable: (apiOptions, { selectedResources }) => selectedResources.length === 1,
@@ -31,7 +31,9 @@ export default (apiOptions, { showDialog, hideDialog }) => ([
                 if (alreadyExists) {
                   return `File or folder with name "${folderName}" already exists`;
                 } else {
-                  return api.createFolder(apiOptions, resource.id, folderName);
+                  hideDialog();
+                  await api.createFolder(apiOptions, resource.id, folderName);
+                  forceUpdate();
                 }
               }}
               onValidate={async (folderName) => {

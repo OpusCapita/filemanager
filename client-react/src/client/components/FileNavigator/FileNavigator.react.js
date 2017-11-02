@@ -319,7 +319,8 @@ class FileNavigator extends Component {
     let selectedResources = resourceChildren.filter(o => selection.some((s) => s === o.id));
     let contextMenuChildren = capabilities(apiOptions, {
       showDialog: this.showDialog,
-      hideDialog: this.hideDialog
+      hideDialog: this.hideDialog,
+      forceUpdate: resource.id ? () => this.navigateToDir(resource.id) : () => {}
     }).
     filter(capability => capability.shouldBeAvailable(apiOptions, {
       selection,

@@ -43,14 +43,17 @@ class SetNameDialog extends Component {
     }
   }
 
+  handleSubmitButtonClick = async (e) => {
+    if (!this.props.validationError) {
+      this.handleSubmit(this.state.value);
+    }
+  }
+
   handleSubmit = async (val) => {
-    console.log('vvv', val);
     let validationError = await this.props.onSubmit(val);
 
     if (validationError) {
       this.setState({ validationError });
-    } else {
-      this.props.onHide();
     }
   }
 
@@ -96,7 +99,7 @@ class SetNameDialog extends Component {
             <button
               type="button"
               className={`oc-fm--dialog__button oc-fm--dialog__button--primary`}
-              onClick={onHide}
+              onClick={this.handleSubmitButtonClick}
               disabled={!valid}
             >
               Create
