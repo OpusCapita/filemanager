@@ -5,11 +5,13 @@ import React, { Component, PropTypes } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
+import ContextMenu from '../ContextMenu';
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
 import clickOutside from 'react-click-outside';
+import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 48;
@@ -23,6 +25,8 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
+  contextMenuId: PropTypes.string,
+  contextMenuChildren: PropTypes.arrayOf(PropTypes.node),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
@@ -40,6 +44,8 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
+  contextMenuId: nanoid(),
+  contextMenuChildren: [],
   layout: () => [],
   layoutOptions: {},
   loading: false,
@@ -137,6 +143,10 @@ class ListView extends Component {
   }
 
   handleRowRightClick = ({ event, index, rowData}) => {
+    if (this.props.selection.indexOf(rowData.id) === -1) {
+      this.handleSelection([rowData.id]);
+    }
+
     this.props.onRowRightClick({ event, index, rowData });
   }
 
@@ -426,6 +436,8 @@ class ListView extends Component {
   render() {
     let {
       items,
+      contextMenuId,
+      contextMenuChildren,
       layout,
       layoutOptions,
       loading,
@@ -490,7 +502,7 @@ class ListView extends Component {
                 sort={this.handleSort}
                 sortBy={sortBy}
                 sortDirection={sortDirection}
-                rowRenderer={Row({ selection, lastSelected, loading })}
+                rowRenderer={Row({ selection, lastSelected, loading, contextMenuId })}
                 noRowsRenderer={NoFilesFoundStub}
                 onRowClick={this.handleRowClick}
                 onRowRightClick={this.handleRowRightClick}
@@ -499,6 +511,9 @@ class ListView extends Component {
                 {layout({ ...layoutOptions, loading, width, height })}
               </Table>
             </ScrollOnMouseOut>
+            <ContextMenu triggerId={contextMenuId}>
+              {contextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+            </ContextMenu>
           </div>
         )}
       </AutoSizer>

@@ -5,11 +5,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import { ContextMenuTrigger, MenuItem } from "react-contextmenu";
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import { ContextMenuTrigger } from "react-contextmenu";
+import ContextMenuItem from '../ContextMenuItem';
 
-window.MenuItem = MenuItem;
-window.SVG = SVG;
+window.ContextMenuItem = ContextMenuItem;
 
 function requireAll(requireContext) {
   return requireContext.keys().map(key => ({

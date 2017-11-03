@@ -1,6 +1,10 @@
+import agent from 'superagent';
+import { downloadFile } from '../utils/download';
+import { getExportMimeType, checkIsGoogleDocument } from './document-export-types';
+
 let signedIn = false;
 
-function appendGoogleApiScript() {
+async function appendGoogleApiScript() {
   if (window.gapi) {
     return false;
   };
@@ -23,7 +27,7 @@ function appendGoogleApiScript() {
   });
 }
 
-function updateSigninStatus(isSignedIn, options) {
+async function updateSigninStatus(isSignedIn, options) {
   if (isSignedIn) {
     options.onSignInSuccess('Google Drive sign-in success');
     console.log('Google Drive sign-in Success');
@@ -78,22 +82,26 @@ function normalizeResource(resource) {
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
-    parentId: typeof resource.parents[0] === 'undefined' ? 'root' : resource.parents[0].id
+    parents: resource.parents,
+    capabilities: resource.capabilities,
+    downloadUrl: resource.downloadUrl,
+    mimeType: resource.mimeType,
+    exportLinks: resource.exportLinks
   };
 }
 
-function pathToId(path) {
+async function pathToId(path) {
 }
 
-function idToPath(id) {
+async function idToPath(id) {
 }
 
 async function getResourceById(options, id) {
-  let response =  await window.gapi.client.drive.files.get({
-    fileId: id,
-    fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents'
+  let response = await window.gapi.client.drive.files.get({
+    fileId: id
+    // fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl'
   });
-  let resource = normalizeResource({ ...response.result, parentId: id });
+  let resource = normalizeResource({ ...response.result });
   return resource;
 }
 
@@ -103,8 +111,8 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let response = await window.gapi.client.drive.parents.list({
-    fileId: id,
-    fields: 'items(id)'
+    fileId: id
+    // fields: 'items(id)'
   });
   let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
 
@@ -117,21 +125,83 @@ async function getParentsForId(options, id, result = []) {
   return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
+async function getParentIdForResource(options, resource) {
+  if (!resource.parents.length) {
+    return 'root';
+  }
+
+  return resource.parents[0].id;
+}
+
 async function getChildrenForId(options, id) {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id}' in parents`,
-    fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents)'
+    q: `'${id}' in parents and trashed = false`
+    // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
 
   let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
   return { resourceChildren };
 }
 
-function signIn() {
+async function getCapabilitiesForResource(options, resource) {
+  return resource.capabilities || [];
+}
+
+async function downloadResource(resource) {
+  let { mimeType } = resource;
+  let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+  let isGoogleDocument = checkIsGoogleDocument(mimeType);
+
+  let downloadUrl = '';
+  let title = '';
+  let content = '';
+  if (isGoogleDocument) {
+    let { exportMimeType, extension } = getExportMimeType(mimeType);
+    downloadUrl = resource.exportLinks[exportMimeType];
+    title = `${resource.title}.${extension}`;
+  } else {
+    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
+    title = resource.title;
+  }
+
+  agent.get(downloadUrl).
+    set('Authorization', `Bearer ${accessToken}`).
+    responseType('blob').
+    end((err, res) => {
+      if (err) {
+        return console.error('Failed to download resource:', err);
+      }
+      downloadFile(res.body, title);
+    });
+}
+
+async function downloadResources(resources) {
+  if (resources.length === 1) {
+    return downloadResource(resources[0]);
+  }
+
+  resources.forEach(async (resource) => {
+
+  });
+}
+
+async function createFolder(apiOptions, parentId, folderName) {
+  await window.gapi.client.drive.files.insert({
+    title: folderName,
+    parents: [{ id: parentId }],
+    mimeType: 'application/vnd.google-apps.folder'
+  });
+}
+
+async function removeResources() {
+
+}
+
+async function signIn() {
   window.gapi.auth2.getAuthInstance().signIn();
 }
 
-function signOut() {
+async function signOut() {
   window.gapi.auth2.getAuthInstance().signOut();
 }
 
@@ -142,6 +212,11 @@ export default {
   getResourceById,
   getChildrenForId,
   getParentsForId,
+  getParentIdForResource,
+  getCapabilitiesForResource,
+  createFolder,
+  downloadResources,
+  removeResources,
   signIn,
   signOut
 };
