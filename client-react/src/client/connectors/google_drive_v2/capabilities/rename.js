@@ -25,7 +25,7 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
           <SetNameDialog
             onHide={hideDialog}
             onSubmit={async (name) => {
-              let { resourceChildren } = await api.getChildrenForId(apiOptions, resource.id);
+              let { resourceChildren } = await api.getChildrenForId(apiOptions, selectedResources[0].parents[0].id);
               let alreadyExists = resourceChildren.some((o) => o.title === name);
               if (alreadyExists) {
                 return `File or folder with name "${name}" already exists`;
