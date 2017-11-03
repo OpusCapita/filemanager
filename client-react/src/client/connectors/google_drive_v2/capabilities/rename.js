@@ -7,7 +7,10 @@ let renameIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/title.svg');
 
 export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
   id: 'rename',
-  shouldBeAvailable: (apiOptions, { selectedResources }) => selectedResources.length === 1,
+  shouldBeAvailable: (apiOptions, { selectedResources }) => (
+    selectedResources.length === 1 &&
+    selectedResources[0].id !== 'root' // root is not mutable
+  ),
   contextMenuRenderer: (apiOptions, {
     selection,
     selectedResources,
@@ -21,30 +24,28 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
         showDialog((
           <SetNameDialog
             onHide={hideDialog}
-            onSubmit={async (folderName) => {
+            onSubmit={async (name) => {
               let { resourceChildren } = await api.getChildrenForId(apiOptions, resource.id);
-              let alreadyExists = resourceChildren.some((o) => o.title === folderName);
+              let alreadyExists = resourceChildren.some((o) => o.title === name);
               if (alreadyExists) {
-                return `File or folder with name "${folderName}" already exists`;
+                return `File or folder with name "${name}" already exists`;
               } else {
                 hideDialog();
-                await api.createFolder(apiOptions, resource.id, folderName);
+                await api.renameResource(apiOptions, selectedResources[0].id, name);
                 forceUpdate();
               }
             }}
-            onValidate={async (folderName) => {
-              if (!folderName) {
-                return 'You must specify a folder name';
-              } else if (folderName === 'CON') {
-                return 'Don\'t you alone do not respect Bill ;)';
-              } else if (folderName.length >= 255) {
-                return 'Folder name can\'t contain more than 255 characters';
-              } else if (folderName.trim() !== sanitizeFilename(folderName.trim())) {
-                return 'Folder name contains not allowed characters';
+            onValidate={async (name) => {
+              if (!name) {
+                return 'Name can\'t be empty';
+              } else if (name.length >= 255) {
+                return 'Name can\'t contain more than 255 characters';
+              } else if (name.trim() !== sanitizeFilename(name.trim())) {
+                return 'Name contains not allowed characters';
               }
               return null;
             }}
-            headerText={`Folder name`}
+            headerText={`New name`}
           />
         ));
       }}

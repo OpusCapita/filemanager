@@ -193,6 +193,13 @@ async function createFolder(apiOptions, parentId, folderName) {
   });
 }
 
+async function renameResource(apiOptions, id, newName) {
+  await window.gapi.client.drive.files.patch({
+    fileId: id,
+    title: newName
+  });
+}
+
 async function removeResources() {
 
 }
@@ -216,6 +223,7 @@ export default {
   getCapabilitiesForResource,
   createFolder,
   downloadResources,
+  renameResource,
   removeResources,
   signIn,
   signOut

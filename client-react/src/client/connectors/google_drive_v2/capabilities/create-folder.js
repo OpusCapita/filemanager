@@ -34,9 +34,9 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
             }}
             onValidate={async (folderName) => {
               if (!folderName) {
-                return 'You must specify a folder name';
+                return 'Name can\'t be empty';
               } else if (folderName === 'CON') {
-                return 'Don\'t you alone do not respect Bill ;)';
+                return 'We too do not respect Bill ;)';
               } else if (folderName.length >= 255) {
                 return 'Folder name can\'t contain more than 255 characters';
               } else if (folderName.trim() !== sanitizeFilename(folderName.trim())) {
