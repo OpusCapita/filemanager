@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+
 const getClientIp = require('../utils/get-client-ip');
 
 const {
@@ -9,6 +10,9 @@ const {
   id2path,
   stat2resource
 } = require('./lib');
+
+const MAX_RETRIES = 3;
+const ERROR_TARGET_EXISTS = 'EEXIST';
 
 module.exports = ({
   options,
@@ -91,22 +95,39 @@ module.exports = ({
     } else {
       targetRelativePath = relativeParentPaths[0];
       targetAbsPath = absParentPaths[0];
-      operation = fs.move;
+      operation = path.dirname(absItemPath) === absParentPaths[0] ?
+        fs.copy :
+        fs.move;
     }
   }
 
-  fs.readdir(targetAbsPath).
-    then(basenames => {
-      if (basenames.includes(basename)) {
-        const { name, ext } = path.parse(basename);
-        let suffix = 1;
+  (function retriedPromise(maxRetries, counter = 1) {
+    return new Promise((resolve, reject) => fs.readdir(targetAbsPath).
+      then(basenames => {
+        let base = basename;
 
-        do {
-          basename = `${name} (${suffix++})${ext}`;
-        } while (basenames.includes(basename));
-      }
-    }).
-    then(_ => operation(absItemPath, path.join(targetAbsPath, basename))).
+        if (basenames.includes(base)) {
+          const { name, ext } = path.parse(base);
+          let suffix = 1;
+
+          do {
+            base = `${name} (${suffix++})${ext}`;
+          } while (basenames.includes(base));
+        }
+
+        return base;
+      }).
+      then(base => operation(absItemPath, path.join(targetAbsPath, base)).
+        then(_ => resolve(basename = base))
+      ).
+      catch(err => (counter < maxRetries && err.code === ERROR_TARGET_EXISTS) ?
+        retriedPromise(maxRetries, counter + 1).
+          then(resolve).
+          catch(reject) :
+        reject(err)
+      )
+    );
+  }(MAX_RETRIES)).
     then(_ => fs.stat(path.join(targetAbsPath, basename))).
     then(stat => stat2resource(options, {  // stat2resource must be called _after_ promise resolution!
       dir: targetRelativePath,
