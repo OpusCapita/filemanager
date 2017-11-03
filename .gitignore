@@ -21,6 +21,7 @@ test-results.xml
 
 /client-react/node_modules
 /server-nodejs/node_modules
+/server-nodejs/api-docs.tmp
 /demo/node_modules
 /demo/demo-fs
 /demo/static
