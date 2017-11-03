@@ -82,6 +82,8 @@ const stat2resource = (options, pathInfo) => stat => {
       canAddChildren: true,
       canRemoveChildren: true,
       canDelete: !!userParent,
+      canRename: !!userParent,
+      canCopy: !!userParent,
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };
