@@ -14,6 +14,8 @@ Predefined connectors placed [here](./client-react/src/client/connectors). You c
 
 ### [NodeJS server implementation](./server-nodejs)
 
+[**API Documentation**](http://opuscapita-filemanager.azurewebsites.net/api/docs/)
+
 ## Demo
 
 See interactive example for more details: [demo](http://opuscapita-filemanager.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.1%2FFileNavigator&maxContainerWidth=100%25&showSidebar=true)
