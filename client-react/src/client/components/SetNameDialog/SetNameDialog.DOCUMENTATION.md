@@ -12,7 +12,9 @@ SetNameDialog is
 ### Code Example
 
 ```
-<SetNameDialog />
+<div style={{ backgroundColor: '#333' }}>
+  <SetNameDialog />
+</div>
 ```
 
 ### Component Name
