@@ -18,12 +18,14 @@ module.exports = ({
   options,
   req,
   res,
+  handleError,
   path: relativeItemPath
 }) => {
   if (relativeItemPath === path.sep) {
-    options.logger.error(`User root must never be renamed/copied/moved, contrary to requested by ${getClientIp(req)}`);
-    res.status(204).end();
-    return;
+    return handleError(Object.assign(
+      new Error(`User root must never be renamed/copied/moved`),
+      { httpCode: 400 }
+    ));
   }
 
   const {
@@ -34,9 +36,10 @@ module.exports = ({
   let basename = reqBasename;
 
   if (parentIds.length > 2) {
-    options.logger.error(`Invalid number of parents requested by ${getClientIp(req)}`);
-    res.status(204).end();
-    return;
+    return handleError(Object.assign(
+      new Error(`Invalid number of parents`),
+      { httpCode: 400 }
+    ));
   }
 
   const absItemPath = path.join(options.fsRoot, relativeItemPath);
@@ -50,9 +53,10 @@ module.exports = ({
     try {
       checkName(basename);
     } catch (err) {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-      return;
+      return handleError(Object.assign(
+        err,
+        { httpCode: 400 }
+      ));
     }
 
     targetRelativePath = path.dirname(relativeItemPath);
@@ -65,9 +69,10 @@ module.exports = ({
       try {
         checkName(basename);
       } catch (err) {
-        options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-        res.status(204).end();
-        return;
+        return handleError(Object.assign(
+          err,
+          { httpCode: 400 }
+        ));
       }
     } else {
       basename = path.basename(absItemPath);
@@ -86,9 +91,10 @@ module.exports = ({
       }
 
       if (!targetAbsPath) {
-        options.logger.error(`Current parent must be among parents request by ${getClientIp(req)}: ${err}`);
-        res.status(204).end();
-        return;
+        return handleError(Object.assign(
+          new Error(`Current parent must be among parents`),
+          { httpCode: 400 }
+        ));
       }
 
       operation = fs.copy;
@@ -101,7 +107,7 @@ module.exports = ({
     }
   }
 
-  (function retriedPromise(maxRetries, counter = 1) {
+  return (function retriedPromise(maxRetries, counter = 1) {
     return new Promise((resolve, reject) => fs.readdir(targetAbsPath).
       then(basenames => {
         let base = basename;
@@ -134,8 +140,5 @@ module.exports = ({
       basename
     })(stat)).
     then(resource => res.json(resource)).
-    catch(err => {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-    });
+    catch(handleError);
 };

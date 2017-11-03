@@ -61,14 +61,12 @@ const upload = multer({
 }).
   array('files');
 
-module.exports = ({ options, req, res }) => {
+module.exports = ({ options, req, res, handleError }) => {
   fsRoot = options.fsRoot;
 
   upload(req, res, err => {
     if (err) {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-      return;
+      return handleError(err);
     }
 
     const { name, parentId, type } = req.body;
@@ -77,25 +75,27 @@ module.exports = ({ options, req, res }) => {
     try {
       reqParentPath = id2path(parentId);
     } catch (err) {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-      return;
+      return handleError(Object.assign(
+        err,
+        { httpCode: 400 }
+      ));
     }
 
     if (type === TYPE_DIR) {
       try {
         checkName(name);
       } catch (err) {
-        options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-        res.status(204).end();
-        return;
+        return handleError(Object.assign(
+          err,
+          { httpCode: 400 }
+        ));
       }
 
       const parentPath = path.join(options.fsRoot, reqParentPath);
       const dirPath = path.join(parentPath, name);
       options.logger.info(`Create dir ${dirPath} requested by ${getClientIp(req)}`);
 
-      fs.access(parentPath). // Check whether parent exists.
+      return fs.access(parentPath). // Check whether parent exists.
         then(_ => fs.ensureDir(dirPath)).
         then(_ => fs.stat(dirPath)).
         then(stat2resource(options, {
@@ -103,20 +103,18 @@ module.exports = ({ options, req, res }) => {
           basename: name
         })).
         then(resource => res.json(resource)).
-        catch(err => {
-          options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-          res.status(204).end();
-        });
+        catch(handleError);
     } else if (type === TYPE_FILE) {
       if (name) {
-        options.logger.error(`name ${name} conflicts with type requested by ${getClientIp(req)}`);
-        res.status(204).end();
-        return;
+        return handleError(Object.assign(
+          new Error(`name ${name} conflicts with type`),
+          { httpCode: 400 }
+        ));
       }
 
       options.logger.info(`Upload ${req.files.map(({ path }) => path)} requested by ${getClientIp(req)}`);
 
-      Promise.all(req.files.map(({ path, filename }) =>
+      return Promise.all(req.files.map(({ path, filename }) =>
         fs.stat(path).
           then(stat2resource(options, {
             dir: reqParentPath,
@@ -124,13 +122,12 @@ module.exports = ({ options, req, res }) => {
           }))
       )).
         then(items => res.json(items)).
-        catch(err => {
-          options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-          res.status(204).end();
-        })
+        catch(handleError);
     } else {
-      options.logger.error(`Unable to create name of invalid type ${type} requested by ${getClientIp(req)}`);
-      res.status(204).end();
+      return handleError(Object.assign(
+        new Error(`Unable to create name of invalid type ${type}`),
+        { httpCode: 400 }
+      ));
     }
   });
 };
