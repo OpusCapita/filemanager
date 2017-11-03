@@ -1,10 +1,10 @@
 # Overview
 
-**Development in progress. Stay tuned…**
+**Development in progress. Stay tuned… :zap:**
 
 OpusCapita **Filemanager** provides a possibility to manipulate files.
 
-[### Client implementation](./client-react)
+### [Client implementation](./client-react)
 
 Client implementation is an npm package which can you can include to your application.
 It built using [Facebook ReactJS](https://reactjs.org/) library.
@@ -12,7 +12,7 @@ It built using [Facebook ReactJS](https://reactjs.org/) library.
 It supports custom connectors to different file storages. 
 Predefined connectors placed [here](./client-react/src/client/connectors). You cat write you own.
 
-[### NodeJS server implementation](./server-nodejs)
+### [NodeJS server implementation](./server-nodejs)
 
 ## Demo
 
