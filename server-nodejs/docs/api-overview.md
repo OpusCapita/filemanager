@@ -156,7 +156,7 @@ Binary data.
 
 When moving a file/dir, **parents** array has destination parent ID only.  **name**, if specified, gives a new name in destination.
 
-When copying a file/dir, **parents** array has both current parent ID and destination parent ID.  **name**, if specified, gives a new name in destination.
+When copying a file/dir, **parents** array has both current parent ID and destination parent ID.  **name**, if specified, gives a new name in destination.  When copying inside parent dir, **parents** array may be have either one parent ID or parent ID repeated twice.
 
 When renaming a file/dir, **parents** parameter is not set or empty array.
 
