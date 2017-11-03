@@ -18,7 +18,7 @@ FileNavigator is
 
   {/*NODE_JS_EXAMPLE*/}
   {/*
-  <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
+  <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
@@ -33,7 +33,7 @@ FileNavigator is
 
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   
-  <div style={{ height: '480px', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
+  <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       id="google_drive_filemanager"
       api={_scope.connectors.google_drive_v2.api}
