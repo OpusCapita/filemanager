@@ -15,74 +15,47 @@ ContextMenu is
 <ContextMenu
   triggerId="oc-fm--contextmenu-sample"
 >
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('edit')} />
-      <span>Edit</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('edit') }}>
+    <span>Edit</span>
+  </ContextMenuItem>
 
-  <MenuItem divider={true} />
+  <ContextMenuItem divider={true} />
 
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('arrow_forward')} />
-      <span>Move to…</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('arrow_forward') }}>
+    <span>Move to…</span>
+  </ContextMenuItem>
 
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('content_copy')} />
-      <span>Copy to…</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('content_copy') }}>
+    <span>Copy to…</span>
+  </ContextMenuItem>
   
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('title')} />
-      <span>Rename…</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('title') }}>
+    <span>Rename…</span>
+  </ContextMenuItem>
 
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('archive')} />
-      <span>Archive</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('archive') }}>
+    <span>Archive</span>
+  </ContextMenuItem>
 
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item oc-fm--context-menu__item--disabled">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('unarchive')} />
-      <span>Unarchive</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('unarchive') }}>
+    <span>Unarchive</span>
+  </ContextMenuItem>
   
-  <MenuItem divider={true} />
+  <ContextMenuItem divider={true} />
   
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('info')} />
-      <span>View details</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('info') }}>
+    <span>View details</span>
+  </ContextMenuItem>
 
-  <MenuItem data={{}} onClick={() => console.log('click')}> 
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('file_download')} />
-      <span>Download</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('file_download') }}> 
+    <span>Download</span>
+  </ContextMenuItem>
 
-  <MenuItem divider={true} />
+  <ContextMenuItem divider={true} />
 
-  <MenuItem data={{}} onClick={() => console.log('click')}>
-    <div className="oc-fm--context-menu__item">
-      <SVG className="oc-fm--context-menu__item-icon" svg={_scope.getIcon('delete')} />
-      <span>Remove</span>
-    </div>
-  </MenuItem>
+  <ContextMenuItem data={{}} onClick={() => console.log('click')} icon={{ svg: _scope.getIcon('delete'), fill: '#dd2515' }}>
+    <span>Remove</span>
+  </ContextMenuItem>
 </ContextMenu>
 ```
 

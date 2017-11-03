@@ -11,6 +11,7 @@ let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
 const propTypes = {
   api: PropTypes.object,
   apiOptions: PropTypes.object,
+  capabilities: PropTypes.func,
   className: PropTypes.string,
   id: PropTypes.string,
   initialResourceId: PropTypes.string,
@@ -21,8 +22,9 @@ const propTypes = {
 const defaultProps = {
   api: 'nodejs_v1',
   apiOptions: {},
+  capabilities: () => [],
   className: '',
-  id: nanoid(),
+  id: '',
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
@@ -41,6 +43,7 @@ class FileNavigator extends Component {
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
+      dialogElement: null,
       resource: {},
       resourceLocation: [],
       resourceChildren: [],
@@ -179,15 +182,15 @@ class FileNavigator extends Component {
     this.setState({ sortBy, sortDirection });
   }
 
-  handleResourceItemClick = ({ event, number, rowData }) => {
+  handleResourceItemClick = async ({ event, number, rowData }) => {
 
   }
 
-  handleResourceItemRightClick = ({ event, number, rowData }) => {
+  handleResourceItemRightClick = async ({ event, number, rowData }) => {
 
   }
 
-  handleResourceItemDoubleClick = ({ event, number, rowData }) => {
+  handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
     let { loadingView, resource } = this.state;
     let { id } = rowData;
 
@@ -203,7 +206,8 @@ class FileNavigator extends Component {
     this.focusView();
   }
 
-  handleViewKeyDown = (e) => {
+  handleViewKeyDown = async (e) => {
+    let { api, apiOptions } = this.props;
     let { loadingView, resource } = this.state;
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
@@ -216,7 +220,7 @@ class FileNavigator extends Component {
           // Fix for fast selection updates
           return;
         }
-        
+
         let isDirectory = selectedResourceItems[0].type === 'dir';
 
         if (isDirectory) {
@@ -228,25 +232,36 @@ class FileNavigator extends Component {
     if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow
       // Navigate to parent directory
       let { resource } = this.state;
-      if (resource.parentId) {
-        this.navigateToDir(resource.parentId, resource.id);
+      let parentId = await api.getParentIdForResource(apiOptions, resource);
+      if (parentId) {
+        this.navigateToDir(parentId, resource.id);
       }
     }
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = async (e) => {
 
   }
 
-  handleViewRef = (ref) => {
+  handleViewRef = async (ref) => {
     this.viewRef = ref;
+  }
+
+  showDialog = (dialogElement) => {
+    this.setState({ dialogElement });
+  }
+
+  hideDialog = () => {
+    this.setState({ dialogElement: null });
   }
 
   render() {
     let {
       api,
+      apiOptions,
       className,
       id,
+      capabilities,
       initialResourceId,
       listViewLayout,
       viewLayoutOptions,
@@ -256,6 +271,7 @@ class FileNavigator extends Component {
     let {
       config,
       error,
+      dialogElement,
       loadingView,
       loadingResourceLocation,
       resource,
@@ -278,6 +294,10 @@ class FileNavigator extends Component {
       viewLoadingElement = signInRenderer ? signInRenderer() : 'Not authenticated';
     }
 
+    if (dialogElement) {
+      viewLoadingElement = dialogElement;
+    }
+
     // Don't remove!
     // if (showSpinner) {
     //   viewLoadingElement = null;
@@ -293,6 +313,28 @@ class FileNavigator extends Component {
     let locationItems = resourceLocation.map((o) => ({
       title: o.title,
       onClick: () => this.handleLocationBarChange(o.id)
+    }));
+
+    // TODO replace it by method "getCapabilities" for performace reason
+    let selectedResources = resourceChildren.filter(o => selection.some((s) => s === o.id));
+    let contextMenuChildren = capabilities(apiOptions, {
+      showDialog: this.showDialog,
+      hideDialog: this.hideDialog,
+      forceUpdate: resource.id ? () => this.navigateToDir(resource.id) : () => {}
+    }).
+    filter(capability => capability.shouldBeAvailable(apiOptions, {
+      selection,
+      selectedResources,
+      resource,
+      resourceChildren,
+      resourceLocation
+    })).
+    map(capability => capability.contextMenuRenderer(apiOptions, {
+      selection,
+      selectedResources,
+      resource,
+      resourceChildren,
+      resourceLocation
     }));
 
     return (
@@ -311,6 +353,7 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
+            contextMenuId={id}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -323,6 +366,7 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
+            contextMenuChildren={contextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           />
