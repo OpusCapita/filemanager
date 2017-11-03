@@ -167,3 +167,12 @@ If target exists, the file/dir is copied/moved with suffix ` (<number>)`, where 
 ```
 <file stats resource>
 ```
+
+# Error
+
+In case of an error, HTTP response is sent with error status code and empty body.  Available HTTP error status codes:
+
+* 400
+* 403
+* 410
+* 500
