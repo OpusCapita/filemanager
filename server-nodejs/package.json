@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node -e \"require('./index').server.run()\"",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build-rest-docs": "raml2html rest-docs/main.raml > rest-docs/api-docs.html"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "babel-eslint": "7.1.1",
     "eslint": "3.17.0",
     "eslint-config-opuscapita": "1.0.7",
-    "eslint-plugin-react": "6.10.0"
+    "eslint-plugin-react": "6.10.0",
+    "raml2html": "6.4.1"
   }
 }
