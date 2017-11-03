@@ -79,6 +79,7 @@ jobs:
       - run:
           name: build-server-api-docs
           command: |
+            echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
             cd server-nodejs && npm run build-api-docs && mkdir -p ../demo/static/api && cp -r api-docs.tmp/docs ../demo/static/api
 
       - run:
