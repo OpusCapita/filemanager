@@ -79,7 +79,7 @@ jobs:
       - run:
           name: build-server-api-docs
           command: |
-            cd server-nodejs && npm run build-api-docs && mv server-nodejs/api-docs.tmp/docs ../demo/static
+            cd server-nodejs && npm run build-api-docs && mkdir -p ../demo/static/api && cp -r api-docs.tmp/docs ../demo/static/api
 
       - run:
           name: build-docker-image

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node -e \"require('./index').server.run()\"",
     "lint": "eslint .",
-    "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i \"s/__env__baseURI__/$SERVER_URL/g\" api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/api-docs.html"
+    "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i \"s/__env__baseURI__/$SERVER_URL/g\" api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html"
   },
   "author": "",
   "license": "ISC",
