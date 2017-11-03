@@ -1,6 +1,6 @@
 import agent from 'superagent';
 import { downloadFile } from '../utils/download';
-import { getExportMimeType, checkIsGoogleDocument } from './document-export-types';
+import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
 
 let signedIn = false;
 
