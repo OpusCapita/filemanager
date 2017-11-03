@@ -16,7 +16,7 @@ Predefined connectors placed [here](./client-react/src/client/connectors). You c
 
 ## Demo
 
-See interactive example for more details: https://opuscapita.github.io/react-markdown
+See interactive example for more details: [demo](http://opuscapita-filemanager.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.1%2FFileNavigator&maxContainerWidth=100%25&showSidebar=true)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
