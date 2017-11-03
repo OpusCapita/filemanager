@@ -160,6 +160,8 @@ When copying a file/dir, **parents** array has both current parent ID and destin
 
 When renaming a file/dir, **parents** parameter is not set or empty array.
 
+If target exists, the file/dir is copied/moved with suffix ` (<number>)`, where number is tried with 1, 2, etc. untill first free name is found.
+
 ### Response
 
 ```
