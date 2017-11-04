@@ -2,6 +2,8 @@
 
 const path = require('path');
 
+const getClientIp = require('../utils/get-client-ip');
+
 const {
   encode: path2id,
   decode
@@ -80,6 +82,9 @@ const stat2resource = (options, pathInfo) => stat => {
       canAddChildren: true,
       canRemoveChildren: true,
       canDelete: !!userParent,
+      canRename: !!userParent,
+      canCopy: !!userParent,
+      caEdit: stat.isFile(), // Only files can be edited
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };
@@ -98,11 +103,38 @@ const stat2resource = (options, pathInfo) => stat => {
   }
 
   return resource;
-}
+};
+
+const handleError = ({ options, req, res }) => err => {
+  options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}` + '\n' +
+    err.stack && err.stack.split('\n')
+  );
+
+  if (err.httpCode) {
+    res.status(err.httpCode).end();
+    return;
+  }
+
+  switch (err.code) {
+    case 'ENOENT':
+    case 'ENOTDIR':
+    case 'EISDIR':
+      res.status(410).end();
+      break;
+    case 'EACCES':
+    case 'EPERM':
+      res.status(403).end();
+      break;
+    default:
+      res.status(500).end();
+  }
+};
+
 module.exports = {
   UNKNOWN_RESOURCE_TYPE_ERROR,
   checkName,
   id2path,
   path2id,
-  stat2resource
+  stat2resource,
+  handleError
 }

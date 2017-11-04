@@ -8,21 +8,20 @@ module.exports = ({
   options,
   req,
   res,
+  handleError,
   path: userPath
 }) => {
   if (userPath === path.sep) {
-    options.logger.error(`User root must never be deleted, contrary to requested by ${getClientIp(req)}`);
-    res.status(204).end();
-    return;
+    return handleError(Object.assign(
+      new Error(`User root must never be deleted`),
+      { httpCode: 400 }
+    ));
   }
 
   const absPath = path.join(options.fsRoot, userPath);
   options.logger.info(`Delete ${absPath} requested by ${getClientIp(req)}`);
 
-  fs.remove(absPath).
+  return fs.remove(absPath).
     then(_ => res.status(200).end()).
-    catch(err => {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-    });
+    catch(handleError);
 };

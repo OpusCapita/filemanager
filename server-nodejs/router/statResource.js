@@ -10,6 +10,7 @@ module.exports = ({
   options,
   req,
   res,
+  handleError,
   path: userPath
 }) => {
   const absPath = path.join(options.fsRoot, userPath);
@@ -18,8 +19,5 @@ module.exports = ({
   fs.stat(absPath).
     then(stat2resource(options, userPath)).
     then(resource => res.json(resource)).
-    catch(err => {
-      options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}`);
-      res.status(204).end();
-    });
+    catch(handleError);
 };
