@@ -33,6 +33,7 @@ NOTE: file/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/
     canDelete: <boolean>,
     canRename: <boolean>,
     canCopy: <boolean>,
+    caEdit: <boolean>,
     canDownload: <boolean>
   }
 }
