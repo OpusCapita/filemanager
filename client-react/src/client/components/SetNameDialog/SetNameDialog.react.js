@@ -37,14 +37,14 @@ class SetNameDialog extends Component {
 
   handleKeyDown = async (e) => {
     if (e.which === 13) { // Enter key
-      if (!this.props.validationError) {
+      if (!this.props.validationError && this.state.value) {
         this.handleSubmit(this.state.value);
       }
     }
   }
 
   handleSubmitButtonClick = async (e) => {
-    if (!this.props.validationError) {
+    if (!this.props.validationError && this.state.value) {
       this.handleSubmit(this.state.value);
     }
   }
