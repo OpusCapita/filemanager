@@ -84,6 +84,7 @@ const stat2resource = (options, pathInfo) => stat => {
       canDelete: !!userParent,
       canRename: !!userParent,
       canCopy: !!userParent,
+      caEdit: stat.isFile(), // Only files can be edited
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };
