@@ -43,7 +43,8 @@ module.exports = ({
         )).
         then(items =>
           items.sort((itemA, itemB) =>
-            (itemB.type === TYPE_DIR) - (itemA.type === TYPE_DIR) || itemA.name.localeCompare(itemB.name)
+            (itemB.type === TYPE_DIR) - (itemA.type === TYPE_DIR) ||
+            itemA.name.toLowerCase().localeCompare(itemB.name.toLowerCase())
             // TODO: add user locale as 2nd argument to the above localeCompare() function.
           )).
         then(items => res.json({ items }))
