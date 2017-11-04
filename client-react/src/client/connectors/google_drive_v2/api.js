@@ -1,6 +1,6 @@
 import agent from 'superagent';
 import { downloadFile } from '../utils/download';
-import { getExportMimeType, checkIsGoogleDocument } from './document-export-types';
+import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
 
 let signedIn = false;
 
@@ -193,6 +193,13 @@ async function createFolder(apiOptions, parentId, folderName) {
   });
 }
 
+async function renameResource(apiOptions, id, newName) {
+  await window.gapi.client.drive.files.patch({
+    fileId: id,
+    title: newName
+  });
+}
+
 async function removeResources() {
 
 }
@@ -216,6 +223,7 @@ export default {
   getCapabilitiesForResource,
   createFolder,
   downloadResources,
+  renameResource,
   removeResources,
   signIn,
   signOut
