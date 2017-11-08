@@ -37,7 +37,7 @@ class NotificationsScope extends Component {
     return (
       <div>
         <strong>Manipulate notifications:</strong>
-        <pre>window.notifUtils.listNotification(id)</pre>
+        <pre>window.notifUtils.listNotification()</pre>
         <pre>window.notifUtils.addNotification(id, props)</pre>
         <pre>window.notifUtils.updateNotification(id, props)</pre>
         <pre>window.notifUtils.removeNotification(id)</pre>
