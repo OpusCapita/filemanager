@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import './ProgressIcon.less';
 
+// Inspired by https://codepen.io/xgad/post/svg-radial-progress-meters
+
 const propTypes = {
   progress: PropTypes.number,
   radius: PropTypes.number
