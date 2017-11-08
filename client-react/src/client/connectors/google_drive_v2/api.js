@@ -187,7 +187,6 @@ async function downloadResources(resources) {
   });
 }
 
-
 async function initResumableUploadSession({ name, size, parentId }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
   let uploadUrl = `https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable`;
@@ -202,13 +201,13 @@ async function initResumableUploadSession({ name, size, parentId }) {
 
 async function uploadChunk({ sessionUrl, size, startByte, content }) {
   return new Promise((resolve, reject) => {
-    let chunkSize = 256 * 1024;
-    let endByte = startByte + chunkSize < size ? startByte + chunkSize : size - startByte;
-    console.log('startByte', startByte, 'endByte', endByte);
+    let chunkSize = 256 * 1024 * 10; // 8 MB
+    let endByte = startByte + chunkSize < size ? startByte + chunkSize : size;
 
     agent.put(sessionUrl).
       set('Content-Range', `bytes ${startByte}-${endByte - 1}/${size}`).
-      send(content.slice(startByte, endByte)).
+      set('Content-Encoding', 'base64').
+      send(btoa(content.slice(startByte, endByte))).
       end((err, res) => {
         if (err) {} // pass
         resolve(res);
@@ -218,27 +217,24 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
 
 async function uploadFileToId(parentId) {
   let file =  await readLocalFile();
-  let sessionUrl = await initResumableUploadSession({ name: file.name, size: file.size, parentId: 'root' });
+  let size = file.content.length;
+  let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId: 'root' });
   let startByte = 0;
 
-  while(startByte < file.size) {
+  while(startByte < size) {
     let res = await uploadChunk({
       sessionUrl,
-      size: file.size,
+      size,
       startByte,
       content: file.content
     });
-    console.log('resf', res);
 
     if (res.status === 308) {
-      console.log('continue');
-      let range = parseRange(res.headers['Range']);
-      console.log('range', range);
-      startByte = range.last + 1;
+      let range = parseRange(size, res.headers['range']);
+      startByte = range[0].end + 1;
     }
 
     if (res.status === 200 || res.status === 201) {
-      console.log('load complete', res);
       return res;
     }
   }

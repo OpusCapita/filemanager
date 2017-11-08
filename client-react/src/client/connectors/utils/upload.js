@@ -9,7 +9,6 @@ async function readLocalFile() {
         resolve({
           content: e.target.result,
           type: file.type,
-          size: file.size,
           name: file.name
         });
       });
