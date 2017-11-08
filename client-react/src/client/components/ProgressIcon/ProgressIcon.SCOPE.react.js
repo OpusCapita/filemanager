@@ -21,6 +21,10 @@ class ProgressIconScope extends Component {
     }, 16);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.progressInterval);
+  }
+
   render() {
     return (
       <div>

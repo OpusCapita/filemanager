@@ -12,7 +12,13 @@ NotificationProgressItem is
 ### Code Example
 
 ```
-<NotificationProgressItem />
+<NotificationProgressItem
+  progress={33}
+  icon={{ svg: _scope.getIcon('archive'), fill: '#333' }}
+  title="Zipping 256 files"
+  onClick={() => console.log('click!')}
+  onProgressClick={() => console.log('progress click!')}
+/>
 ```
 
 ### Component Name
