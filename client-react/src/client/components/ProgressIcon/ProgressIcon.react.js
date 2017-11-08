@@ -19,8 +19,7 @@ class ProgressIcon extends Component {
     var dashOffset = circumference * (1 - progress / 100);
     let strokeWidth = radius / 3;
     let size = `${radius * 2}px`;
-    console.log('progress:', progress);
-    console.log('dashOffset:', dashOffset);
+
     return (
       <div
         className="oc-fm--progress-icon"
