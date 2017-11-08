@@ -11,7 +11,14 @@ export default
 class ProgressIconScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      progress: 0
+    };
+
+    this.progressInterval = setInterval(() => {
+      let newProgress = this.state.progress < 100 ? this.state.progress + 1 : 0;
+      this.setState({ progress: newProgress });
+    }, 16);
   }
 
   render() {

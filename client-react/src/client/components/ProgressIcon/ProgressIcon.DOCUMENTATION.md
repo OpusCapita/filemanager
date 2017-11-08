@@ -21,7 +21,7 @@ ProgressIcon is
     radius={36}
   />
   <ProgressIcon
-    progress={100}
+    progress={_scope.state.progress}
     radius={48}
   />
 </div>
