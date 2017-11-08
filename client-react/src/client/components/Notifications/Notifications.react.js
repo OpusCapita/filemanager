@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import './Notifications.less';
+import Notification from '../Notification';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  notifications: PropTypes.arrayOf(PropTypes.object)
+};
+const defaultProps = {
+  notifications: []
+};
 
 export default
 class Notifications extends Component {
@@ -12,8 +17,17 @@ class Notifications extends Component {
   }
 
   render() {
+    let { notifications } = this.props;
+
+    let notificationsElement = notifications.map((notification, i) => (
+      <div key={i} className="oc-fm--notifications__item">
+        <Notification {...notification} />
+      </div>
+    ));
+
     return (
-      <div className="notifications">
+      <div className="oc-fm--notifications">
+        {notificationsElement}
       </div>
     );
   }

@@ -38,10 +38,10 @@ class Notification extends Component {
   }
 
   render() {
-    let { title, onHide, minimizable, closable, progressText, cancelButtonText } = this.props;
+    let { title, onHide, minimizable, closable, progressText, cancelButtonText, children } = this.props;
     let { minimized } = this.state;
 
-    let toggleElement = minimizable ? (
+    let toggleElement = (minimizable && (progressText || children)) ? (
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={this.handleToggleClick}>
         <SVG
           svg={minimized ? maximizeIcon : minimizeIcon}
@@ -70,9 +70,9 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let itemsElement = minimized ? null : (
+    let itemsElement = (minimized || !children) ? null : (
       <div className="oc-fm--notification__items">
-        {this.props.children}
+        {children.map((child, i) => ({ ...child, key: i }))}
       </div>
     );
 

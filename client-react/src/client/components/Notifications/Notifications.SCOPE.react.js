@@ -5,13 +5,30 @@
 
 import React, { Component, PropTypes } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import utils from './utils';
 
 @showroomScopeDecorator
 export default
 class NotificationsScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      notifications: []
+    };
+
+    window.notifUtils = {};
+    window.notifUtils.addNotification = (id, props) =>
+      this.handleNotificationsChange(utils.addNotification(this.state.notifications, id, props));
+
+    window.notifUtils.updateNotification = (id, props) =>
+      this.handleNotificationsChange(utils.updateNotification(this.state.notifications, id, props));
+
+    window.notifUtils.removeNotification = (id, props) =>
+      this.handleNotificationsChange(utils.removeNotification(this.state.notifications, id, props));
+  }
+
+  handleNotificationsChange = (notifications) => {
+    this.setState({ notifications });
   }
 
   render() {
