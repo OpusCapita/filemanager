@@ -27,9 +27,14 @@ function checkIsGoogleDocument(mimeType) {
   );
 }
 
+function showUploadDialog() {
+
+}
+
 export {
   getExportMimeType,
-  checkIsGoogleDocument
+  checkIsGoogleDocument,
+  showUploadDialog
 }
 
 /*

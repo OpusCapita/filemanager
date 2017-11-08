@@ -1,6 +1,8 @@
 import agent from 'superagent';
 import { downloadFile } from '../utils/download';
+import { readLocalFile } from '../utils/upload';
 import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
+import parseRange from 'range-parser';
 
 let signedIn = false;
 
@@ -185,6 +187,59 @@ async function downloadResources(resources) {
   });
 }
 
+async function initResumableUploadSession({ name, size, parentId }) {
+  let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+  let uploadUrl = `https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable`;
+
+  let res = await agent.post(uploadUrl).
+    set('Authorization', `Bearer ${accessToken}`).
+    set('X-Upload-Content-Length', size).
+    send({ title: name, parents: [parentId] });
+
+  return res.headers['location'];
+}
+
+async function uploadChunk({ sessionUrl, size, startByte, content }) {
+  return new Promise((resolve, reject) => {
+    let chunkSize = 256 * 1024 * 10; // 8 MB
+    let endByte = startByte + chunkSize < size ? startByte + chunkSize : size;
+
+    agent.put(sessionUrl).
+      set('Content-Range', `bytes ${startByte}-${endByte - 1}/${size}`).
+      set('Content-Encoding', 'base64').
+      send(btoa(content.slice(startByte, endByte))).
+      end((err, res) => {
+        if (err) {} // pass
+        resolve(res);
+      });
+  });
+}
+
+async function uploadFileToId(parentId) {
+  let file =  await readLocalFile();
+  let size = file.content.length;
+  let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId: 'root' });
+  let startByte = 0;
+
+  while(startByte < size) {
+    let res = await uploadChunk({
+      sessionUrl,
+      size,
+      startByte,
+      content: file.content
+    });
+
+    if (res.status === 308) {
+      let range = parseRange(size, res.headers['range']);
+      startByte = range[0].end + 1;
+    }
+
+    if (res.status === 200 || res.status === 201) {
+      return res;
+    }
+  }
+}
+
 async function createFolder(apiOptions, parentId, folderName) {
   await window.gapi.client.drive.files.insert({
     title: folderName,
@@ -223,6 +278,7 @@ export default {
   getCapabilitiesForResource,
   createFolder,
   downloadResources,
+  uploadFileToId,
   renameResource,
   removeResources,
   signIn,
