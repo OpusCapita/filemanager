@@ -201,7 +201,7 @@ async function initResumableUploadSession({ name, size, parentId }) {
 
 async function uploadChunk({ sessionUrl, size, startByte, content }) {
   return new Promise((resolve, reject) => {
-    let chunkSize = 256 * 1024 * 10; // 8 MB
+    let chunkSize = 256 * 1024 * 10;
     let endByte = startByte + chunkSize < size ? startByte + chunkSize : size;
 
     agent.put(sessionUrl).
