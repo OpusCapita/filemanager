@@ -1,6 +1,6 @@
 # Overview
 
-**Development in [progress](https://github.com/OpusCapita/filemanager/milestone/1). Stay tuned… :zap:**
+**[Development in progress. Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
 OpusCapita **Filemanager** provides a possibility to manipulate files.
 
