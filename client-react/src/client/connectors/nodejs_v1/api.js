@@ -8,15 +8,21 @@ async function init(options) {
 
 async function normalizeResource(resource) {
   return {
-    createDate: Date.parse(resource.createDate),
+    capabilities: resource.capabilities,
+    createdTime: Date.parse(resource.createdTime),
     id: resource.id,
-    modifyDate: Date.parse(resource.modifyDate),
-    title: resource.title,
+    modifiedTime: Date.parse(resource.modifiedTime),
+    name: resource.name,
     type: resource.type,
     size: resource.size,
-    ancestors: resource.ancestors,
-    parentId: resource.ancestors ? resource.ancestors[resource.ancestors.length - 1] : null
+    // ancestors: resource.ancestors,
+    parentId: resource.parentId ? resource.parentId : null
+    // parentId: resource.ancestors ? resource.ancestors[resource.ancestors.length - 1] : null
   };
+}
+
+async function getCapabilitiesForResource(options, resource) {
+  return resource.capabilities || [];
 }
 
 async function pathToId(path) {
@@ -67,8 +73,35 @@ async function getParentsForId(options, id) {
   return parents;
 }
 
+// async function getParentsForId(options, id, result = []) {
+//   if (id === 'root') {
+//     return result;
+//   }
+//
+//   let response = await window.gapi.client.drive.parents.list({
+//     fileId: id
+//     // fields: 'items(id)'
+//   });
+//   let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
+//
+//   if (parentId === 'root') {
+//     return result;
+//   }
+//
+//   let parent = await getResourceById(options, parentId);
+//
+//   return await getParentsForId(options, parentId, [parent].concat(result));
+// }
+
 async function getParentIdForResource(options, resource) {
   return resource.parentId;
+}
+
+async function renameResource(apiOptions, id, newName) {
+  await window.gapi.client.drive.files.patch({
+    fileId: id,
+    title: newName
+  });
 }
 
 export default {
@@ -76,7 +109,9 @@ export default {
   pathToId,
   idToPath,
   getResourceById,
+  getCapabilitiesForResource,
   getChildrenForId,
   getParentsForId,
-  getParentIdForResource
+  getParentIdForResource,
+  renameResource
 };
