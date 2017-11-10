@@ -215,11 +215,12 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
   });
 }
 
-async function uploadFileToId(parentId) {
+async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
   let file =  await readLocalFile();
   let size = file.content.length;
   let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId: 'root' });
   let startByte = 0;
+  onStart({ name: file.name, size });
 
   while(startByte < size) {
     let res = await uploadChunk({
@@ -232,9 +233,13 @@ async function uploadFileToId(parentId) {
     if (res.status === 308) {
       let range = parseRange(size, res.headers['range']);
       startByte = range[0].end + 1;
+
+      let progress = startByte / (size / 100);
+      onProgress(progress);
     }
 
     if (res.status === 200 || res.status === 201) {
+      onSuccess();
       return res;
     }
   }

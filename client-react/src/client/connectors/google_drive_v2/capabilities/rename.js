@@ -5,19 +5,26 @@ import SetNameDialog from '../../../components/SetNameDialog';
 
 let renameIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/title.svg');
 
-export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
+export default (apiOptions, {
+  showDialog,
+  hideDialog,
+  forceUpdate,
+  getSelection,
+  getSelectedResources,
+  getResource,
+  getResourceChildren,
+  getResourceLocation,
+  getNotifications
+}) => ({
   id: 'rename',
-  shouldBeAvailable: (apiOptions, { selectedResources }) => (
-    selectedResources.length === 1 &&
-    selectedResources[0].id !== 'root' // root is not mutable
-  ),
-  contextMenuRenderer: (apiOptions, {
-    selection,
-    selectedResources,
-    resource,
-    resourceChildren,
-    resourceLocation
-  }) => (
+  shouldBeAvailable: (apiOptions) => {
+    let selectedResources = getSelectedResources();
+    return (
+      selectedResources.length === 1 &&
+      selectedResources[0].id !== 'root' // root is not mutable
+    );
+  },
+  contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: renameIcon }}
       onClick={() => {
@@ -25,6 +32,7 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
           <SetNameDialog
             onHide={hideDialog}
             onSubmit={async (name) => {
+              let selectedResources = getSelectedResources();
               let { resourceChildren } = await api.getChildrenForId(apiOptions, selectedResources[0].parents[0].id);
               let alreadyExists = resourceChildren.some((o) => o.title === name);
               if (alreadyExists) {

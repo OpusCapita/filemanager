@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
+import Notifications from '../Notifications';
 import { SortDirection } from 'react-virtualized';
 import { findIndex } from 'lodash';
 import nanoid from 'nanoid';
@@ -38,19 +39,20 @@ class FileNavigator extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      apiInitialized: false,
+      apiSignedIn: false,
       config: {},
-      error: null,
-      selection: [],
-      sortBy: 'title',
-      sortDirection: SortDirection.ASC,
       dialogElement: null,
-      resource: {},
-      resourceLocation: [],
-      resourceChildren: [],
+      error: null,
       loadingResourceLocation: false,
       loadingView: false,
-      apiInitialized: false,
-      apiSignedIn: false
+      notifications: [],
+      resource: {},
+      resourceChildren: [],
+      resourceLocation: [],
+      selection: [],
+      sortBy: 'title',
+      sortDirection: SortDirection.ASC
     };
   }
 
@@ -255,33 +257,51 @@ class FileNavigator extends Component {
     this.setState({ dialogElement: null });
   }
 
+  updateNotifications = (notifications) => {
+    this.setState({ notifications });
+  }
+
+  getCapabilitiesProps = () => ({
+    showDialog: this.showDialog,
+    hideDialog: this.hideDialog,
+    updateNotifications: this.updateNotifications,
+    forceUpdate: this.state.resource.id ? () => this.navigateToDir(this.state.resource.id) : () => {},
+    getSelection: () => this.state.selection,
+    getSelectedResources: () => this.state.resourceChildren.filter(o => this.state.selection.some((s) => s === o.id)),
+    getResource: () => this.state.resource,
+    getResourceChildren: () => this.state.resourceChildren,
+    getResourceLocation: () => this.state.resourceLocation,
+    getNotifications: () => this.state.notifications
+  });
+
   render() {
     let {
       api,
       apiOptions,
+      capabilities,
       className,
       id,
-      capabilities,
       initialResourceId,
       listViewLayout,
-      viewLayoutOptions,
-      signInRenderer
+      signInRenderer,
+      viewLayoutOptions
     } = this.props;
 
     let {
+      apiInitialized,
+      apiSignedIn,
       config,
-      error,
       dialogElement,
-      loadingView,
+      error,
       loadingResourceLocation,
+      loadingView,
+      notifications,
       resource,
-      resourceLocation,
       resourceChildren,
+      resourceLocation,
       selection,
       sortBy,
-      sortDirection,
-      apiInitialized,
-      apiSignedIn
+      sortDirection
     } = this.state;
 
     let viewLoadingElement = null;
@@ -316,26 +336,10 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let selectedResources = resourceChildren.filter(o => selection.some((s) => s === o.id));
-    let contextMenuChildren = capabilities(apiOptions, {
-      showDialog: this.showDialog,
-      hideDialog: this.hideDialog,
-      forceUpdate: resource.id ? () => this.navigateToDir(resource.id) : () => {}
-    }).
-    filter(capability => capability.shouldBeAvailable(apiOptions, {
-      selection,
-      selectedResources,
-      resource,
-      resourceChildren,
-      resourceLocation
-    })).
-    map(capability => capability.contextMenuRenderer(apiOptions, {
-      selection,
-      selectedResources,
-      resource,
-      resourceChildren,
-      resourceLocation
-    }));
+    let capabilitiesProps = this.getCapabilitiesProps();
+    let contextMenuChildren = capabilities(apiOptions, capabilitiesProps).
+      filter(capability => capability.shouldBeAvailable(apiOptions)).
+      map(capability => capability.contextMenuRenderer(apiOptions));
 
     return (
       <div
@@ -369,7 +373,12 @@ class FileNavigator extends Component {
             contextMenuChildren={contextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
-          />
+          >
+            <Notifications
+              className="oc-fm--file-navigator__notifications"
+              notifications={notifications}
+            />
+          </ListView>
         </div>
       </div>
     );

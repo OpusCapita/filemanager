@@ -28,19 +28,25 @@ Notifications is
       id: 'zipping-1',
       title: 'Zipping 3 elements',
       onHide: () => console.log('hide'),
-      children: [
-        <div>Zipping item 1</div>
-      ]
+      children: [{
+        id: 'item-1',
+        element: <div>Zipping item 1</div>
+      }]
     },
     { 
       id: 'zipping-2',
       title: 'Zipping 3 elements',
       onHide: () => console.log('hide'),
-      children: [
-        <div>Zipping item 1</div>,
-        <div>Zipping item 2</div>,
-        <div>Zipping item 3</div>
-      ]
+      children: [{
+        id: 'item-1',
+        element: <div>Zipping item 1</div>
+      }, {
+        id: 'item-2',
+        element: <div>Zipping item 1</div>
+      }, {
+        id: 'item-3',
+        element: <div>Zipping item 1</div>
+      }]
     }
   ]}
 />
