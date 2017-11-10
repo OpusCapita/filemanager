@@ -17,7 +17,7 @@ class Notifications extends Component {
   }
 
   render() {
-    let { notifications } = this.props;
+    let { notifications, className } = this.props;
 
     let notificationsElement = notifications.map((notification, i) => (
       <div key={i} className="oc-fm--notifications__item">
@@ -26,7 +26,7 @@ class Notifications extends Component {
     ));
 
     return (
-      <div className="oc-fm--notifications">
+      <div className={`oc-fm--notifications ${className || ''}`}>
         {notificationsElement}
       </div>
     );

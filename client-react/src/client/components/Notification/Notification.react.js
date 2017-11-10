@@ -2,8 +2,8 @@ import React, { Component, Children, PropTypes } from 'react';
 import './Notification.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 
-let minimizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
-let maximizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
+let minimizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
+let maximizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
 let closeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/close.svg');
 
 const propTypes = {
@@ -16,7 +16,7 @@ const propTypes = {
   title: PropTypes.node
 };
 const defaultProps = {
-  closable: true,
+  closable: false,
   minimizable: true,
   onHide: () => {},
   progressText: '',
@@ -70,8 +70,8 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let itemsElement = (minimized || !children) ? null : (
-      <div className="oc-fm--notification__items">
+    let itemsElement = (
+      <div className={`oc-fm--notification__items ${minimized ? 'oc-fm--notification__items--minimized' : ''}`}>
         {children.map((child, i) => ({ ...child, key: i }))}
       </div>
     );

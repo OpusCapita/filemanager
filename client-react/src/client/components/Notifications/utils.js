@@ -1,4 +1,4 @@
-import { findIndex, extend } from 'lodash';
+import { find, findIndex, extend } from 'lodash';
 
 function addNotification(notifications, id, props) {
   let index = findIndex(notifications, (o) => o.id === id);
@@ -19,6 +19,10 @@ function updateNotification(notifications, id, props) {
   });
 }
 
+function getNotificationById(notifications, id) {
+  return find(notifications, (o) => o.id === id);
+}
+
 function removeNotification(notifications, id) {
   return notifications.filter(o => o.id !== id);
 }
@@ -26,5 +30,6 @@ function removeNotification(notifications, id) {
 export default {
   addNotification,
   updateNotification,
-  removeNotification
+  removeNotification,
+  getNotificationById
 };

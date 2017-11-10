@@ -514,6 +514,7 @@ class ListView extends Component {
             <ContextMenu triggerId={contextMenuId}>
               {contextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
             </ContextMenu>
+            {this.props.children}
           </div>
         )}
       </AutoSizer>

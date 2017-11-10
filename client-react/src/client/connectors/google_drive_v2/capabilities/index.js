@@ -4,10 +4,10 @@ import download from './download';
 import upload from './upload';
 import rename from './rename';
 
-export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ([
-  createFolder(apiOptions, { showDialog, hideDialog, forceUpdate }),
-  rename(apiOptions, { showDialog, hideDialog, forceUpdate }),
-  download(apiOptions, { showDialog, hideDialog, forceUpdate }),
-  upload(apiOptions, { showDialog, hideDialog, forceUpdate }),
-  deleteResource(apiOptions, { showDialog, hideDialog, forceUpdate })
+export default (apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications }) => ([
+  createFolder(apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications }),
+  rename(apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications }),
+  download(apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications }),
+  upload(apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications }),
+  deleteResource(apiOptions, { showDialog, hideDialog, forceUpdate, updateNotifications })
 ]);

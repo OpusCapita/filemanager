@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
+import Notifications from '../Notifications';
 import { SortDirection } from 'react-virtualized';
 import { findIndex } from 'lodash';
 import nanoid from 'nanoid';
@@ -38,19 +39,20 @@ class FileNavigator extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      apiInitialized: false,
+      apiSignedIn: false,
       config: {},
-      error: null,
-      selection: [],
-      sortBy: 'title',
-      sortDirection: SortDirection.ASC,
       dialogElement: null,
-      resource: {},
-      resourceLocation: [],
-      resourceChildren: [],
+      error: null,
       loadingResourceLocation: false,
       loadingView: false,
-      apiInitialized: false,
-      apiSignedIn: false
+      notifications: [],
+      resource: {},
+      resourceChildren: [],
+      resourceLocation: [],
+      selection: [],
+      sortBy: 'title',
+      sortDirection: SortDirection.ASC
     };
   }
 
@@ -255,33 +257,38 @@ class FileNavigator extends Component {
     this.setState({ dialogElement: null });
   }
 
+  updateNotifications = (notifications) => {
+    this.setState({ notifications });
+  }
+
   render() {
     let {
       api,
       apiOptions,
+      capabilities,
       className,
       id,
-      capabilities,
       initialResourceId,
       listViewLayout,
-      viewLayoutOptions,
-      signInRenderer
+      signInRenderer,
+      viewLayoutOptions
     } = this.props;
 
     let {
+      apiInitialized,
+      apiSignedIn,
       config,
-      error,
       dialogElement,
-      loadingView,
+      error,
       loadingResourceLocation,
+      loadingView,
+      notifications,
       resource,
-      resourceLocation,
       resourceChildren,
+      resourceLocation,
       selection,
       sortBy,
-      sortDirection,
-      apiInitialized,
-      apiSignedIn
+      sortDirection
     } = this.state;
 
     let viewLoadingElement = null;
@@ -320,6 +327,7 @@ class FileNavigator extends Component {
     let contextMenuChildren = capabilities(apiOptions, {
       showDialog: this.showDialog,
       hideDialog: this.hideDialog,
+      updateNotifications: this.updateNotifications,
       forceUpdate: resource.id ? () => this.navigateToDir(resource.id) : () => {}
     }).
     filter(capability => capability.shouldBeAvailable(apiOptions, {
@@ -327,14 +335,16 @@ class FileNavigator extends Component {
       selectedResources,
       resource,
       resourceChildren,
-      resourceLocation
+      resourceLocation,
+      notifications
     })).
     map(capability => capability.contextMenuRenderer(apiOptions, {
       selection,
       selectedResources,
       resource,
       resourceChildren,
-      resourceLocation
+      resourceLocation,
+      notifications
     }));
 
     return (
@@ -369,7 +379,12 @@ class FileNavigator extends Component {
             contextMenuChildren={contextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
-          />
+          >
+            <Notifications
+              className="oc-fm--file-navigator__notifications"
+              notifications={notifications}
+            />
+          </ListView>
         </div>
       </div>
     );
