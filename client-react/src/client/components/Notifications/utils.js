@@ -6,7 +6,7 @@ function addNotification(notifications, id, props) {
     console.error(`Can't add notification: ${id} already exists`);
     return notifications;
   }
-  return notifications.concat([{ id, ...props }]);
+  return notifications.concat([{ id, children: (props.children || []), ...props }]);
 }
 
 function updateNotification(notifications, id, props) {
@@ -19,7 +19,7 @@ function updateNotification(notifications, id, props) {
   });
 }
 
-function getNotificationById(notifications, id) {
+function getNotification(notifications, id) {
   return find(notifications, (o) => o.id === id);
 }
 
@@ -27,9 +27,35 @@ function removeNotification(notifications, id) {
   return notifications.filter(o => o.id !== id);
 }
 
+function addChild(notificationChildren, id, element) {
+  return notificationChildren.concat([{ id, element }]);
+}
+
+function removeChild(notificationChildren, id) {
+  return notificationChildren.filter((o) => o.id !== id);
+}
+
+function updateChild(notificationChildren, id, props) {
+  return notificationChildren.map(o => {
+    if (o.id !== id) {
+      return o;
+    }
+
+    return extend({}, o, { id, ...props });
+  });
+}
+
+function getChild(notificationChildren, id) {
+  return find(notificationChildren, (o) => o.id === id);
+}
+
 export default {
   addNotification,
   updateNotification,
   removeNotification,
-  getNotificationById
+  getNotification,
+  addChild,
+  removeChild,
+  updateChild,
+  getChild
 };

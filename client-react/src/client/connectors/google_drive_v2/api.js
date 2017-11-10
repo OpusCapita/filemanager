@@ -235,7 +235,6 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
       startByte = range[0].end + 1;
 
       let progress = startByte / (size / 100);
-      console.log(progress);
       onProgress(progress);
     }
 

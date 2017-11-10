@@ -261,6 +261,19 @@ class FileNavigator extends Component {
     this.setState({ notifications });
   }
 
+  getCapabilitiesProps = () => ({
+    showDialog: this.showDialog,
+    hideDialog: this.hideDialog,
+    updateNotifications: this.updateNotifications,
+    forceUpdate: this.state.resource.id ? () => this.navigateToDir(this.state.resource.id) : () => {},
+    getSelection: () => this.state.selection,
+    getSelectedResources: () => this.state.resourceChildren.filter(o => this.state.selection.some((s) => s === o.id)),
+    getResource: () => this.state.resource,
+    getResourceChildren: () => this.state.resourceChildren,
+    getResourceLocation: () => this.state.resourceLocation,
+    getNotifications: () => this.state.notifications
+  });
+
   render() {
     let {
       api,
@@ -323,29 +336,10 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let selectedResources = resourceChildren.filter(o => selection.some((s) => s === o.id));
-    let contextMenuChildren = capabilities(apiOptions, {
-      showDialog: this.showDialog,
-      hideDialog: this.hideDialog,
-      updateNotifications: this.updateNotifications,
-      forceUpdate: resource.id ? () => this.navigateToDir(resource.id) : () => {}
-    }).
-    filter(capability => capability.shouldBeAvailable(apiOptions, {
-      selection,
-      selectedResources,
-      resource,
-      resourceChildren,
-      resourceLocation,
-      notifications
-    })).
-    map(capability => capability.contextMenuRenderer(apiOptions, {
-      selection,
-      selectedResources,
-      resource,
-      resourceChildren,
-      resourceLocation,
-      notifications
-    }));
+    let capabilitiesProps = this.getCapabilitiesProps();
+    let contextMenuChildren = capabilities(apiOptions, capabilitiesProps).
+      filter(capability => capability.shouldBeAvailable(apiOptions)).
+      map(capability => capability.contextMenuRenderer(apiOptions));
 
     return (
       <div
