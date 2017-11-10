@@ -53,7 +53,10 @@ if(WEBPACK_BUNDLE_ANALYZE && IS_PRODUCTION_MODE) {
   plugins.push(bundleAnalyzerPlugin);
 }
 
-const entries = [];
+const entries = [
+  // required for IE11
+  'core-js/es6/promise.js'
+];
 
 entries.push(
   (IS_PRODUCTION_MODE || IS_LINK_MODE) ?

@@ -9,12 +9,8 @@ const NODE_ENV = process.env.NODE_ENV;
 
 module.exports = {
   entry: [
-    // IE11 - "String.prototype.startsWith" and endsWith methods (local code)
-    "core-js/es6/string.js",
-    // IE11 - "Promise"s - required for autocompletes
+    // required for IE11
     "core-js/es6/promise.js",
-    // IE11 - Used in "slate-js" dependency code
-    "core-js/es7/array.js",
 
     path.resolve(__dirname, '../../www/index-page.js')
   ],
