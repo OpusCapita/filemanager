@@ -11,7 +11,7 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
   contextMenuRenderer: (apiOptions, { selectedResources }) => (
     <ContextMenuItem
       icon={{ svg: downloadIcon }}
-      onClick={() => api.downloadResources(selectedResources)}
+      onClick={() => api.downloadResources(apiOptions, selectedResources)}
     >
       <span>Download</span>
     </ContextMenuItem>

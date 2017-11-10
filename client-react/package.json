@@ -93,7 +93,7 @@
     "@opuscapita/react-svg": "2.0.1",
     "@opuscapita/svg-icons": "1.1.1",
     "babel-preset-es2017": "6.24.1",
-    "base64url": "2.0.0",
+    "base64url": "^2.0.0",
     "core-js": "2.5.0",
     "filesize": "3.5.11",
     "immutable": "3.8.2",
