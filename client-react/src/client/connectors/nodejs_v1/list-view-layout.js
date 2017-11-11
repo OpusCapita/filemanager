@@ -33,8 +33,8 @@ function formatDate(
 let listViewLayout = (viewLayoutOptions) => ([
   (
     <Column
-      key="title"
-      dataKey="title"
+      key="name"
+      dataKey="name"
       width={48}
       label="Title"
       flexGrow={1}
@@ -55,9 +55,9 @@ let listViewLayout = (viewLayoutOptions) => ([
     />
   ), (viewLayoutOptions.width > MOBILE_WIDTH) && (
     <Column
-      key="modifyDate"
+      key="modifiedTime"
       width={100}
-      dataKey="modifyDate"
+      dataKey="modifiedTime"
       label="Last modified"
       flexGrow={1}
       cellRenderer={Cell({ ...viewLayoutOptions, getData: formatDate })}

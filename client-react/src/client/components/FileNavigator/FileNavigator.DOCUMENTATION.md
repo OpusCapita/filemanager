@@ -17,19 +17,24 @@ FileNavigator is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
-  {/*
+  
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
-      initialResourceId={'Lw'}
+      capabilities={_scope.connectors.nodejs_v1.capabilities}
+      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
+      signInRenderer={() => (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+        </div>
+      )}
     />
   </div>
-  */}
+  
 
   {/*GOOGLE_DRIVE_EXAMPLE*/}
   

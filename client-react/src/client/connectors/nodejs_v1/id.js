@@ -7,6 +7,8 @@ function encode(path) {
     throw new Error('Only strings can be base64-encoded');
   }
 
+  console.log(base64url(path));
+
   return base64url(path);
 }
 
@@ -17,7 +19,7 @@ function decode(id) {
 
   return base64url.decode(id);
 }
-
+window.id = ({ encode, decode })
 module.exports = {
   encode,
   decode

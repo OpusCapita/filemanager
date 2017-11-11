@@ -12,8 +12,13 @@ const {
 } = require('./lib');
 
 module.exports = options => {
+  router.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Methods', 'GET,POST,HEAD,OPTIONS,PUT,PATCH,DELETE');
+    next();
+  });
   router.use(zip());
   router.use(bodyParser.json());
+
   let reqPath;
 
   const connect = (moduleLocation, getArgs) => (req, res, next) => {
