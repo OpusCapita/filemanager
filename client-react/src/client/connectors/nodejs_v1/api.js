@@ -69,8 +69,6 @@ async function getParentsForId(options, id, result = []) {
 
   const parents = [resource].concat(result);
 
-  console.log(parents);
-
   if (!resource.parentId) {
     return parents;
   }

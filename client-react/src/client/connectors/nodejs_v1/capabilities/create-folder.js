@@ -5,16 +5,21 @@ import SetNameDialog from '../../../components/SetNameDialog';
 
 let createFolderIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/create_new_folder.svg');
 
-export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
+export default (apiOptions, {
+  showDialog,
+  hideDialog,
+  forceUpdate,
+  updateNotifications,
+  getSelection,
+  getSelectedResources,
+  getResource,
+  getResourceChildren,
+  getResourceLocation,
+  getNotifications
+}) => ({
   id: 'createFolder',
-  shouldBeAvailable: (apiOptions, { selectedResources }) => selectedResources.length === 1,
-  contextMenuRenderer: (apiOptions, {
-    selection,
-    selectedResources,
-    resource,
-    resourceChildren,
-    resourceLocation
-  }) => (
+  shouldBeAvailable: (apiOptions) => getSelectedResources().length === 1,
+  contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: createFolderIcon }}
       onClick={() => {
@@ -22,6 +27,7 @@ export default (apiOptions, { showDialog, hideDialog, forceUpdate }) => ({
           <SetNameDialog
             onHide={hideDialog}
             onSubmit={async (folderName) => {
+              let resource = getResource();
               let { resourceChildren } = await api.getChildrenForId(apiOptions, resource.id);
               let alreadyExists = resourceChildren.some((o) => o.title === folderName);
               if (alreadyExists) {
