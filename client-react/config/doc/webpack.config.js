@@ -52,11 +52,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test   : /\.(png|jpg|jpeg|gif|ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        test   : /\.(png|jpg|jpeg|gif|ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
         use : ['file-loader']
       },
       {
-        test: /\.md$/,
+        test: /\.(md|svg)$/,
         use: [{
           loader: 'raw-loader'
         }]
