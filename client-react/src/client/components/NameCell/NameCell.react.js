@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import './NameCell.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 import LoadingCell from '../LoadingCell';

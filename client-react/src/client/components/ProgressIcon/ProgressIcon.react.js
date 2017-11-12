@@ -1,6 +1,8 @@
 // Inspired by https://codepen.io/xgad/post/svg-radial-progress-meters
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import './ProgressIcon.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let completeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/done.svg');

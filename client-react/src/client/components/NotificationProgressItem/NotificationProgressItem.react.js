@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import './NotificationProgressItem.less';
 import ProgressIcon from '../ProgressIcon';
 import SVG from '@opuscapita/react-svg/lib/SVG';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import './LocationBar.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let arrowIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');

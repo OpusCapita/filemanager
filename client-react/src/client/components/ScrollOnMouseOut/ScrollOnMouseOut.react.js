@@ -1,7 +1,9 @@
 // XXX - scroll with mouse out doesn't work on ListView. If it can be fixed by another way, it welcome.
 // TODO - remove this PERFECT component
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 const SCROLL_STRENGTH = 20;
 const TIMEOUT_TIME = 16;
