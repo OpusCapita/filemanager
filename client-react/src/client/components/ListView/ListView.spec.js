@@ -4,12 +4,11 @@ import { shallow } from 'enzyme';
 import ListView from '.';
 
 describe('<ListView />', () => {
-  /* Recommended test-cases
 
-  it('should have default props', () => {
+/*  it('should have default props', () => {
     let component = <ListView />;
-    expect(component.props.testProp).to.equal('Give me back my label!');
-    expect(component.props.onClick).to.be.a('function');
+    expect(component.props.sortBy).to.equal('title');
+    expect(component.props.onRowClick).to.be.a('function');
   });
   it('should have the right class name', () => {
     let wrapper = shallow(<ListView className="test-class-name" />);

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
@@ -178,7 +179,7 @@ class FileNavigator extends Component {
     this.setState({ selection });
   }
 
-  handlepSort = ({ sortBy, sortDirection }) => {
+  handleSort = ({ sortBy, sortDirection }) => {
     this.setState({ sortBy, sortDirection });
   }
 

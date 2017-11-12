@@ -1,4 +1,5 @@
-import React, { Component, Children, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component, Children } from 'react';
 import './Notification.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 
