@@ -57,17 +57,14 @@ let listViewLayout = (viewLayoutOptions) => ([
     <Column
       key="modifyDate"
       width={100}
-      dataKey="modifyDate"
+      dataKey="modifiedDate"
       label="Last modified"
       flexGrow={1}
       cellRenderer={Cell({ ...viewLayoutOptions, getData: formatDate })}
       headerRenderer={HeaderCell(viewLayoutOptions)}
-      disableSort={true}
+      disableSort={false}
     />
   )
 ]);
-
-let initiallSortBy = 'title';
-let initiallSortDirection = 'ASC';
 
 export default listViewLayout;

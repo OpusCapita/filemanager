@@ -3,6 +3,7 @@ import deleteResource from './delete-resource';
 import download from './download';
 import upload from './upload';
 import rename from './rename';
+import sort from './sort';
 
 export default (apiOptions, {
   showDialog,
@@ -14,7 +15,8 @@ export default (apiOptions, {
   getResource,
   getResourceChildren,
   getResourceLocation,
-  getNotifications
+  getNotifications,
+  getSortState
 }) => ([
   createFolder(apiOptions, {
     showDialog,
@@ -26,7 +28,8 @@ export default (apiOptions, {
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    getNotifications,
+    getSortState
   }),
   rename(apiOptions, {
     showDialog,
@@ -38,7 +41,8 @@ export default (apiOptions, {
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    getNotifications,
+    getSortState
   }),
   download(apiOptions, {
     showDialog,
@@ -50,7 +54,8 @@ export default (apiOptions, {
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    getNotifications,
+    getSortState
   }),
   upload(apiOptions, {
     showDialog,
@@ -62,7 +67,8 @@ export default (apiOptions, {
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    getNotifications,
+    getSortState
   }),
   deleteResource(apiOptions, {
     showDialog,
@@ -74,6 +80,20 @@ export default (apiOptions, {
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    getNotifications,
+    getSortState
+  }),
+  sort(apiOptions, {
+    showDialog,
+    hideDialog,
+    forceUpdate,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications,
+    getSortState
   })
 ]);

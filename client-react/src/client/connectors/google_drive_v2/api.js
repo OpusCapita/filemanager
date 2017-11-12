@@ -78,9 +78,9 @@ async function init(options) {
 
 function normalizeResource(resource) {
   return {
-    createDate: Date.parse(resource.createdDate),
+    createdDate: Date.parse(resource.createdDate),
     id: resource.id,
-    modifyDate: Date.parse(resource.modifiedDate),
+    modifiedDate: Date.parse(resource.modifiedDate),
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
     size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
@@ -135,9 +135,10 @@ async function getParentIdForResource(options, resource) {
   return resource.parents[0].id;
 }
 
-async function getChildrenForId(options, id) {
+async function getChildrenForId(options, id, orderBy = 'title', orderDirection = 'ASC') {
   let response =  await window.gapi.client.drive.files.list({
-    q: `'${id}' in parents and trashed = false`
+    q: `'${id}' in parents and trashed = false`,
+    orderBy: `folder,${orderBy} ${orderDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
 
