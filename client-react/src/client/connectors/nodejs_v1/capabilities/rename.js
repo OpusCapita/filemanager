@@ -9,6 +9,7 @@ export default (apiOptions, {
   showDialog,
   hideDialog,
   forceUpdate,
+  updateNotifications,
   getSelection,
   getSelectedResources,
   getResource,
@@ -19,10 +20,7 @@ export default (apiOptions, {
   id: 'rename',
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return (
-      selectedResources.length === 1 &&
-      selectedResources[0].id !== 'root' // root is not mutable
-    );
+    return selectedResources.length === 1 && selectedResources[0].id !== 'root'; // root is not mutable
   },
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
@@ -33,7 +31,7 @@ export default (apiOptions, {
             onHide={hideDialog}
             onSubmit={async (name) => {
               let selectedResources = getSelectedResources();
-              let { resourceChildren } = await api.getChildrenForId(apiOptions, selectedResources[0].parents[0].id);
+              let { resourceChildren } = await api.getChildrenForId(apiOptions, selectedResources[0].parentId);
               let alreadyExists = resourceChildren.some((o) => o.title === name);
               if (alreadyExists) {
                 return `File or folder with name "${name}" already exists`;

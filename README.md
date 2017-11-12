@@ -1,6 +1,6 @@
 # Overview
 
-**Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is comming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
+**Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
 OpusCapita **Filemanager** provides a possibility to manipulate files.
 

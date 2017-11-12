@@ -25,7 +25,7 @@ export default (apiOptions, {
     return (
       <ContextMenuItem
         icon={{ svg: downloadIcon }}
-        onClick={() => api.downloadResources(selectedResources)}
+        onClick={() => api.downloadResources(apiOptions, selectedResources)}
       >
         <span>Download</span>
       </ContextMenuItem>

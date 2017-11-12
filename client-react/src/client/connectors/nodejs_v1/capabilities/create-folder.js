@@ -23,11 +23,11 @@ export default (apiOptions, {
     <ContextMenuItem
       icon={{ svg: createFolderIcon }}
       onClick={() => {
-        let resource = getResource();
         showDialog((
           <SetNameDialog
             onHide={hideDialog}
             onSubmit={async (folderName) => {
+              let resource = getResource();
               let { resourceChildren } = await api.getChildrenForId(apiOptions, resource.id);
               let alreadyExists = resourceChildren.some((o) => o.title === folderName);
               if (alreadyExists) {

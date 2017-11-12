@@ -1,7 +1,7 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let deleteIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/delete.svg');
+let uploadIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/file_upload.svg');
 
 export default (apiOptions, {
   showDialog,
@@ -15,15 +15,17 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => ({
-  id: 'delete',
-  title: 'Remove',
+  id: 'download',
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.every(resource => resource.capabilities.canDelete);
+    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
   },
   contextMenuRenderer: (apiOptions) => (
-    <ContextMenuItem icon={{ svg: deleteIcon }}>
-      <span>Remove</span>
+    <ContextMenuItem
+      icon={{ svg: uploadIcon }}
+      onClick={() => api.uploadFileToId(getResource().id)}
+    >
+      <span>Upload</span>
     </ContextMenuItem>
   )
 });

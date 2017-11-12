@@ -36,7 +36,7 @@ class NotificationProgressItem extends Component {
     ) : null;
 
     let titleElement = title ? (
-      <div className="oc-fm--notification-progress-item__title">
+      <div className="oc-fm--notification-progress-item__title" title={title}>
         {title}
       </div>
     ) : null;
