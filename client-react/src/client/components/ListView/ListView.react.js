@@ -157,11 +157,20 @@ class ListView extends Component {
   }
 
   handleKeyDown = (e) => {
+    e.preventDefault();
+
+    // Debounce frequent events for performance reasons
+    let keyDownTime = new Date().getTime();
+    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 64)) {
+      return;
+    }
+    this.lastKeyDownTime = keyDownTime;
+
+
     let { selection, items, onKeyDown } = this.props;
     this.props.onKeyDown(e);
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
-      e.preventDefault();
 
       if (!items.length) {
         return;
@@ -181,8 +190,6 @@ class ListView extends Component {
     }
 
     if (e.which === 40 && !e.shiftKey) { // Down arrow
-      e.preventDefault();
-
       if (!items.length) {
         return;
       }
@@ -201,8 +208,6 @@ class ListView extends Component {
     }
 
     if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
-      e.preventDefault();
-
       if (!items.length) {
         return;
       }
@@ -227,8 +232,6 @@ class ListView extends Component {
     }
 
     if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
-      e.preventDefault();
-
       if (!items.length) {
         return;
       }
@@ -254,7 +257,6 @@ class ListView extends Component {
 
     if (e.which === 65 && (e.ctrlKey || e.metaKey)) { // Ctrl + A or Command + A
       // Select all
-      e.preventDefault();
       let { items } = this.props;
       let allIds = items.map((o) => o.id);
       this.handleSelection(allIds);
@@ -262,15 +264,12 @@ class ListView extends Component {
 
     if (e.which === 27) { // Esc
       // Clear selection
-      e.preventDefault();
       this.handleSelection([]);
     }
 
 
     if (e.which === 33) { // PageUp
       // Scroll top
-      e.preventDefault();
-
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
 
@@ -279,8 +278,6 @@ class ListView extends Component {
 
     if (e.which === 34) { // PageDown
       // Scroll bottom
-      e.preventDefault();
-
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
         scrollHeight - clientHeight :
@@ -291,8 +288,6 @@ class ListView extends Component {
 
     if (e.which === 36) { // Home
       // Scroll to first item
-      e.preventDefault();
-
       let { items } = this.props;
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = 0;
@@ -301,8 +296,6 @@ class ListView extends Component {
 
     if (e.which === 35) { // End
       // Scroll to first item
-      e.preventDefault();
-
       let { items } = this.props;
       let { clientHeight, scrollHeight, scrollTop } = this.state;
       let newScrollTop = scrollHeight - clientHeight;
