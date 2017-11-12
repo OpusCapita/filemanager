@@ -5,7 +5,7 @@ import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import { SortDirection } from 'react-virtualized';
-import { findIndex } from 'lodash';
+import { find, findIndex } from 'lodash';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
@@ -53,7 +53,8 @@ class FileNavigator extends Component {
       resourceLocation: [],
       selection: [],
       sortBy: 'title',
-      sortDirection: SortDirection.ASC
+      sortDirection: SortDirection.ASC,
+      initializedCapabilities: []
     };
   }
 
@@ -90,8 +91,13 @@ class FileNavigator extends Component {
   }
 
   async componentDidMount() {
-    let { initialResourceId, apiOptions, api } = this.props;
+    let { initialResourceId, apiOptions, api, capabilities } = this.props;
     let { apiInitialized, apiSignedIn } = this.state;
+
+    let capabilitiesProps = this.getNavigatorState();
+    let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+    console.log('init', initializedCapabilities);
+    this.setState({ initializedCapabilities });
 
     await api.init({
       ...apiOptions,
@@ -181,8 +187,17 @@ class FileNavigator extends Component {
     this.setState({ selection });
   }
 
-  handleSort = ({ sortBy, sortDirection }) => {
-    this.setState({ sortBy, sortDirection });
+  handleSort = async ({ sortBy, sortDirection }) => {
+    let { apiOptions } = this.props;
+    let { initializedCapabilities } = this.state;
+    let sort = find(initializedCapabilities, (o) => o.id === 'sort').handler;
+    if (!sort) {
+      return;
+    }
+
+    this.setState({ loadingView: true });
+    let newResourceChildren = await sort({ sortBy, sortDirection });
+    this.setState({ sortBy, sortDirection, resourceChildren: newResourceChildren, loadingView: false });
   }
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
@@ -262,7 +277,7 @@ class FileNavigator extends Component {
     this.setState({ notifications });
   }
 
-  getCapabilitiesProps = () => ({
+  getNavigatorState = () => ({
     showDialog: this.showDialog,
     hideDialog: this.hideDialog,
     updateNotifications: this.updateNotifications,
@@ -272,7 +287,8 @@ class FileNavigator extends Component {
     getResource: () => this.state.resource,
     getResourceChildren: () => this.state.resourceChildren,
     getResourceLocation: () => this.state.resourceLocation,
-    getNotifications: () => this.state.notifications
+    getNotifications: () => this.state.notifications,
+    getSortState: () => ({ sortBy: this.state.sortBy, sortDirection: this.state.sortDirection })
   });
 
   render() {
@@ -302,7 +318,8 @@ class FileNavigator extends Component {
       resourceLocation,
       selection,
       sortBy,
-      sortDirection
+      sortDirection,
+      initializedCapabilities
     } = this.state;
 
     let viewLoadingElement = null;
@@ -337,9 +354,8 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let capabilitiesProps = this.getCapabilitiesProps();
-    let contextMenuChildren = capabilities(apiOptions, capabilitiesProps).
-      filter(capability => capability.shouldBeAvailable(apiOptions)).
+    let contextMenuChildren = initializedCapabilities.
+      filter(capability => (capability.contextMenuRenderer && capability.shouldBeAvailable(apiOptions))).
       map(capability => capability.contextMenuRenderer(apiOptions));
 
     return (
