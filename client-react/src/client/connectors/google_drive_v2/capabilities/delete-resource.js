@@ -1,7 +1,7 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let deleteIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/delete.svg');
+let deleteIcon = require('@opuscapita/svg-icons/lib/delete.svg');
 
 export default (apiOptions, {
   showDialog,

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './NoFilesFoundStub.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
-let nothingToShowIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/add_to_photos.svg');
+let nothingToShowIcon = require('@opuscapita/svg-icons/lib/add_to_photos.svg');
 
 export default () => (
   <div className="oc-fm--no-files-found-stub">

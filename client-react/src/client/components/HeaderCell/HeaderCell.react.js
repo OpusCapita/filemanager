@@ -4,8 +4,8 @@ import './HeaderCell.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 import { SortDirection } from 'react-virtualized';
 
-let sortASCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_down.svg');
-let sortDESCIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_up.svg');
+let sortASCIcon = require('@opuscapita/svg-icons/lib/arrow_drop_down.svg');
+let sortDESCIcon = require('@opuscapita/svg-icons/lib/arrow_drop_up.svg');
 
 export default () => ({
   columnData,

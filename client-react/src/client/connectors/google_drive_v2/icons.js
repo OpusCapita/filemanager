@@ -1,9 +1,9 @@
-let dirIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/folder.svg');
-let soundFileIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/audiotrack.svg');
-let pictureFileIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/image.svg');
-let videoFileIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/ondemand_video.svg');
-let archiveFileIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/archive.svg');
-let unknownFileIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/insert_drive_file.svg');
+let dirIcon = require('@opuscapita/svg-icons/lib/folder.svg');
+let soundFileIcon = require('@opuscapita/svg-icons/lib/audiotrack.svg');
+let pictureFileIcon = require('@opuscapita/svg-icons/lib/image.svg');
+let videoFileIcon = require('@opuscapita/svg-icons/lib/ondemand_video.svg');
+let archiveFileIcon = require('@opuscapita/svg-icons/lib/archive.svg');
+let unknownFileIcon = require('@opuscapita/svg-icons/lib/insert_drive_file.svg');
 
 let defaultFillColor = '#333';
 let soundFilesExtensions = ['aac', 'aiff', 'flac', 'm4a', 'ogg', 'mp3', 'wav', 'wma'];

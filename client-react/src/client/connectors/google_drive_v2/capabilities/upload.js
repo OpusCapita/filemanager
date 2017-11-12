@@ -5,7 +5,7 @@ import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 
-let uploadIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/file_upload.svg');
+let uploadIcon = require('@opuscapita/svg-icons/lib/file_upload.svg');
 
 function handler(apiOptions, {
   id,

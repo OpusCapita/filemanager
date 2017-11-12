@@ -3,9 +3,9 @@ import React, { Component, Children } from 'react';
 import './Notification.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 
-let minimizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
-let maximizeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
-let closeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/close.svg');
+let minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
+let maximizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
+let closeIcon = require('@opuscapita/svg-icons/lib/close.svg');
 
 const propTypes = {
   closable: PropTypes.bool,

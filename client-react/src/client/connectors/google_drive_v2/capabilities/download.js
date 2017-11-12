@@ -1,7 +1,7 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let downloadIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/file_download.svg');
+let downloadIcon = require('@opuscapita/svg-icons/lib/file_download.svg');
 
 export default (apiOptions, {
   showDialog,

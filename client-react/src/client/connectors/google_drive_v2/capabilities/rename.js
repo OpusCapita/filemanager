@@ -3,7 +3,7 @@ import sanitizeFilename from 'sanitize-filename';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import SetNameDialog from '../../../components/SetNameDialog';
 
-let renameIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/title.svg');
+let renameIcon = require('@opuscapita/svg-icons/lib/title.svg');
 
 export default (apiOptions, {
   showDialog,

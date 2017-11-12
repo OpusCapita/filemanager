@@ -8,7 +8,7 @@ import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
-let spinnerIcon = require('!!raw-loader!../assets/spinners/spinner.svg');
+let spinnerIcon = require('../assets/spinners/spinner.svg');
 
 const propTypes = {
   api: PropTypes.object,

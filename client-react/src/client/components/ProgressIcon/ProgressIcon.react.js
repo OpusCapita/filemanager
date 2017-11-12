@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ProgressIcon.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
-let completeIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/done.svg');
+let completeIcon = require('@opuscapita/svg-icons/lib/done.svg');
 
 const propTypes = {
   progress: PropTypes.number,
