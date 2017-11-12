@@ -3,7 +3,7 @@ import sanitizeFilename from 'sanitize-filename';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import SetNameDialog from '../../../components/SetNameDialog';
 
-let createFolderIcon = require('!!raw-loader!@opuscapita/svg-icons/lib/create_new_folder.svg');
+let createFolderIcon = require('@opuscapita/svg-icons/lib/create_new_folder.svg');
 
 export default (apiOptions, {
   showDialog,
