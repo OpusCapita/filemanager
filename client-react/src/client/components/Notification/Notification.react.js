@@ -19,6 +19,7 @@ const propTypes = {
 const defaultProps = {
   closable: false,
   minimizable: true,
+  onCancel: () => {},
   onHide: () => {},
   progressText: '',
   cancelButtonText: 'Cancel',
@@ -38,8 +39,12 @@ class Notification extends Component {
     this.setState({ minimized: !this.state.minimized });
   }
 
+  handleCancelClick = () => {
+    this.props.onCancel();
+  }
+
   render() {
-    let { title, onHide, minimizable, closable, progressText, cancelButtonText, children } = this.props;
+    let { title, onHide, onCancel, minimizable, closable, progressText, cancelButtonText, children } = this.props;
     let { minimized } = this.state;
 
     let toggleElement = (minimizable && (progressText || children)) ? (
@@ -60,19 +65,19 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let progressMessageElement = (!minimized && progressText) ? (
+    let progressMessageElement = (progressText) ? (
       <div className="oc-fm--notification__progress">
         <div className="oc-fm--notification__progress-text">
           {progressText}
         </div>
-        <button className="oc-fm--notification__cancel-button">
+        <button onClick={this.handleCancelClick} className="oc-fm--notification__cancel-button">
           {cancelButtonText}
         </button>
       </div>
     ) : null;
 
     let itemsElement = (
-      <div className={`oc-fm--notification__items ${minimized ? 'oc-fm--notification__items--minimized' : ''}`}>
+      <div className={`oc-fm--notification__items`}>
         {children.map((child, i) => ({ ...child, key: i }))}
       </div>
     );
@@ -88,8 +93,15 @@ class Notification extends Component {
             {closeElement}
           </div>
         </div>
-        {progressMessageElement}
-        {itemsElement}
+        <div
+          className={`
+            oc-fm--notification__content
+            ${minimized ? 'oc-fm--notification__content--minimized' : ''}
+          `}
+        >
+          {progressMessageElement}
+          {itemsElement}
+        </div>
       </div>
     );
   }

@@ -15,6 +15,7 @@ Notification is
 <Notification 
   title="Download 2 files"
   onHide={() => console.log('hide')}
+  onCancel={() => console.log('cancel')}
   progressText="Less than minute left"
   cancelButtonText="Cancel"
 >

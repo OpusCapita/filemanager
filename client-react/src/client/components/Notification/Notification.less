@@ -13,14 +13,14 @@
   pointer-events: auto;
 }
 
-.oc-fm--notification__items {
+.oc-fm--notification__content {
   max-height: 240px;
   overflow: auto;
   will-change: max-height;
   transition: max-height 180ms ease-in-out;
 }
 
-.oc-fm--notification__items--minimized {
+.oc-fm--notification__content--minimized {
   max-height: 0;
   will-change: max-height;
   transition: max-height 180ms ease-in-out;
@@ -95,6 +95,7 @@
   box-shadow: none;
   color: #006070;
   padding: 2px 8px;
+  margin-right: -8px;
   position: relative;
   border-radius: 2px;
   overflow: hidden;

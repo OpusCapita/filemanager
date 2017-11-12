@@ -20,6 +20,8 @@ class Notifications extends Component {
   render() {
     let { notifications, className } = this.props;
 
+    console.log('not', notifications);
+
     let notificationsElement = notifications.map((notification, i) => {
       let props = {
         ...notification,
