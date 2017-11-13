@@ -1,2 +1,73 @@
-.toolbar {
+.oc-fm--toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oc-fm--toolbar__items {
+  display: flex;
+  margin-left: auto;
+}
+
+.oc-fm--toolbar__item {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  background: #fff;
+  padding: 0;
+
+  &:focus {
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    outline: none;
+  }
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background-color: #f5f5f5;
+  }
+
+  &:active {
+    cursor: pointer;
+    background-color: #e5e5e5;
+  }
+}
+
+.oc-fm--toolbar__item-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.oc-fm--toolbar__new-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oc-fm--toolbar__new-button {
+  color: #fff;
+  background-color: #e70;
+  padding: 6px 24px;
+  border: none;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover:not([disabled]),
+  &:focus {
+    background-color: #c56300;
+    outline: none;
+  }
+
+  &[disabled] {
+    background-color: #ccc;
+    color: #555;
+    box-shadow: none;
+  }
 }

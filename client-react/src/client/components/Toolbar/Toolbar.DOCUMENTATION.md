@@ -12,7 +12,13 @@ Toolbar is
 ### Code Example
 
 ```
-<Toolbar />
+<Toolbar 
+  items={[
+    { icon: { svg: _scope.getIcon('create_new_folder')}, label: 'Create folder' },
+    { icon: { svg: _scope.getIcon('title')}, label: 'Rename' },
+    { icon: { svg: _scope.getIcon('file_download')}, label: 'Download' }
+  ]}
+/>
 ```
 
 ### Component Name
