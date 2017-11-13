@@ -20,6 +20,7 @@ export default (apiOptions, {
     let selectedResources = getSelectedResources();
     return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
   },
+  availableInContexts: ['row', 'toolbar'],
   contextMenuRenderer: (apiOptions) => {
     let selectedResources = getSelectedResources();
     return (

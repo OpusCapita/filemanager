@@ -20,8 +20,9 @@ export default (apiOptions, {
   id: 'rename',
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].id !== 'root'; // root is not mutable
+    return selectedResources.length === 1;
   },
+  availableInContexts: ['row', 'toolbar'],
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: renameIcon }}

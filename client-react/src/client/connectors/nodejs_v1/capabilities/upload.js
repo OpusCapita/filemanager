@@ -15,11 +15,9 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => ({
-  id: 'download',
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
-  },
+  id: 'upload',
+  shouldBeAvailable: (apiOptions) => true,
+  availableInContexts: ['files-view', 'new-button'],
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: uploadIcon }}

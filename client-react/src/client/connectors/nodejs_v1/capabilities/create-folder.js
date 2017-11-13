@@ -18,7 +18,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'createFolder',
-  shouldBeAvailable: (apiOptions) => getSelectedResources().length === 1,
+  shouldBeAvailable: (apiOptions) => true,
+  availableInContexts: ['files-view', 'new-button'],
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: createFolderIcon }}

@@ -21,6 +21,7 @@ export default (apiOptions, {
     let selectedResources = getSelectedResources();
     return selectedResources.every(resource => resource.capabilities.canDelete);
   },
+  availableInContexts: ['row', 'toolbar'],
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem icon={{ svg: deleteIcon }}>
       <span>Remove</span>

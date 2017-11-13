@@ -22,22 +22,22 @@ let icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.s
 
 
 const propTypes = {
+  id: PropTypes.string,
   api: PropTypes.object,
   apiOptions: PropTypes.object,
   capabilities: PropTypes.func,
   className: PropTypes.string,
-  id: PropTypes.string,
   initialResourceId: PropTypes.string,
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func
 };
 const defaultProps = {
+  id: '',
   api: 'nodejs_v1',
   apiOptions: {},
   capabilities: () => [],
   className: '',
-  id: '',
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
@@ -309,11 +309,11 @@ class FileNavigator extends Component {
 
   render() {
     let {
+      id,
       api,
       apiOptions,
       capabilities,
       className,
-      id,
       initialResourceId,
       listViewLayout,
       signInRenderer,
@@ -370,7 +370,23 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let contextMenuChildren = initializedCapabilities.
+    let rowContextMenuChildren = initializedCapabilities.
+        filter(capability => (
+        capability.contextMenuRenderer &&
+        capability.shouldBeAvailable(apiOptions) &&
+        (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
+      )).
+      map(capability => capability.contextMenuRenderer(apiOptions));
+
+    let filesViewContextMenuChildren = initializedCapabilities.
+      filter(capability => (
+        capability.contextMenuRenderer &&
+        capability.shouldBeAvailable(apiOptions) &&
+        (capability.availableInContexts && capability.availableInContexts.indexOf('files-view') !== -1)
+      )).
+      map(capability => capability.contextMenuRenderer(apiOptions));
+
+    let toolbarItems = initializedCapabilities.
       filter(capability => (capability.contextMenuRenderer && capability.shouldBeAvailable(apiOptions))).
       map(capability => capability.contextMenuRenderer(apiOptions));
 
@@ -405,7 +421,7 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
-            contextMenuId={id}
+            id={id}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -418,7 +434,8 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
-            contextMenuChildren={contextMenuChildren}
+            rowContextMenuChildren={rowContextMenuChildren}
+            filesViewContextMenuChildren={filesViewContextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           >

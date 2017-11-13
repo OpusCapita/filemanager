@@ -16,6 +16,7 @@ FileManager is
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileManager>
       <FileNavigator
+        id="cusomization-area"
         api={_scope.connectors.nodejs_v1.api}
         apiOptions={{
           apiRoot: `${window.env.SERVER_URL}/api`

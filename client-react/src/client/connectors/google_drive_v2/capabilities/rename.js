@@ -24,6 +24,7 @@ export default (apiOptions, {
       selectedResources[0].id !== 'root' // root is not mutable
     );
   },
+  availableInContexts: ['row', 'toolbar'],
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: renameIcon }}
