@@ -101,10 +101,10 @@ All query paramaters are optional
 
 TODO in v2:
 
-* maxResults: <number>,
-* pageToken: <string>,
-* searchQuery: <string>,
-* searchRecursively: <bool>
+* maxResults: \<number\>,
+* pageToken: \<string\>,
+* searchQuery: \<string\>,
+* searchRecursively: \<bool\>
 
 ### Response
 
