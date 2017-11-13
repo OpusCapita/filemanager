@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ContextMenuItem.less';
 import { MenuItem } from "react-contextmenu";
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import DropdownMenuItem from '../DropdownMenuItem';
 
 const propTypes = {
   icon: PropTypes.shape({
@@ -22,22 +22,13 @@ class ContextMenuItem extends Component {
   }
 
   render() {
-    let { icon, ...restProps } = this.props;
-
-    let iconElement = icon ? (
-      <SVG
-        className="oc-fm--context-menu-item__icon"
-        svg={icon.svg}
-        style={{ fill: icon.fill || '#333' }}
-      />
-    ): null;
+    let { icon, children, ...restProps } = this.props;
 
     return (
       <MenuItem {...restProps}>
-        <div className="oc-fm--context-menu-item">
-          {iconElement}
-          {this.props.children}
-        </div>
+        <DropdownMenuItem icon={icon} {...restProps}>
+          {children}
+        </DropdownMenuItem>
       </MenuItem>
     );
   }

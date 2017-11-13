@@ -189,11 +189,12 @@ class FileNavigator extends Component {
   handleSort = async ({ sortBy, sortDirection }) => {
     let { apiOptions } = this.props;
     let { initializedCapabilities } = this.state;
-    let sort = find(initializedCapabilities, (o) => o.id === 'sort').handler;
-    if (!sort) {
+    let sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
+    if (!sortCapability) {
       return;
     }
 
+    let sort = sortCapability.handler;
     this.setState({ loadingView: true });
     let newResourceChildren = await sort({ sortBy, sortDirection });
     this.setState({ sortBy, sortDirection, resourceChildren: newResourceChildren, loadingView: false });
@@ -348,7 +349,7 @@ class FileNavigator extends Component {
     ) : null;
 
     let locationItems = resourceLocation.map((o) => ({
-      title: o.title,
+      name: this.props.api.getResourceName(this.props.apiOptions, o),
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
@@ -369,7 +370,6 @@ class FileNavigator extends Component {
             loading={loadingResourceLocation}
           />
         </div>
-
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
@@ -396,6 +396,7 @@ class FileNavigator extends Component {
             />
           </ListView>
         </div>
+
       </div>
     );
   }

@@ -14,18 +14,18 @@ LocationBar is
 ```
 <LocationBar 
   items={[
-    { title: 'Item 1', onClick: () => console.log('click item 1') },
-    { title: 'Item 2', onClick: () => console.log('click item 2') },
+    { name: 'Item 1', onClick: () => console.log('click item 1') },
+    { name: 'Item 2', onClick: () => console.log('click item 2') },
     { 
-      title: 'Long item long item long item long item long item long item', 
+      name: 'Long item long item long item long item long item long item', 
       onClick: () => console.log('click item long item')
     },
     { 
-      title: 'Long item long item long item long item long item long item', 
+      name: 'Long item long item long item long item long item long item', 
       onClick: () => console.log('click item long item')
     },
     { 
-      title: 'Long item long item long item long item long item long item', 
+      name: 'Long item long item long item long item long item long item', 
       onClick: () => console.log('click item long item')
     }
   ]}
