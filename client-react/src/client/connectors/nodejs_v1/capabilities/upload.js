@@ -1,7 +1,8 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let uploadIcon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let icon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let label = 'Upload';
 
 function handler(apiOptions, {
   id,
@@ -32,6 +33,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'upload',
+  icon: { svg: icon },
+  label,
   shouldBeAvailable: (apiOptions) => true,
   availableInContexts: ['files-view', 'new-button'],
   handler: () => handler(apiOptions, {
@@ -48,7 +51,7 @@ export default (apiOptions, {
   }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: uploadIcon }}
+      icon={{ svg: icon }}
       onClick={() => handler(apiOptions, {
         showDialog,
         hideDialog,
@@ -62,7 +65,7 @@ export default (apiOptions, {
         getNotifications
       })}
     >
-      <span>Upload</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

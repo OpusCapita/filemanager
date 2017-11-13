@@ -57,8 +57,8 @@ class DropdownMenu extends Component {
           let childProps = {
             ...child.props,
             onClick: (e) => {
-              if (child.onClick) {
-                child.onClick(e);
+              if (child.props.onClick) {
+                child.props.onClick(e);
               }
               onHide();
             }

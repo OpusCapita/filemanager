@@ -3,7 +3,8 @@ import sanitizeFilename from 'sanitize-filename';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import SetNameDialog from '../../../components/SetNameDialog';
 
-let createFolderIcon = require('@opuscapita/svg-icons/lib/create_new_folder.svg');
+let icon = require('@opuscapita/svg-icons/lib/create_new_folder.svg');
+let label = 'Create folder';
 
 function handler(apiOptions, {
   id,
@@ -64,6 +65,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'createFolder',
+  icon: { svg: icon },
+  label,
   shouldBeAvailable: (apiOptions) => true,
   availableInContexts: ['files-view', 'new-button'],
   handler: () => handler(apiOptions, {
@@ -80,7 +83,7 @@ export default (apiOptions, {
   }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: createFolderIcon }}
+      icon={{ svg: icon }}
       onClick={() => handler(apiOptions, {
         showDialog,
         hideDialog,
@@ -94,7 +97,7 @@ export default (apiOptions, {
         getNotifications
       })}
     >
-      <span>Create folder</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

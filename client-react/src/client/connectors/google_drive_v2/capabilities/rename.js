@@ -3,7 +3,8 @@ import sanitizeFilename from 'sanitize-filename';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import SetNameDialog from '../../../components/SetNameDialog';
 
-let renameIcon = require('@opuscapita/svg-icons/lib/title.svg');
+let icon = require('@opuscapita/svg-icons/lib/title.svg');
+let label = 'Rename';
 
 function handler(apiOptions, {
   id,
@@ -45,7 +46,7 @@ function handler(apiOptions, {
       }}
       headerText={`New name`}
       submitButtonText={`Rename`}
-      />
+    />
   ));
 }
 
@@ -62,6 +63,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'rename',
+  icon: { svg: icon },
+  label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
     return (
@@ -84,7 +87,7 @@ export default (apiOptions, {
   }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: renameIcon }}
+      icon={{ svg: icon }}
       onClick={() => handler(apiOptions, {
         showDialog,
         hideDialog,
@@ -98,7 +101,7 @@ export default (apiOptions, {
         getNotifications
       })}
     >
-      <span>Rename</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

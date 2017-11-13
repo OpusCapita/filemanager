@@ -1,7 +1,8 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let deleteIcon = require('@opuscapita/svg-icons/lib/delete.svg');
+let icon = require('@opuscapita/svg-icons/lib/delete.svg');
+let label = 'Remove';
 
 function handler(apiOptions, {
   id,
@@ -32,7 +33,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'delete',
-  title: 'Remove',
+  icon: { svg: icon },
+  label,
   shouldBeAvailable: (apiOptions) => {
     // let selectedResources = getSelectedResources();
     // return selectedResources.every(resource => resource.capabilities.canDelete);
@@ -52,8 +54,8 @@ export default (apiOptions, {
     getNotifications
   }),
   contextMenuRenderer: (apiOptions) => (
-    <ContextMenuItem icon={{ svg: deleteIcon }}>
-      <span>Remove</span>
+    <ContextMenuItem icon={{ svg: icon }}>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

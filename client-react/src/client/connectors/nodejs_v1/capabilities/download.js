@@ -1,7 +1,8 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let downloadIcon = require('@opuscapita/svg-icons/lib/file_download.svg');
+let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
+let label = 'Download';
 
 function handler(apiOptions, {
   id,
@@ -33,6 +34,8 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'download',
+  icon: { svg: icon },
+  label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
     return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
@@ -53,7 +56,7 @@ export default (apiOptions, {
   contextMenuRenderer: (apiOptions) => {
     return (
       <ContextMenuItem
-        icon={{ svg: downloadIcon }}
+        icon={{ svg: icon }}
         onClick={() => handler(apiOptions, {
           showDialog,
           hideDialog,
@@ -67,7 +70,7 @@ export default (apiOptions, {
           getNotifications
         })}
       >
-        <span>Download</span>
+        <span>{label}</span>
       </ContextMenuItem>
     );
   }

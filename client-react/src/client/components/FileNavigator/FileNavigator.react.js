@@ -11,16 +11,6 @@ import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
 
-// XXX REMOVE!
-function requireAll(requireContext) {
-  return requireContext.keys().map(key => ({
-    name: key.replace(/(\.svg$|^\.\/)/gi, ''),
-    svg: requireContext(key)
-  }));
-}
-let icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.svg$/));
-
-
 const propTypes = {
   id: PropTypes.string,
   api: PropTypes.object,
@@ -65,13 +55,8 @@ class FileNavigator extends Component {
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
-      initializedCapabilities: [],
-      icons // XXX REMOVE!
+      initializedCapabilities: []
     };
-  }
-
-  getIcon(name) { // XXX REMOVE!
-    return this.state.icons.filter(icon => icon.name === name)[0].svg;
   }
 
   startViewLoading = () => {
@@ -392,7 +377,23 @@ class FileNavigator extends Component {
           capability.shouldBeAvailable(apiOptions) &&
           (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
         )).
-        map(capability => capability.contextMenuRenderer(apiOptions));
+        map(capability => ({
+          icon: capability.icon || null,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
+
+    let newButtonItems = initializedCapabilities.
+        filter(capability => (
+          capability.contextMenuRenderer &&
+          capability.shouldBeAvailable(apiOptions) &&
+          (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
+        )).
+        map(capability => ({
+          icon: capability.icon || null,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
 
     return (
       <div
@@ -402,18 +403,8 @@ class FileNavigator extends Component {
       >
         <div className="oc-fm--file-navigator__toolbar">
           <Toolbar
-            items={[
-              { icon: { svg: this.getIcon('create_new_folder')}, label: 'Create folder' },
-              { icon: { svg: this.getIcon('title')}, label: 'Rename' },
-              { icon: { svg: this.getIcon('file_download')}, label: 'Download' },
-              { icon: { svg: this.getIcon('delete')}, label: 'Remove' }
-            ]}
-            newButtonItems={[
-              { icon: { svg: this.getIcon('create_new_folder')}, label: 'Create folder' },
-              { icon: { svg: this.getIcon('title')}, label: 'Rename' },
-              { icon: { svg: this.getIcon('file_download')}, label: 'Download' },
-              { icon: { svg: this.getIcon('delete')}, label: 'Remove' }
-            ]}
+            items={toolbarItems}
+            newButtonItems={newButtonItems}
           />
         </div>
         <div className="oc-fm--file-navigator__location-bar">
