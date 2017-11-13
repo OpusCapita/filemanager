@@ -31,6 +31,7 @@ function handler(apiOptions, {
         } else {
           hideDialog();
           await api.createFolder(apiOptions, resource.id, folderName);
+          console.log('fu', forceUpdate);
           forceUpdate();
         }
       }}

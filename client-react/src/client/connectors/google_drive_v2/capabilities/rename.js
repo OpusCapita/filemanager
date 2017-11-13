@@ -19,6 +19,8 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
+  console.log('handle');
+
   showDialog((
     <SetNameDialog
       onHide={hideDialog}

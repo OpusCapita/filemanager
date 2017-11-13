@@ -7,6 +7,7 @@ import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
+import clickOutside from 'react-click-outside';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
@@ -36,6 +37,7 @@ const defaultProps = {
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
 
+@clickOutside
 export default
 class FileNavigator extends Component {
   constructor(props) {
@@ -181,6 +183,10 @@ class FileNavigator extends Component {
     let { resourceChildren } = this.state;
     let filteredResourceItems = resourceChildren.filter((o) => ids.indexOf(o.id) !== -1);
     return filteredResourceItems;
+  }
+
+  handleClickOutside = () => {
+    this.handleSelection([]);
   }
 
   handleSelection = (selection) => {

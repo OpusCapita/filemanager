@@ -13,7 +13,6 @@ import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
-import clickOutside from 'react-click-outside';
 import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
@@ -67,7 +66,6 @@ const defaultProps = {
   onRef: () => {}
 };
 
-@clickOutside
 export default
 class ListView extends Component {
   constructor(props) {
@@ -311,12 +309,6 @@ class ListView extends Component {
   handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
     this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
     this.setState({ clientHeight, scrollHeight, scrollTop });
-  }
-
-  handleClickOutside = () => {
-    let selectionData = this.clearSelection();
-    this.handleSelection(selectionData.selection);
-    this.scrollToIndex(selectionData.scrollToIndex);
   }
 
   selectFirstItem = () => ({
