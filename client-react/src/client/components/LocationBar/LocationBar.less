@@ -7,7 +7,6 @@
 
 .oc-fm--location-bar {
   display: flex;
-  background: #e5e5e5;
 }
 
 .oc-fm--location-bar__item {
@@ -20,10 +19,9 @@
     margin-left: 0;
   }
 
-  &:hover,
-  &:focus {
+  &:hover {
     cursor: pointer;
-    background-color: #f5f5f5;
+    background-color: #e5e5e5;
   }
 
   &:focus {
@@ -35,9 +33,13 @@
 }
 
 .oc-fm--location-bar__item--last {
-  color: inherit;
-  background-color: #fff;
+  color: #fff;
+  background-color: #3aa57b;
   padding-right: 0;
+
+  &:hover {
+    background-color: #3aa57b;
+  }
 }
 
 .oc-fm--location-bar__item-title {
