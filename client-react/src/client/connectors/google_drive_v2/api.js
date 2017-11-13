@@ -136,7 +136,7 @@ async function getParentIdForResource(options, resource) {
 }
 
 async function getChildrenForId(options, id, orderBy = 'title', orderDirection = 'ASC') {
-  let response =  await window.gapi.client.drive.files.list({
+  let response = await window.gapi.client.drive.files.list({
     q: `'${id}' in parents and trashed = false`,
     orderBy: `folder,${orderBy} ${orderDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
@@ -151,31 +151,50 @@ async function getCapabilitiesForResource(options, resource) {
 }
 
 async function downloadResource(resource) {
-  let { mimeType } = resource;
+  console.log(resource)
+  const { mimeType } = resource;
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-  let isGoogleDocument = checkIsGoogleDocument(mimeType);
+  const isGoogleDocument = checkIsGoogleDocument(mimeType);
 
-  let downloadUrl = '';
-  let title = '';
-  let content = '';
-  if (isGoogleDocument) {
-    let { exportMimeType, extension } = getExportMimeType(mimeType);
-    downloadUrl = resource.exportLinks[exportMimeType];
-    title = `${resource.title}.${extension}`;
+  let downloadUrl = resource.downloadUrl;
+
+  if (!downloadUrl) {
+    let title = '';
+    // let content = '';
+    console.log('no download url')
+
+    if (isGoogleDocument) {
+      const {
+        exportMimeType,
+        extension
+      } = getExportMimeType(mimeType);
+      downloadUrl = resource.exportLinks[exportMimeType];
+      title = `${resource.title}.${extension}`;
+    } else {
+      downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
+      title = resource.title;
+    }
+
+    console.log('got url: ' + downloadUrl)
+
+    agent.get(downloadUrl).
+      set('Authorization', `Bearer ${accessToken}`).
+      responseType('blob').
+      then((err, res) => {
+        if (err) {
+          return console.error('Failed to download resource:', err);
+        }
+        downloadFile(res.body, title);
+        return {
+          done: true
+        }
+      });
   } else {
-    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
-    title = resource.title;
+    return {
+      downloadUrl,
+      done: false
+    };
   }
-
-  agent.get(downloadUrl).
-    set('Authorization', `Bearer ${accessToken}`).
-    responseType('blob').
-    end((err, res) => {
-      if (err) {
-        return console.error('Failed to download resource:', err);
-      }
-      downloadFile(res.body, title);
-    });
 }
 
 async function downloadResources(resources) {
@@ -210,20 +229,20 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
       set('Content-Encoding', 'base64').
       send(btoa(content.slice(startByte, endByte))).
       end((err, res) => {
-        if (err) {} // pass
+        if (err) { } // pass
         resolve(res);
       });
   });
 }
 
 async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file =  await readLocalFile();
+  let file = await readLocalFile();
   let size = file.content.length;
   let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId: 'root' });
   let startByte = 0;
   onStart({ name: file.name, size });
 
-  while(startByte < size) {
+  while (startByte < size) {
     let res = await uploadChunk({
       sessionUrl,
       size,
