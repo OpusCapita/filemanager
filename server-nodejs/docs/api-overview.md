@@ -90,18 +90,21 @@ If successful, this method returns an empty response body.
 * URL: `api/files/:id/children`
 * Method: GET
 
-### Request
+### Query Parameters
 
-```javascript
-{
-  orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'name'.
-  orderDirection: <string>, // ASC/DESC
-  maxResults: <number>, // TODO in v2
-  pageToken: <string>, // TODO in v2
-  searchQuery: <string>, // TODO in v2
-  searchRecursively: <bool> // TODO in v2
-}
-```
+All query paramaters are optional
+
+---|---|---
+Name | Possible Values | Default
+orderBy | name<br />modifiedTime | name
+orderDirection | ASC<br />DESC | ASC
+
+TODO in v2:
+
+* maxResults: <number>,
+* pageToken: <string>,
+* searchQuery: <string>,
+* searchRecursively: <bool>
 
 ### Response
 
