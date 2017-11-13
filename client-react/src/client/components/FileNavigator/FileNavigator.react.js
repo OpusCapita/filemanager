@@ -96,7 +96,6 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getNavigatorState();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    console.log('init', initializedCapabilities);
     this.setState({ initializedCapabilities });
 
     await api.init({
