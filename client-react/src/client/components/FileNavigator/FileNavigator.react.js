@@ -97,7 +97,7 @@ class FileNavigator extends Component {
     let { initialResourceId, apiOptions, api, capabilities } = this.props;
     let { apiInitialized, apiSignedIn } = this.state;
 
-    let capabilitiesProps = this.getNavigatorState();
+    let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({ initializedCapabilities });
 
@@ -140,8 +140,11 @@ class FileNavigator extends Component {
     this.navigateToDir(id, resource.id);
   }
 
-  async navigateToDir(toId, fromId) {
-    this.startViewLoading();
+  navigateToDir = async (toId, idToSelect, startLoading = true) => {
+    if (startLoading) {
+      this.startViewLoading();
+    }
+
     let resource = await this.getResourceById(toId);
     this.setState({ resource });
 
@@ -149,7 +152,7 @@ class FileNavigator extends Component {
 
     this.setState({
       resourceChildren,
-      selection: typeof fromId !== 'undefined' ? [fromId] : []
+      selection: (typeof idToSelect !== 'undefined' || idToSelect !== null) ? [idToSelect] : []
     });
 
     this.stopViewLoading();
@@ -284,11 +287,11 @@ class FileNavigator extends Component {
     this.setState({ notifications });
   }
 
-  getNavigatorState = () => ({
+  getCapabilitiesProps = () => ({
     showDialog: this.showDialog,
     hideDialog: this.hideDialog,
     updateNotifications: this.updateNotifications,
-    forceUpdate: this.state.resource.id ? () => this.navigateToDir(this.state.resource.id) : () => {},
+    navigateToDir: this.navigateToDir,
     getSelection: () => this.state.selection,
     getSelectedResources: () => this.state.resourceChildren.filter(o => this.state.selection.some((s) => s === o.id)),
     getResource: () => this.state.resource,

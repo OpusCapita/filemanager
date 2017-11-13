@@ -8,7 +8,7 @@ function handler(apiOptions, {
   id,
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -23,7 +23,7 @@ function handler(apiOptions, {
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -44,7 +44,7 @@ export default (apiOptions, {
   handler: () => handler(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,

@@ -10,7 +10,7 @@ function handler(apiOptions, {
   id,
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -19,20 +19,19 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let resource = getResource();
   showDialog((
     <SetNameDialog
       onHide={hideDialog}
       onSubmit={async (folderName) => {
+        let resource = getResource();
         let { resourceChildren } = await api.getChildrenForId(apiOptions, resource.id);
         let alreadyExists = resourceChildren.some((o) => o.title === folderName);
         if (alreadyExists) {
           return `File or folder with name "${folderName}" already exists`;
         } else {
           hideDialog();
-          await api.createFolder(apiOptions, resource.id, folderName);
-          console.log('fu', forceUpdate);
-          forceUpdate();
+          let { result } = await api.createFolder(apiOptions, resource.id, folderName);
+          navigateToDir(resource.id, result.id, false);
         }
       }}
       onValidate={async (folderName) => {
@@ -56,7 +55,7 @@ function handler(apiOptions, {
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -73,7 +72,7 @@ export default (apiOptions, {
   handler: () => handler(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -88,7 +87,7 @@ export default (apiOptions, {
       onClick={() => handler(apiOptions, {
           showDialog,
           hideDialog,
-          forceUpdate,
+          navigateToDir,
           updateNotifications,
           getSelection,
           getSelectedResources,

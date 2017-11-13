@@ -246,7 +246,7 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
 }
 
 async function createFolder(apiOptions, parentId, folderName) {
-  await window.gapi.client.drive.files.insert({
+  return await window.gapi.client.drive.files.insert({
     title: folderName,
     parents: [{ id: parentId }],
     mimeType: 'application/vnd.google-apps.folder'
@@ -254,7 +254,7 @@ async function createFolder(apiOptions, parentId, folderName) {
 }
 
 async function renameResource(apiOptions, id, newName) {
-  await window.gapi.client.drive.files.patch({
+  return await window.gapi.client.drive.files.patch({
     fileId: id,
     title: newName
   });

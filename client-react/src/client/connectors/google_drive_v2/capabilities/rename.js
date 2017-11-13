@@ -10,7 +10,7 @@ function handler(apiOptions, {
   id,
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -30,8 +30,9 @@ function handler(apiOptions, {
           return `File or folder with name "${name}" already exists`;
         } else {
           hideDialog();
-          await api.renameResource(apiOptions, selectedResources[0].id, name);
-          forceUpdate();
+          let { result } = await api.renameResource(apiOptions, selectedResources[0].id, name);
+          let resource = getResource();
+          navigateToDir(resource.id, result.id, false);
         }
       }}
       onValidate={async (name) => {
@@ -53,7 +54,7 @@ function handler(apiOptions, {
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -76,7 +77,7 @@ export default (apiOptions, {
   handler: () => handler(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -91,7 +92,7 @@ export default (apiOptions, {
       onClick={() => handler(apiOptions, {
         showDialog,
         hideDialog,
-        forceUpdate,
+        navigateToDir,
         updateNotifications,
         getSelection,
         getSelectedResources,
