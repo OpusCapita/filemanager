@@ -497,7 +497,7 @@ class ListView extends Component {
                   sort={this.handleSort}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
-                  rowRenderer={Row({ selection, lastSelected, loading, contextMenuId: 'f' })}
+                  rowRenderer={Row({ selection, lastSelected, loading, contextMenuId: rowContextMenuId })}
                   noRowsRenderer={NoFilesFoundStub}
                   onRowClick={this.handleRowClick}
                   onRowRightClick={this.handleRowRightClick}
