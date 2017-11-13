@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import './DropdownMenu.less';
 import clickOutside from 'react-click-outside';
 
@@ -43,7 +43,7 @@ class DropdownMenu extends Component {
   }
 
   render() {
-    let { show, children } = this.props;
+    let { show, onHide, children } = this.props;
 
     if (!show) {
       return null;
@@ -51,7 +51,19 @@ class DropdownMenu extends Component {
 
     return (
       <div className="oc-fm--dropdown-menu">
-        {children}
+        {Children.toArray(children).map(child => {
+          let childProps = {
+            ...child.props,
+            onClick: (e) => {
+              if (child.onClick) {
+                child.onClick(e);
+              }
+              onHide();
+            }
+          };
+
+          return ({ ...child, props: childProps });
+        })}
       </div>
     );
   }
