@@ -123,7 +123,6 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let parent = await getResourceById(options, parentId);
-
   return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
@@ -261,6 +260,10 @@ async function renameResource(apiOptions, id, newName) {
   });
 }
 
+function getResourceName(apiOptions, resource) {
+  return resource.title;
+}
+
 async function removeResources() {
 
 }
@@ -282,6 +285,7 @@ export default {
   getParentsForId,
   getParentIdForResource,
   getCapabilitiesForResource,
+  getResourceName,
   createFolder,
   downloadResources,
   uploadFileToId,

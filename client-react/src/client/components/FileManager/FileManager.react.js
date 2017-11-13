@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import './FileManager.less';
 import Toolbar from '../Toolbar';
 
@@ -49,7 +49,7 @@ class FileManager extends Component {
           />
         </div>
         <div className="oc-fm--file-manager__navigators">
-          {children.map((child, i) => (
+          {Children.toArray(children).map((child, i) => (
             <div key={i} className="oc-fm--file-manager__navigator">
               {child}
             </div>
