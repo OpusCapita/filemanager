@@ -54,6 +54,7 @@ export default (apiOptions, {
               return null;
             }}
             headerText={`New name`}
+            submitButtonText={`Rename`}
           />
         ));
       }}

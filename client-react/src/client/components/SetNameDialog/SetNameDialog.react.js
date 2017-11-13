@@ -5,6 +5,7 @@ import Dialog from '../Dialog';
 
 const propTypes = {
   headerText: PropTypes.string,
+  submitButtonText: PropTypes.string,
   onValidate: PropTypes.func,
   onHide: PropTypes.func,
   onChange: PropTypes.func,
@@ -12,6 +13,7 @@ const propTypes = {
 };
 const defaultProps = {
   headerText: 'Set name',
+  submitButtonText: 'Create',
   autofocus: false,
   onValidate: () => {},
   onHide: () => {},
@@ -50,8 +52,8 @@ class SetNameDialog extends Component {
     }
   }
 
-  handleSubmit = async (val) => {
-    let validationError = await this.props.onSubmit(val);
+  handleSubmit = async () => {
+    let validationError = await this.props.onSubmit(this.state.value);
 
     if (validationError) {
       this.setState({ validationError });
@@ -59,7 +61,7 @@ class SetNameDialog extends Component {
   }
 
   render() {
-    let { onHide, headerText } = this.props;
+    let { onHide, headerText, submitButtonText } = this.props;
     let { value, validationError, valid } = this.state;
 
     let showValidationErrorElement = typeof validationError === 'string' && validationError;
@@ -103,7 +105,7 @@ class SetNameDialog extends Component {
               onClick={this.handleSubmitButtonClick}
               disabled={!valid}
             >
-              Create
+              {submitButtonText}
             </button>
           </div>
           {validationErrorElement}
