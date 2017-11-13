@@ -6,27 +6,37 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import DropdownMenuItem from '../DropdownMenuItem';
+
+window.DropdownMenuItem = DropdownMenuItem;
 
 @showroomScopeDecorator
 export default
-class DropdownMenuItemScope extends Component {
+class DropdownMenuScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      show: false
+    };
+  }
+
+  toggle = () => {
+    this.setState({ show: !this.state.show });
   }
 
   render() {
     return (
       <div>
+        <button onClick={this.toggle}>Toggle context menu</button>
         {this._renderChildren()}
       </div>
     );
   }
 }
 
-DropdownMenuItemScope.contextTypes = {
+DropdownMenuScope.contextTypes = {
   i18n: PropTypes.object
 };
-DropdownMenuItemScope.childContextTypes = {
+DropdownMenuScope.childContextTypes = {
   i18n: PropTypes.object
 };
