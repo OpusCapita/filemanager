@@ -4,11 +4,22 @@ import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
+import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
+
+// XXX REMOVE!
+function requireAll(requireContext) {
+  return requireContext.keys().map(key => ({
+    name: key.replace(/(\.svg$|^\.\/)/gi, ''),
+    svg: requireContext(key)
+  }));
+}
+let icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.svg$/));
+
 
 const propTypes = {
   api: PropTypes.object,
@@ -54,8 +65,13 @@ class FileNavigator extends Component {
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
-      initializedCapabilities: []
+      initializedCapabilities: [],
+      icons // XXX REMOVE!
     };
+  }
+
+  getIcon(name) { // XXX REMOVE!
+    return this.state.icons.filter(icon => icon.name === name)[0].svg;
   }
 
   startViewLoading = () => {
@@ -364,6 +380,22 @@ class FileNavigator extends Component {
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
+        <div className="oc-fm--file-navigator__toolbar">
+          <Toolbar
+            items={[
+              { icon: { svg: this.getIcon('create_new_folder')}, label: 'Create folder' },
+              { icon: { svg: this.getIcon('title')}, label: 'Rename' },
+              { icon: { svg: this.getIcon('file_download')}, label: 'Download' },
+              { icon: { svg: this.getIcon('delete')}, label: 'Remove' }
+            ]}
+            newButtonItems={[
+              { icon: { svg: this.getIcon('create_new_folder')}, label: 'Create folder' },
+              { icon: { svg: this.getIcon('title')}, label: 'Rename' },
+              { icon: { svg: this.getIcon('file_download')}, label: 'Download' },
+              { icon: { svg: this.getIcon('delete')}, label: 'Remove' }
+            ]}
+          />
+        </div>
         <div className="oc-fm--file-navigator__location-bar">
           <LocationBar
             items={locationItems}
