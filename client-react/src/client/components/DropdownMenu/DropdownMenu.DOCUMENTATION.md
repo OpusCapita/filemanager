@@ -15,6 +15,7 @@ DropdownMenu is
 <div style={{ position: 'relative' }}>
   <DropdownMenu 
     show={_scope.state.show}
+    showToTop={true}
     onHide={_scope.toggle}
   >
   

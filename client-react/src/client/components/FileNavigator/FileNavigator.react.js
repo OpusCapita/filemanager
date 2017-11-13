@@ -363,14 +363,13 @@ class FileNavigator extends Component {
         className={`oc-fm--file-navigator ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
-      >
+        >
         <div className="oc-fm--file-navigator__location-bar">
           <LocationBar
             items={locationItems}
             loading={loadingResourceLocation}
-          />
+            />
         </div>
-
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
@@ -397,6 +396,7 @@ class FileNavigator extends Component {
             />
           </ListView>
         </div>
+
       </div>
     );
   }

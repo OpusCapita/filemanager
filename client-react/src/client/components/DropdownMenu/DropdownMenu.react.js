@@ -5,10 +5,12 @@ import clickOutside from 'react-click-outside';
 
 const propTypes = {
   show: PropTypes.bool,
+  showToTop: PropTypes.bool,
   onHide: PropTypes.func
 };
 const defaultProps = {
   show: false,
+  showToTop: false,
   onHide: () => {}
 };
 
@@ -43,14 +45,14 @@ class DropdownMenu extends Component {
   }
 
   render() {
-    let { show, onHide, children } = this.props;
+    let { show, showToTop, onHide, children } = this.props;
 
     if (!show) {
       return null;
     }
 
     return (
-      <div className="oc-fm--dropdown-menu">
+      <div className={`oc-fm--dropdown-menu ${showToTop ? 'oc-fm--dropdown-menu--to-top' : ''}`}>
         {Children.toArray(children).map(child => {
           let childProps = {
             ...child.props,
