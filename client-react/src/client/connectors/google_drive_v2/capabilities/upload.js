@@ -96,6 +96,18 @@ export default (apiOptions, {
   id: 'upload',
   shouldBeAvailable: (apiOptions) => true,
   availableInContexts: ['files-view', 'new-button'],
+  handler: () => handler(apiOptions, {
+    showDialog,
+    hideDialog,
+    forceUpdate,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: uploadIcon }}

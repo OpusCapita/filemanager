@@ -387,8 +387,12 @@ class FileNavigator extends Component {
       map(capability => capability.contextMenuRenderer(apiOptions));
 
     let toolbarItems = initializedCapabilities.
-      filter(capability => (capability.contextMenuRenderer && capability.shouldBeAvailable(apiOptions))).
-      map(capability => capability.contextMenuRenderer(apiOptions));
+        filter(capability => (
+          capability.contextMenuRenderer &&
+          capability.shouldBeAvailable(apiOptions) &&
+          (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
+        )).
+        map(capability => capability.contextMenuRenderer(apiOptions));
 
     return (
       <div
