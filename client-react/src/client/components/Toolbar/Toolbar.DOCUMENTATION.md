@@ -16,7 +16,14 @@ Toolbar is
   items={[
     { icon: { svg: _scope.getIcon('create_new_folder')}, label: 'Create folder' },
     { icon: { svg: _scope.getIcon('title')}, label: 'Rename' },
-    { icon: { svg: _scope.getIcon('file_download')}, label: 'Download' }
+    { icon: { svg: _scope.getIcon('file_download')}, label: 'Download' },
+    { icon: { svg: _scope.getIcon('delete')}, label: 'Remove' }
+  ]}
+  newButtonItems={[
+    { icon: { svg: _scope.getIcon('create_new_folder')}, label: 'Create folder' },
+    { icon: { svg: _scope.getIcon('title')}, label: 'Rename' },
+    { icon: { svg: _scope.getIcon('file_download')}, label: 'Download' },
+    { icon: { svg: _scope.getIcon('delete')}, label: 'Remove' }
   ]}
 />
 ```
