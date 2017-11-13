@@ -189,11 +189,12 @@ class FileNavigator extends Component {
   handleSort = async ({ sortBy, sortDirection }) => {
     let { apiOptions } = this.props;
     let { initializedCapabilities } = this.state;
-    let sort = find(initializedCapabilities, (o) => o.id === 'sort').handler;
-    if (!sort) {
+    let sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
+    if (!sortCapability) {
       return;
     }
 
+    let sort = sortCapability.handler;
     this.setState({ loadingView: true });
     let newResourceChildren = await sort({ sortBy, sortDirection });
     this.setState({ sortBy, sortDirection, resourceChildren: newResourceChildren, loadingView: false });
