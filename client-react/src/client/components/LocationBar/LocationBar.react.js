@@ -28,8 +28,8 @@ class LocationBar extends Component {
 
     if (!items.length) {
       return (
-        <div className="oc-fm--location-bar__item">
-          <div className={`oc-fm--location-bar__item-title oc-fm--location-bar__item-title--disabled`}>
+        <div className="oc-fm--location-bar__item oc-fm--location-bar__item--disabled">
+          <div className={`oc-fm--location-bar__item-title`}>
             <span>&nbsp;</span>
           </div>
         </div>
