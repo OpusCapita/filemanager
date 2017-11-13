@@ -132,7 +132,7 @@ None.
 
 ## Get file(s)/compressed dir
 
-* URL: `api/download?items=:id&items=:id...`
+* URL: `api/download`
 * Method: GET
 
 ### Request Query Parameters
