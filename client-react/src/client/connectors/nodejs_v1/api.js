@@ -177,6 +177,7 @@ async function createFolder(options, parentId, folderName) {
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
+  return response;
 }
 
 function getResourceName(apiOptions, resource) {
@@ -190,6 +191,7 @@ async function renameResource(options, id, newName) {
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
+  return response;
 }
 
 export default {

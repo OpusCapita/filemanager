@@ -5,13 +5,14 @@ import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 
-let uploadIcon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let icon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let label = 'Upload';
 
 function handler(apiOptions, {
   id,
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -84,7 +85,7 @@ function handler(apiOptions, {
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -94,18 +95,30 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'upload',
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
-  },
+  icon: { svg: icon },
+  label,
+  shouldBeAvailable: (apiOptions) => true,
+  availableInContexts: ['files-view', 'new-button'],
+  handler: () => handler(apiOptions, {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: uploadIcon }}
+      icon={{ svg: icon }}
       onClick={() => handler(apiOptions, {
         id: nanoid(),
         showDialog,
         hideDialog,
-        forceUpdate,
+        navigateToDir,
         updateNotifications,
         getSelection,
         getSelectedResources,
@@ -115,7 +128,7 @@ export default (apiOptions, {
         getNotifications
       })}
     >
-      <span>Upload</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

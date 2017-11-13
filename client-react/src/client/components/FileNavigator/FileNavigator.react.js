@@ -4,29 +4,31 @@ import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
+import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
+import clickOutside from 'react-click-outside';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
 
 const propTypes = {
+  id: PropTypes.string,
   api: PropTypes.object,
   apiOptions: PropTypes.object,
   capabilities: PropTypes.func,
   className: PropTypes.string,
-  id: PropTypes.string,
   initialResourceId: PropTypes.string,
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func
 };
 const defaultProps = {
+  id: '',
   api: 'nodejs_v1',
   apiOptions: {},
   capabilities: () => [],
   className: '',
-  id: '',
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
@@ -35,6 +37,7 @@ const defaultProps = {
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
 
+@clickOutside
 export default
 class FileNavigator extends Component {
   constructor(props) {
@@ -94,7 +97,7 @@ class FileNavigator extends Component {
     let { initialResourceId, apiOptions, api, capabilities } = this.props;
     let { apiInitialized, apiSignedIn } = this.state;
 
-    let capabilitiesProps = this.getNavigatorState();
+    let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({ initializedCapabilities });
 
@@ -137,8 +140,11 @@ class FileNavigator extends Component {
     this.navigateToDir(id, resource.id);
   }
 
-  async navigateToDir(toId, fromId) {
-    this.startViewLoading();
+  navigateToDir = async (toId, idToSelect, startLoading = true) => {
+    if (startLoading) {
+      this.startViewLoading();
+    }
+
     let resource = await this.getResourceById(toId);
     this.setState({ resource });
 
@@ -146,7 +152,7 @@ class FileNavigator extends Component {
 
     this.setState({
       resourceChildren,
-      selection: typeof fromId !== 'undefined' ? [fromId] : []
+      selection: (typeof idToSelect !== 'undefined' || idToSelect !== null) ? [idToSelect] : []
     });
 
     this.stopViewLoading();
@@ -180,6 +186,10 @@ class FileNavigator extends Component {
     let { resourceChildren } = this.state;
     let filteredResourceItems = resourceChildren.filter((o) => ids.indexOf(o.id) !== -1);
     return filteredResourceItems;
+  }
+
+  handleClickOutside = () => {
+    this.handleSelection([]);
   }
 
   handleSelection = (selection) => {
@@ -277,11 +287,11 @@ class FileNavigator extends Component {
     this.setState({ notifications });
   }
 
-  getNavigatorState = () => ({
+  getCapabilitiesProps = () => ({
     showDialog: this.showDialog,
     hideDialog: this.hideDialog,
     updateNotifications: this.updateNotifications,
-    forceUpdate: this.state.resource.id ? () => this.navigateToDir(this.state.resource.id) : () => {},
+    navigateToDir: this.navigateToDir,
     getSelection: () => this.state.selection,
     getSelectedResources: () => this.state.resourceChildren.filter(o => this.state.selection.some((s) => s === o.id)),
     getResource: () => this.state.resource,
@@ -293,11 +303,11 @@ class FileNavigator extends Component {
 
   render() {
     let {
+      id,
       api,
       apiOptions,
       capabilities,
       className,
-      id,
       initialResourceId,
       listViewLayout,
       signInRenderer,
@@ -354,9 +364,45 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let contextMenuChildren = initializedCapabilities.
-      filter(capability => (capability.contextMenuRenderer && capability.shouldBeAvailable(apiOptions))).
+    let rowContextMenuChildren = initializedCapabilities.
+        filter(capability => (
+        capability.contextMenuRenderer &&
+        capability.shouldBeAvailable(apiOptions) &&
+        (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
+      )).
       map(capability => capability.contextMenuRenderer(apiOptions));
+
+    let filesViewContextMenuChildren = initializedCapabilities.
+      filter(capability => (
+        capability.contextMenuRenderer &&
+        capability.shouldBeAvailable(apiOptions) &&
+        (capability.availableInContexts && capability.availableInContexts.indexOf('files-view') !== -1)
+      )).
+      map(capability => capability.contextMenuRenderer(apiOptions));
+
+    let toolbarItems = initializedCapabilities.
+        filter(capability => (
+          capability.contextMenuRenderer &&
+          capability.shouldBeAvailable(apiOptions) &&
+          (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
+        )).
+        map(capability => ({
+          icon: capability.icon || null,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
+
+    let newButtonItems = initializedCapabilities.
+        filter(capability => (
+          capability.contextMenuRenderer &&
+          capability.shouldBeAvailable(apiOptions) &&
+          (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
+        )).
+        map(capability => ({
+          icon: capability.icon || null,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
 
     return (
       <div
@@ -364,6 +410,12 @@ class FileNavigator extends Component {
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
+        <div className="oc-fm--file-navigator__toolbar">
+          <Toolbar
+            items={toolbarItems}
+            newButtonItems={newButtonItems}
+          />
+        </div>
         <div className="oc-fm--file-navigator__location-bar">
           <LocationBar
             items={locationItems}
@@ -373,7 +425,7 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
-            contextMenuId={id}
+            id={id}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -386,7 +438,8 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
-            contextMenuChildren={contextMenuChildren}
+            rowContextMenuChildren={rowContextMenuChildren}
+            filesViewContextMenuChildren={filesViewContextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           >

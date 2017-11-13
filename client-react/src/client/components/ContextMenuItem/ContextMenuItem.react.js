@@ -25,7 +25,7 @@ class ContextMenuItem extends Component {
     let { icon, children, ...restProps } = this.props;
 
     return (
-      <MenuItem {...restProps}>
+      <MenuItem>
         <DropdownMenuItem icon={icon} {...restProps}>
           {children}
         </DropdownMenuItem>

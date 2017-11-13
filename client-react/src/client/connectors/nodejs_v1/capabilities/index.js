@@ -7,7 +7,7 @@ import rename from './rename';
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -19,7 +19,7 @@ export default (apiOptions, {
   createFolder(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -31,7 +31,7 @@ export default (apiOptions, {
   rename(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -43,7 +43,7 @@ export default (apiOptions, {
   download(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -55,7 +55,7 @@ export default (apiOptions, {
   upload(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
@@ -67,7 +67,7 @@ export default (apiOptions, {
   deleteResource(apiOptions, {
     showDialog,
     hideDialog,
-    forceUpdate,
+    navigateToDir,
     updateNotifications,
     getSelection,
     getSelectedResources,
