@@ -2,8 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './Toolbar.less';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  items: PropTypes.array,
+  newButtonItems: PropTypes.array
+
+};
+const defaultProps = {
+  items: [],
+  newButtonItems: []
+};
 
 export default
 class Toolbar extends Component {
@@ -14,7 +21,7 @@ class Toolbar extends Component {
 
   render() {
     return (
-      <div className="toolbar">
+      <div className="oc-fm--toolbar">
       </div>
     );
   }
