@@ -51,6 +51,7 @@ export default (apiOptions, {
               return null;
             }}
             headerText={`Folder name`}
+            submitButtonText={`Create`}
           />
         ));
       }}
