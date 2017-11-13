@@ -45,7 +45,7 @@ NOTE: file/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/
 * Method: POST
 * Content-Type: multipart/form-data
 
-### Request
+### Request Body
 
 FormData instance with the following field name/value pairs.
 
@@ -77,7 +77,7 @@ A 204 status is returned if a dir with parentId does not exist.
 * URL: `api/files/id`
 * Method: DELETE
 
-### Request
+### Request Query Parameters
 
 None.
 
@@ -90,7 +90,7 @@ If successful, this method returns an empty response body.
 * URL: `api/files/:id/children`
 * Method: GET
 
-### Query Parameters
+### Request Query Parameters
 
 All query paramaters are optional
 
@@ -120,7 +120,7 @@ TODO in v2:
 * URL: `api/files/:id`
 * Method: GET
 
-### Request
+### Request Query Parameters
 
 None.
 
@@ -135,7 +135,14 @@ None.
 * URL: `api/download?items=:id&items=:id...`
 * Method: GET
 
-### Request
+### Request Query Parameters
+
+| Name           | Value       | 
+|----------------|-------------|
+| items          | dir/file id |
+| items          | dir/file id |
+| ...            | ...         |
+
 
 When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
 
@@ -151,7 +158,7 @@ Binary data.
 * URL: `api/files/:id`
 * Method: PATCH
 
-### Request
+### Request Body
 
 ```javascript
 {
