@@ -16,8 +16,8 @@ import clickOutside from 'react-click-outside';
 import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
-const ROW_HEIGHT = 42;
-const HEADER_HEIGHT = 32;
+const ROW_HEIGHT = 48;
+const HEADER_HEIGHT = 44;
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
