@@ -42,14 +42,19 @@ class LocationBar extends Component {
       ) : null;
 
       return (
-        <div key={i} className="oc-fm--location-bar__item">
+        <div
+          key={i}
+          tabIndex="0"
+          className={`
+            oc-fm--location-bar__item
+            ${i === items.length - 1 ? 'oc-fm--location-bar__item--last': ''}
+          `}
+        >
           <div
             className={`
               oc-fm--location-bar__item-title
-              ${i === items.length - 1 ? 'oc-fm--location-bar__item-title--last': ''}
               ${loading ? 'oc-fm--location-bar__item-title--loading': ''}
             `}
-            tabIndex="0"
             title={item.title}
             onClick={item.onClick}
           >
