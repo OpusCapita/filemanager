@@ -73,7 +73,7 @@ class Toolbar extends Component {
     ));
 
     let dropdownMenuElement = showDropdownMenu ? (
-      <DropdownMenu show={showDropdownMenu} onHide={this.hideDropdownMenu} showToTop={true}>
+      <DropdownMenu show={showDropdownMenu} onHide={this.hideDropdownMenu}>
         {dropdownMenuItems}
       </DropdownMenu>
     ) : null;
