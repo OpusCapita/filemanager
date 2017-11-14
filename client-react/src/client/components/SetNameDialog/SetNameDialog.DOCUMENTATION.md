@@ -12,7 +12,7 @@ SetNameDialog is
 ### Code Example
 
 ```
-<div style={{ backgroundColor: '#333' }}>
+<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.72)' }}>
   <SetNameDialog />
 </div>
 ```

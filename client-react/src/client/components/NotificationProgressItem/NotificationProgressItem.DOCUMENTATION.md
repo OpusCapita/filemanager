@@ -14,7 +14,7 @@ NotificationProgressItem is
 ```
 <NotificationProgressItem
   progress={33}
-  icon={{ svg: _scope.getIcon('archive'), fill: '#333' }}
+  icon={{ svg: _scope.getIcon('archive'), fill: 'rgba(0, 0, 0, 0.72)' }}
   title="Zipping 256 files"
   onClick={() => console.log('click!')}
   onProgressClick={() => console.log('progress click!')}

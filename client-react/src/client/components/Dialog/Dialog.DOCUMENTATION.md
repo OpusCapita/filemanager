@@ -12,7 +12,7 @@ Dialog is
 ### Code Example
 
 ```
-<div style={{ backgroundColor: '#333' }}>
+<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.72)' }}>
   <Dialog>
     <div className="oc-fm--dialog__header">
       <div>Dialog header</div>

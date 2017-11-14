@@ -31,12 +31,12 @@
 }
 
 .oc-fm--dialog__button {
-  padding: 6px 12px;
+  padding: 6px 24px;
   margin-bottom: 12px;
   border: none;
   border-radius: 2px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
-  color: #333;
+  color: rgba(0, 0, 0, 0.72);
   background-color: #fff;
   font-size: 14px;
   white-space: nowrap;
@@ -44,37 +44,36 @@
 
   &:hover:not([disabled]),
   &:focus {
-    background-color: rgba(0,0,0,.08);
     outline: none;
   }
 
   &[disabled] {
-    background-color: #ccc;
+    background-color: #f2f2f2;
     color: #555;
     box-shadow: none;
   }
 }
 
 .oc-fm--dialog__button--default {
-  color: #333;
+  color: rgba(0, 0, 0, 0.72);
   background-color: #fff;
   &:focus:not([disabled]),
   &:hover:not([disabled]) {
-    background-color: rgba(0,0,0,.08);
+    background-color: #f2f2f2;
   }
 }
 
 .oc-fm--dialog__button--primary {
   color: #fff;
-  background-color: #e70;
+  background-color: #2196F3;
   &:focus:not([disabled]),
   &:hover:not([disabled]) {
-    background-color: #c56300;
+    background-color: #1976d2;
   }
 }
 
 .oc-fm--dialog__input {
-  color: #333;
+  color: rgba(0, 0, 0, 0.72);
   font-size: 14px;
   padding: 6px 12px;
   border-radius: 2px;

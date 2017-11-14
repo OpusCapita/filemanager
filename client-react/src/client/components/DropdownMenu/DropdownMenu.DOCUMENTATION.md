@@ -24,7 +24,7 @@ DropdownMenu is
         svg: `<svg viewBox="0 0 120 120" version="1.1">
           <circle cx="60" cy="60" r="50"/>
         </svg>`, 
-        fill: '#333' 
+        fill: 'rgba(0, 0, 0, 0.72)' 
       }}
     >
       <span>Circle</span>
@@ -35,7 +35,7 @@ DropdownMenu is
         svg: `<svg viewBox="0 0 120 120" version="1.1">
           <circle cx="60" cy="60" r="50"/>
         </svg>`, 
-        fill: '#333' 
+        fill: 'rgba(0, 0, 0, 0.72)' 
       }}
     >
       <span>Circle</span>
@@ -46,7 +46,7 @@ DropdownMenu is
         svg: `<svg viewBox="0 0 120 120" version="1.1">
           <circle cx="60" cy="60" r="50"/>
         </svg>`, 
-        fill: '#333' 
+        fill: 'rgba(0, 0, 0, 0.72)' 
       }}
     >
       <span>Circle</span>
