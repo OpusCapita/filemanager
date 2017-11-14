@@ -1,6 +1,6 @@
 ### Synopsis
 
-FileNavigator is 
+FileNavigator is
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -17,7 +17,7 @@ FileNavigator is
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
-  
+
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
@@ -25,7 +25,7 @@ FileNavigator is
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
-      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
+      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`\\`)}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
       signInRenderer={() => (
@@ -34,10 +34,10 @@ FileNavigator is
       )}
     />
   </div>
-  
+
 
   {/*GOOGLE_DRIVE_EXAMPLE*/}
-  
+
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       id="google_drive_filemanager"
