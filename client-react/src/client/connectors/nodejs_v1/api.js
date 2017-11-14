@@ -1,6 +1,5 @@
 import request from 'superagent';
 import id from './id';
-import { readLocalFile } from '../utils/upload';
 import { downloadFile } from '../utils/download';
 
 async function init(options) {
@@ -118,6 +117,27 @@ async function getIdForPath(options, path) {
 
 async function getParentIdForResource(options, resource) {
   return resource.parentId;
+}
+
+async function readLocalFile() {
+  return new Promise((resolve, reject) => {
+    let uploadInput = document.createElement("input");
+    let reader = new FileReader();
+
+    uploadInput.addEventListener('change', (e) => {
+      let file = uploadInput.files[0];
+      resolve({
+        type: file.type,
+        name: file.name,
+        file
+      });
+    });
+
+    uploadInput.type = "file";
+    document.body.appendChild(uploadInput);
+    uploadInput.click();
+    document.body.removeChild(uploadInput);
+  });
 }
 
 async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, onProgress }) {
