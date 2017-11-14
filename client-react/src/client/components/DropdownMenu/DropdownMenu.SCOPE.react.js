@@ -4,43 +4,39 @@
 */
 
 import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
+import DropdownMenuItem from '../DropdownMenuItem';
 
-function requireAll(requireContext) {
-  return requireContext.keys().map(key => ({
-    name: key.replace(/(\.svg$|^\.\/)/gi, ''),
-    svg: requireContext(key)
-  }));
-}
-
-let icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.svg$/));
+window.DropdownMenuItem = DropdownMenuItem;
 
 @showroomScopeDecorator
 export default
-class ToolbarScope extends Component {
+class DropdownMenuScope extends Component {
   constructor(props) {
     super(props);
-    this.state = { icons };
+    this.state = {
+      show: false
+    };
   }
 
-  getIcon(name) {
-    return this.state.icons.filter(icon => icon.name === name)[0].svg;
+  toggle = () => {
+    this.setState({ show: !this.state.show });
   }
 
   render() {
     return (
       <div>
+        <button onClick={this.toggle}>Toggle context menu</button>
         {this._renderChildren()}
       </div>
     );
   }
 }
 
-ToolbarScope.contextTypes = {
+DropdownMenuScope.contextTypes = {
   i18n: PropTypes.object
 };
-ToolbarScope.childContextTypes = {
+DropdownMenuScope.childContextTypes = {
   i18n: PropTypes.object
 };

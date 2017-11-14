@@ -11,6 +11,7 @@ function handler(apiOptions, {
   id,
   showDialog,
   hideDialog,
+  navigateToDir,
   forceUpdate,
   updateNotifications,
   getSelection,
@@ -94,17 +95,30 @@ export default (apiOptions, {
   getNotifications
 }) => ({
   id: 'upload',
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
-  },
+  icon: { svg: icon },
+  label,
+  shouldBeAvailable: (apiOptions) => true,
+  availableInContexts: ['files-view', 'new-button'],
+  handler: () => handler(apiOptions, {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: uploadIcon }}
+      icon={{ svg: icon }}
       onClick={() => handler(apiOptions, {
         id: nanoid(),
         showDialog,
         hideDialog,
+        navigateToDir,
         forceUpdate,
         updateNotifications,
         getSelection,
@@ -115,7 +129,7 @@ export default (apiOptions, {
         getNotifications
       })}
     >
-      <span>Upload</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

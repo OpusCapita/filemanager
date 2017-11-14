@@ -16,12 +16,16 @@ export default
 class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { };
 
     this.connectors = connectors;
 
     window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
+  }
+
+  getIcon(name) {
+    return this.state.icons.filter(icon => icon.name === name)[0].svg;
   }
 
   googleDriveSignIn() {

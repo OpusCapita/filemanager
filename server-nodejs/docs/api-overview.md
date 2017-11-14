@@ -6,7 +6,7 @@
 | [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
 | [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | {<br />&nbsp;&nbsp;orderBy,<br />&nbsp;&nbsp;orderDirection,<br />&nbsp;&nbsp;maxResults,<br />&nbsp;&nbsp;pageToken,<br />&nbsp;&nbsp;searchQuery,<br />&nbsp;&nbsp;searchRecursively<br />}    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
+| [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | ?orderBy=...&orderDirection=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
 | [Rename and/or copy/move file/dir to destination](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
 | [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
 
@@ -45,7 +45,7 @@ NOTE: file/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/
 * Method: POST
 * Content-Type: multipart/form-data
 
-### Request
+### Request Body
 
 FormData instance with the following field name/value pairs.
 
@@ -53,8 +53,8 @@ FormData instance with the following field name/value pairs.
 |------------|--------------|------------------------|
 |  parentId  | \<string\>   |                        |
 |  type      | \<string\>   |                        |
-| ?name      | \<string\>   | for type 'dir' only  |
-| ?files     | \<FileList\> | for type 'file' only |
+| ?name      | \<string\>   | for type 'dir' only    |
+| ?files     | \<FileList\> | for type 'file' only   |
 
 ### Response
 
@@ -77,7 +77,7 @@ A 204 status is returned if a dir with parentId does not exist.
 * URL: `api/files/id`
 * Method: DELETE
 
-### Request
+### Request Query Parameters
 
 None.
 
@@ -90,18 +90,21 @@ If successful, this method returns an empty response body.
 * URL: `api/files/:id/children`
 * Method: GET
 
-### Request
+### Request Query Parameters
 
-```javascript
-{
-  orderBy: <string>, // one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'name'.
-  orderDirection: <string>, // ASC/DESC
-  maxResults: <number>, // TODO in v2
-  pageToken: <string>, // TODO in v2
-  searchQuery: <string>, // TODO in v2
-  searchRecursively: <bool> // TODO in v2
-}
-```
+All query paramaters are optional
+
+| Name           | Possible Values        | Default |
+|----------------|------------------------|---------|
+| orderBy        | name<br />modifiedTime | name    |
+| orderDirection | ASC<br />DESC          | ASC     |
+
+TODO in v2:
+
+* maxResults: \<number\>,
+* pageToken: \<string\>,
+* searchQuery: \<string\>,
+* searchRecursively: \<bool\>
 
 ### Response
 
@@ -117,7 +120,7 @@ If successful, this method returns an empty response body.
 * URL: `api/files/:id`
 * Method: GET
 
-### Request
+### Request Query Parameters
 
 None.
 
@@ -129,10 +132,17 @@ None.
 
 ## Get file(s)/compressed dir
 
-* URL: `api/download?items=:id&items=:id...`
+* URL: `api/download`
 * Method: GET
 
-### Request
+### Request Query Parameters
+
+| Name           | Value       | 
+|----------------|-------------|
+| items          | dir/file id |
+| items          | dir/file id |
+| ...            | ...         |
+
 
 When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
 
@@ -148,7 +158,7 @@ Binary data.
 * URL: `api/files/:id`
 * Method: PATCH
 
-### Request
+### Request Body
 
 ```javascript
 {

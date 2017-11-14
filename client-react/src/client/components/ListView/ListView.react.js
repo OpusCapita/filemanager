@@ -8,18 +8,19 @@ import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
 import ContextMenu from '../ContextMenu';
+import { ContextMenuTrigger } from "react-contextmenu";
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
-import clickOutside from 'react-click-outside';
 import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 48;
-const HEADER_HEIGHT = 48;
+const HEADER_HEIGHT = 44;
 
 const propTypes = {
+  id: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     type: PropTypes.string,
@@ -27,8 +28,8 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
-  contextMenuId: PropTypes.string,
-  contextMenuChildren: PropTypes.arrayOf(PropTypes.node),
+  rowContextMenuChildren: PropTypes.arrayOf(PropTypes.node),
+  filesViewContextMenuChildren: PropTypes.arrayOf(PropTypes.node),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
@@ -45,9 +46,10 @@ const propTypes = {
   onRef: PropTypes.func
 };
 const defaultProps = {
+  id: nanoid(),
   items: [],
-  contextMenuId: nanoid(),
-  contextMenuChildren: [],
+  rowContextMenuChildren: [],
+  filesViewContextMenuChildren: [],
   layout: () => [],
   layoutOptions: {},
   loading: false,
@@ -64,7 +66,6 @@ const defaultProps = {
   onRef: () => {}
 };
 
-@clickOutside
 export default
 class ListView extends Component {
   constructor(props) {
@@ -310,12 +311,6 @@ class ListView extends Component {
     this.setState({ clientHeight, scrollHeight, scrollTop });
   }
 
-  handleClickOutside = () => {
-    let selectionData = this.clearSelection();
-    this.handleSelection(selectionData.selection);
-    this.scrollToIndex(selectionData.scrollToIndex);
-  }
-
   selectFirstItem = () => ({
     selection: this.props.items.length ? [this.props.items[0].id] : [],
     scrollToIndex: 0
@@ -430,9 +425,10 @@ class ListView extends Component {
 
   render() {
     let {
+      id,
       items,
-      contextMenuId,
-      contextMenuChildren,
+      rowContextMenuChildren,
+      filesViewContextMenuChildren,
       layout,
       layoutOptions,
       loading,
@@ -449,6 +445,9 @@ class ListView extends Component {
       scrollTop
     } = this.state;
     let { rangeSelectionStartedAt, lastSelected } = this;
+
+    let rowContextMenuId = `row-context-menu-${id}`;
+    let filesViewContextMenuId = `files-view-context-menu-${id}`;
 
     let itemsToRender = null;
     if (loading && this.containerHeight) {
@@ -480,34 +479,39 @@ class ListView extends Component {
                 width: `${width}px`,
                 height: `${height}px`
               }}
-            >
-              <Table
-                width={width}
-                height={height}
-                rowCount={itemsToRender.length}
-                rowGetter={({ index }) => itemsToRender[index]}
-                rowHeight={ROW_HEIGHT}
-                headerHeight={HEADER_HEIGHT}
-                className="oc-fm--list-view__table"
-                gridClassName="oc-fm--list-view__grid"
-                overscanRowCount={10}
-                onScroll={this.handleScroll}
-                scrollToIndex={scrollToIndex}
-                scrollTop={scrollTop}
-                sort={this.handleSort}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                rowRenderer={Row({ selection, lastSelected, loading, contextMenuId })}
-                noRowsRenderer={NoFilesFoundStub}
-                onRowClick={this.handleRowClick}
-                onRowRightClick={this.handleRowRightClick}
-                onRowDoubleClick={this.handleRowDoubleClick}
               >
-                {layout({ ...layoutOptions, loading, width, height })}
-              </Table>
+              <ContextMenuTrigger id={filesViewContextMenuId}>
+                <Table
+                  width={width}
+                  height={height}
+                  rowCount={itemsToRender.length}
+                  rowGetter={({ index }) => itemsToRender[index]}
+                  rowHeight={ROW_HEIGHT}
+                  headerHeight={HEADER_HEIGHT}
+                  className="oc-fm--list-view__table"
+                  gridClassName="oc-fm--list-view__grid"
+                  overscanRowCount={10}
+                  onScroll={this.handleScroll}
+                  scrollToIndex={scrollToIndex}
+                  scrollTop={scrollTop}
+                  sort={this.handleSort}
+                  sortBy={sortBy}
+                  sortDirection={sortDirection}
+                  rowRenderer={Row({ selection, lastSelected, loading, contextMenuId: rowContextMenuId })}
+                  noRowsRenderer={NoFilesFoundStub}
+                  onRowClick={this.handleRowClick}
+                  onRowRightClick={this.handleRowRightClick}
+                  onRowDoubleClick={this.handleRowDoubleClick}
+                >
+                  {layout({ ...layoutOptions, loading, width, height })}
+                </Table>
+              </ContextMenuTrigger>
             </ScrollOnMouseOut>
-            <ContextMenu triggerId={contextMenuId}>
-              {contextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+            <ContextMenu triggerId={rowContextMenuId}>
+              {rowContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+            </ContextMenu>
+            <ContextMenu triggerId={filesViewContextMenuId}>
+              {filesViewContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
             </ContextMenu>
             {this.props.children}
           </div>

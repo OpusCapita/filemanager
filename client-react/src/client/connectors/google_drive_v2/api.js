@@ -123,7 +123,6 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let parent = await getResourceById(options, parentId);
-
   return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
@@ -195,7 +194,7 @@ async function initResumableUploadSession({ name, size, parentId }) {
   let res = await agent.post(uploadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     set('X-Upload-Content-Length', size).
-    send({ title: name, parents: [parentId] });
+    send({ title: name, parents: [{ id: parentId}] });
 
   return res.headers['location'];
 }
@@ -219,7 +218,7 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
 async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
   let file =  await readLocalFile();
   let size = file.content.length;
-  let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId: 'root' });
+  let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
   let startByte = 0;
   onStart({ name: file.name, size });
 
@@ -240,14 +239,14 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
     }
 
     if (res.status === 200 || res.status === 201) {
-      onSuccess();
+      onSuccess(res);
       return res;
     }
   }
 }
 
 async function createFolder(apiOptions, parentId, folderName) {
-  await window.gapi.client.drive.files.insert({
+  return await window.gapi.client.drive.files.insert({
     title: folderName,
     parents: [{ id: parentId }],
     mimeType: 'application/vnd.google-apps.folder'
@@ -255,10 +254,14 @@ async function createFolder(apiOptions, parentId, folderName) {
 }
 
 async function renameResource(apiOptions, id, newName) {
-  await window.gapi.client.drive.files.patch({
+  return await window.gapi.client.drive.files.patch({
     fileId: id,
     title: newName
   });
+}
+
+function getResourceName(apiOptions, resource) {
+  return resource.title;
 }
 
 async function removeResources() {
@@ -282,6 +285,7 @@ export default {
   getParentsForId,
   getParentIdForResource,
   getCapabilitiesForResource,
+  getResourceName,
   createFolder,
   downloadResources,
   uploadFileToId,
