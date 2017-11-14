@@ -37,7 +37,6 @@ function handler(apiOptions, {
       submitButtonText={'Ok'}
     />
   ));
-
 }
 
 export default (apiOptions, {
