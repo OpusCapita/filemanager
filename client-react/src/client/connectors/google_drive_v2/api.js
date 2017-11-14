@@ -1,6 +1,7 @@
 import agent from 'superagent';
 import JSZip from 'jszip';
 import { readLocalFile } from '../utils/upload';
+import { serializePromises } from '../utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 
@@ -181,18 +182,16 @@ async function downloadResources({ resources, apiOptions }) {
     return downloadResource({ resource: resources[0], params: downloadParams });
   }
 
-  // multiple resources -> download in parallel
-  const files = await Promise.all(
-    resources.map(
-      resource => downloadResource({
-        resource,
-        params: {
-          ...getDownloadParams(resource),
-          direct: false
-        }
-      })
-    )
-  )
+  // multiple resources -> download one by one
+  const files = await serializePromises(resources.map(
+    resource => _ => downloadResource({
+      resource,
+      params: {
+        ...getDownloadParams(resource),
+        direct: false
+      }
+    })
+  ))
 
   const zip = new JSZip();
   // add generated files to a zip bundle
