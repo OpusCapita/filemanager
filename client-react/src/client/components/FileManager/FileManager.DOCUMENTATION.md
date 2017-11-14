@@ -13,7 +13,15 @@ FileManager is
 
 ```
 <div>
-  <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
+  <div
+    style={{ 
+      height: '70vh',
+      minWidth: '320px',
+      flex: '1',
+      marginBottom: '15px',
+      padding: '12px',
+      backgroundColor: '#f2f2f2'
+  }}>
     <FileManager>
       <FileNavigator
         id="cusomization-area"

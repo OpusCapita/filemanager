@@ -414,7 +414,7 @@ class FileNavigator extends Component {
           <Toolbar
             items={toolbarItems}
             newButtonItems={newButtonItems}
-            newButtonText="New"
+
           />
         </div>
         <div className="oc-fm--file-navigator__view">
