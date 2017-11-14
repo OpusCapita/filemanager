@@ -1,5 +1,6 @@
 import request from 'superagent';
 import id from './id';
+import { readLocalFile } from '../utils/upload';
 import { downloadFile } from '../utils/download';
 
 async function init(options) {
@@ -16,9 +17,7 @@ async function normalizeResource(resource) {
     name: resource.name,
     type: resource.type,
     size: resource.size,
-    // ancestors: resource.ancestors,
     parentId: resource.parentId ? resource.parentId : null
-    // parentId: resource.ancestors ? resource.ancestors[resource.ancestors.length - 1] : null
   };
 }
 
@@ -118,32 +117,27 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-// async function downloadResource(options, resource) {
-//   let name = resource.name;
-//   let route = `${options.apiRoot}/download`;
-//   let method = 'GET';
-//   request(method, route).
-//   end((err, res) => {
-//     if (err) {
-//       return console.error('Failed to download resource:', err);
-//     }
-//     downloadFile(res.body, name);
-//   }).
-//   catch((error) => {
-//     console.error('Filemanager. getIdForPath()', error);
-//   });
-//   // request.get(downloadUrl).
-//   // set('Authorization', `Bearer ${accessToken}`).
-//   // responseType('blob').
-//   // end((err, res) => {
-//   //   if (err) {
-//   //     return console.error('Failed to download resource:', err);
-//   //   }
-//   //   downloadFile(res.body, name);
-//   // });
-// }
+async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, onProgress }) {
+  let file =  await readLocalFile();
+  let route = `${options.apiRoot}/files`;
+  onStart({ name: file.name, size: file.file.size });
+  request.post(route).
+  field('type', 'file').
+  field('parentId', parentId).
+  attach('files', file.file, file.name).
+  on('progress', event => {
+    onProgress(event.percent);
+  }).
+  end(error => {
+    if (error) {
+      console.log(`Filemanager. uploadFileToId(${parentId})`, error);
+      onFail();
+    } else {
+      onSuccess();
+    }
+  });
+}
 
-// async function downloadResources(options, resources) {
 async function downloadResources(options, items) {
   let name = items[0].name;
   let route = `${options.apiRoot}/download`;
@@ -172,14 +166,14 @@ async function createFolder(options, parentId, folderName) {
   };
   let response = await request(method, route).send(params).
   catch((error) => {
-    console.error(`Filemanager. renameResource(${id})`, error);
+    console.error(`Filemanager. createFolder(${id})`, error);
   });
 }
 
 async function renameResource(options, id, newName) {
   let route = `${options.apiRoot}/files/${id}`;
   let method = 'PATCH';
-  let response = await request(method, route).send({ name: newName }).
+  let response = await request(method, route).type('application/json').send({ name: newName }).
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
@@ -197,5 +191,6 @@ export default {
   getParentIdForResource,
   createFolder,
   downloadResources,
-  renameResource
+  renameResource,
+  uploadFileToId
 };

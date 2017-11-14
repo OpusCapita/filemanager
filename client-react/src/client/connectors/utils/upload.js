@@ -9,7 +9,8 @@ async function readLocalFile() {
         resolve({
           content: e.target.result,
           type: file.type,
-          name: file.name
+          name: file.name,
+          file
         });
       });
       reader.addEventListener('error', (err) => reject(err));
