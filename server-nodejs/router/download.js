@@ -35,8 +35,12 @@ module.exports = ({ options, req, res, handleError }) => {
             filename: (absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])) + '.zip'
           });
         } else if (preview) {
+          // Sets the Content-Type response HTTP header field based on the filename’s extension.
+          // The Content-Disposition is not set, i.e. "inline" parameter is the default for a browser.
           res.sendFile(absPaths[0]);
         } else {
+          // Sets the Content-Type response HTTP header field based on the filename’s extension.
+          // Sets the Content-Disposition with "attachment" and "filename" equal to path.basename(absPaths[0])
           res.download(absPaths[0]);
         }
       }).
