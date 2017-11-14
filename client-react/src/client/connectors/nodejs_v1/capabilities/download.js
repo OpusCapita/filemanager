@@ -65,13 +65,12 @@ function handler(apiOptions, {
     } else {
       newNotifications = notifUtils.removeNotification(notifications, notificationId);
     }
-
     updateNotifications(newNotifications);
   };
 
   const onFail = () => {};
   const onProgress = (progress) => {
-    console.log('onprogress called with ' + progress)
+    console.log('||| onProgress called with ' + progress)
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const child = notifUtils.getChild(notification.children, notificationChildId);

@@ -1,5 +1,6 @@
 import request from 'superagent';
 import JSZip from 'jszip';
+import debounce from 'lodash/debounce';
 import id from './id';
 import { serializePromises } from '../utils/common';
 
@@ -122,10 +123,24 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function downloadResource({ apiOptions, resource }) {
+async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
   const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
+
   return request.get(downloadUrl).
     responseType('blob').
+    on('progress', event => {
+      /* the event is:
+      {
+        direction: "upload" or "download"
+        percent: 0 to 100 // may be missing if file size is unknown
+        total: // total file size, may be missing
+        loaded: // bytes downloaded or uploaded so far
+      } */
+      console.log('superagent progress for ' + resource.name + ': ');
+      console.log(event)
+      console.log({ i, l, r: i * 100 / l + event.percent })
+      onProgress(i * 100 / l + event.percent / l) // FIXme
+    }).
     then(
       res => ({
         file: res.body,
@@ -156,18 +171,23 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
+  const debouncedOnProgress = debounce(onProgress, 100);
   const files = await serializePromises(
-    resources.map(resource => _ => downloadResource({ resource, apiOptions })),
-    onProgress
+    resources.map(resource => ({ onProgress, i, l }) => downloadResource({
+      resource, apiOptions, onProgress: debouncedOnProgress, i, l
+    })),
+    debouncedOnProgress
   )
 
-  onSuccess()
+  onProgress(100);
 
   const zip = new JSZip();
   // add generated files to a zip bundle
   files.forEach(({ name, file }) => zip.file(name, file));
 
   const blob = await zip.generateAsync({ type: 'blob' })
+
+  setTimeout(onSuccess, 1000);
 
   return {
     direct: false,
