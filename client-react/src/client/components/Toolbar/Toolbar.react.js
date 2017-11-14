@@ -50,7 +50,7 @@ class Toolbar extends Component {
           <button
             key={i}
             disabled={item.disabled}
-            className={`oc-fm--toolbar__item ${item.disabled ? 'oc-fm--toolbar__item--disabled' : ''}`}
+            className={`oc-fm--toolbar__item`}
             title={item.label || ''}
             onClick={(!item.disabled && item.onClick) || (() => {})}
           >
@@ -73,7 +73,7 @@ class Toolbar extends Component {
       <button
         key={i}
         disabled={item.disabled}
-        className={`oc-fm--toolbar__item ${item.disabled ? 'oc-fm--toolbar__item--disabled' : ''}`}
+        className={`oc-fm--toolbar__item`}
         title={item.label || ''}
         onClick={(!item.disabled && item.onClick) || (() => {})}
       >
