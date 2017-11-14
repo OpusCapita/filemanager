@@ -137,14 +137,12 @@ None.
 
 ### Request Query Parameters
 
-| Name           | Value       | 
-|----------------|-------------|
-| items          | dir/file id |
-| items          | dir/file id |
-| ...            | ...         |
-
-
-When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
+| Name           | Value         | Default | Comments                                                  |
+|----------------|---------------|---------|-----------------------------------------------------------|
+| preview        | true or false | false   | Applicable only when single *items* parameter is file ID  |
+| items          | dir/file id   | -       | Both folder and file ids are allowed as *items*           |
+| items          | dir/file id   | -       | When multiple *items*, all _must_ be from the same folder |
+| ...            | ...           | ...     |                                                           |
 
 ### Response
 
