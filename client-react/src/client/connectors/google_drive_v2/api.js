@@ -1,6 +1,6 @@
 import agent from 'superagent';
 import { readLocalFile } from '../utils/upload';
-import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
+import { getExportMimeType, checkIsGoogleDocument, getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 
 let signedIn = false;
@@ -149,33 +149,17 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource(resource) {
-  const { mimeType } = resource;
+async function downloadResource({ resource, params }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-  const isGoogleDocument = checkIsGoogleDocument(mimeType);
 
-  let downloadUrl = resource.downloadUrl;
+  const { downloadUrl, direct, mimeType, fileName } = params;
 
-  if (downloadUrl) {
+  if (direct) {
     return {
       downloadUrl,
-      direct: true,
+      direct,
       mimeType
-    };
-  }
-
-  let title = '';
-
-  if (isGoogleDocument) {
-    const {
-      exportMimeType,
-      extension
-    } = getExportMimeType(mimeType);
-    downloadUrl = resource.exportLinks[exportMimeType];
-    title = `${resource.title}.${extension}`;
-  } else {
-    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
-    title = resource.title;
+    }
   }
 
   return agent.get(downloadUrl).
@@ -183,9 +167,9 @@ async function downloadResource(resource) {
     responseType('blob').
     then(
       res => ({
-        direct: false,
+        direct,
         file: res.body,
-        title
+        fileName
       }),
       err => { throw new Error(`Failed to download resource: ${err}`) }
   );
@@ -193,12 +177,34 @@ async function downloadResource(resource) {
 
 async function downloadResources(resources) {
   if (resources.length === 1) {
-    return downloadResource(resources[0]);
+    const downloadParams = getDownloadParams(resources[0]);
+    return downloadResource({ resource: resources[0], params: downloadParams });
   }
 
-  resources.forEach(async (resource) => {
+  console.log('Multiple! ' + resources.length)
 
-  });
+  // download in parallel
+  const files = await Promise.all(
+    resources.map(
+      resource => downloadResource({
+        resource,
+        params: {
+          ...getDownloadParams(resource),
+          direct: false
+        }
+      })
+    )
+  )
+
+  console.log('files are ready:')
+  console.log(files)
+
+  const blob = new Blob(files.map(({ file }) => file), { type: 'octet/stream' })
+  return {
+    direct: false,
+    file: blob,
+    title: 'Der.blob'
+  }
 }
 
 async function initResumableUploadSession({ name, size, parentId }) {

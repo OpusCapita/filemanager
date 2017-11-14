@@ -17,7 +17,7 @@ class DownloadMenuItem extends PureComponent {
   }
 
   handleClick = _ => (!this.state.downloadUrl && api.downloadResources(this.props.selectedResources).
-      then(({ direct, downloadUrl, file, title, mimeType }) => direct ?
+      then(({ direct, downloadUrl, file, fileName, mimeType }) => direct ?
         // we have a direct download link
         !this.state.downloadUrl ?
           this.setState({
@@ -26,7 +26,7 @@ class DownloadMenuItem extends PureComponent {
           }) :
           console.log('downloadUrl is not empty') :
         // we don't have a direct link - download it silently and then prompt to save the blob
-        promptToSaveBlob(file, title)
+        promptToSaveBlob(file, fileName)
       ).catch(err => console.log(err)))
 
   handleDownloadWasCalled = _ => this.setState({
@@ -70,7 +70,7 @@ export default (apiOptions, {
   id: 'download',
   shouldBeAvailable: (apiOptions) => {
     const selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
+    return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
   },
   contextMenuRenderer: (apiOptions) => {
     // const selectedResources = getSelectedResources()

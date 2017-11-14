@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+// a case when we need to silently download a file using Javascript, and prompt to save it afterwards
 function promptToSaveBlob(content, name) {
   let objectUrl = URL.createObjectURL(new Blob([content], { type: 'octet/stream' }));
 
@@ -15,6 +16,11 @@ function promptToSaveBlob(content, name) {
 }
 
 // TODO combine with promptToSaveBlob for consistensy
+// maybe there's no convenient way
+// <a>.download attribute works only with the same-origin values (e.g. generated with Javascript)
+// if we omit <a>.download user receives unreadable file name
+// on the other hand we have no 'download' attr on html forms
+//
 class HiddenDownloadForm extends PureComponent {
   static propTypes = {
     downloadUrl: PropTypes.string,
