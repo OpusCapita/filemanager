@@ -121,7 +121,7 @@ async function getParentIdForResource(options, resource) {
 }
 
 async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file =  await readLocalFile();
+  let file =  await readLocalFile(true);
   let route = `${options.apiRoot}/files`;
   onStart({ name: file.name, size: file.file.size });
   request.post(route).

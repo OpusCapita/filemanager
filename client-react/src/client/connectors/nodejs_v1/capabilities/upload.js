@@ -4,8 +4,8 @@ import NotificationProgressItem from '../../../components/NotificationProgressIt
 import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
-
-let uploadIcon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let icon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let label = 'Upload';
 
 function handler(apiOptions, {
   id,
@@ -35,9 +35,6 @@ function handler(apiOptions, {
     let newNotification = {
       title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
-      // progressText: `2 minutes left…`, // TODO
-      // cancelButtonText: "Cancel",
-      // onCancel: () => console.log('cancel')
     };
 
     let newNotifications = notification ?
@@ -48,6 +45,7 @@ function handler(apiOptions, {
   };
 
   let onSuccess = () => {
+    let resource = getResource();
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
     let notificationChildrenCount = notification.children.length;
@@ -65,6 +63,7 @@ function handler(apiOptions, {
     }
 
     updateNotifications(newNotifications);
+    navigateToDir(resource.id, null, false);
   };
 
   let onFail = () => {};
@@ -85,6 +84,7 @@ function handler(apiOptions, {
 export default (apiOptions, {
   showDialog,
   hideDialog,
+  navigateToDir,
   forceUpdate,
   updateNotifications,
   getSelection,
