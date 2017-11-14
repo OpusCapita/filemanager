@@ -8,6 +8,7 @@ const { id2path } = require('./lib');
 
 module.exports = ({ options, req, res, handleError }) => {
   const ids = Array.isArray(req.query.items) ? req.query.items : [req.query.items];
+  const preview = req.query.preview === 'true';
   let reqPaths;
 
   try {
@@ -33,6 +34,8 @@ module.exports = ({ options, req, res, handleError }) => {
             }],
             filename: (absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])) + '.zip'
           });
+        } else if (preview) {
+          res.sendFile(absPaths[0]);
         } else {
           res.download(absPaths[0]);
         }
