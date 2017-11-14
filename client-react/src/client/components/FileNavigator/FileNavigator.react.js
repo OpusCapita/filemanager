@@ -416,12 +416,6 @@ class FileNavigator extends Component {
             newButtonItems={newButtonItems}
           />
         </div>
-        <div className="oc-fm--file-navigator__location-bar">
-          <LocationBar
-            items={locationItems}
-            loading={loadingResourceLocation}
-          />
-        </div>
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
@@ -449,7 +443,12 @@ class FileNavigator extends Component {
             />
           </ListView>
         </div>
-
+        <div className="oc-fm--file-navigator__location-bar">
+          <LocationBar
+            items={locationItems}
+            loading={loadingResourceLocation}
+          />
+        </div>
       </div>
     );
   }

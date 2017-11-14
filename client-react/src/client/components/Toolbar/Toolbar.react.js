@@ -20,8 +20,7 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
-  newButtonItems: [],
-  newButtonText: 'New'
+  newButtonItems: []
 };
 
 export default
@@ -55,16 +54,29 @@ class Toolbar extends Component {
         <SVG
           className="oc-fm--toolbar__item-icon"
           svg={item.icon && item.icon.svg}
-          style={{ fill: (item.icon && item.icon.fill) || '#333' }}
+          style={{ fill: (item.icon && item.icon.fill) || 'rgba(0,0,0,.72)' }}
         />
       </button>
     ));
 
-    let newButtonElement = (
+    let newButtonElement = newButtonText ? (
       <button onClick={this.showDropdownMenu} className="oc-fm--toolbar__new-button">
         {newButtonText}
       </button>
-    );
+    ) : newButtonItems.map((item, i) => (
+      <button
+        key={i}
+        className="oc-fm--toolbar__item"
+        title={item.label || ''}
+        onClick={item.onClick || (() => {})}
+      >
+        <SVG
+          className="oc-fm--toolbar__item-icon"
+          svg={item.icon && item.icon.svg}
+          style={{ fill: (item.icon && item.icon.fill) || 'rgba(0,0,0,.72)' }}
+        />
+      </button>
+    ));
 
     let dropdownMenuItems = newButtonItems.map((item, i) => (
       <DropdownMenuItem key={i} icon={item.icon} onClick={item.onClick || (() => {})}>

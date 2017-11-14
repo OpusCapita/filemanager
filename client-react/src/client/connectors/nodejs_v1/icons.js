@@ -5,7 +5,7 @@ let videoFileIcon = require('@opuscapita/svg-icons/lib/ondemand_video.svg');
 let archiveFileIcon = require('@opuscapita/svg-icons/lib/archive.svg');
 let unknownFileIcon = require('@opuscapita/svg-icons/lib/insert_drive_file.svg');
 
-let defaultFillColor = '#333';
+let defaultFillColor = 'rgba(0,0,0,.72)';
 let soundFilesExtensions = ['aac', 'aiff', 'flac', 'm4a', 'ogg', 'mp3', 'wav', 'wma'];
 let pictureFilesExtensions = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'svg'];
 let videoFilesExtensions = ['avi', 'flv', 'wmv', 'mov', 'mp4'];
