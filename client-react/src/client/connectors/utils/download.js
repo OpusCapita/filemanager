@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-function downloadFile(content, name) {
+function promptToSaveBlob(content, name) {
   let objectUrl = URL.createObjectURL(new Blob([content], { type: 'octet/stream' }));
 
   let downloadLink = document.createElement("a");
@@ -14,6 +14,7 @@ function downloadFile(content, name) {
   document.body.removeChild(downloadLink);
 }
 
+// TODO combine with promptToSaveBlob for consistensy
 class HiddenDownloadForm extends PureComponent {
   static propTypes = {
     downloadUrl: PropTypes.string,
@@ -46,6 +47,6 @@ class HiddenDownloadForm extends PureComponent {
 }
 
 export {
-  downloadFile,
+  promptToSaveBlob,
   HiddenDownloadForm
 };

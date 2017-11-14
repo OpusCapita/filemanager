@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { HiddenDownloadForm, downloadFile } from '../../utils/download'
+import { HiddenDownloadForm, promptToSaveBlob } from '../../utils/download'
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
@@ -12,23 +12,30 @@ class DownloadMenuItem extends PureComponent {
   }
 
   state = {
-    downloadUrl: null
+    downloadUrl: null,
+    newTab: false
   }
 
   handleClick = _ => (!this.state.downloadUrl && api.downloadResources(this.props.selectedResources).
-      then(({ direct, downloadUrl, file, title }) => direct ?
+      then(({ direct, downloadUrl, file, title, mimeType }) => direct ?
+        // we have a direct download link
         !this.state.downloadUrl ?
-          this.setState({ downloadUrl }) :
+          this.setState({
+            downloadUrl,
+            ...(mimeType === 'application/pdf' ? { newTab: true } : null)
+          }) :
           console.log('downloadUrl is not empty') :
-        downloadFile(file, title)
+        // we don't have a direct link - download it silently and then prompt to save the blob
+        promptToSaveBlob(file, title)
       ).catch(err => console.log(err)))
 
   handleDownloadWasCalled = _ => this.setState({
-    downloadUrl: null
+    downloadUrl: null,
+    newTab: false
   })
 
   render() {
-    const { downloadUrl } = this.state;
+    const { downloadUrl, newTab } = this.state;
 
     return (
       <ContextMenuItem
@@ -40,6 +47,7 @@ class DownloadMenuItem extends PureComponent {
           downloadUrl && <HiddenDownloadForm
             downloadUrl={downloadUrl}
             onDownloadWasCalled={this.handleDownloadWasCalled}
+            target={newTab ? '_blank' : '_self'}
           />
         }
       </ContextMenuItem>
@@ -65,7 +73,7 @@ export default (apiOptions, {
     return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
   },
   contextMenuRenderer: (apiOptions) => {
-    const selectedResources = getSelectedResources()
+    // const selectedResources = getSelectedResources()
     return (
       <DownloadMenuItem selectedResources={getSelectedResources()} />
     );

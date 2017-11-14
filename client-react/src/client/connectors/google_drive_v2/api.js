@@ -1,5 +1,4 @@
 import agent from 'superagent';
-// import { downloadFile } from '../utils/download';
 import { readLocalFile } from '../utils/upload';
 import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
 import parseRange from 'range-parser';
@@ -160,7 +159,8 @@ async function downloadResource(resource) {
   if (downloadUrl) {
     return {
       downloadUrl,
-      direct: true
+      direct: true,
+      mimeType
     };
   }
 
