@@ -175,7 +175,7 @@ async function downloadResource({ resource, params }) {
   );
 }
 
-async function downloadResources(resources) {
+async function downloadResources({ resources, apiOptions }) {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
     return downloadResource({ resource: resources[0], params: downloadParams });
@@ -203,7 +203,7 @@ async function downloadResources(resources) {
   return {
     direct: false,
     file: blob,
-    fileName: 'archive.zip'
+    fileName: apiOptions.archiveName || 'archive.zip'
   }
 }
 

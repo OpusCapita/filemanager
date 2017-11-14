@@ -19,9 +19,7 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let selectedResources = getSelectedResources();
-
-  return api.downloadResources(selectedResources).
+  return api.downloadResources({ resources: getSelectedResources(), apiOptions }).
     then(({ direct, downloadUrl, file, fileName, mimeType }) => direct ?
       triggerHiddenForm({
         downloadUrl,
@@ -63,14 +61,12 @@ export default (apiOptions, {
     getNotifications
   }),
   availableInContexts: ['row', 'toolbar'],
-  contextMenuRenderer: (apiOptions) => {
-    return (
-      <ContextMenuItem
-        icon={{ svg: icon }}
-        onClick={_ => handler(apiOptions, { getSelectedResources })}
-      >
-        <span>{ label }</span>
-      </ContextMenuItem>
-    );
-  }
+  contextMenuRenderer: (apiOptions) => (
+    <ContextMenuItem
+      icon={{ svg: icon }}
+      onClick={_ => handler(apiOptions, { getSelectedResources })}
+    >
+      <span>{ label }</span>
+    </ContextMenuItem>
+  )
 });
