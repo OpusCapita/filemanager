@@ -1,7 +1,11 @@
 import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
-import { promptToSaveBlob, triggerHiddenForm } from '../../utils/download';
+import NotificationProgressItem from '../../../components/NotificationProgressItem';
+import notifUtils from '../../../components/Notifications/utils';
+import { getIcon } from '../icons';
+import { promptToSaveBlob } from '../../utils/download';
+
 let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
 let label = 'Download';
 
@@ -18,8 +22,75 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  return api.downloadResources({ resources: getSelectedResources(), apiOptions }).
-    then(
+  const notificationId = 'upload';
+  const notificationChildId = id;
+
+  const onStart = ({ name, quantity }) => {
+    console.log('called onstart')
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const childElement = (
+      <NotificationProgressItem title={name} progress={0} icon={getIcon({ title: name })} />
+    );
+
+    const newChildren = notifUtils.addChild(
+      (notification && notification.children) || [], notificationChildId, childElement
+    );
+    const newNotification = {
+      title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      children: newChildren
+    };
+
+    const newNotifications = notification ?
+      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.addNotification(notifications, notificationId, newNotification);
+
+    updateNotifications(newNotifications);
+  };
+
+  const onSuccess = _ => {
+    console.log('called onsuccess')
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const notificationChildrenCount = notification.children.length;
+    let newNotifications;
+
+    if (notificationChildrenCount > 1) {
+      newNotifications = notifUtils.updateNotification(
+        notifications,
+        notificationId, {
+          children: notifUtils.removeChild(notification.children, notificationChildId)
+        }
+      );
+    } else {
+      newNotifications = notifUtils.removeNotification(notifications, notificationId);
+    }
+
+    updateNotifications(newNotifications);
+  };
+
+  const onFail = () => {};
+  const onProgress = (progress) => {
+    console.log('onprogress called with ' + progress)
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const child = notifUtils.getChild(notification.children, notificationChildId);
+    const newChild = { ...child, element: { ...child.element, props: { ...child.element.props, progress } } };
+    const newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
+    const newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
+    updateNotifications(newNotifications);
+  };
+
+  return api.downloadResources({
+    resources: getSelectedResources(),
+    apiOptions,
+    trackers: {
+      onStart,
+      onSuccess,
+      onFail,
+      onProgress
+    }
+  }).then(
       ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
     ).catch(err => console.log(err))
 }

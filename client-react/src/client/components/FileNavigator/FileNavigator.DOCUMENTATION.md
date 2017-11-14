@@ -22,10 +22,10 @@ FileNavigator is
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
-        apiRoot: `${window.env.SERVER_URL}/api`
+        apiRoot: `http://opuscapita-filemanager-demo.azurewebsites.net/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
-      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`\\`)}
+      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
       signInRenderer={() => (

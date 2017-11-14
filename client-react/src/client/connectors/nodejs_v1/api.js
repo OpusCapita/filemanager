@@ -135,7 +135,12 @@ async function downloadResource({ apiOptions, resource }) {
   );
 }
 
-async function downloadResources({ apiOptions, resources }) {
+async function downloadResources({ apiOptions, resources, trackers: {
+  onStart,
+  onSuccess,
+  onFail,
+  onProgress
+} }) {
   if (resources.length === 1) {
     const { id, name } = resources[0];
     return {
@@ -146,9 +151,17 @@ async function downloadResources({ apiOptions, resources }) {
   }
 
   // multiple resources -> download one by one
-  const files = await serializePromises(resources.map(
-    resource => _ => downloadResource({ resource, apiOptions })
-  ))
+
+  const archiveName = apiOptions.archiveName || 'archive.zip'
+
+  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
+
+  const files = await serializePromises(
+    resources.map(resource => _ => downloadResource({ resource, apiOptions })),
+    onProgress
+  )
+
+  onSuccess()
 
   const zip = new JSZip();
   // add generated files to a zip bundle
@@ -159,7 +172,7 @@ async function downloadResources({ apiOptions, resources }) {
   return {
     direct: false,
     file: blob,
-    name: apiOptions.archiveName || 'archive.zip'
+    name: archiveName
   }
 }
 
