@@ -1,5 +1,6 @@
 'use strict';
 
+const helmet = require('helmet');
 const zip = require('express-easy-zip'); // 'node-archiver', 'zipstream' or 'easyzip'  may be used instead.
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -16,6 +17,7 @@ module.exports = options => {
     res.header('Access-Control-Allow-Methods', 'GET,POST,HEAD,OPTIONS,PUT,PATCH,DELETE');
     next();
   });
+  router.use(helmet.noCache());
   router.use(zip());
   router.use(bodyParser.json());
 
