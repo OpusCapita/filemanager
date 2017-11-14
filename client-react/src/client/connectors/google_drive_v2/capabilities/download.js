@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { HiddenDownloadForm } from '../../utils/download'
+import { HiddenDownloadForm, downloadFile } from '../../utils/download'
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
@@ -18,14 +18,16 @@ class DownloadMenuItem extends PureComponent {
   handleClick = _ => {
     if (!this.state.downloadUrl) {
       api.downloadResources(this.props.selectedResources).
-        then(({ done, downloadUrl }) => {
-          if (done) {
-            return
-          }
-          if (!this.state.downloadUrl) {
-            this.setState({
-              downloadUrl
-            })
+        then(result => {
+          const { direct, downloadUrl, file, title } = result;
+          if (direct) {
+            if (!this.state.downloadUrl) {
+              this.setState({ downloadUrl })
+            } else {
+              console.log('downloadUrl is not empty')
+            }
+          } else {
+            downloadFile(file, title)
           }
         })
     }

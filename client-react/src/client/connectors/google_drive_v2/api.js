@@ -1,5 +1,5 @@
 import agent from 'superagent';
-import { downloadFile } from '../utils/download';
+// import { downloadFile } from '../utils/download';
 import { readLocalFile } from '../utils/upload';
 import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
 import parseRange from 'range-parser';
@@ -151,50 +151,44 @@ async function getCapabilitiesForResource(options, resource) {
 }
 
 async function downloadResource(resource) {
-  console.log(resource)
   const { mimeType } = resource;
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
   const isGoogleDocument = checkIsGoogleDocument(mimeType);
 
   let downloadUrl = resource.downloadUrl;
 
-  if (!downloadUrl) {
-    let title = '';
-    // let content = '';
-    console.log('no download url')
-
-    if (isGoogleDocument) {
-      const {
-        exportMimeType,
-        extension
-      } = getExportMimeType(mimeType);
-      downloadUrl = resource.exportLinks[exportMimeType];
-      title = `${resource.title}.${extension}`;
-    } else {
-      downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
-      title = resource.title;
-    }
-
-    console.log('got url: ' + downloadUrl)
-
-    agent.get(downloadUrl).
-      set('Authorization', `Bearer ${accessToken}`).
-      responseType('blob').
-      then((err, res) => {
-        if (err) {
-          return console.error('Failed to download resource:', err);
-        }
-        downloadFile(res.body, title);
-        return {
-          done: true
-        }
-      });
-  } else {
+  if (downloadUrl) {
     return {
       downloadUrl,
-      done: false
+      direct: true
     };
   }
+
+  let title = '';
+
+  if (isGoogleDocument) {
+    const {
+      exportMimeType,
+      extension
+    } = getExportMimeType(mimeType);
+    downloadUrl = resource.exportLinks[exportMimeType];
+    title = `${resource.title}.${extension}`;
+  } else {
+    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
+    title = resource.title;
+  }
+
+  return agent.get(downloadUrl).
+    set('Authorization', `Bearer ${accessToken}`).
+    responseType('blob').
+    then(
+      res => ({
+        direct: false,
+        file: res.body,
+        title
+      }),
+      err => console.error('Failed to download resource:', err)
+  );
 }
 
 async function downloadResources(resources) {
