@@ -1,6 +1,7 @@
 import agent from 'superagent';
+import JSZip from 'jszip';
 import { readLocalFile } from '../utils/upload';
-import { getExportMimeType, checkIsGoogleDocument, getDownloadParams } from './google-drive-utils';
+import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 
 let signedIn = false;
@@ -181,9 +182,7 @@ async function downloadResources(resources) {
     return downloadResource({ resource: resources[0], params: downloadParams });
   }
 
-  console.log('Multiple! ' + resources.length)
-
-  // download in parallel
+  // multiple resources -> download in parallel
   const files = await Promise.all(
     resources.map(
       resource => downloadResource({
@@ -196,14 +195,16 @@ async function downloadResources(resources) {
     )
   )
 
-  console.log('files are ready:')
-  console.log(files)
+  const zip = new JSZip();
+  // add generated files to a zip bundle
+  files.forEach(({ fileName, file }) => zip.file(fileName, file));
 
-  const blob = new Blob(files.map(({ file }) => file), { type: 'octet/stream' })
+  const blob = await zip.generateAsync({ type: 'blob' })
+
   return {
     direct: false,
     file: blob,
-    title: 'Der.blob'
+    fileName: 'archive.zip'
   }
 }
 
