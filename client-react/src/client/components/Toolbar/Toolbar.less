@@ -1,12 +1,20 @@
 .oc-fm--toolbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
 .oc-fm--toolbar__items {
   display: flex;
-  margin-left: auto;
+  padding-right: 6px;
+  margin-right: 6px;
+  border-right: 1px solid #f2f2f2;
+
+  &:last-child {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+  }
 }
 
 .oc-fm--toolbar__item {
@@ -17,7 +25,7 @@
   align-items: center;
   border-radius: 2px;
   border: 1px solid transparent;
-  background: #fff;
+  background-color: #fff;
   padding: 0;
 
   &:focus {
@@ -34,6 +42,14 @@
   &:active {
     cursor: pointer;
     background-color: rgba(0,0,0,.08);
+  }
+}
+
+.oc-fm--toolbar__item--disabled {
+  opacity: 0.22;
+  &:hover {
+    cursor: default;
+    background-color: #fff;
   }
 }
 

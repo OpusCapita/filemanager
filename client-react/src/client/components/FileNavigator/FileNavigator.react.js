@@ -382,26 +382,24 @@ class FileNavigator extends Component {
 
     let toolbarItems = initializedCapabilities.
         filter(capability => (
-          capability.contextMenuRenderer &&
-          capability.shouldBeAvailable(apiOptions) &&
           (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
         )).
         map(capability => ({
           icon: capability.icon || null,
           label: capability.label || '',
-          onClick: capability.handler || (() => {})
+          onClick: capability.handler || (() => {}),
+          disabled: !capability.shouldBeAvailable(apiOptions)
         }));
 
     let newButtonItems = initializedCapabilities.
         filter(capability => (
-          capability.contextMenuRenderer &&
-          capability.shouldBeAvailable(apiOptions) &&
           (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
         )).
         map(capability => ({
           icon: capability.icon || null,
           label: capability.label || '',
-          onClick: capability.handler || (() => {})
+          onClick: capability.handler || (() => {}),
+          disabled: !capability.shouldBeAvailable(apiOptions)
         }));
 
     return (
