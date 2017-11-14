@@ -137,14 +137,25 @@ None.
 
 ### Request Query Parameters
 
-| Name           | Value         | Default | Comments                                                  |
-|----------------|---------------|---------|-----------------------------------------------------------|
-| preview        | true or false | false   | Applicable only when single *items* parameter is file ID  |
-| items          | dir/file id   | -       | Both folder and file ids are allowed as *items*           |
-| items          | dir/file id   | -       | When multiple *items*, all _must_ be from the same folder |
-| ...            | ...           | ...     |                                                           |
+| Name           | Value         | Default | Comments                                                    |
+|----------------|---------------|---------|-------------------------------------------------------------|
+| preview        | true or false | false   | Applicable only when single **items** parameter is file ID  |
+| items          | dir/file id   | -       | Both folder and file IDs are allowed as **items**           |
+| items          | dir/file id   | -       | When multiple **items**, all _must_ be from the same folder |
+| ...            | ...           | ...     |                                                             |
 
 ### Response
+
+For single file download:
+
+* Content-Type: \<appropriate mime type\>
+* Content-Disposition: attachment; filename="\<string\>"
+
+For single file preview:
+
+* Content-Type: \<appropriate mime type\>
+
+For a dir or multiple dirs/files download:
 
 * Content-Type: application/zip
 * Content-Disposition: attachment; filename="\<string\>"
