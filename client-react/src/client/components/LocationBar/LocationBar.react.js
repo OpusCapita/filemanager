@@ -6,7 +6,7 @@ let arrowIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
+    name: PropTypes.string,
     onClick: PropTypes.func
   })),
   loading: PropTypes.bool
@@ -28,8 +28,8 @@ class LocationBar extends Component {
 
     if (!items.length) {
       return (
-        <div className="oc-fm--location-bar__item">
-          <div className={`oc-fm--location-bar__item-title oc-fm--location-bar__item-title--disabled`}>
+        <div className="oc-fm--location-bar__item oc-fm--location-bar__item--disabled">
+          <div className={`oc-fm--location-bar__item-name`}>
             <span>&nbsp;</span>
           </div>
         </div>
@@ -42,18 +42,23 @@ class LocationBar extends Component {
       ) : null;
 
       return (
-        <div key={i} className="oc-fm--location-bar__item">
+        <div
+          key={i}
+          tabIndex="0"
+          className={`
+            oc-fm--location-bar__item
+            ${i === items.length - 1 ? 'oc-fm--location-bar__item--last': ''}
+          `}
+        >
           <div
             className={`
-              oc-fm--location-bar__item-title
-              ${i === items.length - 1 ? 'oc-fm--location-bar__item-title--last': ''}
-              ${loading ? 'oc-fm--location-bar__item-title--loading': ''}
+              oc-fm--location-bar__item-name
+              ${loading ? 'oc-fm--location-bar__item-name--loading': ''}
             `}
-            tabIndex="0"
-            title={item.title}
+            name={item.name}
             onClick={item.onClick}
           >
-            {item.title}
+            {item.name}
           </div>
           {arrow}
         </div>

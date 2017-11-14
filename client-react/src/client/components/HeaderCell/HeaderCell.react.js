@@ -17,7 +17,7 @@ export default () => ({
 }) => {
   let sortIconSvg = sortDirection === SortDirection.ASC ? sortASCIcon : sortDESCIcon;
   let sortIconElement = dataKey === sortBy ? (
-    <SVG svg={sortIconSvg} />
+    <SVG className="oc-fm--header-cell__sort-icon" svg={sortIconSvg} />
   ) : null;
 
   return (

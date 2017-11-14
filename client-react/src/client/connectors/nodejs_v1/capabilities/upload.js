@@ -1,12 +1,29 @@
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 
-let uploadIcon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let icon = require('@opuscapita/svg-icons/lib/file_upload.svg');
+let label = 'Upload';
+
+function handler(apiOptions, {
+  id,
+  showDialog,
+  hideDialog,
+  navigateToDir,
+  updateNotifications,
+  getSelection,
+  getSelectedResources,
+  getResource,
+  getResourceChildren,
+  getResourceLocation,
+  getNotifications
+}) {
+  api.uploadFileToId(getResource().id);
+}
 
 export default (apiOptions, {
   showDialog,
   hideDialog,
-  forceUpdate,
+  navigateToDir,
   updateNotifications,
   getSelection,
   getSelectedResources,
@@ -15,17 +32,40 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => ({
-  id: 'download',
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
-  },
+  id: 'upload',
+  icon: { svg: icon },
+  label,
+  shouldBeAvailable: (apiOptions) => true,
+  availableInContexts: ['files-view', 'new-button'],
+  handler: () => handler(apiOptions, {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
-      icon={{ svg: uploadIcon }}
-      onClick={() => api.uploadFileToId(getResource().id)}
+      icon={{ svg: icon }}
+      onClick={() => handler(apiOptions, {
+        showDialog,
+        hideDialog,
+        navigateToDir,
+        updateNotifications,
+        getSelection,
+        getSelectedResources,
+        getResource,
+        getResourceChildren,
+        getResourceLocation,
+        getNotifications
+      })}
     >
-      <span>Upload</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

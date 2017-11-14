@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { DragSource } from 'react-dnd';
-import { ContextMenuTrigger, MenuItem } from "react-contextmenu";
+import { ContextMenuTrigger } from "react-contextmenu";
 
 const RowDragSource = {
   canDrag(props) {

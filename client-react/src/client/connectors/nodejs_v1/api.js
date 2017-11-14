@@ -64,16 +64,19 @@ async function getChildrenForId(options, id) {
 }
 
 async function getParentsForId(options, id, result = []) {
-  let resource = await getResourceById(options, id);
-  resource.title = resource.name;
-
-  const parents = [resource].concat(result);
-
-  if (!resource.parentId) {
-    return parents;
+  if (!id) {
+    return result;
   }
 
-  return await getParentsForId(options, resource.parentId, parents);
+  let resource = await getResourceById(options, id);
+  let parentId = resource.parentId;
+
+  if (!parentId) {
+    return result;
+  }
+
+  let parent = await getResourceById(options, parentId);
+  return await getParentsForId(options, resource.parentId, [parent].concat(result));
 }
 
 async function getIdForPartPath(options, currId, pathArr) {
@@ -174,6 +177,11 @@ async function createFolder(options, parentId, folderName) {
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
+  return response;
+}
+
+function getResourceName(apiOptions, resource) {
+  return resource.name;
 }
 
 async function renameResource(options, id, newName) {
@@ -183,6 +191,7 @@ async function renameResource(options, id, newName) {
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
+  return response;
 }
 
 export default {
@@ -195,6 +204,7 @@ export default {
   getChildrenForId,
   getParentsForId,
   getParentIdForResource,
+  getResourceName,
   createFolder,
   downloadResources,
   renameResource
