@@ -187,7 +187,7 @@ async function downloadResource(resource) {
         file: res.body,
         title
       }),
-      err => console.error('Failed to download resource:', err)
+      err => { throw new Error(`Failed to download resource: ${err}`) }
   );
 }
 

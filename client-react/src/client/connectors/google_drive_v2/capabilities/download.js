@@ -15,23 +15,13 @@ class DownloadMenuItem extends PureComponent {
     downloadUrl: null
   }
 
-  handleClick = _ => {
-    if (!this.state.downloadUrl) {
-      api.downloadResources(this.props.selectedResources).
-        then(result => {
-          const { direct, downloadUrl, file, title } = result;
-          if (direct) {
-            if (!this.state.downloadUrl) {
-              this.setState({ downloadUrl })
-            } else {
-              console.log('downloadUrl is not empty')
-            }
-          } else {
-            downloadFile(file, title)
-          }
-        })
-    }
-  }
+  handleClick = _ => (!this.state.downloadUrl && api.downloadResources(this.props.selectedResources).
+      then(({ direct, downloadUrl, file, title }) => direct ?
+        !this.state.downloadUrl ?
+          this.setState({ downloadUrl }) :
+          console.log('downloadUrl is not empty') :
+        downloadFile(file, title)
+      ).catch(err => console.log(err)))
 
   handleDownloadWasCalled = _ => this.setState({
     downloadUrl: null
