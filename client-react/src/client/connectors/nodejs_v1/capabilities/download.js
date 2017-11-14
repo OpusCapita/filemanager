@@ -1,6 +1,7 @@
+import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
-
+import { promptToSaveBlob, triggerHiddenForm } from '../../utils/download';
 let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
 let label = 'Download';
 
@@ -17,8 +18,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let selectedResources = getSelectedResources();
-  api.downloadResources(apiOptions, selectedResources);
+  return api.downloadResources({ resources: getSelectedResources(), apiOptions }).
+    then(
+      ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
+    ).catch(err => console.log(err))
 }
 
 export default (apiOptions, {
@@ -38,7 +41,7 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.length === 1 && selectedResources[0].type !== 'dir';
+    return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
   },
   availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {

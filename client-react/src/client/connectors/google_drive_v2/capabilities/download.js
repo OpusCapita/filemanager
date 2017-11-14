@@ -25,7 +25,7 @@ function handler(apiOptions, {
         downloadUrl,
         ...(mimeType === 'application/pdf' ? { target: '_blank' } : null)
       }) :
-      promptToSaveBlob(file, fileName)
+      promptToSaveBlob({ content: file, name: fileName })
     ).catch(err => console.log(err))
 }
 

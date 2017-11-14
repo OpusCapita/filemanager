@@ -1,6 +1,7 @@
 import request from 'superagent';
+import JSZip from 'jszip';
 import id from './id';
-import { downloadFile } from '../utils/download';
+import { serializePromises } from '../utils/common';
 
 async function init(options) {
   options.onInitSuccess();
@@ -121,48 +122,45 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-// async function downloadResource(options, resource) {
-//   let name = resource.name;
-//   let route = `${options.apiRoot}/download`;
-//   let method = 'GET';
-//   request(method, route).
-//   end((err, res) => {
-//     if (err) {
-//       return console.error('Failed to download resource:', err);
-//     }
-//     downloadFile(res.body, name);
-//   }).
-//   catch((error) => {
-//     console.error('Filemanager. getIdForPath()', error);
-//   });
-//   // request.get(downloadUrl).
-//   // set('Authorization', `Bearer ${accessToken}`).
-//   // responseType('blob').
-//   // end((err, res) => {
-//   //   if (err) {
-//   //     return console.error('Failed to download resource:', err);
-//   //   }
-//   //   downloadFile(res.body, name);
-//   // });
-// }
+async function downloadResource({ apiOptions, resource }) {
+  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
+  return request.get(downloadUrl).
+    responseType('blob').
+    then(
+      res => ({
+        file: res.body,
+        name: resource.name
+      }),
+      err => { throw new Error(`Failed to download resource: ${err}`) }
+  );
+}
 
-// async function downloadResources(options, resources) {
-async function downloadResources(options, items) {
-  let name = items[0].name;
-  let route = `${options.apiRoot}/download`;
-  let method = 'GET';
-  let req = request.get(route);
-  for (let i = 0; i < items.length; i++) {
-    req.query({ items: items[i].id });
-  }
-  req.
-  responseType('blob').
-  end((err, res) => {
-    if (err) {
-      return console.error('Failed to download resource:', err);
+async function downloadResources({ apiOptions, resources }) {
+  if (resources.length === 1) {
+    const { id, name } = resources[0];
+    return {
+      direct: true,
+      downloadUrl: `${apiOptions.apiRoot}/download?items=${id}`,
+      name
     }
-    downloadFile(res.body, name);
-  });
+  }
+
+  // multiple resources -> download one by one
+  const files = await serializePromises(resources.map(
+    resource => _ => downloadResource({ resource, apiOptions })
+  ))
+
+  const zip = new JSZip();
+  // add generated files to a zip bundle
+  files.forEach(({ name, file }) => zip.file(name, file));
+
+  const blob = await zip.generateAsync({ type: 'blob' })
+
+  return {
+    direct: false,
+    file: blob,
+    name: apiOptions.archiveName || 'archive.zip'
+  }
 }
 
 async function createFolder(options, parentId, folderName) {

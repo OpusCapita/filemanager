@@ -1,6 +1,6 @@
 // a case when we need to silently download a file using Javascript, and prompt to save it afterwards
-function promptToSaveBlob(content, name) {
-  let objectUrl = URL.createObjectURL(new Blob([content], { type: 'octet/stream' }));
+function promptToSaveBlob({ content, name, downloadUrl }) {
+  let objectUrl = downloadUrl || URL.createObjectURL(new Blob([content], { type: 'octet/stream' }));
 
   let downloadLink = document.createElement("a");
   downloadLink.href = objectUrl;
