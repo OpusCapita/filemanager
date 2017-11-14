@@ -3,6 +3,7 @@ import deleteResource from './delete-resource';
 import download from './download';
 import upload from './upload';
 import rename from './rename';
+import sort from './sort';
 
 export default (apiOptions, {
   showDialog,
@@ -65,6 +66,18 @@ export default (apiOptions, {
     getNotifications
   }),
   deleteResource(apiOptions, {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
+  sort(apiOptions, {
     showDialog,
     hideDialog,
     navigateToDir,
