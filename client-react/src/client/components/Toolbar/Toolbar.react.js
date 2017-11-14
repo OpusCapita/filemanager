@@ -57,7 +57,7 @@ class Toolbar extends Component {
             <SVG
               className="oc-fm--toolbar__item-icon"
               svg={item.icon && item.icon.svg}
-              style={{ fill: (item.icon && item.icon.fill) || 'rgba(0,0,0,.72)' }}
+              style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
             />
           </button>
         ))}
@@ -80,7 +80,7 @@ class Toolbar extends Component {
         <SVG
           className="oc-fm--toolbar__item-icon"
           svg={item.icon && item.icon.svg}
-          style={{ fill: (item.icon && item.icon.fill) || 'rgba(0,0,0,.72)' }}
+          style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
         />
       </button>
     ));

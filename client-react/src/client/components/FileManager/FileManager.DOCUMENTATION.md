@@ -20,7 +20,7 @@ FileManager is
       flex: '1',
       marginBottom: '15px',
       padding: '12px',
-      backgroundColor: '#f2f2f2'
+      backgroundColor: '#f5f5f5'
   }}>
     <FileManager>
       <FileNavigator

@@ -51,7 +51,7 @@ class Notification extends Component {
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={this.handleToggleClick}>
         <SVG
           svg={minimized ? maximizeIcon : minimizeIcon}
-          style={{ fill: '#f2f2f2' }}
+          style={{ fill: '#f5f5f5' }}
         />
       </div>
     ) : null;
@@ -60,7 +60,7 @@ class Notification extends Component {
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={onHide}>
         <SVG
           svg={closeIcon}
-          style={{ fill: '#f2f2f2' }}
+          style={{ fill: '#f5f5f5' }}
           />
       </div>
     ) : null;
