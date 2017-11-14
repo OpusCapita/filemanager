@@ -47,7 +47,8 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  let onSuccess = () => {
+  let onSuccess = (res) => {
+    let resource = getResource();
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
     let notificationChildrenCount = notification.children.length;
@@ -65,6 +66,7 @@ function handler(apiOptions, {
     }
 
     updateNotifications(newNotifications);
+    navigateToDir(resource.id, null, false);
   };
 
   let onFail = () => {};
