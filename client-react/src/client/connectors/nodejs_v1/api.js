@@ -208,6 +208,25 @@ async function renameResource(options, id, newName) {
   return response;
 }
 
+async function removeResource(options, resource) {
+  let route = `${options.apiRoot}/files/${resource.id}`;
+  let method = 'DELETE';
+  let response = await request(method, route).
+  catch((error) => {
+    throw error;
+  });
+  return response;
+}
+
+async function removeResources(options, selectedResources, { onSuccess, onFail }) {
+  let success = await Promise.all(selectedResources.map(async (resource) => await removeResource(options, resource))).
+  catch((error) => {
+    console.error(`Filemanager. removeResources`, error);
+    onFail();
+  });
+  onSuccess();
+}
+
 export default {
   init,
   pathToId,
@@ -222,5 +241,6 @@ export default {
   createFolder,
   downloadResources,
   renameResource,
+  removeResources,
   uploadFileToId
 };
