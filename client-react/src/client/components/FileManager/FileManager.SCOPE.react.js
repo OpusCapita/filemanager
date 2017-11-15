@@ -91,7 +91,7 @@ class FileManagerScope extends Component {
             <input
               value={nodejsInitPath}
               onChange={(e) => this.handleNodejsInitPathChange(e.target.value)}
-              style={{ marginLeft: '12px',  paddingLeft: '10px', minWidth: '320px' }}
+              style={{ marginLeft: '12px',  padding: '0 10px', minWidth: '320px' }}
             />
           </div>
         </div>
