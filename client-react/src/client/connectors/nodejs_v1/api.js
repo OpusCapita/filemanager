@@ -1,6 +1,5 @@
 import request from 'superagent';
 import JSZip from 'jszip';
-import debounce from 'lodash/debounce';
 import id from './id';
 import { serializePromises } from '../utils/common';
 
@@ -18,9 +17,7 @@ async function normalizeResource(resource) {
     name: resource.name,
     type: resource.type,
     size: resource.size,
-    // ancestors: resource.ancestors,
     parentId: resource.parentId ? resource.parentId : null
-    // parentId: resource.ancestors ? resource.ancestors[resource.ancestors.length - 1] : null
   };
 }
 
@@ -123,6 +120,48 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
+async function readLocalFile() {
+  return new Promise((resolve, reject) => {
+    let uploadInput = document.createElement("input");
+    let reader = new FileReader();
+
+    uploadInput.addEventListener('change', (e) => {
+      let file = uploadInput.files[0];
+      resolve({
+        type: file.type,
+        name: file.name,
+        file
+      });
+    });
+
+    uploadInput.type = "file";
+    document.body.appendChild(uploadInput);
+    uploadInput.click();
+    document.body.removeChild(uploadInput);
+  });
+}
+
+async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, onProgress }) {
+  let file =  await readLocalFile(true);
+  let route = `${options.apiRoot}/files`;
+  onStart({ name: file.name, size: file.file.size });
+  request.post(route).
+  field('type', 'file').
+  field('parentId', parentId).
+  attach('files', file.file, file.name).
+  on('progress', event => {
+    onProgress(event.percent);
+  }).
+  end(error => {
+    if (error) {
+      console.log(`Filemanager. uploadFileToId(${parentId})`, error);
+      onFail();
+    } else {
+      onSuccess();
+    }
+  });
+}
+
 async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
   const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
 
@@ -138,7 +177,7 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
       } */
       onProgress((i * 100 + event.percent) / l)
     }).
-    ok(res => false). // throws everything in error handler
+    // ok(res => false). // throws everything in error handler
     then(
       res => ({
         file: res.body,
@@ -209,7 +248,7 @@ async function createFolder(options, parentId, folderName) {
   };
   let response = await request(method, route).send(params).
   catch((error) => {
-    console.error(`Filemanager. renameResource(${id})`, error);
+    console.error(`Filemanager. createFolder(${id})`, error);
   });
   return response;
 }
@@ -221,11 +260,30 @@ function getResourceName(apiOptions, resource) {
 async function renameResource(options, id, newName) {
   let route = `${options.apiRoot}/files/${id}`;
   let method = 'PATCH';
-  let response = await request(method, route).send({ name: newName }).
+  let response = await request(method, route).type('application/json').send({ name: newName }).
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
   });
   return response;
+}
+
+async function removeResource(options, resource) {
+  let route = `${options.apiRoot}/files/${resource.id}`;
+  let method = 'DELETE';
+  let response = await request(method, route).
+  catch((error) => {
+    throw error;
+  });
+  return response;
+}
+
+async function removeResources(options, selectedResources, { onSuccess, onFail }) {
+  let success = await Promise.all(selectedResources.map(async (resource) => await removeResource(options, resource))).
+  catch((error) => {
+    console.error(`Filemanager. removeResources`, error);
+    onFail();
+  });
+  onSuccess();
 }
 
 export default {
@@ -241,5 +299,7 @@ export default {
   getResourceName,
   createFolder,
   downloadResources,
-  renameResource
+  renameResource,
+  removeResources,
+  uploadFileToId
 };

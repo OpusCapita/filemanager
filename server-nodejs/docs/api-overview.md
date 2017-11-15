@@ -8,9 +8,16 @@
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
 | [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | ?orderBy=...&orderDirection=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
 | [Rename and/or copy/move file/dir to destination](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
-| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?items=:id&items=:id...</span>                          | :binary-data                          |
+| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?preview=...&items=:id&items=:id...</span>                          | :binary-data                          |
 
-NOTE: file/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/package/base64url)-variation).  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
+File/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/package/base64url)-variation).  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
+
+To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/) is used to add the following HTTP headers to all responses:
+
+* Surrogate-Control: no-store
+* Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+* Pragma: no-cache
+* Expires: 0
 
 # API
 
@@ -137,16 +144,25 @@ None.
 
 ### Request Query Parameters
 
-| Name           | Value       | 
-|----------------|-------------|
-| items          | dir/file id |
-| items          | dir/file id |
-| ...            | ...         |
-
-
-When multiple items, all _must_ be from the same folder.  Both folder and file ids are allowed in __items__ array.
+| Name           | Value         | Default | Comments                                                    |
+|----------------|---------------|---------|-------------------------------------------------------------|
+| preview        | true or false | false   | Applicable only when single **items** parameter is file ID  |
+| items          | dir/file id   | -       | Both folder and file IDs are allowed as **items**           |
+| items          | dir/file id   | -       | When multiple **items**, all _must_ be from the same folder |
+| ...            | ...           | ...     |                                                             |
 
 ### Response
+
+For single file download:
+
+* Content-Type: \<appropriate mime type\>
+* Content-Disposition: attachment; filename="\<string\>"
+
+For single file preview:
+
+* Content-Type: \<appropriate mime type\>
+
+For a dir or multiple dirs/files download:
 
 * Content-Type: application/zip
 * Content-Disposition: attachment; filename="\<string\>"
