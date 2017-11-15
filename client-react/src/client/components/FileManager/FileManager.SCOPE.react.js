@@ -41,7 +41,7 @@ class FileManagerScope extends Component {
   }
 
   async componentDidMount() {
-    await this.handleNodejsInitPathChange('Customization area/Sound/rty 23');
+    await this.handleNodejsInitPathChange('');
   }
 
   googleDriveSignIn() {

@@ -106,9 +106,10 @@ class FileNavigator extends Component {
   }
 
   async componentDidMount() {
+    let { initialResourceId, apiOptions, api, capabilities, viewLayoutOptions } = this.props;
+    let { apiInitialized, apiSignedIn } = this.state;
     await this.setInitialResourceId();
 
-    let { apiOptions, api, capabilities } = this.props;
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({
