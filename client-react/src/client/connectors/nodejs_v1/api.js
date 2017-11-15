@@ -206,9 +206,9 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   // multiple resources -> download one by one
 
-  const archiveName = apiOptions.archiveName || 'archive.zip'
+  const archiveName = apiOptions.archiveName || 'archive.zip';
 
-  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
+  onStart({ archiveName, quantity: resources.length });
 
   const files = await serializePromises({
     series: resources.map(resource => ({ onProgress, i, l, onFail }) => downloadResource({

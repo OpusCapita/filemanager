@@ -27,11 +27,12 @@ function handler(apiOptions, {
   const notificationId = 'download';
   const notificationChildId = id;
 
-  const onStart = ({ name, quantity }) => {
+  const onStart = ({ archiveName, quantity }) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
+
     const childElement = (
-      <NotificationProgressItem title={name} progress={0} icon={getIcon({ title: name })} />
+      <NotificationProgressItem title={`Creating ${archiveName}...`} progress={0} />
     );
 
     const newChildren = notifUtils.addChild(
@@ -120,7 +121,7 @@ function handler(apiOptions, {
     }
   }).then(
       ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-    ).catch(err => console.log(err))
+    ).catch(err => console.error(err));
 }
 
 export default (apiOptions, {
