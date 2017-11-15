@@ -48,7 +48,6 @@ class FileNavigator extends Component {
       config: {},
       dialogElement: null,
       error: null,
-      initialResourceId: '',
       loadingResourceLocation: false,
       loadingView: false,
       notifications: [],
@@ -114,8 +113,8 @@ class FileNavigator extends Component {
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({
       initializedCapabilities,
-      sortBy: apiOptions.initialSortBy || 'title',
-      sortDirection: apiOptions.initialSortDirection || 'ASC'
+      sortBy: viewLayoutOptions.initialSortBy || 'title',
+      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
     await api.init({
@@ -327,6 +326,7 @@ class FileNavigator extends Component {
       apiOptions,
       capabilities,
       className,
+      initialResourceId,
       listViewLayout,
       signInRenderer,
       viewLayoutOptions
