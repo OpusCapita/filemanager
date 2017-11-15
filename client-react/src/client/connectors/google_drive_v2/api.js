@@ -135,10 +135,10 @@ async function getParentIdForResource(options, resource) {
   return resource.parents[0].id;
 }
 
-async function getChildrenForId(options, id, orderBy = 'title', orderDirection = 'ASC') {
+async function getChildrenForId(options, { id, sortBy = 'title', sortDirection = 'ASC' }) {
   let response = await window.gapi.client.drive.files.list({
     q: `'${id}' in parents and trashed = false`,
-    orderBy: `folder,${orderBy} ${orderDirection === 'ASC' ? '' : 'desc'}`
+    orderBy: `folder,${sortBy} ${sortDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
 

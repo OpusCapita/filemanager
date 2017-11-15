@@ -1,6 +1,8 @@
+import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import onFailError from '../../utils/onFailError';
 
 let icon = require('@opuscapita/svg-icons/lib/delete.svg');
 let label = 'Remove';
@@ -18,12 +20,19 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
+  console.log('delete id: ' + id);
+
   let onSuccess = () => {
     let resource = getResource();
     navigateToDir(resource.id, null, false);
   };
 
-  let onFail = () => {};
+  const onFail = _ => onFailError({
+    getNotifications,
+    label,
+    notificationId: 'delete',
+    updateNotifications
+  });
 
   let selectedResources = getSelectedResources();
 
