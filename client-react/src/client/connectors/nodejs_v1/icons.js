@@ -4,7 +4,6 @@ let pictureFileIcon = require('@opuscapita/svg-icons/lib/image.svg');
 let videoFileIcon = require('@opuscapita/svg-icons/lib/ondemand_video.svg');
 let archiveFileIcon = require('@opuscapita/svg-icons/lib/archive.svg');
 let unknownFileIcon = require('@opuscapita/svg-icons/lib/insert_drive_file.svg');
-let warningIcon = require('@opuscapita/svg-icons/lib/warning.svg');
 
 let defaultFillColor = '#333';
 let soundFilesExtensions = ['aac', 'aiff', 'flac', 'm4a', 'ogg', 'mp3', 'wav', 'wma'];
@@ -28,9 +27,7 @@ export function getIcon(resource) {
     return { svg: videoFileIcon, fill: defaultFillColor };
   } else if (matchFileExtensions(resource.title, archiveFilesExtensions)) {
     return { svg: archiveFileIcon, fill: defaultFillColor };
-  } else if (resource.title === 'error') {
-    return { svg: warningIcon, fill: defaultFillColor }
   } else {
     return { svg: unknownFileIcon, fill: defaultFillColor };
   }
-};
+}

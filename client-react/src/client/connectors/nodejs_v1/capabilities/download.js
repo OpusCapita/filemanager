@@ -6,6 +6,7 @@ import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import { promptToSaveBlob } from '../../utils/download';
 import SVG from '@opuscapita/react-svg/lib/SVG';
+let warningIcon = require('@opuscapita/svg-icons/lib/warning.svg');
 
 let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
 let label = 'Download';
@@ -74,7 +75,7 @@ function handler(apiOptions, {
     const icon = getIcon({ title: 'error' })
     const title = (
       <div className="oc-fm--notification-progress-item">
-        <SVG svg={icon.svg} style={{ fill: '#f00' }} />
+        <SVG svg={warningIcon} style={{ fill: '#f00' }} />
         <span className="oc-fm--notification-progress-item__title" style={{ margin: '0 0 0 6px' }}>
           {`${label} error`}
         </span>
