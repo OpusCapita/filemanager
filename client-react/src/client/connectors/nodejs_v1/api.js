@@ -50,11 +50,12 @@ async function getResourceById(options, id) {
   return await normalizeResource(resource);
 }
 
-async function getChildrenForId(options, id, sortBy = 'name', sortDirection = 'ASC') {
+async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail = _ => {} }) {
   let route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   let method = 'GET';
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
+    onFail({ message: 'Unable to read a directory.' }) // TODO doesn't intercept for some reason
   });
 
   let rawResourceChildren = response.body.items;
@@ -79,7 +80,7 @@ async function getParentsForId(options, id, result = []) {
 }
 
 async function getIdForPartPath(options, currId, pathArr) {
-  let { resourceChildren } = await getChildrenForId(options, id);
+  let { resourceChildren } = await getChildrenForId(options, { id });
 
   for (let i = 0; i < resourceChildren.length; i++) {
     let resource = resourceChildren[i];
@@ -142,7 +143,7 @@ async function readLocalFile() {
 }
 
 async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file =  await readLocalFile(true);
+  let file = await readLocalFile(true);
   let route = `${options.apiRoot}/files`;
   onStart({ name: file.name, size: file.file.size });
   request.post(route).
@@ -168,13 +169,6 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
   return request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
-      /* the event is:
-      {
-        direction: "upload" or "download"
-        percent: 0 to 100 // may be missing if file size is unknown
-        total: // total file size, may be missing
-        loaded: // bytes downloaded or uploaded so far
-      } */
       onProgress((i * 100 + event.percent) / l)
     }).
     then(
@@ -221,9 +215,7 @@ async function downloadResources({ apiOptions, resources, trackers: {
   onProgress(100);
 
   const zip = new JSZip();
-  // add generated files to a zip bundle
   files.forEach(({ name, file }) => zip.file(name, file));
-
   const blob = await zip.generateAsync({ type: 'blob' })
 
   setTimeout(onSuccess, 1000);
@@ -235,7 +227,7 @@ async function downloadResources({ apiOptions, resources, trackers: {
   }
 }
 
-async function createFolder(options, parentId, folderName) {
+async function createFolder(options, parentId, folderName, { onFail }) {
   let route = `${options.apiRoot}/files`;
   let method = 'POST';
   let params = {
@@ -246,6 +238,7 @@ async function createFolder(options, parentId, folderName) {
   let response = await request(method, route).send(params).
   catch((error) => {
     console.error(`Filemanager. createFolder(${id})`, error);
+    onFail()
   });
   return response;
 }
@@ -254,12 +247,13 @@ function getResourceName(apiOptions, resource) {
   return resource.name;
 }
 
-async function renameResource(options, id, newName) {
+async function renameResource(options, id, newName, { onFail }) {
   let route = `${options.apiRoot}/files/${id}`;
   let method = 'PATCH';
   let response = await request(method, route).type('application/json').send({ name: newName }).
   catch((error) => {
     console.error(`Filemanager. renameResource(${id})`, error);
+    onFail()
   });
   return response;
 }

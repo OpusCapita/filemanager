@@ -184,7 +184,7 @@ class FileNavigator extends Component {
 
   async getChildrenForId(id, sortBy, sortDirection) {
     let { api, apiOptions } = this.props;
-    let { resourceChildren } = await api.getChildrenForId(apiOptions, id, sortBy, sortDirection);
+    let { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
     return { resourceChildren };
   }
 
