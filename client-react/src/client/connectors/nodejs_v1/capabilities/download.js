@@ -2,10 +2,10 @@ import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import NotificationProgressItem from '../../../components/NotificationProgressItem';
-import Notification from '../../../components/Notification';
 import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import { promptToSaveBlob } from '../../utils/download';
+import SVG from '@opuscapita/react-svg/lib/SVG';
 
 let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
 let label = 'Download';
@@ -42,7 +42,7 @@ function handler(apiOptions, {
     };
 
     const newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);
@@ -67,27 +67,31 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = ({ code, message }) => {
-    onSuccess(); // close current notification
-
-    const title = `Error #${code}: ${message}`;
-
-    const notificationId = 'error';
+  const onFail = _ => {
     const notifications = getNotifications();
-    const notification = notifUtils.getNotification(notifications, notificationId);
-    const childElement = (
-      <Notification
-        closable={true}
-        title={title}
-      />
-    );
+    let newNotifications = notifUtils.removeNotification(notifications, notificationId);
+
+    const icon = getIcon({ title: 'error' })
+    const title = (
+      <div className="oc-fm--notification-progress-item">
+        <SVG svg={icon.svg} style={{ fill: '#f00' }} />
+        <span className="oc-fm--notification-progress-item__title" style={{ margin: '0 0 0 6px' }}>
+          {`${label} error`}
+        </span>
+      </div>
+    )
 
     const newNotification = {
       title,
-      children: [childElement]
+      minimizable: false,
+      closable: true,
+      children: [],
+      onHide: _ => updateNotifications(notifUtils.removeNotification(notifications, notificationId))
     };
 
-    const newNotifications = notification ?
+    const notification = notifUtils.getNotification(notifications, notificationId);
+
+    newNotifications = notification ?
       notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 

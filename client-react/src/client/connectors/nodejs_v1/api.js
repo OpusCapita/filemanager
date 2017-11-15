@@ -177,17 +177,14 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
       } */
       onProgress((i * 100 + event.percent) / l)
     }).
-    // ok(res => false). // throws everything in error handler
     then(
       res => ({
         file: res.body,
         name: resource.name
       }),
       err => {
-        console.log('error occured!');
-        console.log(JSON.stringify(err))
-        onFail({ code: 400, message: 'Booo' })
-        throw new Error(`Failed to download resource: ${err}`)
+        console.error(err)
+        onFail()
       }
   );
 }
