@@ -99,7 +99,11 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    this.setState({ initializedCapabilities });
+    this.setState({
+      initializedCapabilities,
+      sortBy: apiOptions.initialSortBy || 'title',
+      sortDirection: apiOptions.initialSortDirection || 'ASC'
+    });
 
     await api.init({
       ...apiOptions,
@@ -141,6 +145,8 @@ class FileNavigator extends Component {
   }
 
   navigateToDir = async (toId, idToSelect, startLoading = true) => {
+    let { sortBy, sortDirection } = this.state;
+
     if (startLoading) {
       this.startViewLoading();
     }
@@ -148,7 +154,7 @@ class FileNavigator extends Component {
     let resource = await this.getResourceById(toId);
     this.setState({ resource });
 
-    let { resourceChildren } = await this.getChildrenForId(resource.id);
+    let { resourceChildren } = await this.getChildrenForId(resource.id, sortBy, sortDirection);
 
     this.setState({
       resourceChildren,
@@ -176,9 +182,9 @@ class FileNavigator extends Component {
     return result;
   }
 
-  async getChildrenForId(id) {
+  async getChildrenForId(id, sortBy, sortDirection) {
     let { api, apiOptions } = this.props;
-    let { resourceChildren } = await api.getChildrenForId(apiOptions, id);
+    let { resourceChildren } = await api.getChildrenForId(apiOptions, id, sortBy, sortDirection);
     return { resourceChildren };
   }
 
