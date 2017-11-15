@@ -10,7 +10,7 @@ let signedIn = false;
 async function appendGoogleApiScript() {
   if (window.gapi) {
     return false;
-  };
+  }
 
   return new Promise((resolve, reject) => {
     let script = document.createElement('script');
@@ -167,13 +167,6 @@ async function downloadResource({ resource, params, onProgress, i, l }) {
     set('Authorization', `Bearer ${accessToken}`).
     responseType('blob').
     on('progress', event => {
-      /* the event is:
-      {
-        direction: "upload" or "download"
-        percent: 0 to 100 // may be missing if file size is unknown
-        total: // total file size, may be missing
-        loaded: // bytes downloaded or uploaded so far
-      } */
       onProgress((i * 100 + event.percent) / l)
     }).
     then(

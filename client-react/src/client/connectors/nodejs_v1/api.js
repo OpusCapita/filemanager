@@ -93,16 +93,10 @@ async function getRootId(options) {
 }
 
 async function getIdForPartPath(options, currId, pathArr) {
-  console.log('pathArr:', pathArr);
-  console.log(currId);
-  let { resourceChildren } = await getChildrenForId(options, currId);
-
-  console.log(resourceChildren);
-
+  let { resourceChildren } = await getChildrenForId(options, { id: currId });
   for (let i = 0; i < resourceChildren.length; i++) {
     let resource = resourceChildren[i];
     if (resource.name === pathArr[0]) {
-      console.log(resource.name, resource.id);
       if (pathArr.length === 1) {
         return resource.id;
       } else {
@@ -177,12 +171,12 @@ async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, o
 }
 
 async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
-  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
+  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`;
 
   return request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
-      onProgress((i * 100 + event.percent) / l)
+      onProgress((i * 100 + event.percent) / l);
     }).
     then(
       res => ({
@@ -190,8 +184,8 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
         name: resource.name
       }),
       err => {
-        console.error(err)
-        onFail()
+        console.error(err);
+        onFail();
       }
   );
 }
@@ -223,13 +217,13 @@ async function downloadResources({ apiOptions, resources, trackers: {
     })),
     onProgress,
     onFail
-  })
+  });
 
   onProgress(100);
 
   const zip = new JSZip();
   files.forEach(({ name, file }) => zip.file(name, file));
-  const blob = await zip.generateAsync({ type: 'blob' })
+  const blob = await zip.generateAsync({ type: 'blob' });
 
   setTimeout(onSuccess, 1000);
 
