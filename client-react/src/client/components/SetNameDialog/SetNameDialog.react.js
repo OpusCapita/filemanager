@@ -5,6 +5,7 @@ import Dialog from '../Dialog';
 
 const propTypes = {
   headerText: PropTypes.string,
+  cancelButtonText: PropTypes.string,
   submitButtonText: PropTypes.string,
   onValidate: PropTypes.func,
   onHide: PropTypes.func,
@@ -13,6 +14,7 @@ const propTypes = {
 };
 const defaultProps = {
   headerText: 'Set name',
+  cancelButtonText: 'Cancel',
   submitButtonText: 'Create',
   autofocus: false,
   onValidate: () => {},
@@ -61,7 +63,7 @@ class SetNameDialog extends Component {
   }
 
   render() {
-    let { onHide, headerText, submitButtonText } = this.props;
+    let { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
     let { value, validationError, valid } = this.state;
 
     let showValidationErrorElement = typeof validationError === 'string' && validationError;
@@ -97,7 +99,7 @@ class SetNameDialog extends Component {
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
             <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
-              Cancel
+              {cancelButtonText}
             </button>
             <button
               type="button"
