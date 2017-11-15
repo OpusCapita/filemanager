@@ -23,6 +23,8 @@ FileManager is
       backgroundColor: '#f5f5f5'
   }}>
     <FileManager>
+    
+      {/* Use NodeJS API v1 connector */}
       <FileNavigator
         id="cusomization-area"
         api={_scope.connectors.nodejs_v1.api}
@@ -39,7 +41,8 @@ FileManager is
           </div>
         )}
       />
-
+      
+      {/* Use Google Drive API v2 connector */}
       <FileNavigator
         id="google_drive_filemanager"
         api={_scope.connectors.google_drive_v2.api}
@@ -78,6 +81,7 @@ FileManager is
           </div>
         )}
       />
+
     </FileManager>
   </div>
 
