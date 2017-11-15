@@ -33,8 +33,10 @@ function handler(apiOptions, {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       }}
-      headerText={`Do you really want to remove\n${selectedResources.length > 1 ? `${selectedResources.length} files` : `the file ${selectedResources[0].name}`}?`}
-      submitButtonText={'Ok'}
+      headerText={`Do you really want to remove\n${selectedResources.length > 1 ?
+        `${selectedResources.length} files` :
+        `the file ${selectedResources[0].name}`}?`}
+      submitButtonText={'OK'}
     />
   ));
 }

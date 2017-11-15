@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import './ConfirmDialog.less';
 import Dialog from '../Dialog';
 
 const propTypes = {
@@ -11,14 +10,14 @@ const propTypes = {
 };
 const defaultProps = {
   headerText: 'Do you really want to remove the file?',
-  submitButtonText: 'Ok',
+  submitButtonText: 'OK',
   autofocus: false,
   onHide: () => {},
   onSubmit: () => {}
 };
 
 export default
-class CancelOkDialog extends Component {
+class ConfirmDialog extends Component {
   constructor(props) {
     super(props);
   }
@@ -27,6 +26,10 @@ class CancelOkDialog extends Component {
     if (e.which === 13) { // Enter key
       this.handleSubmit();
     }
+  };
+
+  handleCancel = async () => {
+    this.props.onHide();
   };
 
   handleSubmit = async () => {
@@ -44,7 +47,11 @@ class CancelOkDialog extends Component {
           </div>
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
-            <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
+            <button
+              type="button"
+              className="oc-fm--dialog__button oc-fm--dialog__button--default"
+              onClick={this.handleCancel}
+            >
               Cancel
             </button>
             <button
@@ -61,5 +68,5 @@ class CancelOkDialog extends Component {
   }
 }
 
-CancelOkDialog.propTypes = propTypes;
-CancelOkDialog.defaultProps = defaultProps;
+ConfirmDialog.propTypes = propTypes;
+ConfirmDialog.defaultProps = defaultProps;

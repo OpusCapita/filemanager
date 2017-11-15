@@ -31,7 +31,8 @@ function handler(apiOptions, {
       <NotificationProgressItem title={name} progress={0} icon={getIcon({ title: name })} />
     );
 
-    let newChildren = notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
+    let newChildren =
+      notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
       title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
