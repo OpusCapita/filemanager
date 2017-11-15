@@ -98,7 +98,7 @@
     "core-js": "2.5.0",
     "filesize": "3.5.11",
     "immutable": "3.8.2",
-    "jszip": "^3.1.5",
+    "jszip": "3.1.5",
     "lodash": "4.17.4",
     "moment": "2.19.1",
     "nanoid": "1.0.0",

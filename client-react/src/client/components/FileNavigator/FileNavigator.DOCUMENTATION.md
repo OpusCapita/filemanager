@@ -22,7 +22,7 @@ FileNavigator is
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
-        apiRoot: `http://opuscapita-filemanager-demo.azurewebsites.net/api`
+        apiRoot: `${window.env.SERVER_URL}/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
       initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
