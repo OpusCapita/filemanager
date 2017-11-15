@@ -123,7 +123,7 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
+async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
   const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
 
   return request.get(downloadUrl).
@@ -138,12 +138,18 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
       } */
       onProgress((i * 100 + event.percent) / l)
     }).
+    ok(res => false). // throws everything in error handler
     then(
       res => ({
         file: res.body,
         name: resource.name
       }),
-      err => { throw new Error(`Failed to download resource: ${err}`) }
+      err => {
+        console.log('error occured!');
+        console.log(JSON.stringify(err))
+        onFail({ code: 400, message: 'Booo' })
+        throw new Error(`Failed to download resource: ${err}`)
+      }
   );
 }
 
@@ -168,12 +174,13 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
-  const files = await serializePromises(
-    resources.map(resource => ({ onProgress, i, l }) => downloadResource({
-      resource, apiOptions, onProgress, i, l
+  const files = await serializePromises({
+    series: resources.map(resource => ({ onProgress, i, l, onFail }) => downloadResource({
+      resource, apiOptions, onProgress, i, l, onFail
     })),
-    onProgress
-  )
+    onProgress,
+    onFail
+  })
 
   onProgress(100);
 

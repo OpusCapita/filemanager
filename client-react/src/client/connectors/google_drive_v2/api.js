@@ -205,16 +205,19 @@ async function downloadResources({ resources, apiOptions, trackers: {
   onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
   // multiple resources -> download one by one
-  const files = await serializePromises(resources.map(
-    resource => ({ onProgress, i, l }) => downloadResource({
-      resource,
-      params: {
-        ...getDownloadParams(resource),
-        direct: false
-      },
-      onProgress, i, l
-    })
-  ), onProgress)
+  const files = await serializePromises({
+    series: resources.map(
+      resource => ({ onProgress, i, l }) => downloadResource({
+        resource,
+        params: {
+          ...getDownloadParams(resource),
+          direct: false
+        },
+        onProgress, i, l
+      })
+    ),
+    onProgress
+  })
 
   onProgress(100);
 

@@ -2,6 +2,7 @@ import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import NotificationProgressItem from '../../../components/NotificationProgressItem';
+import Notification from '../../../components/Notification';
 import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import { promptToSaveBlob } from '../../utils/download';
@@ -66,7 +67,33 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = () => {};
+  const onFail = ({ code, message }) => {
+    onSuccess(); // close current notification
+
+    const title = `Error #${code}: ${message}`;
+
+    const notificationId = 'error';
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const childElement = (
+      <Notification
+        closable={true}
+        title={title}
+      />
+    );
+
+    const newNotification = {
+      title,
+      children: [childElement]
+    };
+
+    const newNotifications = notification ?
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
+      notifUtils.addNotification(notifications, notificationId, newNotification);
+
+    updateNotifications(newNotifications);
+  };
+
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
