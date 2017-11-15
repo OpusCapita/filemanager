@@ -26,7 +26,6 @@ FileNavigator is
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
-      initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
       signInRenderer={() => (
@@ -50,7 +49,6 @@ FileNavigator is
         SCOPES: 'https://www.googleapis.com/auth/drive'
       }}
       capabilities={_scope.connectors.google_drive_v2.capabilities}
-      initialResourceId="root"
       listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
       viewLayoutOptions={_scope.connectors.google_drive_v2.viewLayoutOptions}
       signInRenderer={() => (

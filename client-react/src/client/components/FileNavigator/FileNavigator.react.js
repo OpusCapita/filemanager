@@ -48,6 +48,7 @@ class FileNavigator extends Component {
       config: {},
       dialogElement: null,
       error: null,
+      initialResourceId: '',
       loadingResourceLocation: false,
       loadingView: false,
       notifications: [],
@@ -74,7 +75,7 @@ class FileNavigator extends Component {
   }
 
   handleApiReady = () => {
-    let { initialResourceId } = this.props;
+    let { initialResourceId } = this.state;
     let resourceId = this.state.resource.id;
     let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
     this.navigateToDir(idToNavigate);
@@ -91,12 +92,18 @@ class FileNavigator extends Component {
         this.monitorApiAvailability();
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
+  };
+
+  async setInitialResourceId() {
+    let { api, initialResourceId, apiOptions } = this.props;
+    initialResourceId = initialResourceId === '' ? await api.getRootId(apiOptions) : initialResourceId;
+    this.setState({ initialResourceId });
   }
 
   async componentDidMount() {
-    let { initialResourceId, apiOptions, api, capabilities } = this.props;
-    let { apiInitialized, apiSignedIn } = this.state;
+    await this.setInitialResourceId();
 
+    let { apiOptions, api, capabilities } = this.props;
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({
@@ -314,7 +321,6 @@ class FileNavigator extends Component {
       apiOptions,
       capabilities,
       className,
-      initialResourceId,
       listViewLayout,
       signInRenderer,
       viewLayoutOptions

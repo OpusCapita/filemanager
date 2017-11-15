@@ -79,12 +79,30 @@ async function getParentsForId(options, id, result = []) {
   return await getParentsForId(options, resource.parentId, [parent].concat(result));
 }
 
+async function getBaseResource(options) {
+  let route = `${options.apiRoot}/files`;
+  let response = await request.get(route).catch((error) => {
+    console.error('Filemanager. getBaseResource()', error);
+  });
+  return normalizeResource(response.body);
+}
+
+async function getRootId(options) {
+  let resource = await getBaseResource(options);
+  return resource.id;
+}
+
 async function getIdForPartPath(options, currId, pathArr) {
-  let { resourceChildren } = await getChildrenForId(options, { id });
+  console.log('pathArr:', pathArr);
+  console.log(currId);
+  let { resourceChildren } = await getChildrenForId(options, currId);
+
+  console.log(resourceChildren);
 
   for (let i = 0; i < resourceChildren.length; i++) {
     let resource = resourceChildren[i];
-    if (resource.name === resource.name) {
+    if (resource.name === pathArr[0]) {
+      console.log(resource.name, resource.id);
       if (pathArr.length === 1) {
         return resource.id;
       } else {
@@ -97,12 +115,7 @@ async function getIdForPartPath(options, currId, pathArr) {
 }
 
 async function getIdForPath(options, path) {
-  let route = `${options.apiRoot}/files`;
-  let method = 'GET';
-  let response = await request(method, route).catch((error) => {
-    console.error('Filemanager. getIdForPath()', error);
-  });
-  let resource = normalizeResource(response);
+  let resource = await getBaseResource(options);
 
   let pathArr = path.split('/');
 
@@ -111,7 +124,7 @@ async function getIdForPath(options, path) {
   }
 
   if (pathArr.length === 1) {
-    return pathArr[0];
+    return resource.id;
   }
 
   return await getIdForPartPath(options, resource.id, pathArr.slice(1));
@@ -285,6 +298,7 @@ export default {
   getResourceById,
   getCapabilitiesForResource,
   getChildrenForId,
+  getRootId,
   getParentsForId,
   getParentIdForResource,
   getResourceName,

@@ -264,6 +264,10 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
   });
 }
 
+async function getRootId() {
+  return 'root';
+}
+
 async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
   let file = await readLocalFile();
   let size = file.content.length;
@@ -331,6 +335,7 @@ export default {
   idToPath,
   getResourceById,
   getChildrenForId,
+  getRootId,
   getParentsForId,
   getParentIdForResource,
   getCapabilitiesForResource,
