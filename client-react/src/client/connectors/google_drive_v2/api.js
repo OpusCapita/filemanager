@@ -1,7 +1,8 @@
 import agent from 'superagent';
-import { downloadFile } from '../utils/download';
+import JSZip from 'jszip';
 import { readLocalFile } from '../utils/upload';
-import { getExportMimeType, checkIsGoogleDocument } from './google-drive-utils';
+import { serializePromises } from '../utils/common';
+import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 
 let signedIn = false;
@@ -135,7 +136,7 @@ async function getParentIdForResource(options, resource) {
 }
 
 async function getChildrenForId(options, id, orderBy = 'title', orderDirection = 'ASC') {
-  let response =  await window.gapi.client.drive.files.list({
+  let response = await window.gapi.client.drive.files.list({
     q: `'${id}' in parents and trashed = false`,
     orderBy: `folder,${orderBy} ${orderDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
@@ -149,42 +150,90 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource(resource) {
-  let { mimeType } = resource;
+async function downloadResource({ resource, params, onProgress, i, l }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-  let isGoogleDocument = checkIsGoogleDocument(mimeType);
 
-  let downloadUrl = '';
-  let title = '';
-  let content = '';
-  if (isGoogleDocument) {
-    let { exportMimeType, extension } = getExportMimeType(mimeType);
-    downloadUrl = resource.exportLinks[exportMimeType];
-    title = `${resource.title}.${extension}`;
-  } else {
-    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
-    title = resource.title;
+  const { downloadUrl, direct, mimeType, fileName } = params;
+
+  if (direct) {
+    return {
+      downloadUrl,
+      direct,
+      mimeType
+    }
   }
 
-  agent.get(downloadUrl).
+  return agent.get(downloadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     responseType('blob').
-    end((err, res) => {
-      if (err) {
-        return console.error('Failed to download resource:', err);
-      }
-      downloadFile(res.body, title);
-    });
+    on('progress', event => {
+      /* the event is:
+      {
+        direction: "upload" or "download"
+        percent: 0 to 100 // may be missing if file size is unknown
+        total: // total file size, may be missing
+        loaded: // bytes downloaded or uploaded so far
+      } */
+      onProgress((i * 100 + event.percent) / l)
+    }).
+    then(
+      res => ({
+        direct,
+        file: res.body,
+        fileName
+      }),
+      err => { throw new Error(`Failed to download resource: ${err}`) }
+  );
 }
 
-async function downloadResources(resources) {
+async function downloadResources({ resources, apiOptions, trackers: {
+  onStart,
+  onSuccess,
+  onFail,
+  onProgress
+} }) {
   if (resources.length === 1) {
-    return downloadResource(resources[0]);
+    const downloadParams = getDownloadParams(resources[0]);
+    onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
+    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
+    onSuccess();
+    return result;
   }
 
-  resources.forEach(async (resource) => {
+  const archiveName = apiOptions.archiveName || 'archive.zip'
 
-  });
+  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
+
+  // multiple resources -> download one by one
+  const files = await serializePromises({
+    series: resources.map(
+      resource => ({ onProgress, i, l }) => downloadResource({
+        resource,
+        params: {
+          ...getDownloadParams(resource),
+          direct: false
+        },
+        onProgress, i, l
+      })
+    ),
+    onProgress
+  })
+
+  onProgress(100);
+
+  const zip = new JSZip();
+  // add generated files to a zip bundle
+  files.forEach(({ fileName, file }) => zip.file(fileName, file));
+
+  const blob = await zip.generateAsync({ type: 'blob' })
+
+  setTimeout(onSuccess, 1000);
+
+  return {
+    direct: false,
+    file: blob,
+    fileName: apiOptions.archiveName || 'archive.zip'
+  }
 }
 
 async function initResumableUploadSession({ name, size, parentId }) {
@@ -209,20 +258,20 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
       set('Content-Encoding', 'base64').
       send(btoa(content.slice(startByte, endByte))).
       end((err, res) => {
-        if (err) {} // pass
+        if (err) { } // pass
         resolve(res);
       });
   });
 }
 
 async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file =  await readLocalFile();
+  let file = await readLocalFile();
   let size = file.content.length;
   let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
   let startByte = 0;
   onStart({ name: file.name, size });
 
-  while(startByte < size) {
+  while (startByte < size) {
     let res = await uploadChunk({
       sessionUrl,
       size,

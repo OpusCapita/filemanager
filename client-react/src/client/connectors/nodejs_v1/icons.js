@@ -34,4 +34,4 @@ export function getIcon(resource) {
   } else {
     return { svg: unknownFileIcon, fill: `#616161` };
   }
-};
+}

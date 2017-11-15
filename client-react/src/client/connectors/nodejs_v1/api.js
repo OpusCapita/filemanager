@@ -1,6 +1,7 @@
 import request from 'superagent';
+import JSZip from 'jszip';
 import id from './id';
-import { downloadFile } from '../utils/download';
+import { serializePromises } from '../utils/common';
 
 async function init(options) {
   options.onInitSuccess();
@@ -161,22 +162,77 @@ async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, o
   });
 }
 
-async function downloadResources(options, items) {
-  let name = items[0].name;
-  let route = `${options.apiRoot}/download`;
-  let method = 'GET';
-  let req = request.get(route);
-  for (let i = 0; i < items.length; i++) {
-    req.query({ items: items[i].id });
-  }
-  req.
-  responseType('blob').
-  end((err, res) => {
-    if (err) {
-      return console.error('Failed to download resource:', err);
+async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
+  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
+
+  return request.get(downloadUrl).
+    responseType('blob').
+    on('progress', event => {
+      /* the event is:
+      {
+        direction: "upload" or "download"
+        percent: 0 to 100 // may be missing if file size is unknown
+        total: // total file size, may be missing
+        loaded: // bytes downloaded or uploaded so far
+      } */
+      onProgress((i * 100 + event.percent) / l)
+    }).
+    then(
+      res => ({
+        file: res.body,
+        name: resource.name
+      }),
+      err => {
+        console.error(err)
+        onFail()
+      }
+  );
+}
+
+async function downloadResources({ apiOptions, resources, trackers: {
+  onStart,
+  onSuccess,
+  onFail,
+  onProgress
+} }) {
+  if (resources.length === 1) {
+    const { id, name } = resources[0];
+    return {
+      direct: true,
+      downloadUrl: `${apiOptions.apiRoot}/download?items=${id}`,
+      name
     }
-    downloadFile(res.body, name);
-  });
+  }
+
+  // multiple resources -> download one by one
+
+  const archiveName = apiOptions.archiveName || 'archive.zip'
+
+  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
+
+  const files = await serializePromises({
+    series: resources.map(resource => ({ onProgress, i, l, onFail }) => downloadResource({
+      resource, apiOptions, onProgress, i, l, onFail
+    })),
+    onProgress,
+    onFail
+  })
+
+  onProgress(100);
+
+  const zip = new JSZip();
+  // add generated files to a zip bundle
+  files.forEach(({ name, file }) => zip.file(name, file));
+
+  const blob = await zip.generateAsync({ type: 'blob' })
+
+  setTimeout(onSuccess, 1000);
+
+  return {
+    direct: false,
+    file: blob,
+    name: archiveName
+  }
 }
 
 async function createFolder(options, parentId, folderName) {

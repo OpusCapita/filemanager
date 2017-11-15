@@ -27,6 +27,42 @@ function checkIsGoogleDocument(mimeType) {
   );
 }
 
+function getDownloadParams(resource) {
+  const { mimeType, title } = resource;
+  let { downloadUrl } = resource;
+
+  if (downloadUrl) {
+    return {
+      downloadUrl,
+      direct: true,
+      mimeType,
+      fileName: title
+    };
+  }
+
+  let fileName = '';
+  const isGoogleDocument = checkIsGoogleDocument(mimeType);
+
+  if (isGoogleDocument) {
+    const {
+      exportMimeType,
+      extension
+    } = getExportMimeType(mimeType);
+    downloadUrl = resource.exportLinks[exportMimeType];
+    fileName = `${title}.${extension}`;
+  } else {
+    downloadUrl = `https://www.googleapis.com/drive/v2/files/${resource.id}?alt=media`;
+    fileName = title;
+  }
+
+  return {
+    downloadUrl,
+    direct: false,
+    mimeType,
+    fileName
+  };
+}
+
 function showUploadDialog() {
 
 }
@@ -34,7 +70,8 @@ function showUploadDialog() {
 export {
   getExportMimeType,
   checkIsGoogleDocument,
-  showUploadDialog
+  showUploadDialog,
+  getDownloadParams
 }
 
 /*
