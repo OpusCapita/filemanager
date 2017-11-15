@@ -26,7 +26,6 @@ function handler(apiOptions, {
   const notificationChildId = id;
 
   const onStart = ({ name, quantity }) => {
-    console.log(getNotifications) // undefined
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const childElement = (
@@ -37,12 +36,12 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
     const newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);
@@ -67,7 +66,7 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = () => {};
+  const onFail = () => { };
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -132,9 +131,20 @@ export default (apiOptions, {
   contextMenuRenderer: (apiOptions) => (
     <ContextMenuItem
       icon={{ svg: icon }}
-      onClick={_ => handler(apiOptions, { getSelectedResources })}
+      onClick={_ => handler(apiOptions, {
+        showDialog,
+        hideDialog,
+        navigateToDir,
+        updateNotifications,
+        getSelection,
+        getSelectedResources,
+        getResource,
+        getResourceChildren,
+        getResourceLocation,
+        getNotifications
+      })}
     >
-      <span>{ label }</span>
+      <span>{label}</span>
     </ContextMenuItem>
   )
 });

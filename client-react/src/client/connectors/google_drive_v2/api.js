@@ -214,7 +214,7 @@ async function downloadResources({ resources, apiOptions, trackers: {
       },
       onProgress, i, l
     })
-  ))
+  ), onProgress)
 
   onProgress(100);
 
