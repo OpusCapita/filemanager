@@ -136,10 +136,7 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
         total: // total file size, may be missing
         loaded: // bytes downloaded or uploaded so far
       } */
-      console.log('superagent progress for ' + resource.name + ': ');
-      console.log(event)
-      console.log({ i, l, r: i * 100 / l + event.percent })
-      onProgress(i * 100 / l + event.percent / l) // FIXme
+      onProgress((i * 100 + event.percent) / l)
     }).
     then(
       res => ({
@@ -171,12 +168,11 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
-  const debouncedOnProgress = debounce(onProgress, 100);
   const files = await serializePromises(
     resources.map(resource => ({ onProgress, i, l }) => downloadResource({
-      resource, apiOptions, onProgress: debouncedOnProgress, i, l
+      resource, apiOptions, onProgress, i, l
     })),
-    debouncedOnProgress
+    onProgress
   )
 
   onProgress(100);

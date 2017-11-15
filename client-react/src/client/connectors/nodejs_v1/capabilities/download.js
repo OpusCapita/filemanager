@@ -22,11 +22,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const notificationId = 'upload';
+  const notificationId = 'download';
   const notificationChildId = id;
 
   const onStart = ({ name, quantity }) => {
-    console.log('called onstart')
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const childElement = (
@@ -49,7 +48,6 @@ function handler(apiOptions, {
   };
 
   const onSuccess = _ => {
-    console.log('called onsuccess')
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const notificationChildrenCount = notification.children.length;
@@ -70,7 +68,6 @@ function handler(apiOptions, {
 
   const onFail = () => {};
   const onProgress = (progress) => {
-    console.log('||| onProgress called with ' + progress)
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const child = notifUtils.getChild(notification.children, notificationChildId);

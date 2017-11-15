@@ -150,7 +150,7 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource({ resource, params }) {
+async function downloadResource({ resource, params, onProgress, i, l }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 
   const { downloadUrl, direct, mimeType, fileName } = params;
@@ -166,6 +166,16 @@ async function downloadResource({ resource, params }) {
   return agent.get(downloadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     responseType('blob').
+    on('progress', event => {
+      /* the event is:
+      {
+        direction: "upload" or "download"
+        percent: 0 to 100 // may be missing if file size is unknown
+        total: // total file size, may be missing
+        loaded: // bytes downloaded or uploaded so far
+      } */
+      onProgress((i * 100 + event.percent) / l)
+    }).
     then(
       res => ({
         direct,
@@ -176,28 +186,45 @@ async function downloadResource({ resource, params }) {
   );
 }
 
-async function downloadResources({ resources, apiOptions }) {
+async function downloadResources({ resources, apiOptions, trackers: {
+  onStart,
+  onSuccess,
+  onFail,
+  onProgress
+} }) {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
-    return downloadResource({ resource: resources[0], params: downloadParams });
+    onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
+    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
+    onSuccess();
+    return result;
   }
+
+  const archiveName = apiOptions.archiveName || 'archive.zip'
+
+  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
   // multiple resources -> download one by one
   const files = await serializePromises(resources.map(
-    resource => _ => downloadResource({
+    resource => ({ onProgress, i, l }) => downloadResource({
       resource,
       params: {
         ...getDownloadParams(resource),
         direct: false
-      }
+      },
+      onProgress, i, l
     })
   ))
+
+  onProgress(100);
 
   const zip = new JSZip();
   // add generated files to a zip bundle
   files.forEach(({ fileName, file }) => zip.file(fileName, file));
 
   const blob = await zip.generateAsync({ type: 'blob' })
+
+  setTimeout(onSuccess, 1000);
 
   return {
     direct: false,
