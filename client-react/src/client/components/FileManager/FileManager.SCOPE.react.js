@@ -29,6 +29,8 @@ class FileManagerScope extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      nodejsInitPath: '',
+      nodejsInitId: '',
       themeClassName: 'oc-fm--file-manager--default-theme'
     };
 
@@ -36,6 +38,10 @@ class FileManagerScope extends Component {
 
     window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
+  }
+
+  async componentDidMount() {
+    await this.handleNodejsInitPathChange('Customization area/Sound/rty 23');
   }
 
   googleDriveSignIn() {
@@ -53,7 +59,24 @@ class FileManagerScope extends Component {
     this.setState({ themeClassName });
   }
 
+  handleNodejsInitPathChange = async (path) => {
+    this.setState({
+      nodejsInitPath: path
+    });
+
+    let apiOptions = {
+      apiRoot: `${window.env.SERVER_URL}/api`
+    };
+
+    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path);
+    if (nodejsInitId) {
+      this.setState({ nodejsInitId });
+    }
+  }
+
   render() {
+    let { nodejsInitPath, nodejsInitId } = this.state;
+
     return (
       <div>
         <div style={{ marginBottom: '12px' }}>
@@ -63,6 +86,14 @@ class FileManagerScope extends Component {
               <option key={theme.name}>{theme.name}</option>
             ))}
           </select>
+          <div style={{ marginTop: '10px' }}>
+            <strong>Path:</strong>
+            <input
+              value={nodejsInitPath}
+              onChange={(e) => this.handleNodejsInitPathChange(e.target.value)}
+              style={{ marginLeft: '12px',  paddingLeft: '10px', minWidth: '320px' }}
+            />
+          </div>
         </div>
 
         <DragDropContextProvider backend={HTML5Backend}>

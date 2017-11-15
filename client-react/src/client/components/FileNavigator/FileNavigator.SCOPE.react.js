@@ -16,19 +16,9 @@ export default
 class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
-    this.nodeInitId = '';
     this.connectors = connectors;
     window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
-  }
-
-  async componentDidMount() {
-    let apiOptions = {
-      apiRoot: `${window.env.SERVER_URL}/api`
-    };
-    let path = 'Customization area/Sound/rty 23';
-    this.nodeInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path);
-    this.forceUpdate();
   }
 
   getIcon(name) {

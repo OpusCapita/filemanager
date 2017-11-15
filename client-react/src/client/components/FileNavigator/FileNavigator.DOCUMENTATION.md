@@ -13,11 +13,10 @@ FileNavigator is
 
 ```
 <div>
-
 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
   {/*NODE_JS_EXAMPLE*/}
-
+  
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}

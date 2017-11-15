@@ -50,15 +50,15 @@ module.exports = options => {
   });
 
   router.route('/api/files/:id/children').
-    get(connect('./listChildren', _ => ({ path: reqPath })));
+    get(connect('./listChildren', _ => ({ initPath: reqPath })));
 
   router.route('/api/files/:id').
-    get(connect('./statResource', _ => ({ path: reqPath }))).
-    patch(connect('./renameCopyMove', _ => ({ path: reqPath }))).
-    delete(connect('./remove', _ => ({ path: reqPath })));
+    get(connect('./statResource', _ => ({ initPath: reqPath }))).
+    patch(connect('./renameCopyMove', _ => ({ initPath: reqPath }))).
+    delete(connect('./remove', _ => ({ initPath: reqPath })));
 
   router.route('/api/files').
-    get(connect('./statResource', _ => ({ path: path.sep }))).
+    get(connect('./statResource', _ => ({ initPath: path.sep }))).
     post(connect('./uploadOrCreate'));
 
   router.route('/api/download').

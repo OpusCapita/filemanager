@@ -100,6 +100,12 @@ class FileNavigator extends Component {
     this.setState({ initialResourceId });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.initialResourceId !== nextProps.initialResourceId) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
+  }
+
   async componentDidMount() {
     await this.setInitialResourceId();
 
