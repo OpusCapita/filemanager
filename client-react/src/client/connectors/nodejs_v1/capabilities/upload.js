@@ -27,7 +27,7 @@ function handler(apiOptions, {
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
     let childElement = (
-      <NotificationProgressItem title={name} progress={0} icon={getIcon({ title: name })} />
+      <NotificationProgressItem title={name} progress={0} icon={getIcon({ name })} />
     );
 
     let newChildren =
