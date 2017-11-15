@@ -13,10 +13,10 @@ class FileManager extends Component {
   }
 
   render() {
-    let { children } = this.props;
+    let { children, className } = this.props;
 
     return (
-      <div className={`oc-fm--file-manager`}>
+      <div className={`oc-fm--file-manager ${className || ''}`}>
         <div className="oc-fm--file-manager__navigators">
           {Children.toArray(children).map((child, i) => (
             <div key={i} className="oc-fm--file-manager__navigator">
