@@ -22,6 +22,7 @@ FileNavigator is
     <FileNavigator
       api={_scope.connectors.nodejs_v1.api}
       apiOptions={{
+        ..._scope.connectors.nodejs_v1.apiOptions,
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
