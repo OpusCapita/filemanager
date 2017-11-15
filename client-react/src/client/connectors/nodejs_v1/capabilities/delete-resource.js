@@ -40,7 +40,7 @@ function handler(apiOptions, {
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       }}
       headerText={dialogNameText + dialogFilesText}
-      cancelButtonText={'Reject'}
+      cancelButtonText={'Cancel'}
       submitButtonText={'Confirm'}
     />
   ));
