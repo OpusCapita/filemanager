@@ -6,6 +6,11 @@
   overflow: hidden;
 }
 
+.oc-fm--file-manager svg {
+  // Fix for blurry SVG icons in Firefox and IE
+  transform: scale(1);
+}
+
 .oc-fm--file-manager__navigators {
   flex: 1;
   display: flex;
