@@ -49,8 +49,8 @@ async function getResourceById(options, id) {
   return await normalizeResource(resource);
 }
 
-async function getChildrenForId(options, id) {
-  let route = `${options.apiRoot}/files/${id}/children`;
+async function getChildrenForId(options, id, sortBy = 'name', sortDirection = 'ASC') {
+  let route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   let method = 'GET';
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);

@@ -43,7 +43,7 @@ class ContextMenuScope extends Component {
               padding: '24px',
               textAlign: 'center',
               color: '#fff',
-              backgroundColor: '#333'
+              backgroundColor: 'rgba(0, 0, 0, 0.72)'
             }}
           >
             Right click here

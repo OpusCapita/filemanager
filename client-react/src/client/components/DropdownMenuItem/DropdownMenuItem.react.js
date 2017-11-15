@@ -22,7 +22,7 @@ class DropdownMenuItem extends Component {
       <SVG
         className="oc-fm--dropdown-menu-item__icon"
         svg={icon.svg}
-        style={{ fill: icon.fill || '#333' }}
+        style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }}
       />
     ): null;
 

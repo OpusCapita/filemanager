@@ -20,8 +20,7 @@ const propTypes = {
 };
 const defaultProps = {
   items: [],
-  newButtonItems: [],
-  newButtonText: 'New'
+  newButtonItems: []
 };
 
 export default
@@ -45,26 +44,46 @@ class Toolbar extends Component {
     let { items, newButtonItems, newButtonText } = this.props;
     let { showDropdownMenu } = this.state;
 
-    let itemsElement = items.map((item, i) => (
+    let itemsElement = items.length ? (
+      <div className="oc-fm--toolbar__items">
+        {items.map((item, i) => (
+          <button
+            key={i}
+            disabled={item.disabled}
+            className={`oc-fm--toolbar__item`}
+            title={item.label || ''}
+            onClick={(!item.disabled && item.onClick) || (() => {})}
+          >
+            <SVG
+              className="oc-fm--toolbar__item-icon"
+              svg={item.icon && item.icon.svg}
+              style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
+            />
+          </button>
+        ))}
+      </div>
+    ) : null;
+
+
+    let newButtonElement = newButtonText ? (
+      <button onClick={this.showDropdownMenu} className="oc-fm--toolbar__new-button">
+        {newButtonText}
+      </button>
+    ) : newButtonItems.map((item, i) => (
       <button
         key={i}
-        className="oc-fm--toolbar__item"
+        disabled={item.disabled}
+        className={`oc-fm--toolbar__item`}
         title={item.label || ''}
-        onClick={item.onClick || (() => {})}
+        onClick={(!item.disabled && item.onClick) || (() => {})}
       >
         <SVG
           className="oc-fm--toolbar__item-icon"
           svg={item.icon && item.icon.svg}
-          style={{ fill: (item.icon && item.icon.fill) || '#333' }}
+          style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
         />
       </button>
     ));
-
-    let newButtonElement = (
-      <button onClick={this.showDropdownMenu} className="oc-fm--toolbar__new-button">
-        {newButtonText}
-      </button>
-    );
 
     let dropdownMenuItems = newButtonItems.map((item, i) => (
       <DropdownMenuItem key={i} icon={item.icon} onClick={item.onClick || (() => {})}>
@@ -78,15 +97,21 @@ class Toolbar extends Component {
       </DropdownMenu>
     ) : null;
 
-    return (
-      <div className="oc-fm--toolbar">
-        <div className="oc-fm--toolbar__new-button-container">
+    let newButtonContainer = newButtonText ? (
+      <div className="oc-fm--toolbar__new-button-container">
           {newButtonElement}
           {dropdownMenuElement}
-        </div>
-        <div className="oc-fm--toolbar__items">
-          {itemsElement}
-        </div>
+      </div>
+    ) : (
+      <div className="oc-fm--toolbar__items">
+        {newButtonElement}
+      </div>
+    );
+
+    return (
+      <div className="oc-fm--toolbar">
+        {newButtonContainer}
+        {itemsElement}
       </div>
     );
   }

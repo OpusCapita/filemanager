@@ -45,6 +45,7 @@ class LocationBar extends Component {
         <div
           key={i}
           tabIndex="0"
+          onClick={item.onClick}
           className={`
             oc-fm--location-bar__item
             ${i === items.length - 1 ? 'oc-fm--location-bar__item--last': ''}
@@ -56,7 +57,6 @@ class LocationBar extends Component {
               ${loading ? 'oc-fm--location-bar__item-name--loading': ''}
             `}
             name={item.name}
-            onClick={item.onClick}
           >
             {item.name}
           </div>

@@ -31,7 +31,7 @@ class NotificationProgressItem extends Component {
 
     let iconElement = icon ? (
       <div className="oc-fm--notification-progress-item__icon">
-        <SVG svg={icon.svg} style={{ fill: icon.fill || '#333' }} />
+        <SVG svg={icon.svg} style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }} />
       </div>
     ) : null;
 

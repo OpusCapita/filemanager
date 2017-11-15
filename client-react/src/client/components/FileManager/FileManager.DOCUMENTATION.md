@@ -13,12 +13,21 @@ FileManager is
 
 ```
 <div>
-  <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
+  <div
+    style={{ 
+      height: '70vh',
+      minWidth: '320px',
+      flex: '1',
+      marginBottom: '15px',
+      padding: '12px',
+      backgroundColor: '#f5f5f5'
+  }}>
     <FileManager>
       <FileNavigator
         id="cusomization-area"
         api={_scope.connectors.nodejs_v1.api}
         apiOptions={{
+          ..._scope.connectors.nodejs_v1.apiOptions,
           apiRoot: `${window.env.SERVER_URL}/api`
         }}
         capabilities={_scope.connectors.nodejs_v1.capabilities}

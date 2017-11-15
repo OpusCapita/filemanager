@@ -62,12 +62,9 @@ let listViewLayout = (viewLayoutOptions) => ([
       flexGrow={1}
       cellRenderer={Cell({ ...viewLayoutOptions, getData: formatDate })}
       headerRenderer={HeaderCell(viewLayoutOptions)}
-      disableSort={true}
+      disableSort={false}
     />
   )
 ]);
-
-let initiallSortBy = 'title';
-let initiallSortDirection = 'ASC';
 
 export default listViewLayout;

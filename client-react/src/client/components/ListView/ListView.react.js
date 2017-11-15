@@ -16,8 +16,8 @@ import { findIndex, range } from 'lodash';
 import nanoid from 'nanoid';
 
 const SCROLL_STRENGTH = 80;
-const ROW_HEIGHT = 48;
-const HEADER_HEIGHT = 44;
+const ROW_HEIGHT = 38;
+const HEADER_HEIGHT = 38;
 
 const propTypes = {
   id: PropTypes.string,

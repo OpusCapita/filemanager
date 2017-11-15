@@ -16,7 +16,7 @@ class FileManager extends Component {
     let { children } = this.props;
 
     return (
-      <div className="oc-fm--file-manager">
+      <div className={`oc-fm--file-manager`}>
         <div className="oc-fm--file-manager__navigators">
           {Children.toArray(children).map((child, i) => (
             <div key={i} className="oc-fm--file-manager__navigator">
