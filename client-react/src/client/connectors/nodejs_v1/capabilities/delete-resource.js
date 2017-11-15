@@ -63,6 +63,11 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
+
+    if (!selectedResources.length) {
+      return false;
+    }
+
     return selectedResources.every(resource => resource.capabilities.canDelete);
   },
   availableInContexts: ['row', 'toolbar'],
