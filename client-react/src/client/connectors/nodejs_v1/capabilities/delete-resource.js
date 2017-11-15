@@ -26,6 +26,12 @@ function handler(apiOptions, {
   let onFail = () => {};
 
   let selectedResources = getSelectedResources();
+
+  let dialogNameText = `Do you really want to remove\n`;
+  let dialogFilesText = selectedResources.length > 1 ?
+    `${selectedResources.length} files ?` :
+    `"${selectedResources[0].name}" ?`;
+
   showDialog((
     <ConfirmDialog
       onHide={hideDialog}
@@ -33,10 +39,9 @@ function handler(apiOptions, {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       }}
-      headerText={`Do you really want to remove\n${selectedResources.length > 1 ?
-        `${selectedResources.length} files` :
-        `the file ${selectedResources[0].name}`}?`}
-      submitButtonText={'OK'}
+      headerText={dialogNameText + dialogFilesText}
+      cancelButtonText={'Reject'}
+      submitButtonText={'Confirm'}
     />
   ));
 }
