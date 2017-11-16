@@ -25,7 +25,7 @@ FileNavigator is
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
       capabilities={_scope.connectors.nodejs_v1.capabilities}
-      initialResourceId={_scope.nodeInitId}
+      initialResourceId={_scope.state.nodeInitId}
       listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
       signInRenderer={() => (

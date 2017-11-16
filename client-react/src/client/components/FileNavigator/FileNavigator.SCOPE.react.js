@@ -34,12 +34,6 @@ class FileNavigatorScope extends Component {
   }
 
   render() {
-    if (this.nodeInitId === '') {
-      return (
-        <div></div>
-      )
-    }
-
     return (
       <div>
         <DragDropContextProvider backend={HTML5Backend}>

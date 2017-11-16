@@ -56,6 +56,14 @@ class FileManagerScope extends Component {
     this.setState({ themeClassName });
   }
 
+  handleNodejsLocationChange = (resourceLocation) => {
+    let resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
+    this.setState({
+      nodejsInitPath: resourceLocationString,
+      nodejsInitId: resourceLocation[resourceLocation.length - 1].id
+    });
+  }
+
   handleNodejsInitPathChange = async (path) => {
     this.setState({
       nodejsInitPath: path || '/'
@@ -93,7 +101,7 @@ class FileManagerScope extends Component {
 
         <div style={{ display: 'flex', padding: '0 12px 12px', background: '#f5f5f5' }}>
 
-          <div style={{ width: '50%' }}>
+          <div style={{ width: '50%', display: 'flex', paddingRight: '12px', alignItems: 'center' }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -103,15 +111,15 @@ class FileManagerScope extends Component {
             >
               <strong>nodejs_v1 API</strong>
             </div>
-            <strong>Initial path:</strong>
+            <strong style={{ marginRight: '12px' }}>Initial path:</strong>
             <input
               value={nodejsInitPath}
               onChange={(e) => this.handleNodejsInitPathChange(e.target.value)}
-              style={{ marginLeft: '12px', padding: '0 4px' }}
+              style={{ padding: '0 4px', flex: '1' }}
             />
           </div>
 
-          <div style={{ width: '50%' }}>
+          <div style={{ width: '50%', display: 'flex', paddingRight: '12px', alignItems: 'center' }}>
             <div
               style={{
                 display: 'inline-flex',

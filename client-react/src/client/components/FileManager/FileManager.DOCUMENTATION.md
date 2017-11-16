@@ -39,6 +39,7 @@ FileManager is
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           </div>
         )}
+        onLocationChange={_scope.handleNodejsLocationChange}
       />
       
       {/* Use Google Drive API v2 connector */}

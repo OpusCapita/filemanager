@@ -21,7 +21,8 @@ const propTypes = {
   initialResourceId: PropTypes.string,
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
-  signInRenderer: PropTypes.func
+  signInRenderer: PropTypes.func,
+  onLocationChange: PropTypes.func
 };
 const defaultProps = {
   id: '',
@@ -32,7 +33,8 @@ const defaultProps = {
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
-  signInRenderer: null
+  signInRenderer: null,
+  onLocationChange: () => {}
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -74,7 +76,7 @@ class FileNavigator extends Component {
   }
 
   handleApiReady = () => {
-    let { initialResourceId } = this.state;
+    let { initialResourceId } = this.props;
     let resourceId = this.state.resource.id;
     let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
     this.navigateToDir(idToNavigate);
@@ -93,14 +95,12 @@ class FileNavigator extends Component {
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
 
-  async setInitialResourceId() {
-    let { api, initialResourceId, apiOptions } = this.props;
-    initialResourceId = initialResourceId === '' ? await api.getRootId(apiOptions) : initialResourceId;
-    this.setState({ initialResourceId });
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.initialResourceId !== nextProps.initialResourceId) {
+    let needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+
+    if (needToNavigate) {
       this.navigateToDir(nextProps.initialResourceId);
     }
   }
@@ -108,7 +108,6 @@ class FileNavigator extends Component {
   async componentDidMount() {
     let { initialResourceId, apiOptions, api, capabilities, viewLayoutOptions } = this.props;
     let { apiInitialized, apiSignedIn } = this.state;
-    await this.setInitialResourceId();
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
@@ -182,6 +181,7 @@ class FileNavigator extends Component {
     let resourceParents = await this.getParentsForId(resource.id);
     let resourceLocation = resourceParents.concat(resource);
     this.setState({ resourceLocation, loadingResourceLocation: false });
+    this.props.onLocationChange(resourceLocation);
   }
 
   async getParentsForId(id) {
