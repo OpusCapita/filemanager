@@ -16,10 +16,7 @@ export default
 class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
-
     this.connectors = connectors;
-
     window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
   }

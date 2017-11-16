@@ -24,6 +24,7 @@ function handler(apiOptions, {
 }) {
   let notificationId = 'upload';
   let notificationChildId = id;
+  let prevResourceId = getResource().id;
 
   let onStart = ({ name, size }) => {
     let notifications = getNotifications();
@@ -46,7 +47,7 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  let onSuccess = () => {
+  let onSuccess = (newResourceId) => {
     let resource = getResource();
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
@@ -65,7 +66,10 @@ function handler(apiOptions, {
     }
 
     updateNotifications(newNotifications);
-    navigateToDir(resource.id, null, false);
+
+    if (prevResourceId === resource.id) {
+      navigateToDir(resource.id, newResourceId, false);
+    }
   };
 
   const onFail = _ => onFailError({
@@ -125,6 +129,7 @@ export default (apiOptions, {
         id: nanoid(),
         showDialog,
         hideDialog,
+        navigateToDir,
         updateNotifications,
         getSelection,
         getSelectedResources,

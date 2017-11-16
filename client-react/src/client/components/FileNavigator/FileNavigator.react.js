@@ -22,7 +22,8 @@ const propTypes = {
   initialResourceId: PropTypes.string,
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
-  signInRenderer: PropTypes.func
+  signInRenderer: PropTypes.func,
+  onLocationChange: PropTypes.func
 };
 const defaultProps = {
   id: '',
@@ -33,7 +34,8 @@ const defaultProps = {
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
-  signInRenderer: null
+  signInRenderer: null,
+  onLocationChange: () => {}
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -92,6 +94,16 @@ class FileNavigator extends Component {
         this.monitorApiAvailability();
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
+  };
+
+  componentWillReceiveProps(nextProps) {
+    let needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+
+    if (needToNavigate) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
   }
 
   async componentDidMount() {
@@ -170,6 +182,7 @@ class FileNavigator extends Component {
     let resourceParents = await this.getParentsForId(resource.id);
     let resourceLocation = resourceParents.concat(resource);
     this.setState({ resourceLocation, loadingResourceLocation: false });
+    this.props.onLocationChange(resourceLocation);
   }
 
   async getParentsForId(id) {

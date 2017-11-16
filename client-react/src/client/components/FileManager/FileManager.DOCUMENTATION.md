@@ -18,7 +18,6 @@ FileManager is
       height: '70vh',
       minWidth: '320px',
       flex: '1',
-      marginBottom: '15px',
       padding: '12px',
       backgroundColor: '#f5f5f5'
   }}>
@@ -33,13 +32,14 @@ FileManager is
           apiRoot: `${window.env.SERVER_URL}/api`
         }}
         capabilities={_scope.connectors.nodejs_v1.capabilities}
-        initialResourceId={_scope.connectors.nodejs_v1.id.encode(`/`)}
+        initialResourceId={_scope.state.nodejsInitId}
         listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
         viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
         signInRenderer={() => (
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           </div>
         )}
+        onLocationChange={_scope.handleNodejsLocationChange}
       />
       
       {/* Use Google Drive API v2 connector */}
@@ -83,18 +83,6 @@ FileManager is
       />
 
     </FileManager>
-  </div>
-
-  <div>
-    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-      <strong style={{ marginRight: '8px' }}>Google Drive</strong>
-      <button type="button" onClick={window.googleDriveSignIn} style={{ marginRight: '8px' }}>
-        Sign in
-      </button>
-      <button type="button" onClick={window.googleDriveSignOut}>
-        Sign out
-      </button>
-    </div>
   </div>
 </div>
 ```
