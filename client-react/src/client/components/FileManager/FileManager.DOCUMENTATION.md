@@ -18,7 +18,6 @@ FileManager is
       height: '70vh',
       minWidth: '320px',
       flex: '1',
-      marginBottom: '15px',
       padding: '12px',
       backgroundColor: '#f5f5f5'
   }}>
@@ -83,18 +82,6 @@ FileManager is
       />
 
     </FileManager>
-  </div>
-
-  <div>
-    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-      <strong style={{ marginRight: '8px' }}>Google Drive</strong>
-      <button type="button" onClick={window.googleDriveSignIn} style={{ marginRight: '8px' }}>
-        Sign in
-      </button>
-      <button type="button" onClick={window.googleDriveSignOut}>
-        Sign out
-      </button>
-    </div>
   </div>
 </div>
 ```

@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContextProvider } from 'react-dnd';
 import connectors from '../../connectors';
 import FileNavigator from '../FileNavigator';
 
@@ -29,7 +27,7 @@ class FileManagerScope extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nodejsInitPath: '',
+      nodejsInitPath: '/',
       nodejsInitId: '',
       themeClassName: 'oc-fm--file-manager--default-theme'
     };
@@ -54,21 +52,20 @@ class FileManagerScope extends Component {
 
   handleThemeChange = (e) => {
     let themeName = e.target.value;
-    console.log('tn', themeName);
     let themeClassName = `oc-fm--file-manager--${themeName}-theme`;
     this.setState({ themeClassName });
   }
 
   handleNodejsInitPathChange = async (path) => {
     this.setState({
-      nodejsInitPath: path
+      nodejsInitPath: path || '/'
     });
 
     let apiOptions = {
       apiRoot: `${window.env.SERVER_URL}/api`
     };
 
-    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path);
+    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path || '/');
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }
@@ -76,29 +73,68 @@ class FileManagerScope extends Component {
 
   render() {
     let { nodejsInitPath, nodejsInitId } = this.state;
+    let nodejsPathChooserElement = (
+      <select onChange={this.handleThemeChange} style={{ marginLeft: '12px' }}>
+        {themes.map((theme) => (
+          <option key={theme.name}>{theme.name}</option>
+        ))}
+      </select>
+    );
 
     return (
       <div>
-        <div style={{ marginBottom: '12px' }}>
+        <div style={{ paddingBottom: '12px', borderBottom: '1px solid #f2f2f2' }}>
           <strong>Choose theme:</strong>
-          <select onChange={this.handleThemeChange} style={{ marginLeft: '12px' }}>
-            {themes.map((theme) => (
-              <option key={theme.name}>{theme.name}</option>
-            ))}
-          </select>
-          <div style={{ marginTop: '10px' }}>
-            <strong>Path:</strong>
+          {nodejsPathChooserElement}
+        </div>
+
+        {this._renderChildren()}
+
+
+        <div style={{ display: 'flex', padding: '0 12px 12px', background: '#f5f5f5' }}>
+
+          <div style={{ width: '50%' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                marginRight: '12px',
+                borderRadius: '2px'
+              }}
+            >
+              <strong>nodejs_v1 API</strong>
+            </div>
+            <strong>Initial path:</strong>
             <input
               value={nodejsInitPath}
               onChange={(e) => this.handleNodejsInitPathChange(e.target.value)}
-              style={{ marginLeft: '12px',  padding: '0 10px', minWidth: '320px' }}
+              style={{ marginLeft: '12px', padding: '0 4px' }}
             />
           </div>
+
+          <div style={{ width: '50%' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                marginRight: '12px',
+                borderRadius: '2px'
+              }}
+            >
+              <strong>google_drive_v2 API</strong>
+            </div>
+            <div
+              style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center' }}
+            >
+              <button type="button" onClick={window.googleDriveSignIn} style={{ marginRight: '8px' }}>
+                Sign in
+              </button>
+              <button type="button" onClick={window.googleDriveSignOut}>
+                Sign out
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        <DragDropContextProvider backend={HTML5Backend}>
-          {this._renderChildren()}
-        </DragDropContextProvider>
       </div>
     );
   }
