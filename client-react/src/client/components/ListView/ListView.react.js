@@ -1,13 +1,10 @@
-// TODO move selection functions to separate file "selection-utils.js" to reduce file size
-// TODO - handle shiftKey + [Home|End|PageUp|PageDown] for select many files
+
 
 import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
 import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
-import ContextMenu from '../ContextMenu';
 import { ContextMenuTrigger } from "react-contextmenu";
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
@@ -20,7 +17,8 @@ const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
 
 const propTypes = {
-  id: PropTypes.string,
+  rowContextMenuId: PropTypes.string,
+  filesViewContextMenuId: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     type: PropTypes.string,
@@ -28,8 +26,6 @@ const propTypes = {
     size: PropTypes.number,
     modifyDate: PropTypes.number
   })),
-  rowContextMenuChildren: PropTypes.arrayOf(PropTypes.node),
-  filesViewContextMenuChildren: PropTypes.arrayOf(PropTypes.node),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
   loading: PropTypes.bool,
@@ -46,10 +42,9 @@ const propTypes = {
   onRef: PropTypes.func
 };
 const defaultProps = {
-  id: nanoid(),
+  rowContextMenuId: nanoid(),
+  filesViewContextMenuId: nanoid(),
   items: [],
-  rowContextMenuChildren: [],
-  filesViewContextMenuChildren: [],
   layout: () => [],
   layoutOptions: {},
   loading: false,
@@ -425,10 +420,9 @@ class ListView extends Component {
 
   render() {
     let {
-      id,
+      rowContextMenuId,
+      filesViewContextMenuId,
       items,
-      rowContextMenuChildren,
-      filesViewContextMenuChildren,
       layout,
       layoutOptions,
       loading,
@@ -445,9 +439,6 @@ class ListView extends Component {
       scrollTop
     } = this.state;
     let { rangeSelectionStartedAt, lastSelected } = this;
-
-    let rowContextMenuId = `row-context-menu-${id}`;
-    let filesViewContextMenuId = `files-view-context-menu-${id}`;
 
     let itemsToRender = null;
     if (loading && this.containerHeight) {
@@ -507,12 +498,6 @@ class ListView extends Component {
                 </Table>
               </ContextMenuTrigger>
             </ScrollOnMouseOut>
-            <ContextMenu triggerId={rowContextMenuId}>
-              {rowContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
-            </ContextMenu>
-            <ContextMenu triggerId={filesViewContextMenuId}>
-              {filesViewContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
-            </ContextMenu>
             {this.props.children}
           </div>
         )}

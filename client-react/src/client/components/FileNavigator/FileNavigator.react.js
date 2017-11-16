@@ -8,6 +8,7 @@ import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
 import clickOutside from 'react-click-outside';
+import ContextMenu from '../ContextMenu';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
@@ -408,6 +409,9 @@ class FileNavigator extends Component {
           disabled: !capability.shouldBeAvailable(apiOptions)
         }));
 
+    let rowContextMenuId = `row-context-menu-${id}`;
+    let filesViewContextMenuId = `files-view-context-menu-${id}`;
+
     return (
       <div
         className={`oc-fm--file-navigator ${className}`}
@@ -424,7 +428,8 @@ class FileNavigator extends Component {
         <div className="oc-fm--file-navigator__view">
           {viewLoadingOverlay}
           <ListView
-            id={id}
+            rowContextMenuId={rowContextMenuId}
+            filesViewContextMenuId={filesViewContextMenuId}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -437,8 +442,6 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
-            rowContextMenuChildren={rowContextMenuChildren}
-            filesViewContextMenuChildren={filesViewContextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           >
@@ -454,6 +457,12 @@ class FileNavigator extends Component {
             loading={loadingResourceLocation}
           />
         </div>
+        <ContextMenu triggerId={rowContextMenuId}>
+          {rowContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+        </ContextMenu>
+        <ContextMenu triggerId={filesViewContextMenuId}>
+          {filesViewContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+        </ContextMenu>
       </div>
     );
   }
