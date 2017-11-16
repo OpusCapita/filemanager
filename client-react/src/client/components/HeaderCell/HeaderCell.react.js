@@ -1,5 +1,5 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import './HeaderCell.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 import { SortDirection } from 'react-virtualized';
@@ -15,7 +15,7 @@ export default () => ({
   sortBy,
   sortDirection
 }) => {
-  let sortIconSvg = sortDirection === SortDirection.ASC ? sortASCIcon : sortDESCIcon;
+  let sortIconSvg = sortDirection === SortDirection.ASC ? sortDESCIcon : sortASCIcon;
   let sortIconElement = dataKey === sortBy ? (
     <SVG className="oc-fm--header-cell__sort-icon" svg={sortIconSvg} />
   ) : null;
