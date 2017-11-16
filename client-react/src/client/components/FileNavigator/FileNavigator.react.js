@@ -94,15 +94,15 @@ class FileNavigator extends Component {
   }
 
   async componentDidMount() {
-    let { initialResourceId, apiOptions, api, capabilities } = this.props;
+    let { initialResourceId, apiOptions, api, capabilities, viewLayoutOptions } = this.props;
     let { apiInitialized, apiSignedIn } = this.state;
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
     this.setState({
       initializedCapabilities,
-      sortBy: apiOptions.initialSortBy || 'title',
-      sortDirection: apiOptions.initialSortDirection || 'ASC'
+      sortBy: viewLayoutOptions.initialSortBy || 'title',
+      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
     await api.init({

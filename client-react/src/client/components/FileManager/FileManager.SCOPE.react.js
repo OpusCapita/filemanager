@@ -14,12 +14,23 @@ import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
 
+function requireAll(requireContext) {
+  return requireContext.keys().map(key => ({
+    name: key.replace(/(\.less$|^\.\/)/gi, ''),
+    css: requireContext(key)
+  }));
+}
+
+let themes = requireAll(require.context('../themes', true, /.*\.less$/));
+
 @showroomScopeDecorator
 export default
 class FileManagerScope extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      themeClassName: 'oc-fm--file-manager--default-theme'
+    };
 
     this.connectors = connectors;
 
@@ -35,9 +46,25 @@ class FileManagerScope extends Component {
     connectors.google_drive_v2.api.signOut();
   }
 
+  handleThemeChange = (e) => {
+    let themeName = e.target.value;
+    console.log('tn', themeName);
+    let themeClassName = `oc-fm--file-manager--${themeName}-theme`;
+    this.setState({ themeClassName });
+  }
+
   render() {
     return (
       <div>
+        <div style={{ marginBottom: '12px' }}>
+          <strong>Choose theme:</strong>
+          <select onChange={this.handleThemeChange} style={{ marginLeft: '12px' }}>
+            {themes.map((theme) => (
+              <option key={theme.name}>{theme.name}</option>
+            ))}
+          </select>
+        </div>
+
         <DragDropContextProvider backend={HTML5Backend}>
           {this._renderChildren()}
         </DragDropContextProvider>
