@@ -33,7 +33,7 @@ function handler(apiOptions, {
       onHide={hideDialog}
       onSubmit={async (folderName) => {
         let resource = getResource();
-        let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id });
+        let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id, onFail });
         let alreadyExists = resourceChildren.some((o) => o.title === folderName);
         if (alreadyExists) {
           return `File or folder with name "${folderName}" already exists`;
