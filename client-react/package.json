@@ -96,6 +96,7 @@
     "babel-preset-es2017": "6.24.1",
     "base64url": "2.0.0",
     "core-js": "2.5.0",
+    "detect-it": "3.0.3",
     "filesize": "3.5.11",
     "immutable": "3.8.2",
     "jszip": "3.1.5",
