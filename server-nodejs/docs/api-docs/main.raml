@@ -44,77 +44,96 @@ types:
               required: false
       responses:
         200:
-          description:
+          description: |
+            If both name and file fields were not sent,
+            the server returns an empty array.
           body:
             application/json:
               type: FileStatsResource | FileStatsResource[]
-        204:
-          description: A 204 status is returned if a dir with parentId does not exist.
-          body:
-            properties:
-              error:
-            example:
-              error: No Content
+        400:
+          description: |
+            BAD REQUEST.
+            A 400 status is returned
+            1. if the 'type' field contains 'file' value and the 'name' field was sent
+            2. if one of fields is not sent: parentId or type.
+        410:
+          description: |
+            GONE.
+            A 410 status is returned if a dir with parentId does not exist.
+        500:
+          description: |
+            INTERNAL SERVER ERROR.
+            A 500 status is returned if 'type' field contains 'dir' value
+            and the 'files' field was sent
 
     get:
-      description: Get dir stats for root
+      description: |
+        Get dir stats for root.
+        The request returns root directory meta data
       responses:
         200:
           description:
           body:
             application/json:
               type: FileStatsResource
-        204:
-          description:
-          body:
-            properties:
-              error:
-            example:
-              error: No Content
 
     /{id}:
       get:
-        description: Get file or directory statistics
+        description: |
+          Get file or directory statistics.
+          The request returns file or directory meta data
         responses:
           200:
             description:
             body:
               application/json:
                 type: FileStatsResource
-          204:
-            body:
-              properties:
-                error:
-              example:
-                error: No Content
+          410:
+            description: |
+              GONE.
+              A 410 status is returned if a dir with id does not exist.
 
       delete:
         description: Delete file or directory
         responses:
           200:
-            description: If successful, this method returns an empty response body.
-            body:
-              type: nil
-          204:
-            body:
-              properties:
-                error:
-              example:
-                error: No Content
+            description: |
+              If successful, this method returns an empty response body.
+              If the resource does not exist,
+              this method returns an empty response body.
+          400:
+            description: |
+              BAD REQUEST.
+              A 400 status is returned
+              if the delete query of a root directory arrived.
 
       patch:
         description: |
           Rename and/or copy/move file/dir to destination
+
           When moving a file/dir, parents array has destination parent ID only.
           name, if specified, gives a new name in destination.
-          When copying a file/dir, parents array has both current parent ID and destination parent ID.
+
+          When copying a file/dir, parents array has both current parent ID
+          and destination parent ID (order is irrelevant).
           name, if specified, gives a new name in destination.
+          When copying inside parent dir, parents array may have either
+          one parent ID or parent ID repeated twice.
+
           When renaming a file/dir, parents parameter is not set or empty array.
+
+          If target exists, the file/dir is copied/moved with suffix (<number>),
+          where number is tried with 1, 2, etc. untill first free name is found.
         body:
           application/json:
             properties:
-              parents: string[]
-              name: string
+              parents:
+                type: array
+                items: string
+                required: false
+              name:
+                type: string
+                required: false
         responses:
           200:
             description:
