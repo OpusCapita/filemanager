@@ -20,8 +20,6 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  console.log('delete id: ' + id);
-
   let onSuccess = () => {
     let resource = getResource();
     navigateToDir(resource.id, null, false);

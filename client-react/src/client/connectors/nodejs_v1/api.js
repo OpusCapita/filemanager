@@ -50,12 +50,14 @@ async function getResourceById(options, id) {
   return normalizeResource(resource);
 }
 
-async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail = _ => {} }) {
+async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail }) {
   let route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   let method = 'GET';
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
-    onFail({ message: 'Unable to read a directory.' }) // TODO doesn't intercept for some reason
+    if (onFail) {
+      onFail({ message: 'Unable to read a directory.' }) // TODO doesn't intercept for some reason
+    }
   });
 
   let rawResourceChildren = response.body.items;
