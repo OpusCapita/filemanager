@@ -431,15 +431,14 @@ class FileNavigator extends Component {
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
+        {viewLoadingOverlay}
         <div className="oc-fm--file-navigator__toolbar">
           <Toolbar
             items={toolbarItems}
             newButtonItems={newButtonItems}
-
           />
         </div>
         <div className="oc-fm--file-navigator__view">
-          {viewLoadingOverlay}
           <ListView
             rowContextMenuId={rowContextMenuId}
             filesViewContextMenuId={filesViewContextMenuId}
