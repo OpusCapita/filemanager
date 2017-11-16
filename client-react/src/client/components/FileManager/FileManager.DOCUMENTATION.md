@@ -22,7 +22,7 @@ FileManager is
       padding: '12px',
       backgroundColor: '#f5f5f5'
   }}>
-    <FileManager>
+    <FileManager className={_scope.state.themeClassName}>
     
       {/* Use NodeJS API v1 connector */}
       <FileNavigator
