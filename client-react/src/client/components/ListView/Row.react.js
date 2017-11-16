@@ -62,7 +62,8 @@ class Row extends Component {
       isDragging,
       connectDragSource,
       connectDragPreview,
-      contextMenuId
+      contextMenuId,
+      hasTouch
     } = this.props;
 
     const a11yProps = {};
@@ -100,17 +101,17 @@ class Row extends Component {
     let isLastSelected = lastSelected === rowData.id;
 
     return (
-      <ContextMenuTrigger id={contextMenuId}>
+      <ContextMenuTrigger id={contextMenuId} holdToDisplay={hasTouch ? 1000 : -1}>
         {connectDragPreview(connectDragSource((
           <div
             {...a11yProps}
             className={`
-            ReactVirtualized__Table__row
-            oc-fm--list-view__row
-            ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
-            ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
-            ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
-            ${loading ? 'oc-fm--list-view__row--loading' : ''}
+              ReactVirtualized__Table__row
+              oc-fm--list-view__row
+              ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
+              ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
+              ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
+              ${loading ? 'oc-fm--list-view__row--loading' : ''}
             `}
             key={rowData.id}
             role="row"

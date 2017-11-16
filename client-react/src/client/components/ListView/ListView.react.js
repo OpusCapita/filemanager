@@ -11,10 +11,12 @@ import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
 import nanoid from 'nanoid';
+import detectIt from 'detect-it';
 
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
+const HAS_TOUCH = detectIt.deviceType === 'hasTouch';
 
 const propTypes = {
   rowContextMenuId: PropTypes.string,
@@ -470,8 +472,8 @@ class ListView extends Component {
                 width: `${width}px`,
                 height: `${height}px`
               }}
-              >
-              <ContextMenuTrigger id={filesViewContextMenuId}>
+            >
+              <ContextMenuTrigger id={filesViewContextMenuId}  holdToDisplay={HAS_TOUCH ? 1000 : -1}>
                 <Table
                   width={width}
                   height={height}
@@ -488,7 +490,9 @@ class ListView extends Component {
                   sort={this.handleSort}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
-                  rowRenderer={Row({ selection, lastSelected, loading, contextMenuId: rowContextMenuId })}
+                  rowRenderer={Row({
+                    selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
+                  })}
                   noRowsRenderer={NoFilesFoundStub}
                   onRowClick={this.handleRowClick}
                   onRowRightClick={this.handleRowRightClick}
