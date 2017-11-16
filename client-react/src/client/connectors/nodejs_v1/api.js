@@ -115,11 +115,11 @@ async function getIdForPath(options, path) {
 
   let pathArr = path.split('/');
 
-  if (pathArr.length === 0 || pathArr[0] !== resource.name) {
+  if (pathArr.length === 0 || pathArr.length === 1 || pathArr[0] !== '') {
     return null;
   }
 
-  if (pathArr.length === 1) {
+  if (pathArr.length === 2 && pathArr[1] === '') {
     return resource.id;
   }
 

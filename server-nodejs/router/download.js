@@ -42,7 +42,7 @@ module.exports = ({ options, req, res, handleError }) => {
         if (stat.isDirectory()) {
           res.zip({
             files: [{
-              initPath: absPaths[0],
+              path: absPaths[0],
               name: absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])
             }],
             filename: (absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])) + '.zip'
@@ -78,7 +78,7 @@ module.exports = ({ options, req, res, handleError }) => {
 
   return res.zip({
     files: absPaths.map(absPath => ({ // TODO: handle situation when none of absPaths exists.
-      initPath: absPath,
+      path: absPath,
       name: path.basename(absPath)
     })),
     filename: (parentPath === options.fsRoot ? options.rootName : path.basename(parentPath)) + '.zip'
