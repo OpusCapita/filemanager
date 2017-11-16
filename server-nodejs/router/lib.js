@@ -107,7 +107,7 @@ const stat2resource = (options, pathInfo) => stat => {
 
 const handleError = ({ options, req, res }) => err => {
   options.logger.error(`Error processing request by ${getClientIp(req)}: ${err}` + '\n' +
-    err.stack && err.stack.split('\n')
+    (err.stack && err.stack.split('\n'))
   );
 
   if (err.httpCode) {
