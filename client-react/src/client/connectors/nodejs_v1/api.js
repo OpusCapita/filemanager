@@ -8,7 +8,7 @@ async function init(options) {
   options.onSignInSuccess();
 }
 
-async function normalizeResource(resource) {
+function normalizeResource(resource) {
   return {
     capabilities: resource.capabilities,
     createdTime: Date.parse(resource.createdTime),
@@ -47,7 +47,7 @@ async function getResourceById(options, id) {
   });
 
   let resource = response.body;
-  return await normalizeResource(resource);
+  return normalizeResource(resource);
 }
 
 async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail = _ => {} }) {
@@ -59,7 +59,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
   });
 
   let rawResourceChildren = response.body.items;
-  let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => await normalizeResource(o)));
+  let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => normalizeResource(o)));
   return { resourceChildren };
 }
 
@@ -160,12 +160,13 @@ async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, o
   on('progress', event => {
     onProgress(event.percent);
   }).
-  end(error => {
+  end((error, response) => {
     if (error) {
       console.log(`Filemanager. uploadFileToId(${parentId})`, error);
       onFail();
     } else {
-      onSuccess();
+      let newResource = normalizeResource(response.body[0]);
+      onSuccess(newResource.id);
     }
   });
 }
