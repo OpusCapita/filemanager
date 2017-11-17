@@ -21,11 +21,12 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const onFail = _ => onFailError({
+  const onFail = ({ message } = {}) => onFailError({
     getNotifications,
     label,
     notificationId: 'createFolder',
-    updateNotifications
+    updateNotifications,
+    message
   });
 
   showDialog((

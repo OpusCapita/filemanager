@@ -1,9 +1,11 @@
+import React from 'react';
 import api from '../api';
 import ContextMenuItem from '../../../components/ContextMenuItem';
 import NotificationProgressItem from '../../../components/NotificationProgressItem';
 import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
+import onFailError from '../../utils/onFailError';
 
 let icon = require('@opuscapita/svg-icons/lib/file_upload.svg');
 let label = 'Upload';
@@ -69,7 +71,14 @@ function handler(apiOptions, {
     navigateToDir(resource.id, null, false);
   };
 
-  let onFail = () => {};
+  const onFail = ({ message } = {}) => onFailError({
+    getNotifications,
+    label,
+    notificationId,
+    updateNotifications,
+    message
+  });
+
   let onProgress = (progress) => {
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);

@@ -16,7 +16,7 @@ export default (apiOptions, {
 }) => ({
   id: 'sort',
   handler: async ({ sortBy, sortDirection }) => {
-    const onFail = ({ message }) => onFailError({
+    const onFail = ({ message } = {}) => onFailError({
       getNotifications,
       label,
       notificationId: 'rename',

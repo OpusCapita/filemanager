@@ -84,7 +84,7 @@ function normalizeResource(resource) {
     modifiedDate: Date.parse(resource.modifiedDate),
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
-    size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
+    size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize, 10),
     parents: resource.parents,
     capabilities: resource.capabilities,
     downloadUrl: resource.downloadUrl,
@@ -188,7 +188,11 @@ async function downloadResources({ resources, apiOptions, trackers: {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
     onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
-    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
+    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 }).
+      catch(err => {
+        console.error('Error downloading resource: ', err);
+        onFail()
+      });
     onSuccess();
     return result;
   }
@@ -207,6 +211,9 @@ async function downloadResources({ resources, apiOptions, trackers: {
           direct: false
         },
         onProgress, i, l
+      }).catch(err => {
+        console.error('Error downloading archive: ', err);
+        onFail()
       })
     ),
     onProgress
@@ -251,7 +258,7 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
       set('Content-Encoding', 'base64').
       send(btoa(content.slice(startByte, endByte))).
       end((err, res) => {
-        if (err) { } // pass
+        if (err) { } // pass // TBD how to handle errors
         resolve(res);
       });
   });
@@ -291,27 +298,50 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
   }
 }
 
-async function createFolder(apiOptions, parentId, folderName) {
-  return await window.gapi.client.drive.files.insert({
+async function createFolder(apiOptions, parentId, folderName, { onFail }) {
+  return window.gapi.client.drive.files.insert({
     title: folderName,
     parents: [{ id: parentId }],
     mimeType: 'application/vnd.google-apps.folder'
-  });
+  }).then(
+    res => res,
+    err => {
+      console.error(`Filemanager. createFolder(${id})`, err);
+      onFail()
+    }
+  );
 }
 
-async function renameResource(apiOptions, id, newName) {
-  return await window.gapi.client.drive.files.patch({
+async function renameResource(apiOptions, id, newName, { onFail }) {
+  return window.gapi.client.drive.files.patch({
     fileId: id,
     title: newName
-  });
+  }).then(
+    res => res,
+    err => {
+      console.error('Failed to rename resource: ', err);
+      onFail()
+    }
+  )
 }
 
 function getResourceName(apiOptions, resource) {
   return resource.title;
 }
 
-async function removeResources() {
+async function removeResource(apiOptions, resource) {
+  return window.gapi.client.drive.files.delete({
+    fileId: resource.id,
+  });
+}
 
+async function removeResources(apiOptions, selectedResources, { onSuccess, onFail }) {
+  let success = await Promise.all(selectedResources.map(async (resource) => await removeResource(apiOptions, resource))).
+  catch((error) => {
+    console.error(`Filemanager. removeResources`, error);
+    onFail();
+  });
+  onSuccess();
 }
 
 async function signIn() {

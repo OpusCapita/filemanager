@@ -21,7 +21,7 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const onFail = ({ message }) => onFailError({
+  const onFail = ({ message } = {}) => onFailError({
     getNotifications,
     label,
     notificationId: 'rename',

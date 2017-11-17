@@ -56,7 +56,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
     if (onFail) {
-      onFail({ message: 'Unable to read a directory.' }) // TODO doesn't intercept for some reason
+      onFail({ message: 'Unable to read a directory.' })
     }
   });
 

@@ -25,11 +25,12 @@ function handler(apiOptions, {
     navigateToDir(resource.id, null, false);
   };
 
-  const onFail = _ => onFailError({
+  const onFail = ({ message } = {}) => onFailError({
     getNotifications,
     label,
     notificationId: 'delete',
-    updateNotifications
+    updateNotifications,
+    message
   });
 
   let selectedResources = getSelectedResources();
