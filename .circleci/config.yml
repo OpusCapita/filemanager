@@ -84,13 +84,13 @@ jobs:
 
       - run:
           name: build-docker-image
-          command: docker build -f Dockerfile.demo -t opuscapita/filemanager-demo:latest .
+          command: docker build -f Dockerfile.demo -t ockvolkovich/filemanager-demo:latest .
 
       - run:
           name: deploy-docker-image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push opuscapita/filemanager-demo:latest
+            docker push ockvolkovich/filemanager-demo:latest
 
 workflows:
   version: 2
