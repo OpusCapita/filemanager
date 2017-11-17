@@ -8,6 +8,7 @@ import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
 import { find, findIndex } from 'lodash';
 import clickOutside from 'react-click-outside';
+import ContextMenu from '../ContextMenu';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
@@ -21,7 +22,8 @@ const propTypes = {
   initialResourceId: PropTypes.string,
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
-  signInRenderer: PropTypes.func
+  signInRenderer: PropTypes.func,
+  onLocationChange: PropTypes.func
 };
 const defaultProps = {
   id: '',
@@ -32,7 +34,8 @@ const defaultProps = {
   initialResourceId: '',
   listViewLayout: () => {},
   viewLayoutOptions: {},
-  signInRenderer: null
+  signInRenderer: null,
+  onLocationChange: () => {}
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -91,6 +94,16 @@ class FileNavigator extends Component {
         this.monitorApiAvailability();
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
+  };
+
+  componentWillReceiveProps(nextProps) {
+    let needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+
+    if (needToNavigate) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
   }
 
   async componentDidMount() {
@@ -158,7 +171,7 @@ class FileNavigator extends Component {
 
     this.setState({
       resourceChildren,
-      selection: (typeof idToSelect !== 'undefined' || idToSelect !== null) ? [idToSelect] : []
+      selection: (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect]
     });
 
     this.stopViewLoading();
@@ -169,6 +182,7 @@ class FileNavigator extends Component {
     let resourceParents = await this.getParentsForId(resource.id);
     let resourceLocation = resourceParents.concat(resource);
     this.setState({ resourceLocation, loadingResourceLocation: false });
+    this.props.onLocationChange(resourceLocation);
   }
 
   async getParentsForId(id) {
@@ -408,23 +422,26 @@ class FileNavigator extends Component {
           disabled: !capability.shouldBeAvailable(apiOptions)
         }));
 
+    let rowContextMenuId = `row-context-menu-${id}`;
+    let filesViewContextMenuId = `files-view-context-menu-${id}`;
+
     return (
       <div
         className={`oc-fm--file-navigator ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}
       >
+        {viewLoadingOverlay}
         <div className="oc-fm--file-navigator__toolbar">
           <Toolbar
             items={toolbarItems}
             newButtonItems={newButtonItems}
-
           />
         </div>
         <div className="oc-fm--file-navigator__view">
-          {viewLoadingOverlay}
           <ListView
-            id={id}
+            rowContextMenuId={rowContextMenuId}
+            filesViewContextMenuId={filesViewContextMenuId}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
@@ -437,8 +454,6 @@ class FileNavigator extends Component {
             sortBy={sortBy}
             sortDirection={sortDirection}
             items={resourceChildren}
-            rowContextMenuChildren={rowContextMenuChildren}
-            filesViewContextMenuChildren={filesViewContextMenuChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
           >
@@ -454,6 +469,12 @@ class FileNavigator extends Component {
             loading={loadingResourceLocation}
           />
         </div>
+        <ContextMenu triggerId={rowContextMenuId}>
+          {rowContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+        </ContextMenu>
+        <ContextMenu triggerId={filesViewContextMenuId}>
+          {filesViewContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
+        </ContextMenu>
       </div>
     );
   }

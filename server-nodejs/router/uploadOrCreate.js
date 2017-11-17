@@ -25,13 +25,17 @@ const upload = multer({
       const { name, parentId, type } = req.body;
 
       if (type !== TYPE_FILE) {
-        cb(new Error('type ${type} conflicts with files field requested by ${getClientIp(req)}'));
-        return;
+        return cb(Object.assign(
+          new Error(`type ${type} conflicts with files field requested by ${getClientIp(req)}`),
+          { httpCode: 400 }
+        ));
       }
 
       if (name) {
-        cb(new Error('name ${name} conflicts with files field requested by ${getClientIp(req)}'));
-        return;
+        return cb(Object.assign(
+          new Error(`name ${name} conflicts with files field requested by ${getClientIp(req)}`),
+          { httpCode: 400 }
+        ));
       }
 
       let parentPath;
@@ -39,23 +43,55 @@ const upload = multer({
       try {
         parentPath = path.join(fsRoot, id2path(parentId));
       } catch (err) {
-        cb(err);
-        return;
+        return cb(Object.assign(
+          err,
+          { httpCode: 400 }
+        ));
       }
 
-      fs.access(parentPath).
+      return fs.access(parentPath).
         then(_ => cb(null, parentPath)).
-        catch(_ => cb('Parent folder does not exist'));
+        catch(cb);
     },
     filename(req, file, cb) {
+      const { parentId } = req.body;
+
       try {
         checkName(file.originalname);
       } catch (err) {
-        cb(err);
-        return;
+        return cb(Object.assign(
+          err,
+          { httpCode: 400 }
+        ));
       }
 
-      cb(null, file.originalname);
+      let parentPath;
+
+      try {
+        parentPath = path.join(fsRoot, id2path(parentId));
+      } catch (err) {
+        return cb(Object.assign(
+          err,
+          { httpCode: 400 }
+        ));
+      }
+
+      return fs.readdir(parentPath).
+        then(basenames => {
+          let basename = file.originalname;
+
+          if (basenames.includes(basename)) {
+            const { name, ext } = path.parse(basename);
+            let suffix = 1;
+
+            do {
+              basename = `${name} (${suffix++})${ext}`;
+            } while (basenames.includes(basename));
+          }
+
+          cb(null, basename);
+        }).
+        catch(cb);
     }
   })
 }).

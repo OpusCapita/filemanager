@@ -8,7 +8,7 @@ async function init(options) {
   options.onSignInSuccess();
 }
 
-async function normalizeResource(resource) {
+function normalizeResource(resource) {
   return {
     capabilities: resource.capabilities,
     createdTime: Date.parse(resource.createdTime),
@@ -47,7 +47,7 @@ async function getResourceById(options, id) {
   });
 
   let resource = response.body;
-  return await normalizeResource(resource);
+  return normalizeResource(resource);
 }
 
 async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail }) {
@@ -61,7 +61,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
   });
 
   let rawResourceChildren = response.body.items;
-  let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => await normalizeResource(o)));
+  let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => normalizeResource(o)));
   return { resourceChildren };
 }
 
@@ -81,12 +81,24 @@ async function getParentsForId(options, id, result = []) {
   return await getParentsForId(options, resource.parentId, [parent].concat(result));
 }
 
-async function getIdForPartPath(options, currId, pathArr) {
-  let { resourceChildren } = await getChildrenForId(options, { id });
+async function getBaseResource(options) {
+  let route = `${options.apiRoot}/files`;
+  let response = await request.get(route).catch((error) => {
+    console.error('Filemanager. getBaseResource()', error);
+  });
+  return normalizeResource(response.body);
+}
 
+async function getRootId(options) {
+  let resource = await getBaseResource(options);
+  return resource.id;
+}
+
+async function getIdForPartPath(options, currId, pathArr) {
+  let { resourceChildren } = await getChildrenForId(options, { id: currId });
   for (let i = 0; i < resourceChildren.length; i++) {
     let resource = resourceChildren[i];
-    if (resource.name === resource.name) {
+    if (resource.name === pathArr[0]) {
       if (pathArr.length === 1) {
         return resource.id;
       } else {
@@ -99,21 +111,16 @@ async function getIdForPartPath(options, currId, pathArr) {
 }
 
 async function getIdForPath(options, path) {
-  let route = `${options.apiRoot}/files`;
-  let method = 'GET';
-  let response = await request(method, route).catch((error) => {
-    console.error('Filemanager. getIdForPath()', error);
-  });
-  let resource = normalizeResource(response);
+  let resource = await getBaseResource(options);
 
   let pathArr = path.split('/');
 
-  if (pathArr.length === 0 || pathArr[0] !== resource.name) {
+  if (pathArr.length === 0 || pathArr.length === 1 || pathArr[0] !== '') {
     return null;
   }
 
-  if (pathArr.length === 1) {
-    return pathArr[0];
+  if (pathArr.length === 2 && pathArr[1] === '') {
+    return resource.id;
   }
 
   return await getIdForPartPath(options, resource.id, pathArr.slice(1));
@@ -155,23 +162,24 @@ async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, o
   on('progress', event => {
     onProgress(event.percent);
   }).
-  end(error => {
+  end((error, response) => {
     if (error) {
       console.log(`Filemanager. uploadFileToId(${parentId})`, error);
       onFail();
     } else {
-      onSuccess();
+      let newResource = normalizeResource(response.body[0]);
+      onSuccess(newResource.id);
     }
   });
 }
 
 async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
-  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`
+  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`;
 
   return request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
-      onProgress((i * 100 + event.percent) / l)
+      onProgress((i * 100 + event.percent) / l);
     }).
     then(
       res => ({
@@ -179,8 +187,8 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
         name: resource.name
       }),
       err => {
-        console.error(err)
-        onFail()
+        console.error(err);
+        onFail();
       }
   );
 }
@@ -212,13 +220,13 @@ async function downloadResources({ apiOptions, resources, trackers: {
     })),
     onProgress,
     onFail
-  })
+  });
 
   onProgress(100);
 
   const zip = new JSZip();
   files.forEach(({ name, file }) => zip.file(name, file));
-  const blob = await zip.generateAsync({ type: 'blob' })
+  const blob = await zip.generateAsync({ type: 'blob' });
 
   setTimeout(onSuccess, 1000);
 
@@ -287,6 +295,7 @@ export default {
   getResourceById,
   getCapabilitiesForResource,
   getChildrenForId,
+  getRootId,
   getParentsForId,
   getParentIdForResource,
   getResourceName,

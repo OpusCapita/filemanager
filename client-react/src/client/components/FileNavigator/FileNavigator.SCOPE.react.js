@@ -16,24 +16,39 @@ export default
 class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
-
     this.connectors = connectors;
 
-    window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
-    window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
+    this.state = {
+      nodejsInitPath: '/',
+      nodejsInitId: ''
+    };
   }
 
-  getIcon(name) {
-    return this.state.icons.filter(icon => icon.name === name)[0].svg;
+  async componentDidMount() {
+    await this.handleNodejsInitPathChange('');
   }
 
-  googleDriveSignIn() {
-    connectors.google_drive_v2.api.signIn();
+  handleNodejsLocationChange = (resourceLocation) => {
+    let resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
+    this.setState({
+      nodejsInitPath: resourceLocationString,
+      nodejsInitId: resourceLocation[resourceLocation.length - 1].id
+    });
   }
 
-  googleDriveSignOut() {
-    connectors.google_drive_v2.api.signOut();
+  handleNodejsInitPathChange = async (path) => {
+    this.setState({
+      nodejsInitPath: path || '/'
+    });
+
+    let apiOptions = {
+      apiRoot: `${window.env.SERVER_URL}/api`
+    };
+
+    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path || '/');
+    if (nodejsInitId) {
+      this.setState({ nodejsInitId });
+    }
   }
 
   render() {

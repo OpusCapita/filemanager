@@ -15,18 +15,19 @@
 .oc-fm--file-navigator__view {
   flex: 1;
   overflow: hidden;
-  position: static !important; // XXX - Fix for ListView Autosizer append inline styles to parent element
 }
 
 .oc-fm--file-navigator__location-bar {
   border-top: 1px solid rgba(0,0,0,.08);
+  position: relative;
+  z-index: 10;
 }
 
 .oc-fm--file-navigator__notifications {
   width: 280px;
   position: absolute;
   right: 24px;
-  bottom: 32px;
+  bottom: 12px;
   z-index: 10;
 }
 
