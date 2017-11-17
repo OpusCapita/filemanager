@@ -36,11 +36,11 @@ let listViewLayout = (viewLayoutOptions) => ([
       flexGrow: 1,
       cellRenderer: {
         elementType: 'NameCell',
-        elementProps: viewLayoutOptions
+        callArguments: [viewLayoutOptions]
       },
       headerRenderer: {
         elementType: 'HeaderCell',
-        elementProps: viewLayoutOptions
+        callArguments: [viewLayoutOptions]
       },
       disableSort: false
     }
@@ -54,11 +54,11 @@ let listViewLayout = (viewLayoutOptions) => ([
       flexGrow: viewLayoutOptions.width > TABLET_WIDTH ? 1 : 0,
       cellRenderer: {
         elementType: 'Cell',
-        elementProps: { ...viewLayoutOptions, getData: formatSize }
+        callArguments: [{ ...viewLayoutOptions, getData: formatSize }]
       },
       headerRenderer: {
         elementType: 'HeaderCell',
-        elementProps: viewLayoutOptions
+        callArguments: [viewLayoutOptions]
       },
       disableSort: true
     }
@@ -72,11 +72,11 @@ let listViewLayout = (viewLayoutOptions) => ([
       flexGrow: 1,
       cellRenderer: {
         elementType: 'Cell',
-        elementProps: { ...viewLayoutOptions, getData: formatDate }
+        callArguments: [{ ...viewLayoutOptions, getData: formatDate }]
       },
       headerRenderer: {
         elementType: 'HeaderCell',
-        elementProps: viewLayoutOptions
+        callArguments: [viewLayoutOptions]
       },
       disableSort: false
     }

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component, Children } from 'react';
 import './ContextMenu.less';
 import { ContextMenu as Menu } from "react-contextmenu";
-import sharedComponents from '../shared-components';
+import rawToReactElement from '../raw-to-react-element';
 
 const propTypes = {
   triggerId: PropTypes.string,
@@ -25,12 +25,7 @@ class ContextMenu extends Component {
     let { children, triggerId, ...restProps } = this.props;
 
     let childrenElement = children.map((rawChild, i) => {
-      if (React.isValidElement(rawChild)) {
-        return { ...rawChild, key: i };
-      }
-
-      let elementType = sharedComponents[rawChild.elementType];
-      return React.createElement(elementType, { ...rawChild.elementProps, key: i });
+      return rawToReactElement({ ...rawChild }, i);
     });
 
     return (

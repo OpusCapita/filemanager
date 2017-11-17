@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component, Children } from 'react';
 import './Notification.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
-import sharedComponents from '../shared-components';
+import rawToReactElement from '../raw-to-react-element';
 
 let minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
 let maximizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
@@ -92,8 +92,7 @@ class Notification extends Component {
             return { ...rawChild, key: i };
           }
 
-          let elementType = sharedComponents[rawChild.elementType];
-          return React.createElement(elementType, { ...rawChild.elementProps, key: i });
+          return rawToReactElement(rawChild, i);
         })}
       </div>
     );
