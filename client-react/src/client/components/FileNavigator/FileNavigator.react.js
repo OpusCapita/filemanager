@@ -171,7 +171,7 @@ class FileNavigator extends Component {
 
     this.setState({
       resourceChildren,
-      selection: (typeof idToSelect !== 'undefined' || idToSelect !== null) ? [idToSelect] : []
+      selection: (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect]
     });
 
     this.stopViewLoading();
