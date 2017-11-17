@@ -93,12 +93,6 @@ function normalizeResource(resource) {
   };
 }
 
-async function pathToId(path) {
-}
-
-async function idToPath(id) {
-}
-
 async function getResourceById(options, id) {
   let response = await window.gapi.client.drive.files.get({
     fileId: id
@@ -324,8 +318,6 @@ async function signOut() {
 
 export default {
   init,
-  pathToId,
-  idToPath,
   getResourceById,
   getChildrenForId,
   getRootId,

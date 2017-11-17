@@ -11,6 +11,7 @@ import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
+import sharedComponents from '../shared-components';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
 
 const propTypes = {
@@ -295,7 +296,11 @@ class FileNavigator extends Component {
     this.viewRef = ref;
   }
 
-  showDialog = (dialogElement) => {
+  showDialog = (rawDialogElement) => {
+    let dialogElement = React.isValidElement(rawDialogElement) ?
+      rawDialogElement :
+      React.createElement(sharedComponents[rawDialogElement.elementType], rawDialogElement.elementProps);;
+
     this.setState({ dialogElement });
   }
 

@@ -35,13 +35,13 @@ function removeChild(notificationChildren, id) {
   return notificationChildren.filter((o) => o.id !== id);
 }
 
-function updateChild(notificationChildren, id, props) {
+function updateChild(notificationChildren, id, element) {
   return notificationChildren.map(o => {
     if (o.id !== id) {
       return o;
     }
 
-    return extend({}, o, { id, ...props });
+    return extend({}, o, { id, ...element });
   });
 }
 

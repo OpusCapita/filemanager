@@ -1,6 +1,5 @@
 import request from 'superagent';
 import JSZip from 'jszip';
-import id from './id';
 import { serializePromises } from '../utils/common';
 
 async function init(options) {
@@ -23,20 +22,6 @@ function normalizeResource(resource) {
 
 async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
-}
-
-async function pathToId(path) {
-  return new Promise((resolve, reject) => {
-    let id = id.decode(path);
-    resolve(id);
-  });
-}
-
-async function idToPath(id) {
-  return new Promise((resolve, reject) => {
-    let path = id.encode(id);
-    resolve(path);
-  });
 }
 
 async function getResourceById(options, id) {
@@ -289,8 +274,6 @@ async function removeResources(options, selectedResources, { onSuccess, onFail }
 
 export default {
   init,
-  pathToId,
-  idToPath,
   getIdForPath,
   getResourceById,
   getCapabilitiesForResource,

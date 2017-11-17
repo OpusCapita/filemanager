@@ -4,16 +4,16 @@ import FileSaver from 'file-saver';
 function promptToSaveBlob({ content, name, downloadUrl }) {
   if (downloadUrl) {
     const iframeId = 'oc-fm--filemanager-download-iframe';
-    let f = document.getElementById(iframeId);
+    let iframeDOMNode = document.getElementById(iframeId);
 
-    if (!f) {
-      f = document.createElement('iframe');
-      f.style.display = 'none';
-      f.id = iframeId;
-      document.body.appendChild(f);
+    if (!iframeDOMNode) {
+      iframeDOMNode = document.createElement('iframe');
+      iframeDOMNode.style.display = 'none';
+      iframeDOMNode.id = iframeId;
+      document.body.appendChild(iframeDOMNode);
     }
 
-    f.src = downloadUrl;
+    iframeDOMNode.src = downloadUrl;
   } else {
     const blob = new Blob([content], { type: 'octet/stream' });
     FileSaver.saveAs(blob, name);

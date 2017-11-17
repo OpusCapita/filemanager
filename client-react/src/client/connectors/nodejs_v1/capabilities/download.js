@@ -1,16 +1,14 @@
-import React from 'react';
 import api from '../api';
-import ContextMenuItem from '../../../components/ContextMenuItem';
-import NotificationProgressItem from '../../../components/NotificationProgressItem';
 import notifUtils from '../../../components/Notifications/utils';
 import { promptToSaveBlob } from '../../utils/download';
 import onFailError from '../../utils/onFailError';
+import nanoid from 'nanoid';
+import icons from '../icons-svg';
 
-let icon = require('@opuscapita/svg-icons/lib/file_download.svg');
+let icon = icons.fileDownload;
 let label = 'Download';
 
 function handler(apiOptions, {
-  id,
   showDialog,
   hideDialog,
   navigateToDir,
@@ -23,15 +21,19 @@ function handler(apiOptions, {
   getNotifications
 }) {
   const notificationId = 'download';
-  const notificationChildId = id;
+  const notificationChildId = nanoid();
 
   const onStart = ({ archiveName, quantity }) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
 
-    const childElement = (
-      <NotificationProgressItem title={`Creating ${archiveName}...`} progress={0} />
-    );
+    const childElement = {
+      elementType: 'NotificationProgressItem',
+      elementProps: {
+        title: `Creating ${archiveName}...`,
+        progress: 0
+      }
+    };
 
     const newChildren = notifUtils.addChild(
       (notification && notification.children) || [], notificationChildId, childElement
@@ -78,7 +80,17 @@ function handler(apiOptions, {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const child = notifUtils.getChild(notification.children, notificationChildId);
-    const newChild = { ...child, element: { ...child.element, props: { ...child.element.props, progress } } };
+
+    const newChild = {
+      ...child,
+      element: {
+        ...child.element,
+        elementProps: {
+          ...child.element.elementProps,
+          progress
+        }
+      }
+    };
     const newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
     const newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
     updateNotifications(newNotifications);
@@ -130,25 +142,23 @@ export default (apiOptions, {
     getResourceLocation,
     getNotifications
   }),
-  contextMenuRenderer: (apiOptions) => {
-    return (
-      <ContextMenuItem
-        icon={{ svg: icon }}
-        onClick={() => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        })}
-      >
-        <span>{label}</span>
-      </ContextMenuItem>
-    );
-  }
+  contextMenuRenderer: (apiOptions) => ({
+    elementType: 'ContextMenuItem',
+    elementProps: {
+      icon: { svg: icon },
+      onClick: () => handler(apiOptions, {
+        showDialog,
+        hideDialog,
+        navigateToDir,
+        updateNotifications,
+        getSelection,
+        getSelectedResources,
+        getResource,
+        getResourceChildren,
+        getResourceLocation,
+        getNotifications
+      }),
+      children: label
+    }
+  })
 });

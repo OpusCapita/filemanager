@@ -1,10 +1,8 @@
-import React from 'react';
 import api from '../api';
-import ContextMenuItem from '../../../components/ContextMenuItem';
-import ConfirmDialog from '../../../components/ConfirmDialog';
 import onFailError from '../../utils/onFailError';
+import icons from '../icons-svg';
 
-let icon = require('@opuscapita/svg-icons/lib/delete.svg');
+let icon = icons.delete;
 let label = 'Remove';
 
 function handler(apiOptions, {
@@ -39,18 +37,21 @@ function handler(apiOptions, {
     `${selectedResources.length} files ?` :
     `"${selectedResources[0].name}" ?`;
 
-  showDialog((
-    <ConfirmDialog
-      onHide={hideDialog}
-      onSubmit={async () => {
+  let rawDialogElement = {
+    elementType: 'ConfirmDialog',
+    elementProps: {
+      onHide: hideDialog,
+      onSubmit: async () => {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
-      }}
-      headerText={dialogNameText + dialogFilesText}
-      cancelButtonText={'Cancel'}
-      submitButtonText={'Confirm'}
-    />
-  ));
+      },
+      headerText: dialogNameText + dialogFilesText,
+      cancelButtonText: 'Cancel',
+      submitButtonText: 'Confirm'
+    }
+  };
+
+  showDialog(rawDialogElement);
 }
 
 export default (apiOptions, {
@@ -90,10 +91,11 @@ export default (apiOptions, {
     getResourceLocation,
     getNotifications
   }),
-  contextMenuRenderer: (apiOptions) => (
-    <ContextMenuItem
-      icon={{ svg: icon }}
-      onClick={() => handler(apiOptions, {
+  contextMenuRenderer: (apiOptions) => ({
+    elementType: 'ContextMenuItem',
+    elementProps: {
+      icon: { svg: icon },
+      onClick: () => handler(apiOptions, {
         showDialog,
         hideDialog,
         navigateToDir,
@@ -104,9 +106,8 @@ export default (apiOptions, {
         getResourceChildren,
         getResourceLocation,
         getNotifications
-      })}
-    >
-      <span>{label}</span>
-    </ContextMenuItem>
-  )
+      }),
+      children: label
+    }
+  })
 });
