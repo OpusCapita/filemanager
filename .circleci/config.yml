@@ -57,6 +57,14 @@ jobs:
           command: (cd client-react && yarn install)
 
       - run:
+          name: install-dependencies-connector-node-v1
+          command: (cd connectors/node-v1 && yarn install)
+
+      - run:
+          name: install-dependencies-connector-google-drive-v2
+          command: (cd connectors/google-drive-v2 && yarn install)
+
+      - run:
           name: install-dependencies-server-nodejs
           command: (cd server-nodejs && yarn install)
 
