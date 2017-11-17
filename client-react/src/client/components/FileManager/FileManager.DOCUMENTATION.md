@@ -26,15 +26,15 @@ FileManager is
       {/* Use NodeJS API v1 connector */}
       <FileNavigator
         id="cusomization-area"
-        api={_scope.connectors.nodejs_v1.api}
+        api={_scope.connectors.nodeV1.api}
         apiOptions={{
-          ..._scope.connectors.nodejs_v1.apiOptions,
+          ..._scope.connectors.nodeV1.apiOptions,
           apiRoot: `${window.env.SERVER_URL}/api`
         }}
-        capabilities={_scope.connectors.nodejs_v1.capabilities}
+        capabilities={_scope.connectors.nodeV1.capabilities}
         initialResourceId={_scope.state.nodejsInitId}
-        listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
-        viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
+        listViewLayout={_scope.connectors.nodeV1.listViewLayout}
+        viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
         signInRenderer={() => (
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           </div>
@@ -43,19 +43,20 @@ FileManager is
       />
       
       {/* Use Google Drive API v2 connector */}
+
       <FileNavigator
         id="google_drive_filemanager"
-        api={_scope.connectors.google_drive_v2.api}
+        api={_scope.connectors.googleDriveV2.api}
         apiOptions={{
           CLIENT_ID: window.env.CLIENT_ID,
           API_KEY: window.env.API_KEY,
           DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
           SCOPES: 'https://www.googleapis.com/auth/drive'
         }}
-        capabilities={_scope.connectors.google_drive_v2.capabilities}
+        capabilities={_scope.connectors.googleDriveV2.capabilities}
         initialResourceId="root"
-        listViewLayout={_scope.connectors.google_drive_v2.listViewLayout}
-        viewLayoutOptions={_scope.connectors.google_drive_v2.viewLayoutOptions}
+        listViewLayout={_scope.connectors.googleDriveV2.listViewLayout}
+        viewLayoutOptions={_scope.connectors.googleDriveV2.viewLayoutOptions}
         signInRenderer={() => (
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
             <strong

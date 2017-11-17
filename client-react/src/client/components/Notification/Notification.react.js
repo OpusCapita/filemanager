@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component, Children } from 'react';
 import './Notification.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
+import rawToReactElement from '../raw-to-react-element';
 
 let minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
 let maximizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
@@ -14,7 +15,14 @@ const propTypes = {
   onHide: PropTypes.func,
   cancelButtonText: PropTypes.string,
   progressText: PropTypes.node,
-  title: PropTypes.node
+  title: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.shape({
+      elementType: PropTypes.string,
+      elementProps: PropTypes.object
+    })),
+    PropTypes.arrayOf(PropTypes.node)
+  ])
 };
 const defaultProps = {
   closable: false,
@@ -23,7 +31,8 @@ const defaultProps = {
   onHide: () => {},
   progressText: '',
   cancelButtonText: 'Cancel',
-  title: ''
+  title: '',
+  children: []
 };
 
 export default
@@ -61,7 +70,7 @@ class Notification extends Component {
         <SVG
           svg={closeIcon}
           style={{ fill: '#f5f5f5' }}
-          />
+        />
       </div>
     ) : null;
 
@@ -78,7 +87,13 @@ class Notification extends Component {
 
     let itemsElement = (
       <div className={`oc-fm--notification__items`}>
-        {children.map((child, i) => ({ ...child, key: i }))}
+        {children.map((rawChild, i) => {
+          if (React.isValidElement(rawChild)) {
+            return { ...rawChild, key: i };
+          }
+
+          return rawToReactElement(rawChild, i);
+        })}
       </div>
     );
 

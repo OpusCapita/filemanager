@@ -9,13 +9,18 @@ import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
-import connectors from '../../connectors';
+import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
+
+let connectors = {
+  nodeV1: connectorNodeV1
+};
 
 @showroomScopeDecorator
 export default
 class FileNavigatorScope extends Component {
   constructor(props) {
     super(props);
+
     this.connectors = connectors;
 
     this.state = {
@@ -45,7 +50,7 @@ class FileNavigatorScope extends Component {
       apiRoot: `${window.env.SERVER_URL}/api`
     };
 
-    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path || '/');
+    let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }

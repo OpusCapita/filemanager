@@ -1,5 +1,3 @@
-
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ListView.less';
@@ -12,6 +10,7 @@ import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import { findIndex, range } from 'lodash';
 import nanoid from 'nanoid';
 import detectIt from 'detect-it';
+import rawToReactElement from '../raw-to-react-element';
 
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 38;
@@ -498,7 +497,9 @@ class ListView extends Component {
                   onRowRightClick={this.handleRowRightClick}
                   onRowDoubleClick={this.handleRowDoubleClick}
                 >
-                  {layout({ ...layoutOptions, loading, width, height })}
+                  {layout({ ...layoutOptions, loading, width, height }).map(
+                    (rawLayoutChild, i) => rawToReactElement(rawLayoutChild, i)
+                  )}
                 </Table>
               </ContextMenuTrigger>
             </ScrollOnMouseOut>

@@ -7,10 +7,16 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import connectors from '../../connectors';
+import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
+import connectorGoogleDriveV2 from '@opuscapita/react-filemanager-connector-google-drive-v2';
 import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
+
+let connectors = {
+  nodeV1: connectorNodeV1,
+  googleDriveV2: connectorGoogleDriveV2
+};
 
 function requireAll(requireContext) {
   return requireContext.keys().map(key => ({
@@ -43,11 +49,11 @@ class FileManagerScope extends Component {
   }
 
   googleDriveSignIn() {
-    connectors.google_drive_v2.api.signIn();
+    connectors.googleDriveV2.api.signIn();
   }
 
   googleDriveSignOut() {
-    connectors.google_drive_v2.api.signOut();
+    connectors.googleDriveV2.api.signOut();
   }
 
   handleThemeChange = (e) => {
@@ -73,7 +79,7 @@ class FileManagerScope extends Component {
       apiRoot: `${window.env.SERVER_URL}/api`
     };
 
-    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path || '/');
+    let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }
@@ -109,7 +115,7 @@ class FileManagerScope extends Component {
                 borderRadius: '2px'
               }}
             >
-              <strong>nodejs_v1 API</strong>
+              <strong>nodeV1 API</strong>
             </div>
             <strong style={{ marginRight: '12px' }}>Initial path:</strong>
             <input
@@ -127,7 +133,7 @@ class FileManagerScope extends Component {
                 borderRadius: '2px'
               }}
             >
-              <strong>google_drive_v2 API</strong>
+              <strong>googleDriveV2 API</strong>
             </div>
             <div
               style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center' }}
