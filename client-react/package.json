@@ -10,12 +10,7 @@
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
     "npm-build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
     "npm-publish": "npm run npm-build && update-changelog -- --all && npm-publish",
-    "grails-plugin-build": "rimraf build && npm run npm-build",
-    "grails-plugin-package": "npm run grails-plugin-build && grails-plugin-package",
-    "grails-plugin-install": "npm run grails-plugin-package && grails-plugin-install",
-    "grails-plugin-deploy": "npm run grails-plugin-package && grails-plugin-deploy",
-    "grails-plugin-deploy-release": "npm run grails-plugin-package -- --release && grails-plugin-deploy --release",
-    "publish-release": "npm run grails-plugin-deploy-release && npm run npm-publish -- --release"
+    "publish-release": "npm run npm-publish -- --release"
   },
   "license": "Apache-2.0",
   "repository": "OpusCapita/react-filemanager",
