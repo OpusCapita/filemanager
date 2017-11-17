@@ -1,7 +1,7 @@
 import api from '../api';
-import ContextMenuItem from '../../../components/ContextMenuItem';
+import icons from '../icons-svg';
 
-let icon = require('@opuscapita/svg-icons/lib/delete.svg');
+let icon = icons.delete;
 let label = 'Remove';
 
 function handler(apiOptions, {
@@ -54,9 +54,23 @@ export default (apiOptions, {
     getResourceLocation,
     getNotifications
   }),
-  contextMenuRenderer: (apiOptions) => (
-    <ContextMenuItem icon={{ svg: icon }}>
-      <span>{label}</span>
-    </ContextMenuItem>
-  )
+  contextMenuRenderer: (apiOptions) => ({
+    elementType: 'ContextMenuItem',
+    elementProps: {
+      icon: { svg: icon },
+      onClick: () => handler(apiOptions, {
+        showDialog,
+        hideDialog,
+        navigateToDir,
+        updateNotifications,
+        getSelection,
+        getSelectedResources,
+        getResource,
+        getResourceChildren,
+        getResourceLocation,
+        getNotifications
+      }),
+      children: label
+    }
+  })
 });

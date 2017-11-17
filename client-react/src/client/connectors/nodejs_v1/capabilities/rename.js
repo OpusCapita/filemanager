@@ -7,7 +7,6 @@ let icon = icons.rename;
 let label = 'Rename';
 
 function handler(apiOptions, {
-  id,
   showDialog,
   hideDialog,
   navigateToDir,
@@ -36,7 +35,7 @@ function handler(apiOptions, {
         let { resourceChildren } = await api.getChildrenForId(
           apiOptions, { id: selectedResources[0].parentId, onFail }
         );
-        let alreadyExists = resourceChildren.some((o) => o.title === name);
+        let alreadyExists = resourceChildren.some((o) => o.name === name);
         if (alreadyExists) {
           return `File or folder with name "${name}" already exists`;
         } else {
