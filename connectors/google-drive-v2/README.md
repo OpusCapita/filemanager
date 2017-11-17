@@ -1,3 +1,3 @@
-# NodeJS V1 connector
+# Google Drive V2 connector
 
 Documentation is coming soon.
