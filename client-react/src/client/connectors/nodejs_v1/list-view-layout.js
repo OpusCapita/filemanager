@@ -3,7 +3,7 @@ import HeaderCell from '../../components/HeaderCell';
 import Cell from '../../components/Cell';
 import NameCell from '../../components/NameCell';
 
-import moment from 'moment';
+import fecha from 'fecha';
 import filesize from 'filesize';
 
 const TABLET_WIDTH = 1024;
@@ -24,7 +24,7 @@ function formatDate(
 ) {
   if (cellData) {
     let { locale, dateTimePattern } = viewLayoutOptions;
-    return moment(new Date().setTime(cellData)).locale(locale).format(dateTimePattern);
+    return fecha.format(new Date().setTime(cellData), dateTimePattern);
   }
 
   return '';
