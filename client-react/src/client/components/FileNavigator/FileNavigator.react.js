@@ -28,7 +28,7 @@ const propTypes = {
 };
 const defaultProps = {
   id: '',
-  api: 'nodejs_v1',
+  api: 'nodeV1',
   apiOptions: {},
   capabilities: () => [],
   className: '',

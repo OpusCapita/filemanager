@@ -1,12 +1,13 @@
+import React from 'react';
+import { triggerHiddenForm, promptToSaveBlob } from '../utils/download';
 import api from '../api';
 import notifUtils from '../../../components/Notifications/utils';
-import { promptToSaveBlob } from '../../utils/download';
-import onFailError from '../../utils/onFailError';
 import nanoid from 'nanoid';
+import { getIcon } from '../icons';
 import icons from '../icons-svg';
 
 let icon = icons.fileDownload;
-let label = 'Download';
+const label = 'Download';
 
 function handler(apiOptions, {
   showDialog,
@@ -23,15 +24,16 @@ function handler(apiOptions, {
   const notificationId = 'download';
   const notificationChildId = nanoid();
 
-  const onStart = ({ archiveName, quantity }) => {
+  const onStart = ({ name, quantity }) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
 
     const childElement = {
       elementType: 'NotificationProgressItem',
       elementProps: {
-        title: `Creating ${archiveName}...`,
-        progress: 0
+        title: name,
+        progress: 0,
+        icon: getIcon({ title: name })
       }
     };
 
@@ -39,7 +41,7 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
@@ -69,18 +71,11 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label,
-    notificationId,
-    updateNotifications
-  });
-
+  const onFail = () => { };
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
     const child = notifUtils.getChild(notification.children, notificationChildId);
-
     const newChild = {
       ...child,
       element: {
@@ -105,9 +100,14 @@ function handler(apiOptions, {
       onFail,
       onProgress
     }
-  }).then(
-      ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-    ).catch(err => console.error(err));
+  }).
+    then(({ direct, downloadUrl, file, fileName, mimeType }) => direct ?
+      triggerHiddenForm({
+        downloadUrl,
+        ...(mimeType === 'application/pdf' ? { target: '_blank' } : null)
+      }) :
+      promptToSaveBlob({ content: file, name: fileName })
+    ).catch(err => console.log(err))
 }
 
 export default (apiOptions, {
@@ -126,10 +126,9 @@ export default (apiOptions, {
   icon: { svg: icon },
   label,
   shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
+    const selectedResources = getSelectedResources();
     return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
   },
-  availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {
     showDialog,
     hideDialog,
@@ -142,6 +141,7 @@ export default (apiOptions, {
     getResourceLocation,
     getNotifications
   }),
+  availableInContexts: ['row', 'toolbar'],
   contextMenuRenderer: (apiOptions) => ({
     elementType: 'ContextMenuItem',
     elementProps: {

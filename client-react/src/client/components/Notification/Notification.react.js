@@ -70,7 +70,7 @@ class Notification extends Component {
         <SVG
           svg={closeIcon}
           style={{ fill: '#f5f5f5' }}
-          />
+        />
       </div>
     ) : null;
 

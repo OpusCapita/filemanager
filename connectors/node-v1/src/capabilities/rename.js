@@ -1,13 +1,12 @@
 import api from '../api';
 import sanitizeFilename from 'sanitize-filename';
-import onFailError from '../../utils/onFailError';
+import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 
-let icon = icons.createNewFolder;
-let label = 'Create folder';
+let icon = icons.rename;
+let label = 'Rename';
 
 function handler(apiOptions, {
-  id,
   showDialog,
   hideDialog,
   navigateToDir,
@@ -19,46 +18,47 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const onFail = _ => onFailError({
+  const onFail = ({ message }) => onFailError({
     getNotifications,
     label,
-    notificationId: 'createFolder',
-    updateNotifications
+    notificationId: 'rename',
+    updateNotifications,
+    message
   });
 
   let rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
       onHide: hideDialog,
-      onSubmit: async (folderName) => {
-        let resource = getResource();
-        let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id, onFail });
-        let alreadyExists = resourceChildren.some((o) => o.title === folderName);
+      onSubmit: async (name) => {
+        let selectedResources = getSelectedResources();
+        let { resourceChildren } = await api.getChildrenForId(
+          apiOptions, { id: selectedResources[0].parentId, onFail }
+        );
+        let alreadyExists = resourceChildren.some((o) => o.name === name);
         if (alreadyExists) {
-          return `File or folder with name "${folderName}" already exists`;
+          return `File or folder with name "${name}" already exists`;
         } else {
           hideDialog();
-          let result = await api.createFolder(apiOptions, resource.id, folderName, { onFail });
+          let result = await api.renameResource(apiOptions, selectedResources[0].id, name, { onFail });
+          let resource = getResource();
           navigateToDir(resource.id, result.body.id, false);
         }
       },
-      onValidate: async (folderName) => {
-        if (!folderName) {
+      onValidate: async (name) => {
+        if (!name) {
           return 'Name can\'t be empty';
-        } else if (folderName === 'CON') {
-          return 'We too do not respect Bill ;)';
-        } else if (folderName.length >= 255) {
-          return 'Folder name can\'t contain more than 255 characters';
-        } else if (folderName.trim() !== sanitizeFilename(folderName.trim())) {
-          return 'Folder name contains not allowed characters';
+        } else if (name.length >= 255) {
+          return 'Name can\'t contain more than 255 characters';
+        } else if (name.trim() !== sanitizeFilename(name.trim())) {
+          return 'Name contains not allowed characters';
         }
         return null;
       },
-      headerText: `Folder name`,
-      submitButtonText: `Create`
+      headerText: `New name`,
+      submitButtonText: `Rename`
     }
   };
-
   showDialog(rawDialogElement);
 }
 
@@ -74,11 +74,14 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => ({
-  id: 'createFolder',
+  id: 'rename',
   icon: { svg: icon },
   label,
-  shouldBeAvailable: (apiOptions) => true,
-  availableInContexts: ['files-view', 'new-button'],
+  shouldBeAvailable: (apiOptions) => {
+    let selectedResources = getSelectedResources();
+    return selectedResources.length === 1;
+  },
+  availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {
     showDialog,
     hideDialog,

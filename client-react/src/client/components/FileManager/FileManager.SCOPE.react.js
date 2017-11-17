@@ -7,10 +7,14 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import connectors from '../../connectors';
+import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
+
+let connectors = {
+  nodeV1: connectorNodeV1
+};
 
 function requireAll(requireContext) {
   return requireContext.keys().map(key => ({
@@ -34,21 +38,21 @@ class FileManagerScope extends Component {
 
     this.connectors = connectors;
 
-    window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
-    window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
+    // window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
+    // window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
   }
 
   async componentDidMount() {
     await this.handleNodejsInitPathChange('');
   }
 
-  googleDriveSignIn() {
-    connectors.google_drive_v2.api.signIn();
-  }
+  // googleDriveSignIn() {
+  //   connectors.googleDriveV2.api.signIn();
+  // }
 
-  googleDriveSignOut() {
-    connectors.google_drive_v2.api.signOut();
-  }
+  // googleDriveSignOut() {
+  //   connectors.googleDriveV2.api.signOut();
+  // }
 
   handleThemeChange = (e) => {
     let themeName = e.target.value;
@@ -73,7 +77,7 @@ class FileManagerScope extends Component {
       apiRoot: `${window.env.SERVER_URL}/api`
     };
 
-    let nodejsInitId = await connectors.nodejs_v1.api.getIdForPath(apiOptions, path || '/');
+    let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }
@@ -109,7 +113,7 @@ class FileManagerScope extends Component {
                 borderRadius: '2px'
               }}
             >
-              <strong>nodejs_v1 API</strong>
+              <strong>nodeV1 API</strong>
             </div>
             <strong style={{ marginRight: '12px' }}>Initial path:</strong>
             <input
@@ -127,7 +131,7 @@ class FileManagerScope extends Component {
                 borderRadius: '2px'
               }}
             >
-              <strong>google_drive_v2 API</strong>
+              <strong>googleDriveV2 API</strong>
             </div>
             <div
               style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center' }}

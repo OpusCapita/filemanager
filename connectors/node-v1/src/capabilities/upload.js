@@ -1,8 +1,8 @@
 import api from '../api';
-import notifUtils from '../../../components/Notifications/utils';
+import notifUtils from '../utils/notifications';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
-import onFailError from '../../utils/onFailError';
+import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 
 let icon = icons.fileUpload;

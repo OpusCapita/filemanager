@@ -1,5 +1,5 @@
 import api from '../api';
-import onFailError from '../../utils/onFailError';
+import onFailError from '../utils/onFailError';
 
 export default (apiOptions, {
   showDialog,

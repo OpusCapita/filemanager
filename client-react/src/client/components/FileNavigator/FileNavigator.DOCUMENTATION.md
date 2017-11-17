@@ -17,15 +17,15 @@ FileNavigator is
   
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
-      api={_scope.connectors.nodejs_v1.api}
+      api={_scope.connectors.nodeV1.api}
       apiOptions={{
-        ..._scope.connectors.nodejs_v1.apiOptions,
+        ..._scope.connectors.nodeV1.apiOptions,
         apiRoot: `${window.env.SERVER_URL}/api`
       }}
-      capabilities={_scope.connectors.nodejs_v1.capabilities}
+      capabilities={_scope.connectors.nodeV1.capabilities}
       initialResourceId={_scope.state.nodeInitId}
-      listViewLayout={_scope.connectors.nodejs_v1.listViewLayout}
-      viewLayoutOptions={_scope.connectors.nodejs_v1.viewLayoutOptions}
+      listViewLayout={_scope.connectors.nodeV1.listViewLayout}
+      viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
     />
   </div>
 </div>

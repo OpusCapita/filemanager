@@ -1,6 +1,6 @@
 import request from 'superagent';
 import JSZip from 'jszip';
-import { serializePromises } from '../utils/common';
+import { serializePromises } from './utils/common';
 
 async function init(options) {
   options.onInitSuccess();
