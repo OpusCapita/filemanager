@@ -53,22 +53,26 @@ types:
         400:
           description: |
             BAD REQUEST.
-            A 400 status is returned
+
+            A 400 status is returned:
             1. if the 'type' field contains 'file' value and the 'name' field was sent
             2. if one of fields is not sent: parentId or type.
         410:
           description: |
             GONE.
+
             A 410 status is returned if a dir with parentId does not exist.
         500:
           description: |
             INTERNAL SERVER ERROR.
+
             A 500 status is returned if 'type' field contains 'dir' value
             and the 'files' field was sent
 
     get:
       description: |
         Get dir stats for root.
+
         The request returns root directory meta data
       responses:
         200:
@@ -81,7 +85,8 @@ types:
       get:
         description: |
           Get file or directory statistics.
-          The request returns file or directory meta data
+
+          The request returns file or directory meta data.
         responses:
           200:
             description:
@@ -91,6 +96,7 @@ types:
           410:
             description: |
               GONE.
+
               A 410 status is returned if a dir with id does not exist.
 
       delete:
@@ -99,13 +105,13 @@ types:
           200:
             description: |
               If successful, this method returns an empty response body.
-              If the resource does not exist,
-              this method returns an empty response body.
+
+              If the resource does not exist, this method returns an empty response body.
           400:
             description: |
-              BAD REQUEST.
-              A 400 status is returned
-              if the delete query of a root directory arrived.
+              BAD REQUEST
+
+              A 400 status is returned if the delete query of a root directory arrived.
 
       patch:
         description: |
@@ -142,7 +148,8 @@ types:
                 type: FileStatsResource
           410:
             description: |
-              GONE.
+              GONE
+
               A 410 status is returned if a resource with id does not exist.
 
       /children:
@@ -186,7 +193,8 @@ types:
                     # nextPageToken:
             410:
               description: |
-                GONE.
+                GONE
+
                 A 410 status is returned if a resource with id does not exist.
 
   /download:
@@ -196,6 +204,7 @@ types:
         items:
           description: |
             When multiple items, all must be from the same folder.
+
             Both folder and file ids are allowed in items array.
           type: string[]
       responses:
@@ -204,20 +213,21 @@ types:
           headers:
             Content-Disposition:
               description: |
-                for single file or a dir or multiple dirs/files download
+                For single file or a dir or multiple dirs/files download
               pattern: ^attachment; filename="[\w\.\-]+\.[\w\.]+"$
               example: attachment; filename="archive.zip"
               required: false
             Content-Type:
               description: |
-                one of 'appropriate mime type' or 'application/zip'.
-                appropriate mime type - for single file prewiev or download.
-                application/zip - for a dir or multiple dirs/files download.
+                One of 'appropriate mime type' or 'application/zip':
+                1. appropriate mime type - for single file prewiev or download.
+                2. application/zip - for a dir or multiple dirs/files download.
           body:
             application/zip:
               description: Binary data
               type: file
         410:
           description: |
-            GONE.
+            GONE
+
             A 410 status is returned if a resource with id does not exist.
