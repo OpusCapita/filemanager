@@ -9,9 +9,11 @@ import Notification from './Notification';
 import NotificationProgressItem from './NotificationProgressItem';
 import ProgressIcon from './ProgressIcon';
 import SetNameDialog from './SetNameDialog';
+import { Column } from 'react-virtualized';
 
 export default {
   Cell,
+  Column,
   ConfirmDialog,
   ContextMenuItem,
   Dialog,

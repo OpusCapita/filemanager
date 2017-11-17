@@ -1,8 +1,3 @@
-import { Column } from 'react-virtualized';
-import HeaderCell from '../../components/HeaderCell';
-import Cell from '../../components/Cell';
-import NameCell from '../../components/NameCell';
-
 import fecha from 'fecha';
 import filesize from 'filesize';
 
@@ -31,40 +26,61 @@ function formatDate(
 };
 
 let listViewLayout = (viewLayoutOptions) => ([
-  (
-    <Column
-      key="name"
-      dataKey="name"
-      width={48}
-      label="Title"
-      flexGrow={1}
-      cellRenderer={NameCell(viewLayoutOptions)}
-      headerRenderer={HeaderCell(viewLayoutOptions)}
-      disableSort={false}
-    />
-  ), (
-    <Column
-      key="size"
-      width={100}
-      dataKey="size"
-      label="File size"
-      flexGrow={viewLayoutOptions.width > TABLET_WIDTH ? 1 : 0}
-      cellRenderer={Cell({ ...viewLayoutOptions, getData: formatSize })}
-      headerRenderer={HeaderCell(viewLayoutOptions)}
-      disableSort={true}
-    />
-  ), (viewLayoutOptions.width > MOBILE_WIDTH) && (
-    <Column
-      key="modifiedTime"
-      width={100}
-      dataKey="modifiedTime"
-      label="Last modified"
-      flexGrow={1}
-      cellRenderer={Cell({ ...viewLayoutOptions, getData: formatDate })}
-      headerRenderer={HeaderCell(viewLayoutOptions)}
-      disableSort={false}
-    />
-  )
+  ({
+    elementType: 'Column',
+    elementProps: {
+      key: "name",
+      dataKey: "name",
+      width: 48,
+      label: "Title",
+      flexGrow: 1,
+      cellRenderer: {
+        elementType: 'NameCell',
+        elementProps: viewLayoutOptions
+      },
+      headerRenderer: {
+        elementType: 'HeaderCell',
+        elementProps: viewLayoutOptions
+      },
+      disableSort: false
+    }
+  }), ({
+    elementType: 'Column',
+    elementProps: {
+      key: "size",
+      width: 100,
+      dataKey: "size",
+      label: "File size",
+      flexGrow: viewLayoutOptions.width > TABLET_WIDTH ? 1 : 0,
+      cellRenderer: {
+        elementType: 'Cell',
+        elementProps: { ...viewLayoutOptions, getData: formatSize }
+      },
+      headerRenderer: {
+        elementType: 'HeaderCell',
+        elementProps: viewLayoutOptions
+      },
+      disableSort: true
+    }
+  }), (viewLayoutOptions.width > MOBILE_WIDTH) && ({
+    elementType: 'Column',
+    elementProps: {
+      key: "modifiedTime",
+      width: 100,
+      dataKey: "modifiedTime",
+      label: "Last modified",
+      flexGrow: 1,
+      cellRenderer: {
+        elementType: 'Cell',
+        elementProps: { ...viewLayoutOptions, getData: formatDate }
+      },
+      headerRenderer: {
+        elementType: 'HeaderCell',
+        elementProps: viewLayoutOptions
+      },
+      disableSort: false
+    }
+  })
 ]);
 
 export default listViewLayout;
