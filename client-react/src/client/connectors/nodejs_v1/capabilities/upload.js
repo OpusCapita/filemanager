@@ -72,11 +72,12 @@ function handler(apiOptions, {
     }
   };
 
-  const onFail = _ => onFailError({
+  const onFail = ({ message } = {}) => onFailError({
     getNotifications,
     label,
     notificationId,
-    updateNotifications
+    updateNotifications,
+    message
   });
 
   let onProgress = (progress) => {

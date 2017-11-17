@@ -5,6 +5,7 @@ import ContextMenuItem from '../../../components/ContextMenuItem';
 import NotificationProgressItem from '../../../components/NotificationProgressItem';
 import notifUtils from '../../../components/Notifications/utils';
 import { getIcon } from '../icons';
+import onFailError from '../../utils/onFailError';
 
 const icon = require('@opuscapita/svg-icons/lib/file_download.svg');
 const label = 'Download';
@@ -66,7 +67,14 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = () => { };
+  const onFail = ({ message } = {}) => onFailError({
+    getNotifications,
+    label,
+    notificationId,
+    updateNotifications,
+    message
+  });
+
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -93,7 +101,11 @@ function handler(apiOptions, {
         ...(mimeType === 'application/pdf' ? { target: '_blank' } : null)
       }) :
       promptToSaveBlob({ content: file, name: fileName })
-    ).catch(err => console.log(err))
+    )
+    // .catch(err => {
+    //   console.log('Failed to download resource: ', err);
+    //   onFail()
+    // })
 }
 
 export default (apiOptions, {

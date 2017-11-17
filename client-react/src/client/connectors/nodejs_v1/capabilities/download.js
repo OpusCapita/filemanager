@@ -67,11 +67,12 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = _ => onFailError({
+  const onFail = ({ message } = {}) => onFailError({
     getNotifications,
     label,
     notificationId,
-    updateNotifications
+    updateNotifications,
+    message
   });
 
   const onProgress = (progress) => {
