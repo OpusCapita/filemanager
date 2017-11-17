@@ -8,7 +8,6 @@
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
-    "start-wmd": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 win/index-windows",
     "npm-build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
     "npm-publish": "npm run npm-build && update-changelog -- --all && npm-publish",
     "grails-plugin-build": "rimraf build && npm run npm-build",
