@@ -1,7 +1,7 @@
 import agent from 'superagent';
 import JSZip from 'jszip';
-import { readLocalFile } from '../utils/upload';
-import { serializePromises } from '../utils/common';
+import { readLocalFile } from './utils/upload';
+import { serializePromises } from './utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 

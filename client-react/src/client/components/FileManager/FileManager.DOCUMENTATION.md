@@ -43,7 +43,7 @@ FileManager is
       />
       
       {/* Use Google Drive API v2 connector */}
-      {/*
+
       <FileNavigator
         id="google_drive_filemanager"
         api={_scope.connectors.googleDriveV2.api}
@@ -82,7 +82,6 @@ FileManager is
           </div>
         )}
       />
-    */}
 
     </FileManager>
   </div>

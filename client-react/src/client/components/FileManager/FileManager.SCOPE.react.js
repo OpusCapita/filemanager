@@ -8,12 +8,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
+import connectorGoogleDriveV2 from '@opuscapita/react-filemanager-connector-google-drive-v2';
 import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
 
 let connectors = {
-  nodeV1: connectorNodeV1
+  nodeV1: connectorNodeV1,
+  googleDriveV2: connectorGoogleDriveV2
 };
 
 function requireAll(requireContext) {
@@ -38,21 +40,21 @@ class FileManagerScope extends Component {
 
     this.connectors = connectors;
 
-    // window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
-    // window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
+    window.googleDriveSignIn = this.googleDriveSignIn.bind(this);
+    window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
   }
 
   async componentDidMount() {
     await this.handleNodejsInitPathChange('');
   }
 
-  // googleDriveSignIn() {
-  //   connectors.googleDriveV2.api.signIn();
-  // }
+  googleDriveSignIn() {
+    connectors.googleDriveV2.api.signIn();
+  }
 
-  // googleDriveSignOut() {
-  //   connectors.googleDriveV2.api.signOut();
-  // }
+  googleDriveSignOut() {
+    connectors.googleDriveV2.api.signOut();
+  }
 
   handleThemeChange = (e) => {
     let themeName = e.target.value;

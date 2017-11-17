@@ -1,7 +1,7 @@
 import React from 'react';
 import { triggerHiddenForm, promptToSaveBlob } from '../utils/download';
 import api from '../api';
-import notifUtils from '../../../components/Notifications/utils';
+import notifUtils from '../utils/notifications';
 import nanoid from 'nanoid';
 import { getIcon } from '../icons';
 import icons from '../icons-svg';
