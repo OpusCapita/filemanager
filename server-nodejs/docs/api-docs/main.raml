@@ -140,12 +140,10 @@ types:
             body:
               application/json:
                 type: FileStatsResource
-          204:
-            body:
-              properties:
-                error:
-              example:
-                error: No Content
+          410:
+            description: |
+              GONE.
+              A 410 status is returned if a resource with id does not exist.
 
       /children:
         get:
@@ -153,24 +151,29 @@ types:
           queryParameters:
             orderBy:
               type: string
-              description: one of 'createdDate', 'folder', 'modifiedDate', 'quotaBytesUsed', 'name'
+              description: |
+                one of 'name' or 'modifiedDate',
+                default value is 'name'
               required: false
             orderDirection:
               type: string
-              description: ASC/DESC
+              description: |
+                one of 'ASC' or 'DESC'
+                default value is 'ASC'
               required: false
-            maxResults:
-              type: number
-              required: false
-            pageToken:
-              type: string
-              required: false
-            searchQuery:
-              type: string
-              required: false
-            searchRecursively:
-              type: boolean
-              required: false
+            # will develop in v2
+            # maxResults:
+            #   type: number
+            #   required: false
+            # pageToken:
+            #   type: string
+            #   required: false
+            # searchQuery:
+            #   type: string
+            #   required: false
+            # searchRecursively:
+            #   type: boolean
+            #   required: false
           responses:
             200:
               description:
@@ -179,13 +182,12 @@ types:
                   type: object
                   properties:
                     items: FileStatsResource[]
-                    nextPageToken:
-            204:
-              body:
-                properties:
-                  error:
-                example:
-                  error: No Content
+                    # will develop in v2
+                    # nextPageToken:
+            410:
+              description: |
+                GONE.
+                A 410 status is returned if a resource with id does not exist.
 
   /download:
     get:
@@ -201,15 +203,21 @@ types:
           description:
           headers:
             Content-Disposition:
+              description: |
+                for single file or a dir or multiple dirs/files download
               pattern: ^attachment; filename="[\w\.\-]+\.[\w\.]+"$
               example: attachment; filename="archive.zip"
+              required: false
+            Content-Type:
+              description: |
+                one of 'appropriate mime type' or 'application/zip'.
+                appropriate mime type - for single file prewiev or download
+                application/zip - for a dir or multiple dirs/files download
           body:
             application/zip:
               description: Binary data
               type: file
-        204:
-          body:
-            properties:
-              error:
-            example:
-              error: No Content
+        410:
+          description: |
+            GONE.
+            A 410 status is returned if a resource with id does not exist.
