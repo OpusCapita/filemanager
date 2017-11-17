@@ -1,6 +1,6 @@
 ### Synopsis
 
-FileManager is 
+FileManager is
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -14,7 +14,7 @@ FileManager is
 ```
 <div>
   <div
-    style={{ 
+    style={{
       height: '70vh',
       minWidth: '320px',
       flex: '1',
@@ -22,7 +22,7 @@ FileManager is
       backgroundColor: '#f5f5f5'
   }}>
     <FileManager className={_scope.state.themeClassName}>
-    
+
       {/* Use NodeJS API v1 connector */}
       <FileNavigator
         id="cusomization-area"
@@ -41,7 +41,7 @@ FileManager is
         )}
         onLocationChange={_scope.handleNodejsLocationChange}
       />
-      
+
       {/* Use Google Drive API v2 connector */}
       <FileNavigator
         id="google_drive_filemanager"
