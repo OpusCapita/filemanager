@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: build-connector-google-drive-v2
-          command: (cd connectors/google-drive-v2 && yarn install && Npm run npm-build)
+          command: (cd connectors/google-drive-v2 && yarn install && npm run npm-build)
 
       - run:
           name: install-dependencies-client-react
