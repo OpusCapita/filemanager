@@ -18,7 +18,7 @@ Predefined connectors placed [here](./client-react/src/client/connectors). You c
 
 ## Demo
 
-See interactive example for more details: [demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.1%2FFileManager&maxContainerWidth=100%25&showSidebar=true)
+See interactive example for more details: [demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.2%2FFileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
