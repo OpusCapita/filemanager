@@ -53,16 +53,16 @@ jobs:
 #          - v1-dependencies-
 
       - run:
+          name: build-connector-node-v1
+          command: (cd connectors/node-v1 && yarn install && npm run build)
+
+      - run:
+          name: build-connector-google-drive-v2
+          command: (cd connectors/google-drive-v2 && yarn install)
+
+      - run:
           name: install-dependencies-client-react
           command: (cd client-react && yarn install)
-
-      - run:
-          name: install-dependencies-connector-node-v1
-          command: (cd connectors/node-v1 && yarn install)
-
-      - run:
-          name: install-dependencies-connector-google-drive-v2
-          command: (cd connectors/google-drive-v2 && yarn install)
 
       - run:
           name: install-dependencies-server-nodejs
