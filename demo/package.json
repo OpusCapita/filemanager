@@ -6,7 +6,7 @@
     "start": "node ./index.js"
   },
   "dependencies": {
-    "@opuscapita/filemanager-server": "file:../server-nodejs",
+    "@opuscapita/filemanager-server": "file:../packages/server-nodejs",
     "express": "4.16.2"
   }
 }
