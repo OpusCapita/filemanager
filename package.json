@@ -17,8 +17,7 @@
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
-    "publish": "lerna publish --exact --yes",
-    "publish-next": "lerna publish --npm-tag=next"
+    "publish": "lerna publish --exact --yes"
   },
   "useWorkspaces": true,
   "workspaces": [
