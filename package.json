@@ -15,7 +15,8 @@
     "lint": "lerna run lint",
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
-    "updated": "lerna updated || exit 0"
+    "updated": "lerna updated || exit 0",
+    "publish": "lerna publish --exact --yes"
   },
   "useWorkspaces": true,
   "version": "1.0.0-beta.1"
