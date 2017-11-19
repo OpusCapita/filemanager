@@ -1,6 +1,15 @@
-# Overview
+# Filemanager
 
-**Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
+
+> **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
+
+![badge-circleci](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg) 
+![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)
+![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)
+
+## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.2%2FFileManager&maxContainerWidth=100%25&showSidebar=false)
+
+> Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
 OpusCapita **Filemanager** provides a possibility to manipulate files.
 
@@ -15,12 +24,6 @@ Predefined connectors placed [here](./client-react/src/client/connectors). You c
 ### [NodeJS server implementation](./server-nodejs)
 
 [**API Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
-
-## Demo
-
-See interactive example for more details: [demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.2%2FFileManager&maxContainerWidth=100%25&showSidebar=false)
-
-> Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
 ## Contributors
 
