@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+		"lerna": "^2.5.1"
+	},
+  "name": "@opuscapita/filemanager-packages",
+  "private": true,
+  "npmClient": "yarn",
+  "npmClientArgs": [
+    "--no-lockfile"
+  ],
+  "scripts": {
+    "bootstrap": "lerna bootstrap && cd demo && sh ./populate-demo-fs.sh",
+    "clean": "lerna clean",
+    "diff": "lerna diff",
+    "distclean": "lerna clean --yes && rm -rf node_modules",
+    "lint": "lerna run lint",
+    "postinstall": "npm run bootstrap",
+    "start": "lerna run start --parallel",
+    "updated": "lerna updated || exit 0",
+    "publish": "lerna publish --exact --yes"
+  },
+  "useWorkspaces": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "version": "1.0.0-beta.1"
+}

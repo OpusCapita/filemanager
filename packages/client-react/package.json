@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/react-filemanager",
-  "version": "0.0.2",
+  "version": "1.0.0-beta.3",
   "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
@@ -8,9 +8,8 @@
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
-    "npm-build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
-    "npm-publish": "npm run npm-build && update-changelog -- --all && npm-publish",
-    "publish-release": "npm run npm-publish -- --release"
+    "build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
+    "publish": "npm run build"
   },
   "license": "Apache-2.0",
   "repository": "OpusCapita/react-filemanager",
@@ -30,8 +29,8 @@
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",
     "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
-    "@opuscapita/react-filemanager-connector-node-v1": "file:../connectors/node-v1",
-    "@opuscapita/react-filemanager-connector-google-drive-v2": "file:../connectors/google-drive-v2",
+    "@opuscapita/react-filemanager-connector-google-drive-v2": "*",
+    "@opuscapita/react-filemanager-connector-node-v1": "*",
     "@opuscapita/react-showroom-client": "1.2.10",
     "@opuscapita/react-showroom-server": "1.3.0",
     "autoprefixer": "6.7.6",
