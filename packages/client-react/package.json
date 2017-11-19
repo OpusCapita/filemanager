@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/react-filemanager",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
