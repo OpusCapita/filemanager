@@ -10,9 +10,12 @@
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
-OpusCapita **Filemanager** provides a possibility to manipulate files.
+### Packages
 
-### [Client implementation](./client-react)
+* [Client React](./packages/client-react)
+* [Server Node](./packages/server-node)
+* [Client React connector for Server Node](./packages/connector-node-v1)
+* [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
 
 Client implementation is an npm package which can you can include to your application.
 It built using [Facebook ReactJS](https://reactjs.org/) library.
@@ -24,7 +27,19 @@ Predefined connectors placed [here](./client-react/src/client/connectors). You c
 
 [**API Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
 
-## Contributors
+## Contributing
+
+### Run from clonned repo:
+
+```
+git clone git@github.com:OpusCapita/filemanager.git
+```
+
+```
+npm run bootstrap && npm start
+```
+
+### Main contributors
 
 | [<img src="https://avatars.githubusercontent.com/u/24603787?v=3" width="100px;"/>](https://github.com/asergeev-sc) | [**Alexey Sergeev**](https://github.com/asergeev-sc)     |
 | :---: | :---: |
