@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/filemanager-server",
-  "version": "0.0.1",
+  "version": "1.0.0-beta.2",
   "description": "",
   "main": "index.js",
   "scripts": {
