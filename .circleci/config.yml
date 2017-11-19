@@ -53,23 +53,11 @@ jobs:
 #          - v1-dependencies-
 
       - run:
-          name: build-connector-node-v1
-          command: (cd connectors/node-v1 && yarn install && npm run npm-build)
+          name: install-dependencies-for-packages
+          command: yarn
 
       - run:
-          name: build-connector-google-drive-v2
-          command: (cd connectors/google-drive-v2 && yarn install && npm run npm-build)
-
-      - run:
-          name: install-dependencies-client-react
-          command: (cd client-react && yarn install)
-
-      - run:
-          name: install-dependencies-server-nodejs
-          command: (cd server-nodejs && yarn install)
-
-      - run:
-          name: install-dependencies-demo
+          name: install-dependencies-for-demo
           command: (cd demo && yarn install)
 
 #      - save_cache:
@@ -80,15 +68,15 @@ jobs:
       - run:
           name: build-client-static
           command: |
-            cd client-react &&
+            cd packages/client-react &&
             sh ./scripts/gh-pages/build.sh &&
-            mv ./.gh-pages-tmp ../demo && mv ../demo/.gh-pages-tmp ../demo/static
+            mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
 
       - run:
           name: build-server-api-docs
           command: |
             echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
-            cd server-nodejs && npm run build-api-docs && mkdir -p ../demo/static/api && cp -r api-docs.tmp/docs ../demo/static/api
+            cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
 
       - run:
           name: build-docker-image
