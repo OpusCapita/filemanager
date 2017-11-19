@@ -5,7 +5,7 @@ MAINTAINER OpusCapita
 
 RUN mkdir /demo && mkdir /server-nodejs
 
-COPY ./server-nodejs /server-nodejs
+COPY ./packages/server-nodejs /server-nodejs
 COPY ./demo /demo
 
 RUN cd demo && ./populate-demo-fs.sh
