@@ -14,18 +14,56 @@
 
 * [Client React](./packages/client-react)
 * [Server Node](./packages/server-node)
-* [Client React connector for Server Node](./packages/connector-node-v1)
+* [Client React connector for Server Node API v1](./packages/connector-node-v1)
 * [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
+
+Detailed documentation for each package is coming soon.
+
+### Basic usage
 
 Client implementation is an npm package which can you can include to your application.
 It built using [Facebook ReactJS](https://reactjs.org/) library.
 
-It supports custom connectors to different file storages. 
-Predefined connectors placed [here](./client-react/src/client/connectors). You cat write you own.
+It supports custom connectors to different file storages.
+Predefined connectors are [Server Node API v1](./packages/connector-node-v1) and [Google Drive API v2](./packages/connector-google-drive-v2). You can write you own.
 
-### [NodeJS server implementation](./server-nodejs)
+#### Run Node server
 
-[**API Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
+Install package
+
+```
+npm install --save @opuscapita/filemanager-server
+```
+
+Now you have at least two variants how to start it:
+
+* application
+
+```
+let config = {
+  fsRoot: __dirname,
+  rootName: 'Root folder',
+  port: process.env.PORT || '3020',
+  host: process.env.HOST || 'localhost'
+};
+
+let filemanager = require('@opuscapita/filemanager-server`);
+filemanager.run(config);
+```
+
+* middleware
+
+See [example](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js) here
+
+
+#### Run client
+
+```
+npm install --save @opuscapita/react-filemanager @opuscapita
+
+```
+
+[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
 
 ## Contributing
 
