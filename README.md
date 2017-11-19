@@ -35,9 +35,9 @@ Install package
 npm install --save @opuscapita/filemanager-server
 ```
 
-Now you have at least two variants how to start it:
+Now you have at least two variants how to use it:
 
-* application
+* Start as application
 
 ```
 let config = {
@@ -51,10 +51,7 @@ let filemanager = require('@opuscapita/filemanager-server`);
 filemanager.run(config);
 ```
 
-* middleware
-
-See [example](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js) here
-
+* [Use as middleware](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js)
 
 #### Run client
 
