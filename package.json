@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-		"lerna": "^2.5.1"
+		"lerna": "2.5.1"
 	},
   "name": "@opuscapita/filemanager-packages",
   "private": true,
