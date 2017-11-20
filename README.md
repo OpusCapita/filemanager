@@ -33,7 +33,7 @@ Predefined connectors are [Server Node API v1](./packages/connector-node-v1) and
 
 Install package
 
-```
+```shell
 npm install --save @opuscapita/filemanager-server
 ```
 
@@ -41,7 +41,7 @@ Now you have at least two variants how to use it:
 
 * Start as application
 
-```
+```js
 let config = {
   fsRoot: __dirname,
   rootName: 'Root folder',
@@ -59,13 +59,13 @@ filemanager.run(config);
 
 Install packages
 
-```
+```shell
 npm install --save @opuscapita/react-filemanager @opuscapita/react-filemanager-connector-node-v1
 ```
 
 Use it as a child of you application
 
-```
+```jsx
 import React from 'react';
 import { FileManager, FileNavigator } from `@opuscapita/react-filemanager`;
 import connectorNodeV1 from `@opuscapita/react-filemanager-connector-node-v1`;
@@ -98,11 +98,11 @@ const fileManager (props) => (
 
 ### Run from clonned repo:
 
-```
+```shell
 git clone git@github.com:OpusCapita/filemanager.git
 ```
 
-```
+```shell
 npm run bootstrap && npm start
 ```
 
