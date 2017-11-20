@@ -54,7 +54,7 @@ let config = {
   host: process.env.HOST || 'localhost'
 };
 
-let filemanager = require('@opuscapita/filemanager-server`);
+let filemanager = require('@opuscapita/filemanager-server');
 filemanager.run(config);
 ```
 
