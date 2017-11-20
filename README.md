@@ -6,7 +6,7 @@
 
 > **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
-## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.2%2FFileManager&maxContainerWidth=100%25&showSidebar=false)
+## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F1.0.0-beta.3%2FFileManager&maxContainerWidth=100%25&showSidebar=true)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
@@ -27,7 +27,9 @@ It built using [Facebook ReactJS](https://reactjs.org/) library.
 It supports custom connectors to different file storages.
 Predefined connectors are [Server Node API v1](./packages/connector-node-v1) and [Google Drive API v2](./packages/connector-google-drive-v2). You can write you own.
 
-#### Run Node server
+#### How to use Server Node
+
+[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
 
 Install package
 
@@ -53,14 +55,44 @@ filemanager.run(config);
 
 * [Use as middleware](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js)
 
-#### Run client
+#### How to use Client React
+
+Install packages
 
 ```
-npm install --save @opuscapita/react-filemanager @opuscapita
-
+npm install --save @opuscapita/react-filemanager @opuscapita/react-filemanager-connector-node-v1
 ```
 
-[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
+Use it as a child of you application
+
+```
+import React from 'react';
+import { FileManager, FileNavigator } from `@opuscapita/react-filemanager`;
+import connectorNodeV1 from `@opuscapita/react-filemanager-connector-node-v1`;
+
+const apiOptions = {
+  ...connectorNodeV1.apiOptions,
+  apiRoot: `http://opuscapita-filemanager-demo.azurewebsites.net/api` // Or you local Server Node V1 installation.
+}
+
+const fileManager (props) => (
+ <div style={{ height: '480px' }}>
+    <FileManager>
+      <FileNavigator
+        id="filemanager-1"
+        api={connectorNodeV1.api}
+        apiOptions={apiOptions}
+        capabilities={connectorNodeV1.capabilities}
+        initialResourceId={'Lw'}
+        listViewLayout={connectorNodeV1.listViewLayout}
+        viewLayoutOptions={connectorNodeV1.viewLayoutOptions}
+      />
+    />
+  </div>
+);
+```
+
+# More detailed documentation coming soon!
 
 ## Contributing
 
