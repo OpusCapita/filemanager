@@ -25,7 +25,12 @@ Client implementation is an npm package which can you can include to your applic
 It built using [Facebook ReactJS](https://reactjs.org/) library.
 
 It supports custom connectors to different file storages.
-Predefined connectors are [Server Node API v1](./packages/connector-node-v1) and [Google Drive API v2](./packages/connector-google-drive-v2). You can write you own.
+Predefined connectors are:
+
+* [Client React connector for Server Node API v1](./packages/connector-node-v1)
+* [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
+
+You can write you own (documentation how to do it will appears a little later).
 
 #### How to use Server Node
 
