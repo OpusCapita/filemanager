@@ -72,6 +72,7 @@ Use it as a child of you application
 
 ```jsx
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { FileManager, FileNavigator } from `@opuscapita/react-filemanager`;
 import connectorNodeV1 from `@opuscapita/react-filemanager-connector-node-v1`;
 
@@ -80,7 +81,7 @@ const apiOptions = {
   apiRoot: `http://opuscapita-filemanager-demo.azurewebsites.net/api` // Or you local Server Node V1 installation.
 }
 
-const fileManager (props) => (
+const fileManager = (
  <div style={{ height: '480px' }}>
     <FileManager>
       <FileNavigator
@@ -95,6 +96,8 @@ const fileManager (props) => (
     </FileManager>
   </div>
 );
+
+ReactDOM.render(fileManager, document.body);
 ```
 
 # More detailed documentation coming soon!
