@@ -92,7 +92,7 @@ const fileManager (props) => (
         listViewLayout={connectorNodeV1.listViewLayout}
         viewLayoutOptions={connectorNodeV1.viewLayoutOptions}
       />
-    />
+    </FileManager>
   </div>
 );
 ```
