@@ -1,8 +1,8 @@
 # Filemanager
 
-![badge-circleci](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg) 
-![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)
-![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)
+[![badge-circleci](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)](https://circleci.com/gh/OpusCapita/filemanager)
+[![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
+[![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
 > **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
