@@ -7,7 +7,8 @@
     "start": "node -e \"require('./index').server.run()\"",
     "lint": "eslint .",
     "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
-    "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml"
+    "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
+    "test-restapi": "newman run api-tests/rest-test.postman_collection.json"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -30,6 +31,7 @@
     "eslint": "3.17.0",
     "eslint-config-opuscapita": "1.0.7",
     "eslint-plugin-react": "6.10.0",
+    "newman": "^3.8.3",
     "raml-js-validator": "0.6.1",
     "raml2html": "6.4.1"
   }
