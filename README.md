@@ -28,7 +28,7 @@ Predefined connectors are:
 * [Client React connector for Server Node API v1](./packages/connector-node-v1)
 * [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
 
-You can write you own custom connectors (documentation how to do it will appears a little later).
+You can write you own custom connectors (documentation on how to do it will appear later).
 
 #### How to use Server Node
 
