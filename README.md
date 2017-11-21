@@ -21,7 +21,7 @@ Detailed documentation for each package is coming soon.
 
 ### Basic usage
 
-Client implementation is an npm package using  which can you can embed into your application.
+Client implementation is an npm package which can be embed into your application.
 It uses [React](https://reactjs.org/) framework and supports connectors to different file storages.
 Predefined connectors are:
 
