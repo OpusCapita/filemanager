@@ -71,8 +71,8 @@ Use it as a child component of you application
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { FileManager, FileNavigator } from `@opuscapita/react-filemanager`;
-import connectorNodeV1 from `@opuscapita/react-filemanager-connector-node-v1`;
+import { FileManager, FileNavigator } from '@opuscapita/react-filemanager';
+import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 
 const apiOptions = {
   ...connectorNodeV1.apiOptions,
