@@ -13,7 +13,7 @@
 ### Packages
 
 * [Client React](./packages/client-react)
-* [Server Node](./packages/server-node)
+* [Server Node](./packages/server-nodejs)
 * [Client React connector for Server Node API v1](./packages/connector-node-v1)
 * [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
 
