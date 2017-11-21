@@ -100,18 +100,6 @@ ReactDOM.render(fileManager, document.body);
 
 # More detailed documentation coming soon!
 
-## Contributing
-
-### Run from clonned repo:
-
-```shell
-git clone git@github.com:OpusCapita/filemanager.git
-```
-
-```shell
-npm run bootstrap && npm start
-```
-
 ### Main contributors
 
 | [<img src="https://avatars.githubusercontent.com/u/24603787?v=3" width="100px;"/>](https://github.com/asergeev-sc) | [**Alexey Sergeev**](https://github.com/asergeev-sc)     |
