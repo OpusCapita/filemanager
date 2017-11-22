@@ -1,13 +1,12 @@
 const express = require('express');
 const filemanagerMiddleware = require('./middleware');
-const config = require('./config/server-config');
 const logger = require('./logger');
 
 const app = express();
 
-function run(serverConfig = config) {
-  const host = serverConfig.host;
-  const port = serverConfig.port;
+function run(config = require('./config/server-config')) {
+  const host = config.host;
+  const port = config.port;
 
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -15,7 +14,7 @@ function run(serverConfig = config) {
     next();
   });
 
-  app.use(filemanagerMiddleware(serverConfig));
+  app.use(filemanagerMiddleware(config));
 
   app.listen(port, host, function(err) {
     if (err) {
