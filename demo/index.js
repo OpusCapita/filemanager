@@ -11,8 +11,8 @@ const config = {
 };
 
 const app = express();
-const host = process.env.PORT || '3020';
-const port = process.env.HOST || 'localhost';
+const host = process.env.HOST || 'localhost';
+const port = process.env.PORT || '3020';
 
 fs.writeFileSync(
   path.resolve(__dirname, './static/env.js'),
