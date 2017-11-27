@@ -4,7 +4,6 @@ const helmet = require('helmet');
 const zip = require('express-easy-zip'); // 'node-archiver', 'zipstream' or 'easyzip'  may be used instead.
 const bodyParser = require('body-parser');
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 
 const {
@@ -13,6 +12,8 @@ const {
 } = require('./lib');
 
 module.exports = options => {
+  const router = express.Router();
+
   router.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,POST,HEAD,OPTIONS,PUT,PATCH,DELETE');
     next();
