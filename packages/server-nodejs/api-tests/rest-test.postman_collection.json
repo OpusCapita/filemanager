@@ -54,7 +54,7 @@
 					},
 					"response": [
 						{
-							"id": "f013904e-67c1-48da-8452-bc0e97747e91",
+							"id": "ae1ee13b-156f-4624-9c8f-bbc848ee6540",
 							"name": "api/files_get_ex.1",
 							"originalRequest": {
 								"method": "GET",
@@ -1476,7 +1476,7 @@
 					"response": []
 				},
 				{
-					"name": "api/files/:id/children_get",
+					"name": "Check newDir",
 					"event": [
 						{
 							"listen": "test",
@@ -1503,7 +1503,9 @@
 									"        let item = jsonData.items[i];",
 									"        pm.expect(item.parentId).to.equal(newDirId);",
 									"    }",
-									"});"
+									"});",
+									"",
+									"pm.globals.set(\"newDirSize\", jsonData.items.length);"
 								]
 							}
 						}
@@ -2293,7 +2295,7 @@
 					"response": []
 				},
 				{
-					"name": "Check workChildDir",
+					"name": "Check newDir",
 					"event": [
 						{
 							"listen": "test",
@@ -2302,12 +2304,12 @@
 								"exec": [
 									"let jsonData = pm.response.json();",
 									"    ",
-									"pm.test('\"Get workChildDir children\" should have status 200', () => {",
+									"pm.test('\"Get newDir children\" should have status 200', () => {",
 									"    pm.expect(pm.response.code).to.equal(200);",
 									"});",
-									"    ",
-									"pm.test('workChildDir children should have correct size', () => {",
-									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"workChildrenSize\") - 1);",
+									"",
+									"pm.test('newDir children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"newDirSize\") - 1);",
 									"});"
 								]
 							}
