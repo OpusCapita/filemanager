@@ -10,7 +10,7 @@ git clone git@github.com:OpusCapita/filemanager.git
 npm run bootstrap && npm start
 ```
 
-### Release process (only for NPM collaborators)
+### Release process (only for collaborators at npmjs.com)
 
 ```npm run bootstrap && npm release``` then choose proper version.
 
