@@ -6,7 +6,7 @@
 
 > **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
-## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=true)
+## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
