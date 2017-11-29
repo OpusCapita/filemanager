@@ -24,10 +24,3 @@ class HeaderCellScope extends Component {
     );
   }
 }
-
-HeaderCellScope.contextTypes = {
-  i18n: PropTypes.object
-};
-HeaderCellScope.childContextTypes = {
-  i18n: PropTypes.object
-};

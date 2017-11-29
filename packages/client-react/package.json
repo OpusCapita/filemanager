@@ -23,8 +23,8 @@
     "README.md"
   ],
   "peerDependencies": {
-    "react": "^0.14.8 || ^15.4.2",
-    "react-dom": "^0.14.8 || ^15.4.2"
+    "react": "0.14.x || 15.x.x || 16.x.x",
+    "react-dom": "0.14.x || 15.x.x || 16.x.x"
   },
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",

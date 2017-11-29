@@ -24,10 +24,3 @@ class SetNameDialogScope extends Component {
     );
   }
 }
-
-SetNameDialogScope.contextTypes = {
-  i18n: PropTypes.object
-};
-SetNameDialogScope.childContextTypes = {
-  i18n: PropTypes.object
-};

@@ -37,10 +37,3 @@ class ToolbarScope extends Component {
     );
   }
 }
-
-ToolbarScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ToolbarScope.childContextTypes = {
-  i18n: PropTypes.object
-};

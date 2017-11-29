@@ -153,10 +153,3 @@ class FileManagerScope extends Component {
     );
   }
 }
-
-FileManagerScope.contextTypes = {
-  i18n: PropTypes.object
-};
-FileManagerScope.childContextTypes = {
-  i18n: PropTypes.object
-};

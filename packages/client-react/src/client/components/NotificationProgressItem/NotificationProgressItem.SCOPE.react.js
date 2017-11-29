@@ -37,10 +37,3 @@ class NotificationProgressItemScope extends Component {
     );
   }
 }
-
-NotificationProgressItemScope.contextTypes = {
-  i18n: PropTypes.object
-};
-NotificationProgressItemScope.childContextTypes = {
-  i18n: PropTypes.object
-};

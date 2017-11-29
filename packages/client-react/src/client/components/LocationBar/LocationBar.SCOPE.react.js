@@ -24,10 +24,3 @@ class LocationBarScope extends Component {
     );
   }
 }
-
-LocationBarScope.contextTypes = {
-  i18n: PropTypes.object
-};
-LocationBarScope.childContextTypes = {
-  i18n: PropTypes.object
-};
