@@ -10,4 +10,10 @@ git clone git@github.com:OpusCapita/filemanager.git
 npm run bootstrap && npm start
 ```
 
-# More detailed documentation coming soon!
+### Release process (only for collaborators at npmjs.com)
+
+```npm run bootstrap && npm release``` then choose proper version.
+
+If you want to release a beta version, choose `prerelease`.
+
+[Lerna](https://github.com/lerna/lerna) automatically set proper version for each package and adds git tag.
