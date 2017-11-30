@@ -8,16 +8,20 @@ async function init(options) {
 }
 
 function normalizeResource(resource) {
-  return {
-    capabilities: resource.capabilities,
-    createdTime: Date.parse(resource.createdTime),
-    id: resource.id,
-    modifiedTime: Date.parse(resource.modifiedTime),
-    name: resource.name,
-    type: resource.type,
-    size: resource.size,
-    parentId: resource.parentId ? resource.parentId : null
-  };
+  if (resource) {
+    return {
+      capabilities: resource.capabilities,
+      createdTime: Date.parse(resource.createdTime),
+      id: resource.id,
+      modifiedTime: Date.parse(resource.modifiedTime),
+      name: resource.name,
+      type: resource.type,
+      size: resource.size,
+      parentId: resource.parentId ? resource.parentId : null
+    };
+  } else {
+    return {};
+  }
 }
 
 async function getCapabilitiesForResource(options, resource) {
@@ -32,6 +36,7 @@ async function getResourceById(options, id) {
   });
 
   let resource = response.body;
+
   return normalizeResource(resource);
 }
 
@@ -56,6 +61,11 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let resource = await getResourceById(options, id);
+
+  if (!resource) {
+    return result;
+  }
+
   let parentId = resource.parentId;
 
   if (!parentId) {
