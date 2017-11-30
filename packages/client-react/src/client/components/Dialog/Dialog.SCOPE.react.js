@@ -24,10 +24,3 @@ class DialogScope extends Component {
     );
   }
 }
-
-DialogScope.contextTypes = {
-  i18n: PropTypes.object
-};
-DialogScope.childContextTypes = {
-  i18n: PropTypes.object
-};

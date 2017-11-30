@@ -24,10 +24,3 @@ class LoadingCellScope extends Component {
     );
   }
 }
-
-LoadingCellScope.contextTypes = {
-  i18n: PropTypes.object
-};
-LoadingCellScope.childContextTypes = {
-  i18n: PropTypes.object
-};

@@ -24,10 +24,3 @@ class ConfirmDialogScope extends Component {
     );
   }
 }
-
-ConfirmDialogScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ConfirmDialogScope.childContextTypes = {
-  i18n: PropTypes.object
-};

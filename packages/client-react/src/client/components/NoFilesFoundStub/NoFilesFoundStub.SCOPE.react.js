@@ -24,10 +24,3 @@ class NoFilesFoundStubScope extends Component {
     );
   }
 }
-
-NoFilesFoundStubScope.contextTypes = {
-  i18n: PropTypes.object
-};
-NoFilesFoundStubScope.childContextTypes = {
-  i18n: PropTypes.object
-};

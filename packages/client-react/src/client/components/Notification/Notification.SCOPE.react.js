@@ -24,10 +24,3 @@ class NotificationScope extends Component {
     );
   }
 }
-
-NotificationScope.contextTypes = {
-  i18n: PropTypes.object
-};
-NotificationScope.childContextTypes = {
-  i18n: PropTypes.object
-};

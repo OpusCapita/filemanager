@@ -54,10 +54,3 @@ class ContextMenuScope extends Component {
     );
   }
 }
-
-ContextMenuScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ContextMenuScope.childContextTypes = {
-  i18n: PropTypes.object
-};
