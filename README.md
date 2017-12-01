@@ -98,15 +98,9 @@ const fileManager = (
 ReactDOM.render(fileManager, document.body);
 ```
 
-# More detailed documentation coming soon!
-
-## [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
-
-## Contributing
-
-### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
-
-### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
+* [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
+* [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
+* [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
 
 ### Main contributors
 
