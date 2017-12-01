@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap && cd demo && sh ./populate-demo-fs.sh",
+    "changelog": "docker run -it --rm -v \"$(pwd)\":/usr/local/src/your-app ockvolkovich/github-changelog-generator -u OpusCapita -p filemanager --token $CHANGELOG_GITHUB_TOKEN && git add ./CHANGELOG.md && git commit -m \"Update CHANGELOG.md [ci skip]\"",
     "clean": "lerna clean",
     "diff": "lerna diff",
     "distclean": "lerna clean --yes && rm -rf node_modules",
