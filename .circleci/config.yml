@@ -2,67 +2,14 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:6
+      - image: circleci/node:8
     working_directory: ~/repo
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#          - v1-dependencies-{{ checksum "package.json" }}
-#          # fallback to using the latest cache if no exact match is found
-#          - v1-dependencies-
+
       - run:
-          name: install-dependencies-for-packages
+          name: bootstrap
           command: yarn
-
-#      - save_cache:
-#          paths:
-#            - node_modules
-#          key: v1-dependencies-{{ checksum "package.json" }}
-
-#      - run:
-#          name: lint
-#          command: npm run lint
-#
-#      - run:
-#          name: test
-#          command: |
-#            mkdir junit
-#            npm test -- --reporter mocha-junit-reporter
-#
-#          environment:
-#            MOCHA_FILE: junit/test-results.xml
-#
-#      - store_test_results:
-#          path: junit
-#
-#      - store_artifacts:
-#          path: junit
-  build-demo-docker-image:
-    docker:
-      - image: circleci/node:6
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - setup_remote_docker
-#      - restore_cache:
-#          keys:
-#          - v1-dependencies-{{ checksum "package.json" }}
-#          # fallback to using the latest cache if no exact match is found
-#          - v1-dependencies-
-
-      - run:
-          name: install-dependencies-for-packages
-          command: yarn
-
-      - run:
-          name: install-dependencies-for-demo
-          command: (cd demo && yarn install)
-
-#      - save_cache:
-#          paths:
-#            - node_modules
-#          key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
           name: build-client-static
@@ -86,20 +33,3 @@ jobs:
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ockvolkovich/filemanager-demo:latest
-
-workflows:
-  version: 2
-  build-all:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
-      - build-demo-docker-image:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
