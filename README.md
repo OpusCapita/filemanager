@@ -100,6 +100,14 @@ ReactDOM.render(fileManager, document.body);
 
 # More detailed documentation coming soon!
 
+## [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
+
+## Contributing
+
+### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
+
+### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
+
 ### Main contributors
 
 | [<img src="https://avatars.githubusercontent.com/u/24603787?v=3" width="100px;"/>](https://github.com/asergeev-sc) | [**Alexey Sergeev**](https://github.com/asergeev-sc)     |
