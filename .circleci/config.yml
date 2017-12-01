@@ -9,7 +9,7 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: bootstrap
+          name: bootstrap-packages
           command: yarn
 
       - run:
@@ -26,11 +26,15 @@ jobs:
             cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
 
       - run:
-          name: build-docker-image
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+      - run:
+          name: build-demo
           command: docker build -f Dockerfile.demo -t ockvolkovich/filemanager-demo:latest .
 
       - run:
-          name: deploy-docker-image
+          name: deploy-demo
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ockvolkovich/filemanager-demo:latest
