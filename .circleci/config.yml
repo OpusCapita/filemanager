@@ -8,31 +8,6 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - restore_cache:
-          keys:
-            - deps-root-{{ checksum "package.json" }}
-            - deps-root
-
-      - restore_cache:
-          keys:
-            - deps-client-react-{{ checksum "packages/client-react/package.json" }}
-            - deps-client-react
-
-      - restore_cache:
-          keys:
-            - deps-connector-google-drive-v2-{{ checksum "packages/connector-google-drive-v2/package.json" }}
-            - deps-connector-google-drive-v2
-
-      - restore_cache:
-          keys:
-            - deps-connector-node-v1-{{ checksum "packages/connector-node-v1/package.json" }}
-            - deps-connector-node-v1
-
-      - restore_cache:
-          keys:
-            - deps-server-nodejs-{{ checksum "packages/server-nodejs/package.json" }}
-            - deps-server-nodejs
-
       - run:
           name: bootstrap-packages
           command: yarn
@@ -63,28 +38,3 @@ jobs:
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ockvolkovich/filemanager-demo:latest
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: deps-root-{{ checksum "package.json" }}
-
-      - save_cache:
-          paths:
-            - packages/client-react/node_modules
-          key: deps-client-react-{{ checksum "packages/client-react/package.json" }}
-
-      - save_cache:
-          paths:
-            - packages/connector-google-drive-v2/node_modules
-          key: deps-connector-google-drive-v2-{{ checksum "packages/connector-google-drive-v2/package.json" }}
-
-      - save_cache:
-          paths:
-            - packages/connector-node-v1/node_modules
-          key: deps-connector-node-v1-{{ checksum "packages/connector-node-v1/package.json" }}
-
-      - save_cache:
-          paths:
-            - packages/server-nodejs/node_modules
-          key: deps-server-nodejs-{{ checksum "packages/server-nodejs/package.json" }}
