@@ -31,10 +31,10 @@ jobs:
 
       - run:
           name: build-demo
-          command: docker build -f Dockerfile.demo -t ockvolkovich/filemanager-demo:latest .
+          command: docker build -f Dockerfile.demo -t opuscapita/filemanager-demo:latest .
 
       - run:
           name: deploy-demo
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ockvolkovich/filemanager-demo:latest
+            docker push opuscapita/filemanager-demo:latest
