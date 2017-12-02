@@ -32,7 +32,7 @@
     "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
     "@opuscapita/react-filemanager-connector-google-drive-v2": "1.0.0-beta.9",
     "@opuscapita/react-filemanager-connector-node-v1": "1.0.0-beta.9",
-    "@opuscapita/react-showroom-client": "1.3.0-beta.3",
+    "@opuscapita/react-showroom-client": "1.3.0-beta.4",
     "@opuscapita/react-showroom-server": "1.3.0",
     "autoprefixer": "6.7.6",
     "babel-cli": "6.26.0",
