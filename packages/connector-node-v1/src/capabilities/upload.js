@@ -120,7 +120,15 @@ export default (apiOptions, {
   id: 'upload',
   icon: { svg: icon },
   label,
-  shouldBeAvailable: (apiOptions) => true,
+  shouldBeAvailable: (apiOptions) => {
+    let resource = getResource();
+
+    if (!resource || !resource.capabilitites) {
+      return false;
+    }
+
+    return resource.capabilities.canAddChildren;
+  },
   availableInContexts: ['files-view', 'new-button'],
   handler: () => handler(apiOptions, {
     showDialog,

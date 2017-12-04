@@ -127,7 +127,12 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
+
+    return (
+      selectedResources.length > 0 &&
+      !selectedResources.some(r => r.type === 'dir') &&
+      selectedResources.every(r => r.capabilities.canDownload)
+    );
   },
   availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {

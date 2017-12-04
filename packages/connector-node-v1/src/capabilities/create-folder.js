@@ -7,7 +7,6 @@ let icon = icons.createNewFolder;
 let label = 'Create folder';
 
 function handler(apiOptions, {
-  id,
   showDialog,
   hideDialog,
   navigateToDir,
@@ -77,7 +76,15 @@ export default (apiOptions, {
   id: 'createFolder',
   icon: { svg: icon },
   label,
-  shouldBeAvailable: (apiOptions) => true,
+  shouldBeAvailable: (apiOptions) => {
+    let resource = getResource();
+
+    if (!resource || !resource.capabilities) {
+      return false;
+    }
+
+    return resource.capabilities.canAddChildren;
+  },
   availableInContexts: ['files-view', 'new-button'],
   handler: () => handler(apiOptions, {
     showDialog,

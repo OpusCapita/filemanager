@@ -79,7 +79,11 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.length === 1;
+
+    return (
+      selectedResources.length === 1 &&
+      selectedResources.every(r => r.capabilities.canRename)
+    );
   },
   availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {
