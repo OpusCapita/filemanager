@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build:
+  build-demo:
     docker:
-      - image: circleci/node:8
+      - image: opuscapita/ci-node8:latest
     working_directory: ~/repo
     steps:
       - checkout
@@ -30,11 +30,41 @@ jobs:
           command: (cd demo && yarn install)
 
       - run:
-          name: build-demo
-          command: docker build -f Dockerfile.demo -t opuscapita/filemanager-demo:latest .
+          name: deploy-docker-demo-image
+          command: ./.circleci/scripts/deploy-docker-demo-image.js
 
       - run:
-          name: deploy-demo
-          command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push opuscapita/filemanager-demo:latest
+          name: azure-create-web-app
+          command: ./.circleci/scripts/azure-create-webapp.js
+
+  azure-maintenance:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: azure-cleanup
+          command: ./.circleci/scripts/azure-cleanup.js
+
+workflows:
+  version: 2
+
+  commit:
+      jobs:
+        - build-demo
+
+  nightly:
+      triggers:
+        - schedule:
+            cron: "0 * * * *"
+            filters:
+              branches:
+                only:
+                  - master
+      jobs:
+        - azure-maintenance
