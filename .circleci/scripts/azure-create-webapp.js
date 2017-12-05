@@ -12,7 +12,7 @@ let resource = JSON.parse(
     az webapp create \
       --plan ${env.AZURE_APP_SERVICE_PLAN} \
       --resource-group ${env.AZURE_RESOURCE_GROUP} \
-      --deployment-container-image-name ${env.DOCKER_DEMO_CONTAINER_NAME}:${env.BRANCH} \
+      --deployment-container-image-name ${env.DOCKER_DEMO_CONTAINER_NAME}:${env.DOCKER_TAG} \
       --name ${env.AZURE_APP_NAME}-${env.DOCKER_TAG} \
   `)
 );
