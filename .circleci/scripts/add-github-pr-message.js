@@ -13,6 +13,7 @@ let targets = pullRequests.map(pr => pr.head.sha);
 
 console.log('--- Add status message to these commits:', JSON.stringify(targets, null, 4));
 
+
 targets.forEach(target => {
   run(`
     http --ignore-stdin --auth ${env.GH_NAME}:${env.GH_PASS} \
