@@ -8,34 +8,38 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - run:
-          name: bootstrap-packages
-          command: yarn
+      # - run:
+      #     name: bootstrap-packages
+      #     command: yarn
 
-      - run:
-          name: build-client-static
-          command: |
-            cd packages/client-react &&
-            npm run gh-pages:build &&
-            mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
+      # - run:
+      #     name: build-client-static
+      #     command: |
+      #       cd packages/client-react &&
+      #       npm run gh-pages:build &&
+      #       mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
 
-      - run:
-          name: build-server-api-docs
-          command: |
-            echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
-            cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
+      # - run:
+      #     name: build-server-api-docs
+      #     command: |
+      #       echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
+      #       cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
 
-      - run:
-          name: install-demo-dependencies
-          command: (cd demo && yarn install)
+      # - run:
+      #     name: install-demo-dependencies
+      #     command: (cd demo && yarn install)
 
-      - run:
-          name: deploy-docker-demo-image
-          command: ./.circleci/scripts/deploy-docker-demo-image.js
+      # - run:
+      #     name: deploy-docker-demo-image
+      #     command: ./.circleci/scripts/deploy-docker-demo-image.js
 
-      - run:
-          name: azure-create-web-app
-          command: ./.circleci/scripts/azure-create-webapp.js
+      # - run:
+      #     name: azure-create-web-app
+      #     command: ./.circleci/scripts/azure-create-webapp.js
+
+      # - run:
+      #     name: add-github-pr-message
+      #     command: ./.circleci/scripts/add-github-pr-message.js
 
   azure-maintenance:
     docker:
