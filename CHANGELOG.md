@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0-beta.10](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.10) (2017-12-06)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.9...v1.0.0-beta.10)
+
+**Implemented enhancements:**
+
+- Provide possibility to configure resource capabilities for "server-nodejs" [\#120](https://github.com/OpusCapita/filemanager/issues/120)
+
+**Closed issues:**
+
+- Improve lerna bootstrap speed  [\#113](https://github.com/OpusCapita/filemanager/issues/113)
+
 ## [v1.0.0-beta.9](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.9) (2017-12-01)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.8...v1.0.0-beta.9)
 
