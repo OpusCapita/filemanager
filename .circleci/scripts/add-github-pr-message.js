@@ -23,7 +23,7 @@ targets.forEach(target => {
     https://api.github.com/repos/${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME}/statuses/${target} \
     state="success" \
     target_url="${demoUrl}" \
-    description="Click ""Details"" to open the demo page " \
+    description="Click Details link to open the demo page! " \
     context="ci/demo-deploy"
   `);
 });
