@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+let run = require('./run');
+
 run(`
   mkdir /vault &&
   git clone git@github.com:OpusCapita/machineuser-vault.git /vault
