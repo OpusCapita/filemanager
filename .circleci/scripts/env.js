@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
-
 run(`
   mkdir /vault &&
   git clone git@github.com:OpusCapita/machineuser-vault.git /vault
@@ -17,6 +15,8 @@ run(`
 `);
 
 let env = process.env;
+let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
+
 console.log('--- env.GH_MAIL', env.GH_MAIL);
 
 module.exports = {
