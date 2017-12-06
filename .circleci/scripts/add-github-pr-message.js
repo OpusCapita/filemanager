@@ -24,5 +24,3 @@ targets.forEach(target => {
     context="ci/demo-deploy"
   `);
 });
-
-console.log('prs:', targets);
