@@ -64,7 +64,7 @@ let dockerHubWebhooks = JSON.parse(
   `)
 ).results;
 
-console.log('--- Docker Hub Webhooks:', dockerHubWebhooks);
+console.log('--- Docker Hub Webhooks:', JSON.stringify(dockerHubWebhooks, null, 4));
 
 let dockerHubWebHookExists = !!dockerHubWebhooks.filter(hook => hook.name === 'azure-cd').length
 

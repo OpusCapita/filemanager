@@ -19,7 +19,7 @@ targets.forEach(target => {
     POST \
     https://api.github.com/repos/${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME}/statuses/${target} \
     state="success" \
-    target_url="${`http://opuscapita-filemanager-demo-${env.DOCKER_TAG}.azurewebsites.net`}" \
+    target_url="http://opuscapita-filemanager-demo-${env.DOCKER_TAG}.azurewebsites.net" \
     description="Test status" \
     context="ci/demo-deploy"
   `);
