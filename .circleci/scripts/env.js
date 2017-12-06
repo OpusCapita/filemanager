@@ -3,8 +3,6 @@
 let env = process.env;
 let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
 
-console.log('--- env.GH_MAIL', env.GH_MAIL);
-
 module.exports = {
   AZURE_APP_NAME: "opuscapita-filemanager-demo",
   AZURE_APP_SERVICE_PLAN: env.AZURE_APP_SERVICE_PLAN,
