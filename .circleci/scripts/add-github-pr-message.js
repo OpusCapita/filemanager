@@ -7,7 +7,11 @@ let pullRequests = JSON.parse(
   run(`http GET https://api.github.com/repos/${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME}/pulls`)
 ).filter(pr => pr.head.ref === env.BRANCH);
 
+console.log('--- Branch related PRs:', pullRequests);
+
 let targets = pullRequests.map(pr => pr.head.sha);
+
+console.log('--- Add status message to these commits:', targets);
 
 targets.forEach(target => {
   run(`

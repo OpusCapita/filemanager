@@ -10,7 +10,7 @@ jobs:
 
       - run:
           name: init-env
-          command: node ./.circleci/scripts/init-env.js
+          command: ./.circleci/scripts/init-env.js
 
       # - run:
       #     name: bootstrap-packages
@@ -43,7 +43,7 @@ jobs:
 
       - run:
           name: add-github-pr-message
-          command: node ./.circleci/scripts/add-github-pr-message.js
+          command: ./.circleci/scripts/add-github-pr-message.js
 
   azure-maintenance:
     docker:
