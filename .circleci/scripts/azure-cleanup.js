@@ -25,9 +25,9 @@ let webAppsToDelete = webApps.filter(app => {
   );
 });
 
-console.log('--- Remote branches:', remoteBranches);
-console.log('--- Web Apps all:', webApps.map(app => app.name));
-console.log('--- Web Apps to delete:', webAppsToDelete.map(app => app.name));
+console.log('--- Remote branches:', JSON.stringify(remoteBranches, null, 4));
+console.log('--- Web Apps all:', JSON.stringify(webApps.map(app => app.name), null, 4));
+console.log('--- Web Apps to delete:', JSON.stringify(webAppsToDelete.map(app => app.name), null, 4));
 
 if (webAppsToDelete.length) {
   run(`
