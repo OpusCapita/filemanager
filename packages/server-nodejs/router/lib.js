@@ -79,12 +79,12 @@ const stat2resource = (options, pathInfo) => stat => {
     modifiedTime: stat.mtime,
     capabilities: {
       canListChildren: true,
-      canAddChildren: true,
-      canRemoveChildren: true,
-      canDelete: !!userParent,
-      canRename: !!userParent,
-      canCopy: !!userParent,
-      caEdit: stat.isFile(), // Only files can be edited
+      canAddChildren: !options.readOnly,
+      canRemoveChildren: !options.readOnly,
+      canDelete: !!userParent && !options.readOnly,
+      canRename: !!userParent && !options.readOnly,
+      canCopy: !!userParent && !options.readOnly,
+      canEdit: stat.isFile() && !options.readOnly, // Only files can be edited
       canDownload: stat.isFile() // Only files can be downloaded
     }
   };

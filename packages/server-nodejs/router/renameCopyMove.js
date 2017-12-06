@@ -21,6 +21,13 @@ module.exports = ({
   handleError,
   path: relativeItemPath
 }) => {
+  if (options.readOnly) {
+    return handleError(Object.assign(
+      new Error(`File Manager is in read-only mode`),
+      { httpCode: 403 }
+    ));
+  }
+
   if (relativeItemPath === path.sep) {
     return handleError(Object.assign(
       new Error(`User root must never be renamed/copied/moved`),

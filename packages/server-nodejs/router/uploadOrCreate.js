@@ -98,9 +98,16 @@ const upload = multer({
   array('files');
 
 module.exports = ({ options, req, res, handleError }) => {
+  if (options.readOnly) {
+    return handleError(Object.assign(
+      new Error(`File Manager is in read-only mode`),
+      { httpCode: 403 }
+    ));
+  }
+
   fsRoot = options.fsRoot;
 
-  upload(req, res, err => {
+  return upload(req, res, err => {
     if (err) {
       return handleError(err);
     }
