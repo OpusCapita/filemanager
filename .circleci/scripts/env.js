@@ -13,7 +13,7 @@ run(`
 `);
 
 run(`
-  source /vault/.secrets
+  source /vault/.secrets-plain
 `);
 
 let env = process.env;
