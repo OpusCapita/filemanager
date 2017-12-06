@@ -4,6 +4,8 @@ let env = process.env;
 let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
 
 console.log('--- env.GH_MAIL', env.GH_MAIL);
+console.log('whoami', require('./run')('whoami'));
+console.log('shell', require('./env')('env | grep SHELL'));
 
 module.exports = {
   AZURE_APP_NAME: "opuscapita-filemanager-demo",
