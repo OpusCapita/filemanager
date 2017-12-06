@@ -7,7 +7,7 @@ let pullRequests = JSON.parse(
   run(`http GET https://api.github.com/repos/${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME}/pulls`)
 ).filter(pr => pr.head.ref === env.BRANCH);
 
-console.log('--- Branch related PRs:', pullRequests);
+console.log('--- Branch related PRs:', JSON.stringify(pullRequests, null, 4));
 
 let targets = pullRequests.map(pr => pr.head.sha);
 
