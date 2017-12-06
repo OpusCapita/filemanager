@@ -12,9 +12,7 @@ run(`
   openssl aes-256-cbc -d -in .secrets -out .secrets-plain -k ${process.env.MACHINEUSER_VAULT_KEY}
 `);
 
-run(`
-  source /vault/.secrets-plain
-`);
+run(`cat /vault/.secrets-plain >> ~/.bashrc`);
 
 let env = process.env;
 let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
