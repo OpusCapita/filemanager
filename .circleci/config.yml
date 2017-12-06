@@ -8,6 +8,10 @@ jobs:
       - checkout
       - setup_remote_docker
 
+      - run:
+          name: init-env
+          command: ./.circleci/scripts/init-env.js
+
       # - run:
       #     name: bootstrap-packages
       #     command: yarn
