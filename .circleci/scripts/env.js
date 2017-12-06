@@ -1,18 +1,23 @@
 #!/usr/bin/env node
 
-// let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
+let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
 
-// run(`
-//   mkdir /vault &&
-//   git clone git@github.com:OpusCapita/machineuser-vault.git /vault
-// `, { suppressOutput: true });
+run(`
+  mkdir /vault &&
+  git clone git@github.com:OpusCapita/machineuser-vault.git /vault
+`);
 
-// run(`
-//   cd /vault &&
-//   openssl aes-256-cbc -d -in .secrets -out .secrets-plain -k ${process.env.MACHINEUSER_VAULT_KEY}
-// `);
+run(`
+  cd /vault &&
+  openssl aes-256-cbc -d -in .secrets -out .secrets-plain -k ${process.env.MACHINEUSER_VAULT_KEY}
+`);
 
+run(`
+  source /vault/.secrets
+`);
 
+let env = process.env;
+console.log('--- env.GH_MAIL', env.GH_MAIL);
 
 module.exports = {
   AZURE_APP_NAME: "opuscapita-filemanager-demo",

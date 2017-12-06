@@ -37,9 +37,9 @@ jobs:
       #     name: azure-create-web-app
       #     command: ./.circleci/scripts/azure-create-webapp.js
 
-      # - run:
-      #     name: add-github-pr-message
-      #     command: ./.circleci/scripts/add-github-pr-message.js
+      - run:
+          name: add-github-pr-message
+          command: ./.circleci/scripts/add-github-pr-message.js
 
   azure-maintenance:
     docker:

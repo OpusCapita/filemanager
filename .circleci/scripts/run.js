@@ -1,6 +1,6 @@
 let execSync = require('child_process').execSync;
 
-module.exports = (command, { suppressOutput }) => {
+module.exports = (command) => {
   let output = execSync(
     command,
     {
@@ -9,10 +9,6 @@ module.exports = (command, { suppressOutput }) => {
       shell: '/bin/bash'
     }
   );
-
-  if (!suppressOutput) {
-    console.log(output);
-  }
 
   return output;
 };
