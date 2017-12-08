@@ -7,7 +7,7 @@ let DOCKER_TAG = env.CIRCLE_BRANCH.replace('/', '-').replace('#', '-');
 let shouldDeployDemo = () => {
   console.log('circle_sha1', env.CIRCLE_SHA1);
   let gitCommitMessage = run(`git log --format=oneline -n 1 ${env.CIRCLE_SHA1}`);
-
+  console.log('gcm', gitCommitMessage);
   return (
     gitCommitMessage.contains('[ci deploy demo]') ||
     gitCommitMessage.contains('[ci demo deploy]') ||
