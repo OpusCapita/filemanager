@@ -47,9 +47,9 @@ jobs:
       - run:
           name: azure-create-web-app (only if commit message contains "[ci deploy demo]")
           command: |
-          if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-            ./.circleci/scripts/azure-create-webapp.js
-          fi
+            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
+              ./.circleci/scripts/azure-create-webapp.js
+            fi
 
       - run:
           name: update-github-commit-status
