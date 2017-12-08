@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-demo:
+  build:
     docker:
       - image: opuscapita/ci-node8:latest
     working_directory: ~/repo
@@ -74,7 +74,7 @@ workflows:
 
   commit:
       jobs:
-        - build-demo
+        - build
 
   nightly:
       triggers:
