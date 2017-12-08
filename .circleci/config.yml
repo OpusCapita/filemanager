@@ -12,44 +12,44 @@ jobs:
           name: init-env
           command: ./.circleci/scripts/init-env.js
 
-      # - run:
-      #     name: bootstrap-packages
-      #     command: yarn
+      - run:
+          name: bootstrap-packages
+          command: yarn
 
-      # - run:
-      #     name: install-demo-dependencies
-      #     command: (cd demo && yarn install)
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
 
-      # - run:
-      #     name: build-client-static (only if commit message contains "[ci deploy demo]")
-      #     command: |
-      #       if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-      #         cd packages/client-react &&
-      #         npm run gh-pages:build &&
-      #         mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
-      #       fi
+      - run:
+          name: build-client-static (only if commit message contains "[ci deploy demo]")
+          command: |
+            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
+              cd packages/client-react &&
+              npm run gh-pages:build &&
+              mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
+            fi
 
-      # - run:
-      #     name: build-server-api-docs (only if commit message contains "[ci deploy demo]")
-      #     command: |
-      #       if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-      #         echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
-      #         cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
-      #       fi
+      - run:
+          name: build-server-api-docs (only if commit message contains "[ci deploy demo]")
+          command: |
+            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
+              echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
+              cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
+            fi
 
-      # - run:
-      #     name: deploy-docker-demo-image (only if commit message contains "[ci deploy demo]")
-      #     command: |
-      #       if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-      #         ./.circleci/scripts/deploy-docker-demo-image.js
-      #       fi
+      - run:
+          name: deploy-docker-demo-image (only if commit message contains "[ci deploy demo]")
+          command: |
+            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
+              ./.circleci/scripts/deploy-docker-demo-image.js
+            fi
 
-      # - run:
-      #     name: azure-create-web-app (only if commit message contains "[ci deploy demo]")
-      #     command: |
-      #       if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-      #         ./.circleci/scripts/azure-create-webapp.js
-      #       fi
+      - run:
+          name: azure-create-web-app (only if commit message contains "[ci deploy demo]")
+          command: |
+            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
+              ./.circleci/scripts/azure-create-webapp.js
+            fi
 
       - run:
           name: update-github-commit-status
