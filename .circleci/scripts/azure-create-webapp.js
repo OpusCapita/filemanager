@@ -24,7 +24,7 @@ console.log('--- New Azure App Service ID:', resource.id);
 run(`
   az resource tag \
     --ids '${resource.id}' \
-    --tags Repository=${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME} Branch=${env.BRANCH} \
+    --tags Repository=${env.PROJECT_USERNAME}/${env.PROJECT_REPONAME} Branch=${env.BRANCH} Demo=true \
 `);
 
 // Enable continuous deployment
