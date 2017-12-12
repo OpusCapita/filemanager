@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: opuscapita/ci-node8:latest
-        entrypoint: /entrypoint.sh
+        entrypoint: /cmd.sh
     working_directory: ~/repo
     steps:
       - checkout
