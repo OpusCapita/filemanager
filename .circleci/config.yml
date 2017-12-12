@@ -9,10 +9,6 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: init-env
-          command: ./.circleci/scripts/init-env.js
-
-      - run:
           name: bootstrap-packages
           command: yarn
 
@@ -32,24 +28,17 @@ jobs:
       - run:
           name: build-server-api-docs (only if commit message contains "[ci deploy demo]")
           command: |
-            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-              echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
-              cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
-            fi
+            cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
 
       - run:
           name: deploy-docker-demo-image (only if commit message contains "[ci deploy demo]")
           command: |
-            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-              ./.circleci/scripts/deploy-docker-demo-image.js
-            fi
+            ./.circleci/scripts/deploy-docker-demo-image.js
 
       - run:
           name: azure-create-web-app (only if commit message contains "[ci deploy demo]")
           command: |
-            if [ "${SHOULD_DEPLOY_DEMO}" == "true" ]; then
-              ./.circleci/scripts/azure-create-webapp.js
-            fi
+            ./.circleci/scripts/azure-create-webapp.js
 
       - run:
           name: update-github-commit-status
