@@ -13,9 +13,9 @@ jobs:
           name: init-ci-container
           command: /ci-scripts/init.sh
 
-      - run:
-          name: bootstrap-packages
-          command: yarn
+      # - run:
+      #     name: bootstrap-packages
+      #     command: yarn
 
   deploy-demo:
     docker:
