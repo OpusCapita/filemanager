@@ -3,11 +3,15 @@ jobs:
   build:
     docker:
       - image: opuscapita/ci-node8:latest
-        command: bash /entrypoint.sh
+
     working_directory: ~/repo
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          name: init-ci-container
+          command: /entrypoint.sh
 
       - run:
           name: bootstrap-packages
