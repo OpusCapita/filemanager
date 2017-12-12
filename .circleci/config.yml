@@ -33,6 +33,7 @@ jobs:
             mkdir -p ../../demo/static/api
             cp -r api-docs.tmp/docs ../../demo/static/api
 
+
       - run:
           name: deploy-docker-demo-image (only if commit message contains "[ci deploy demo]")
           command: |
