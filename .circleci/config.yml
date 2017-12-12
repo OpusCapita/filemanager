@@ -17,33 +17,49 @@ jobs:
           name: bootstrap-packages
           command: yarn
 
+  deploy-demo:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
       - run:
           name: install-demo-dependencies
           command: (cd demo && yarn install)
 
       - run:
-          name: build-client-static (only if commit message contains "[ci deploy demo]")
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
+          name: build-client-static
           command: |
             cd packages/client-react
             npm run gh-pages:build
             mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
 
       - run:
-          name: build-server-api-docs (only if commit message contains "[ci deploy demo]")
+          name: build-server-api-docs
           command: |
             cd packages/server-nodejs
             npm run build-api-docs
             mkdir -p ../../demo/static/api
             cp -r api-docs.tmp/docs ../../demo/static/api
 
-
       - run:
-          name: deploy-docker-demo-image (only if commit message contains "[ci deploy demo]")
+          name: deploy-docker-demo-image
           command: |
             ./.circleci/scripts/deploy-docker-demo-image.js
 
       - run:
-          name: azure-create-web-app (only if commit message contains "[ci deploy demo]")
+          name: azure-create-web-app
           command: |
             ./.circleci/scripts/azure-create-webapp.js
 
@@ -62,6 +78,10 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
           name: azure-cleanup
           command: ./.circleci/scripts/azure-cleanup.js
 
@@ -71,6 +91,10 @@ workflows:
   commit:
       jobs:
         - build
+        - deploy-demo
+            requires:
+              - build
+            type: approval
 
   nightly:
       triggers:
