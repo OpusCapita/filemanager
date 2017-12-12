@@ -91,11 +91,10 @@ workflows:
   commit:
       jobs:
         - build
-        - deploy-demo
+        - deploy-demo:
+            type: approval
             requires:
               - build
-            type: approval
-
   nightly:
       triggers:
         - schedule:
