@@ -16,6 +16,7 @@ jobs:
           name: install-demo-dependencies
           command: (cd demo && yarn install)
 
+
       - run:
           name: build-client-static (only if commit message contains "[ci deploy demo]")
           command: |
