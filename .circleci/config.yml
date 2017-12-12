@@ -11,12 +11,11 @@ jobs:
 
       - run:
           name: init-ci-container
-          command: /entrypoint.sh
+          command: /ci-scripts/init.sh
 
       - run:
           name: bootstrap-packages
           command: yarn
-
 
       - run:
           name: install-demo-dependencies
