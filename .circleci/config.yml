@@ -2,7 +2,25 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      # - run:
+      #     name: bootstrap-packages
+      #     command: yarn
+
+  deploy-demo:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
     working_directory: ~/repo
     steps:
       - checkout
@@ -13,28 +31,77 @@ jobs:
           command: yarn
 
       - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+      - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
           name: build-client-static
           command: |
-            cd packages/client-react &&
-            npm run gh-pages:build &&
+            cd packages/client-react
+            npm run gh-pages:build
             mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
 
       - run:
           name: build-server-api-docs
           command: |
-            echo 'export SERVER_URL=$SERVER_URL' >> $BASH_ENV &&
-            cd packages/server-nodejs && npm run build-api-docs && mkdir -p ../../demo/static/api && cp -r api-docs.tmp/docs ../../demo/static/api
+            cd packages/server-nodejs
+            npm run build-api-docs
+            mkdir -p ../../demo/static/api
+            cp -r api-docs.tmp/docs ../../demo/static/api
 
       - run:
-          name: install-demo-dependencies
-          command: (cd demo && yarn install)
-
-      - run:
-          name: build-demo
-          command: docker build -f Dockerfile.demo -t opuscapita/filemanager-demo:latest .
-
-      - run:
-          name: deploy-demo
+          name: deploy-docker-demo-image
           command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push opuscapita/filemanager-demo:latest
+            ./.circleci/scripts/deploy-docker-demo-image.js
+
+      - run:
+          name: azure-create-web-app
+          command: |
+            ./.circleci/scripts/azure-create-webapp.js
+
+      - run:
+          name: update-github-commit-status
+          command: ./.circleci/scripts/update-github-commit-status.js
+
+  azure-maintenance:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
+          name: azure-cleanup
+          command: ./.circleci/scripts/azure-cleanup.js
+
+workflows:
+  version: 2
+
+  commit:
+      jobs:
+        - build
+        - deploy-demo:
+            type: approval
+            requires:
+              - build
+  nightly:
+      triggers:
+        - schedule:
+            cron: "0 * * * *"
+            filters:
+              branches:
+                only:
+                  - master
+      jobs:
+        - azure-maintenance
