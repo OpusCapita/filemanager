@@ -92,7 +92,6 @@ workflows:
       jobs:
         - build
         - deploy-demo:
-            type: approval
             requires:
               - build
   nightly:
