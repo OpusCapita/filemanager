@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.0.0-beta.13](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.13) (2017-12-22)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.12...v1.0.0-beta.13)
+
 ## [v1.0.0-beta.12](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.12) (2017-12-22)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.11...v1.0.0-beta.12)
 
