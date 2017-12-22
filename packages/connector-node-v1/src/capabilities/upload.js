@@ -122,8 +122,7 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let resource = getResource();
-
-    if (!resource || !resource.capabilitites) {
+    if (!resource || !resource.capabilities) {
       return false;
     }
 
