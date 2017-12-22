@@ -6,7 +6,7 @@
 
 > **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/issues/122) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
 
-## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
+## [Demo](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
@@ -32,7 +32,7 @@ You can write you own custom connectors (documentation on how to do it will appe
 
 #### How to use Server Node
 
-[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
+[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo-master.azurewebsites.net/api/docs/)
 
 Install package
 
