@@ -4,23 +4,24 @@ import './SetNameDialog.less';
 import Dialog from '../Dialog';
 
 const propTypes = {
-  headerText: PropTypes.string,
   cancelButtonText: PropTypes.string,
-  submitButtonText: PropTypes.string,
-  onValidate: PropTypes.func,
-  onHide: PropTypes.func,
+  headerText: PropTypes.string,
+  initialValue: PropTypes.string,
   onChange: PropTypes.func,
-  onSubmit: PropTypes.func
+  onHide: PropTypes.func,
+  onSubmit: PropTypes.func,
+  onValidate: PropTypes.func,
+  submitButtonText: PropTypes.string
 };
 const defaultProps = {
-  headerText: 'Set name',
   cancelButtonText: 'Cancel',
-  submitButtonText: 'Create',
-  autofocus: false,
-  onValidate: () => {},
-  onHide: () => {},
+  headerText: 'Set name',
+  initialValue: '',
   onChange: () => {},
-  onSubmit: () => {}
+  onHide: () => {},
+  onSubmit: () => {},
+  onValidate: () => {},
+  submitButtonText: 'Create'
 };
 
 export default
@@ -28,7 +29,7 @@ class SetNameDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: props.initialValue,
       validationError: null,
       valid: false
     };
@@ -42,14 +43,14 @@ class SetNameDialog extends Component {
 
   handleKeyDown = async (e) => {
     if (e.which === 13) { // Enter key
-      if (!this.props.validationError && this.state.value) {
+      if (!this.state.validationError && this.state.value) {
         this.handleSubmit(this.state.value);
       }
     }
   }
 
   handleSubmitButtonClick = async (e) => {
-    if (!this.props.validationError && this.state.value) {
+    if (!this.state.validationError && this.state.value) {
       this.handleSubmit(this.state.value);
     }
   }
@@ -60,6 +61,12 @@ class SetNameDialog extends Component {
     if (validationError) {
       this.setState({ validationError });
     }
+  }
+
+  moveCaretAtEnd = (e) => {
+    let tmpValue = e.target.value;
+    e.target.value = '';
+    e.target.value = tmpValue;
   }
 
   render() {
@@ -95,6 +102,7 @@ class SetNameDialog extends Component {
             `}
             value={value}
             onChange={this.handleChange}
+            onFocus={this.moveCaretAtEnd}
           />
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
