@@ -7,6 +7,8 @@
     "lint": "eslint src/client",
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
+    "test-all": "npm run test && npm run size",
+    "size": "npm run build && size-limit",
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
     "build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
     "prepublish": "npm run build",
@@ -79,6 +81,7 @@
     "rimraf": "2.6.1",
     "sinon": "2.1.0",
     "sinon-chai": "2.9.0",
+    "size-limit": "0.13.2",
     "source-map-loader": "0.1.6",
     "style-loader": "0.13.2",
     "url-loader": "0.5.8",
@@ -109,6 +112,12 @@
     "sanitize-filename": "1.6.1",
     "superagent": "3.6.3"
   },
+  "size-limit": [
+    {
+      "limit": "150KB",
+      "path": "./lib/index.js"
+    }
+  ],
   "nyc": {
     "include": [
       "src/client/**/*.js"
