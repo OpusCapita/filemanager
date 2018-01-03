@@ -17,14 +17,11 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 test-results.xml
-client-react/coverage/
-client-react/.nyc_output
+coverage
+.nyc_output
 
-/client-react/node_modules
-/server-nodejs/node_modules
 /server-nodejs/api-docs.tmp
-/demo/node_modules
 /demo/demo-fs
 /demo/static
-/client-react/.gh-pages-tmp
-/client-react/www/static
+packages/client-react/.gh-pages-tmp
+packages/client-react/www/static

@@ -12,6 +12,20 @@ import nanoid from 'nanoid';
 import detectIt from 'detect-it';
 import rawToReactElement from '../raw-to-react-element';
 
+import {
+  addToSelection,
+  removeFromSelection,
+  selectRange,
+  selectPrev,
+  selectNext,
+  selectFirstItem,
+  selectLastItem,
+  addPrevToSelection,
+  addNextToSelection,
+  removeLastFromSelection,
+  removeFirstFromSelection
+} from './utils';
+
 const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
@@ -93,55 +107,34 @@ class ListView extends Component {
     this.props.onSelection(ids);
   }
 
-  addToSelection(id) {
-    let index = this.props.selection.indexOf(id);
-    return index === -1 ? this.props.selection.concat([id]) : this.props.selection;
-  }
-
-  removeFromSelection(id) {
-    let index = this.props.selection.indexOf(id);
-    return index === -1 ?
-      this.props.selection :
-      [].
-      concat(this.props.selection.slice(0, index)).
-      concat(this.props.selection.slice(index + 1, this.props.selection.length));
-  }
-
-  selectRange(fromId, toId) {
-    let fromIdIndex = findIndex(this.props.items, (o) => o.id === fromId);
-    let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
-    let selectionDirection = toIdIndex > fromIdIndex ? 1 : -1;
-    let itemsSlice = selectionDirection === 1 ?
-        this.props.items.slice(fromIdIndex, toIdIndex + 1) :
-        this.props.items.slice(toIdIndex, fromIdIndex + 1);
-
-    let selection = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
-
-    return selection;
-  }
-
-  handleRowClick = ({ event, index, rowData}) => {
-    let { selection } = this.props;
+  handleRowClick = ({ event, index, rowData }) => {
+    let { selection, items } = this.props;
     let { id } = rowData;
     this.lastSelected = id;
 
     if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
       this.rangeSelectionStartedAt = id;
-      this.props.selection.indexOf(rowData.id) !== -1 ?
-        this.handleSelection(this.removeFromSelection(id)) :
-        this.handleSelection(this.addToSelection(id));
+
+      this.handleSelection(selection.indexOf(id) !== -1 ?
+        removeFromSelection({ selection, id }) :
+        addToSelection({ selection, id })
+      );
     } else if (event.shiftKey) {
       this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
-      this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
+      this.handleSelection(selectRange({
+        items,
+        fromId: this.rangeSelectionStartedAt,
+        toId: id
+      }));
     } else {
       this.rangeSelectionStartedAt = null;
-      this.handleSelection([rowData.id]);
-    };
+      this.handleSelection([id]);
+    }
 
     this.props.onRowClick({ event, index, rowData });
   }
 
-  handleRowRightClick = ({ event, index, rowData}) => {
+  handleRowRightClick = ({ event, index, rowData }) => {
     if (this.props.selection.indexOf(rowData.id) === -1) {
       this.handleSelection([rowData.id]);
     }
@@ -153,7 +146,7 @@ class ListView extends Component {
     this.props.onRowDoubleClick({ event, index, rowData });
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = e => {
     e.preventDefault();
 
     // Debounce frequent events for performance reasons
@@ -163,23 +156,22 @@ class ListView extends Component {
     }
     this.lastKeyDownTime = keyDownTime;
 
-
     let { selection, items, onKeyDown } = this.props;
-    this.props.onKeyDown(e);
+
+    onKeyDown(e);
 
     if (e.which === 38 && !e.shiftKey) { // Up arrow
-
       if (!items.length) {
         return;
       }
 
       if (!selection.length) {
-        let selectionData = this.selectLastItem();
+        let selectionData = selectLastItem({ items });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
-        let selectionData = this.selectPrev();
+        let selectionData = selectPrev({ items, lastSelected: this.lastSelected });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
@@ -192,12 +184,12 @@ class ListView extends Component {
       }
 
       if (!selection.length) {
-        let selectionData = this.selectFirstItem();
+        let selectionData = selectFirstItem({ items });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
       } else {
-        let selectionData = this.selectNext();
+        let selectionData = selectNext({ items, lastSelected: this.lastSelected });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
@@ -210,19 +202,26 @@ class ListView extends Component {
       }
 
       if (!selection.length) {
-        let selectionData = this.selectLastItem();
+        let selectionData = selectLastItem({ items });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
         return;
       }
 
-      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+      let fromIdIndex = findIndex(items, ({ id }) => id === this.lastSelected);
       let nextIdIndex = fromIdIndex > 0 ? fromIdIndex - 1 : 0;
       let nextId = items[nextIdIndex].id;
       let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
 
-      let selectionData = selectionDirection === -1 ? this.addPrevToSelection() : this.removeLastFromSelection();
+      if (this.lastSelected === items[0].id) {
+        return
+      }
+
+      let selectionData = selectionDirection === -1 ?
+        addPrevToSelection({ selection, items, lastSelected: this.lastSelected }) :
+        removeLastFromSelection({ selection, items });
+
       this.lastSelected = items[selectionData.scrollToIndex].id;
       this.handleSelection(selectionData.selection);
       this.scrollToIndex(selectionData.scrollToIndex);
@@ -234,19 +233,26 @@ class ListView extends Component {
       }
 
       if (!selection.length) {
-        let selectionData = this.selectFirstItem();
+        let selectionData = selectFirstItem({ items });
         this.lastSelected = items[selectionData.scrollToIndex].id;
         this.handleSelection(selectionData.selection);
         this.scrollToIndex(selectionData.scrollToIndex);
         return;
       }
 
-      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
+      let fromIdIndex = findIndex(items, ({ id }) => id === this.lastSelected);
       let nextIdIndex = fromIdIndex + 1 < items.length ? fromIdIndex + 1 : items.length - 1;
       let nextId = items[nextIdIndex].id;
       let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
 
-      let selectionData = selectionDirection === -1 ? this.addNextToSelection() : this.removeFirstFromSelection();
+      if (this.lastSelected === items[items.length - 1].id) {
+        return
+      }
+
+      let selectionData = selectionDirection === -1 ?
+        addNextToSelection({ selection, items, lastSelected: this.lastSelected }) :
+        removeFirstFromSelection({ selection, items });
+
       this.lastSelected = items[selectionData.scrollToIndex].id;
       this.handleSelection(selectionData.selection);
       this.scrollToIndex(selectionData.scrollToIndex);
@@ -307,106 +313,20 @@ class ListView extends Component {
     this.setState({ clientHeight, scrollHeight, scrollTop });
   }
 
-  selectFirstItem = () => ({
-    selection: this.props.items.length ? [this.props.items[0].id] : [],
-    scrollToIndex: 0
-  });
-
-  selectLastItem = () => ({
-    selection: this.props.items.length ? [this.props.items[this.props.items.length - 1].id] : [],
-    scrollToIndex: this.props.items.length - 1
-  });
-
   clearSelection = () => ({
     selection: [],
     scrollToIndex: this.state.scrollToIndex
   });
 
-  selectNext = () => {
-    let { selection, items } = this.props;
-    let currentId = this.lastSelected;
-    let currentIndex = findIndex(items, (o) => o.id === currentId);
-    let nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
-    let nextId = items[nextIndex].id;
-    return { selection: [nextId], scrollToIndex: nextIndex };
-  }
-
-  selectPrev = () => {
-    let { selection, items } = this.props;
-    let currentId = this.lastSelected;
-    let currentIndex = findIndex(items, (o) => o.id === currentId);
-
-    if (currentIndex <= -1) {
-      // Fix for fast selection updates
-      return { selection, scrollToIndex: 0 };
-    }
-
-    let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
-    let prevId = items[prevIndex].id;
-    return { selection: [prevId], scrollToIndex: prevIndex };
-  }
-
-  addNextToSelection = () => {
-    let { selection } = this.props;
-    let nextSelectionData = this.selectNext();
-    return {
-      selection: selection.concat(nextSelectionData.selection),
-      scrollToIndex: nextSelectionData.scrollToIndex
-    };
-  }
-
-  addPrevToSelection = () => {
-    let { selection } = this.props;
-    let prevSelectionData = this.selectPrev();
-    return {
-      selection: prevSelectionData.selection.concat(selection),
-      scrollToIndex: prevSelectionData.scrollToIndex
-    };
-  }
-
-  removeLastFromSelection = () => {
-    let { selection, items } = this.props;
-
-    if (selection.length > 1) {
-      let nextSelection = selection.slice(0, selection.length - 1);
-      return {
-        selection: nextSelection,
-        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[nextSelection.length - 1])
-      };
-    } else {
-      return {
-        selection,
-        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
-      };
-    }
-  }
-
-  removeFirstFromSelection = () => {
-    let { selection, items } = this.props;
-
-    if (selection.length > 1) {
-      let nextSelection = selection.slice(1, selection.length);
-      return {
-        selection: nextSelection,
-        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[0])
-      };
-    } else {
-      return {
-        selection,
-        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
-      };
-    }
-  }
-
-  scrollToIndex = (index) => {
+  scrollToIndex = index => {
     this.setState({ scrollToIndex: index });
   }
 
-  handleCursorAbove = (scrollTop) => {
+  handleCursorAbove = scrollTop => {
     this.setState({ scrollTop });
   }
 
-  handleCursorBellow = (scrollTop) => {
+  handleCursorBellow = scrollTop => {
     this.setState({ scrollTop });
   }
 
@@ -414,13 +334,13 @@ class ListView extends Component {
     this.props.onSort({ sortBy, sortDirection });
   }
 
-  handleRef = (ref) => {
+  handleRef = ref => {
     this.containerRef = ref;
     this.props.onRef(ref);
   }
 
   render() {
-    let {
+    const {
       rowContextMenuId,
       filesViewContextMenuId,
       items,
@@ -433,18 +353,18 @@ class ListView extends Component {
       sortDirection
     } = this.props;
 
-    let {
+    const {
       scrollToIndex,
       clientHeight,
       scrollHeight,
       scrollTop
     } = this.state;
-    let { rangeSelectionStartedAt, lastSelected } = this;
+    const { rangeSelectionStartedAt, lastSelected } = this;
 
     let itemsToRender = null;
     if (loading && this.containerHeight) {
       // Generate items for "loading placeholder"
-      let itemsCount = Math.floor(this.containerHeight / ROW_HEIGHT - 1);
+      const itemsCount = Math.floor(this.containerHeight / ROW_HEIGHT - 1);
       itemsToRender = range(itemsCount).map((o) => ({}));
     } else {
       itemsToRender = items;
