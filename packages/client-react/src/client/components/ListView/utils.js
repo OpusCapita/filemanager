@@ -1,6 +1,10 @@
 import { findIndex } from 'lodash';
 
 export const
+  isDef = thing => thing !== undefined,
+
+  noop = _ => {},
+
   addToSelection = ({ selection, id, toHead = false }) => selection.indexOf(id) === -1 ?
     toHead ?
       [id, ...selection] :
