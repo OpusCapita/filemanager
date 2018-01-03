@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
+// TBD individual imports from 'react-virtualized' to decrease bundle size?
+// ex. import Table from 'react-virtualized/dist/commonjs/Table'
 import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
 import { ContextMenuTrigger } from "react-contextmenu";
 import NoFilesFoundStub from '../NoFilesFoundStub';
@@ -392,7 +394,7 @@ class ListView extends Component {
                 height: `${height}px`
               }}
             >
-              <ContextMenuTrigger id={filesViewContextMenuId}  holdToDisplay={HAS_TOUCH ? 1000 : -1}>
+              <ContextMenuTrigger id={filesViewContextMenuId} holdToDisplay={HAS_TOUCH ? 1000 : -1}>
                 <Table
                   width={width}
                   height={height}
