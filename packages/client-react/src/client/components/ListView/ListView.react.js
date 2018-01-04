@@ -9,16 +9,12 @@ import { ContextMenuTrigger } from "react-contextmenu";
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
-import {
-  // findIndex,
-  range
-} from 'lodash';
+import { range } from 'lodash';
 import nanoid from 'nanoid';
 import detectIt from 'detect-it';
 import rawToReactElement from '../raw-to-react-element';
 import WithSelection from './withSelectionHOC';
 
-// const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
 const HAS_TOUCH = detectIt.deviceType === 'hasTouch';
@@ -35,8 +31,8 @@ const propTypes = {
   })),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
-  loading: PropTypes.bool,
   selection: PropTypes.arrayOf(PropTypes.string),
+  loading: PropTypes.bool,
   sortBy: PropTypes.string,
   sortDirection: PropTypes.string,
   onRowClick: PropTypes.func,
@@ -54,8 +50,8 @@ const defaultProps = {
   items: [],
   layout: () => [],
   layoutOptions: {},
-  loading: false,
   selection: [],
+  loading: false,
   sortBy: 'title',
   sortDirection: SortDirection.ASC,
   onRowClick: () => {},
@@ -70,18 +66,6 @@ const defaultProps = {
 
 export default
 class ListView extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selection.length === 1) {
-      // When FileNavigator navigates to parent dir, this last selected should be rigth
-      this.lastSelected = nextProps.selection[0];
-    }
-
-    if (this.props.loading !== nextProps.loading) {
-      // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
-      this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
-    }
-  }
-
   handleSort = ({ sortBy, sortDirection }) => {
     this.props.onSort({ sortBy, sortDirection });
   }
@@ -116,6 +100,8 @@ class ListView extends Component {
             onKeyDown={this.props.onKeyDown}
             onSelection={this.props.onSelection}
             selection={this.props.selection}
+            loading={loading}
+            rowHeight={ROW_HEIGHT} // TBD
           >
             {
               ({
@@ -129,12 +115,10 @@ class ListView extends Component {
                 scrollHeight,
                 scrollToIndex,
                 selection,
-                lastSelected,
-                onRef
+                lastSelected
               }) => (
                 <div
                   className="oc-fm--list-view"
-                  ref={onRef}
                 >
                   <ScrollOnMouseOut
                     onCursorAbove={onCursorAbove}

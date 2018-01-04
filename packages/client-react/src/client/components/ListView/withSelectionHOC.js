@@ -18,6 +18,8 @@ import {
   removeFirstFromSelection
 } from './utils';
 
+const SCROLL_STRENGTH = 80;
+
 export default class WithSelection extends PureComponent {
   static propTypes = {
     onSelection: PropTypes.func,
@@ -28,7 +30,9 @@ export default class WithSelection extends PureComponent {
     onScroll: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
     idPropName: PropTypes.string,
-    selection: PropTypes.array
+    selection: PropTypes.array,
+    loading: PropTypes.bool,
+    rowHeight: PropTypes.number
   }
 
   static defaultProps = {
@@ -39,7 +43,8 @@ export default class WithSelection extends PureComponent {
     onScroll: noop,
     items: [],
     idPropName: 'id',
-    selection: []
+    selection: [],
+    loading: false
   }
 
   state = {
@@ -47,6 +52,18 @@ export default class WithSelection extends PureComponent {
     clientHeight: 0,
     scrollTop: 0,
     scrollHeight: 0
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selection.length === 1) {
+      // When FileNavigator navigates to parent dir, this last selected should be rigth
+      this.lastSelected = nextProps.selection[0];
+    }
+
+    if (this.props.loading !== nextProps.loading) {
+      // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
+      this.setState({ scrollHeight: nextProps.items.length * this.props.rowHeight });
+    }
   }
 
   handleSelection = ids => this.props.onSelection(ids);
@@ -208,7 +225,7 @@ export default class WithSelection extends PureComponent {
 
     if (e.which === 34) { // PageDown
       // Scroll bottom
-      const { scrollTop } = this.state;
+      const { scrollTop, scrollHeight, clientHeight } = this.state;
       const newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
         scrollHeight - clientHeight :
         scrollTop + SCROLL_STRENGTH;
@@ -230,8 +247,6 @@ export default class WithSelection extends PureComponent {
 
     if (this.containerRef) {
       this.containerRef.focus(); // XXX fix for loosing focus on key navigation
-    } else {
-      console.warn(`Child ref is undefined`)
     }
   }
 
@@ -275,8 +290,8 @@ export default class WithSelection extends PureComponent {
     return (
       <div
         onKeyDown={this.handleKeyDown}
-        className="oc-fm--list-view"
         tabIndex="0"
+        ref={this.handleRef}
       >
         {children({
           selection,
@@ -289,8 +304,7 @@ export default class WithSelection extends PureComponent {
           scrollTop,
           scrollHeight,
           scrollToIndex,
-          lastSelected: this.lastSelected,
-          onRef: this.handleRef
+          lastSelected: this.lastSelected
         })}
       </div>
     )
