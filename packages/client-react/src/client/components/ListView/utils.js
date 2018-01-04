@@ -13,6 +13,8 @@ export const
 
   removeFromSelection = ({ selection, id }) => selection.filter(sid => sid !== id),
 
+  // TODO: when needed, refactor utils to accept idPropName argument
+  // which defined unique key (currently only 'id' is supported)
   selectRange = ({ items, fromId, toId }) => {
     const fromIdIndex = findIndex(items, ({ id }) => id === fromId);
     const toIdIndex = findIndex(items, ({ id }) => id === toId);
