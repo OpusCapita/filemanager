@@ -70,6 +70,10 @@ class ListView extends Component {
     this.props.onSort({ sortBy, sortDirection });
   }
 
+  handleRowDoubleClick = ({ event, index, rowData }) => {
+    this.props.onRowDoubleClick({ event, index, rowData });
+  }
+
   render() {
     const {
       rowContextMenuId,
