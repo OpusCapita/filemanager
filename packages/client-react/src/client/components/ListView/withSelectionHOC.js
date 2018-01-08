@@ -292,6 +292,7 @@ export default class WithSelection extends PureComponent {
         onKeyDown={this.handleKeyDown}
         tabIndex="0"
         ref={this.handleRef}
+        className="oc-fm--list-view-selection"
       >
         {children({
           selection,
