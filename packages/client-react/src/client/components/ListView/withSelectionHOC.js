@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
+import './withSelectionHOC.less';
 
 import {
   isDef,
@@ -292,7 +293,7 @@ export default class WithSelection extends PureComponent {
         onKeyDown={this.handleKeyDown}
         tabIndex="0"
         ref={this.handleRef}
-        className="oc-fm--list-view-selection"
+        className="oc-fm--withSelectionHOC"
       >
         {children({
           selection,
