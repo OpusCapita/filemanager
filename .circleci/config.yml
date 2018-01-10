@@ -88,13 +88,13 @@ workflows:
   commit:
       jobs:
         - build
-        - hold:
+        - approve-deploy-demo:
             type: approval
             requires:
               - build
         - deploy-demo:
             requires:
-              - hold
+              - approve-deploy-demo
   nightly:
       triggers:
         - schedule:
