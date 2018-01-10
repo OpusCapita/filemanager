@@ -3,16 +3,16 @@
   "version": "1.0.0-beta.13",
   "description": "React file manager",
   "scripts": {
-    "link-mode": "cross-env NODE_ENV=link node node_modules/webpack/bin/webpack.js --config ./config/webpack.config.js",
+    "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
     "lint": "eslint src/client",
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
     "test-all": "npm run test && npm run size",
     "size": "npm run build && size-limit",
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
-    "build": "rimraf lib && cross-env NODE_ENV=production node node_modules/webpack/bin/webpack.js --config ./config/webpack.config.js --hide-modules",
+    "build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
     "prepublish": "npm run build",
-    "gh-pages:build": "rimraf .gh-pages-tmp && showroom-scan src && node node_modules/webpack/bin/webpack.js --config ./config/doc/webpack.config.js && cp www/index.html .gh-pages-tmp"
+    "gh-pages:build": "rimraf .gh-pages-tmp && showroom-scan src && node webpack --config ./config/doc/webpack.config.js && cp www/index.html .gh-pages-tmp"
   },
   "license": "Apache-2.0",
   "repository": "OpusCapita/react-filemanager",
