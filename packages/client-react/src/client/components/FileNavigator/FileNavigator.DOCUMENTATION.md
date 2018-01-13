@@ -16,7 +16,7 @@ FileNavigator is
 | onResourceChange               | func                    | `resource => ...`                                                                              |
 | onResourceChildrenChange       | func                    | `resourceChildren => ...`                                                                      |
 | onResourceLocationChange       | func                    | `resourceLocation => ...`                                                                      |
-| onSelectionChange              | func                    | `selection` => ...` <br /> You can use `onSelectionChange` it in pair with `onResourceChildrenChange` |
+| onSelectionChange              | func                    | `selection` => ...` You can use `onSelectionChange` it in pair with `onResourceChildrenChange`        |
 
 ### Connectors
 
