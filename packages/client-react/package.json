@@ -12,7 +12,7 @@
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
     "build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
     "prepublish": "npm run build",
-    "gh-pages:build": "rimraf .gh-pages-tmp && showroom-scan src && node webpack --config ./config/doc/webpack.config.js && cp www/index.html .gh-pages-tmp"
+    "gh-pages:build": "rimraf .gh-pages-tmp && showroom-scan src && webpack --config ./config/doc/webpack.config.js && cp www/index.html .gh-pages-tmp"
   },
   "license": "Apache-2.0",
   "repository": "OpusCapita/react-filemanager",

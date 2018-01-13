@@ -5,18 +5,18 @@ FileNavigator is
 
 ### Props Reference
 
-| Name                           | Type                    | Description                                                 |
-| ------------------------------ | :---------------------- | ----------------------------------------------------------- |
-| api                            | object                  |                                                             |
-| apiOptions                     | object                  |                                                             |
-| capabilities                   | func                    |                                                             |
-| initialResourceId              | string                  |                                                             |
-| listViewLayout                 | func                    |                                                             |
-| viewLayoutOptions              |                         |                                                             |
-| onResourceChange               | func                    | `resource => ...`                                           |
-| onResourceChildrenChange       | func                    | `resourceChildren => ...`                                   |
-| onResourceLocationChange       | func                    | `resourceLocation => ...`                                   |
-| onSelectionChange              | func                    | `selection` => ...`                                         |
+| Name                           | Type                    | Description                                                                                    |
+| ------------------------------ | :---------------------- | -----------------------------------------------------------                                    |
+| api                            | object                  |                                                                                                |
+| apiOptions                     | object                  |                                                                                                |
+| capabilities                   | func                    |                                                                                                |
+| initialResourceId              | string                  |                                                                                                |
+| listViewLayout                 | func                    |                                                                                                |
+| viewLayoutOptions              |                         |                                                                                                |
+| onResourceChange               | func                    | `resource => ...`                                                                              |
+| onResourceChildrenChange       | func                    | `resourceChildren => ...`                                                                      |
+| onResourceLocationChange       | func                    | `resourceLocation => ...`                                                                      |
+| onSelectionChange              | func                    | `selection` => ...` <br /> You can use `onSelectionChange` it in pair with `onResourceChildrenChange` |
 
 ### Connectors
 
@@ -62,6 +62,62 @@ Resource example for **connector-node-v1**:
 }
 ```
 
+#### Resource children
+
+`resourceChildren` is an array of `resource`s. 
+
+In **FileNavigator** its a files and folders list of current `resource`.
+
+#### Resource location
+
+`resourceLocation` is an array of `resources`s.
+
+Its an array of current `resource` ancestors (parents).
+
+For **Massive Attack** folder in **Customization area => Music => Massive Attack** folders hierarchy `resourceLocation` can have such stucture:
+
+```
+[
+    {
+        "capabilities": { ... },
+        "createdTime": 1515858963105,
+        "id": "Lw",
+        "modifiedTime": 1515858963105,
+        "name": "Customization area",
+        "type": "dir",
+        "parentId": null
+    },
+    {
+        "capabilities": { ... },
+        "createdTime": 1515858970729,
+        "id": "L011c2lj",
+        "modifiedTime": 1515858970729,
+        "name": "Music",
+        "type": "dir",
+        "parentId": "Lw"
+    },
+    {
+        "capabilities": { ... },
+        "createdTime": 1515858970729,
+        "id": "L011c2ljL01hc3NpdmUgQXR0YWNr",
+        "modifiedTime": 1515858970729,
+        "name": "Massive Attack",
+        "type": "dir",
+        "parentId": "L011c2lj"
+    }
+]
+```
+
+### Selection
+
+`selection` is an array of selected resource `id`s.
+
+`selection` example:
+
+```
+["L0ltYWdlcw","L01pc2M","L011c2lj","L1NvdW5k","L1ZpZGVv"]
+```
+
 ### Code Example
 
 ```
@@ -79,10 +135,10 @@ Resource example for **connector-node-v1**:
       initialResourceId={_scope.state.nodeInitId}
       listViewLayout={_scope.connectors.nodeV1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
-      onSelectionChange={selection => console.log('onSelectionChange', selection)}
       onResourceChange={resource => console.log('onResourceChange', resource)}
       onResourceChildrenChange={resourceChildren => console.log('onResourceChildrenChange', resourceChildren)}
       onResourceLocationChange={resourceLocation => console.log('onResourceLocationChange', resourceLocation)}
+      onSelectionChange={selection => console.log('onSelectionChange', selection)}
     />
   </div>
 </div>
@@ -95,4 +151,3 @@ FileNavigator
 ### License
 
 Licensed by © 2017 OpusCapita
-
