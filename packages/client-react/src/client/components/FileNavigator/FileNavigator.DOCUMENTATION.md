@@ -135,10 +135,18 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
       initialResourceId={_scope.state.nodeInitId}
       listViewLayout={_scope.connectors.nodeV1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
-      onResourceChange={resource => console.log('onResourceChange', resource)}
-      onResourceChildrenChange={resourceChildren => console.log('onResourceChildrenChange', resourceChildren)}
-      onResourceLocationChange={resourceLocation => console.log('onResourceLocationChange', resourceLocation)}
-      onSelectionChange={selection => console.log('onSelectionChange', selection)}
+      onResourceChange={
+        resource => console.log('onResourceChange', resource)
+      }
+      onResourceChildrenChange={
+        resourceChildren => console.log('onResourceChildrenChange', resourceChildren)
+      }
+      onResourceLocationChange={
+        resourceLocation => console.log('onResourceLocationChange', resourceLocation)
+      }
+      onSelectionChange={
+        selection => console.log('onSelectionChange', selection)
+      }
     />
   </div>
 </div>
