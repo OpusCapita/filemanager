@@ -7,7 +7,60 @@ FileNavigator is
 
 | Name                           | Type                    | Description                                                 |
 | ------------------------------ | :---------------------- | ----------------------------------------------------------- |
-| demoProp                       | string                  | Write a description of the property                         |
+| api                            | object                  |                                                             |
+| apiOptions                     | object                  |                                                             |
+| capabilities                   | func                    |                                                             |
+| initialResourceId              | string                  |                                                             |
+| listViewLayout                 | func                    |                                                             |
+| viewLayoutOptions              |                         |                                                             |
+| onResourceChange               | func                    | `resource => ...`                                           |
+| onResourceChildrenChange       | func                    | `resourceChildren => ...`                                   |
+| onResourceLocationChange       | func                    | `resourceLocation => ...`                                   |
+| onSelectionChange              | func                    | `selection` => ...`                                         |
+
+### Connectors
+
+Connector is a bridge between server API and `@opuscapita/react-filemanager`.
+
+> NOTE: Filemanager Connector API and related props are not documented while API isn't stabilized.
+
+**Available connectors:**
+
+[connector-node-v1 source](https://github.com/OpusCapita/filemanager/tree/master/packages/connector-node-v1)
+[connector-google-drive-v2 source](https://github.com/OpusCapita/filemanager/tree/master/packages/connector-google-drive-v2)
+
+You can write you own custom connectors (documentation on how to do it will appear later).
+
+### Types
+
+#### Resource
+
+`resource` is a current directory resource definition.
+
+`resource` object schema can be various. It depends on **connector** implementation.
+
+Resource example for **connector-node-v1**:
+
+```
+{
+    "capabilities": {
+        "canListChildren": true,
+        "canAddChildren": true,
+        "canRemoveChildren": true,
+        "canDelete": false,
+        "canRename": false,
+        "canCopy": false,
+        "canEdit": false,
+        "canDownload": false
+    },
+    "createdTime": 1515854279676,
+    "id": "Lw",
+    "modifiedTime": 1515854279660,
+    "name": "Customization area",
+    "type": "dir",
+    "parentId": null
+}
+```
 
 ### Code Example
 
@@ -26,6 +79,10 @@ FileNavigator is
       initialResourceId={_scope.state.nodeInitId}
       listViewLayout={_scope.connectors.nodeV1.listViewLayout}
       viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
+      onSelectionChange={selection => console.log('onSelectionChange', selection)}
+      onResourceChange={resource => console.log('onResourceChange', resource)}
+      onResourceChildrenChange={resourceChildren => console.log('onResourceChildrenChange', resourceChildren)}
+      onResourceLocationChange={resourceLocation => console.log('onResourceLocationChange', resourceLocation)}
     />
   </div>
 </div>
