@@ -24,7 +24,10 @@ const propTypes = {
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func,
-  onLocationChange: PropTypes.func
+  onResourceLocationChange: PropTypes.func,
+  onSelectionChange: PropTypes.func,
+  onResourceChange: PropTypes.func,
+  onResourceChildrenChange: PropTypes.func
 };
 const defaultProps = {
   id: '',
@@ -36,7 +39,10 @@ const defaultProps = {
   listViewLayout: () => {},
   viewLayoutOptions: {},
   signInRenderer: null,
-  onLocationChange: () => {}
+  onResourceLocationChange: () => {},
+  onSelectionChange: () => {},
+  onResourceChange: () => {},
+  onResourceChildrenChange: () => {}
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -135,7 +141,8 @@ class FileNavigator extends Component {
   }
 
   handleApiInitFail = () => {
-    this.setState({ apiInititalized: false, resourceChildren: [] });
+    this.setState({ apiInititalized: false });
+    this.handleResourceChildrenChange([]);
     this.monitorApiAvailability();
   }
 
@@ -145,12 +152,10 @@ class FileNavigator extends Component {
 
   handleApiSignInFail = () => {
     this.monitorApiAvailability();
-    this.setState({
-      apiSignedIn: false,
-      selection: [],
-      resource: [],
-      resourceChildren: []
-    });
+    this.handleSelectionChange([]);
+    this.handleResourceChildrenChange([]);
+    this.handleResourceChange({});
+    this.setState({ apiSignedIn: false });
   }
 
   handleLocationBarChange = (id) => {
@@ -166,14 +171,14 @@ class FileNavigator extends Component {
     }
 
     let resource = await this.getResourceById(toId);
-    this.setState({ resource });
+    this.handleResourceChange(resource);
 
     let { resourceChildren } = await this.getChildrenForId(resource.id, sortBy, sortDirection);
 
-    this.setState({
-      resourceChildren,
-      selection: (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect]
-    });
+    let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
+
+    this.handleSelectionChange(newSelection);
+    this.handleResourceChildrenChange(resourceChildren);
 
     this.stopViewLoading();
     this.setParentsForResource(resource);
@@ -182,8 +187,8 @@ class FileNavigator extends Component {
   async setParentsForResource(resource) {
     let resourceParents = await this.getParentsForId(resource.id);
     let resourceLocation = resourceParents.concat(resource);
-    this.setState({ resourceLocation, loadingResourceLocation: false });
-    this.props.onLocationChange(resourceLocation);
+    this.handleResourceLocationChange(resourceLocation);
+    this.setState({ loadingResourceLocation: false });
   }
 
   async getParentsForId(id) {
@@ -203,18 +208,34 @@ class FileNavigator extends Component {
     return { resourceChildren };
   }
 
-  filterResourceChildrenByID(ids) {
+  getResourceChildrenBySelection(selection) {
     let { resourceChildren } = this.state;
-    let filteredResourceItems = resourceChildren.filter((o) => ids.indexOf(o.id) !== -1);
+    let filteredResourceItems = resourceChildren.filter((o) => selection.indexOf(o.id) !== -1);
     return filteredResourceItems;
   }
 
   handleClickOutside = () => {
-    this.handleSelection([]);
+    this.handleSelectionChange([]);
   }
 
-  handleSelection = (selection) => {
+  handleResourceLocationChange = (resourceLocation) => {
+    this.setState({ resourceLocation });
+    this.props.onResourceLocationChange(resourceLocation);
+  }
+
+  handleSelectionChange = (selection) => {
     this.setState({ selection });
+    this.props.onSelectionChange(selection);
+  }
+
+  handleResourceChildrenChange = (resourceChildren) => {
+    this.setState({ resourceChildren});
+    this.props.onResourceChildrenChange(resourceChildren);
+  }
+
+  handleResourceChange = (resource) => {
+    this.setState({ resource });
+    this.props.onResourceChange(resource);
   }
 
   handleSort = async ({ sortBy, sortDirection }) => {
@@ -228,7 +249,8 @@ class FileNavigator extends Component {
     let sort = sortCapability.handler;
     this.setState({ loadingView: true });
     let newResourceChildren = await sort({ sortBy, sortDirection });
-    this.setState({ sortBy, sortDirection, resourceChildren: newResourceChildren, loadingView: false });
+    this.handleResourceChildrenChange(newResourceChildren);
+    this.setState({ sortBy, sortDirection, loadingView: false });
   }
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
@@ -263,17 +285,17 @@ class FileNavigator extends Component {
       let { selection } = this.state;
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
-        let selectedResourceItems = this.filterResourceChildrenByID(selection);
+        let selectedResourceChildrens = this.getResourceChildrenBySelection(selection);
 
-        if (!selectedResourceItems[0]) {
+        if (!selectedResourceChildrens[0]) {
           // Fix for fast selection updates
           return;
         }
 
-        let isDirectory = selectedResourceItems[0].type === 'dir';
+        let isDirectory = selectedResourceChildrens[0].type === 'dir';
 
         if (isDirectory) {
-          this.navigateToDir(selectedResourceItems[0].id);
+          this.navigateToDir(selectedResourceChildrens[0].id);
         }
       }
     }
@@ -449,7 +471,7 @@ class FileNavigator extends Component {
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}
             onRowDoubleClick={this.handleResourceItemDoubleClick}
-            onSelection={this.handleSelection}
+            onSelection={this.handleSelectionChange}
             onSort={this.handleSort}
             onRef={this.handleViewRef}
             loading={loadingView}

@@ -98,6 +98,8 @@ const fileManager = (
 ReactDOM.render(fileManager, document.body);
 ```
 
+[FileNavigator documentation and example](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
+
 #### [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
 #### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
 #### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
