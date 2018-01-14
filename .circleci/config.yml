@@ -31,6 +31,8 @@ jobs:
             echo "_auth = ${NPM_DEFAULT_REGISTRY_AUTH}" >> ~/.npmrc
             echo "email = ${NPM_DEFAULT_REGISTRY_MAIL}" >> ~/.npmrc
             echo "always-auth = true" >> ~/.npmrc
+            git config --global user.email "${GH_MAIL}"
+            git config --global user.name "${GH_NAME}"
 
       - run:
           name: bootstrap-packages
