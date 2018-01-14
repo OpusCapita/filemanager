@@ -13,6 +13,32 @@ jobs:
           name: init-ci-container
           command: /ci-scripts/init.sh
 
+  publish-release:
+    docker: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: init-ci-container
+          command: |
+            /ci-scripts/init.sh
+            # NPM auth
+            npm config set registry ${NPM_DEFAULT_REGISTRY}
+            echo "_auth = ${NPM_DEFAULT_REGISTRY_AUTH}" >> ~/.npmrc
+            echo "email = ${NPM_DEFAULT_REGISTRY_MAIL}" >> ~/.npmrc
+            echo "always-auth = true" >> ~/.npmrc
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: publish-to-npm
+          command: yarn run publish
+
   deploy-demo:
     docker:
       - image: opuscapita/ci-node8:latest
@@ -88,13 +114,25 @@ workflows:
   commit:
       jobs:
         - build
-        - approve-deploy-demo:
+        - approve-publish-release:
             type: approval
             requires:
               - build
+            filters:
+              branches:
+                only:
+                  - master
+        - publish-release:
+            requires:
+              - build
+              - approve-publish-release
+            filters:
+              branches:
+                only:
+                  - master
         - deploy-demo:
             requires:
-              - approve-deploy-demo
+              - build
   nightly:
       triggers:
         - schedule:
