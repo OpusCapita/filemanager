@@ -108,7 +108,7 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
 ]
 ```
 
-### Selection
+#### Selection
 
 `selection` is an array of selected resource `id`s.
 
