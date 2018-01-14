@@ -18,7 +18,7 @@
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
-    "publish": "lerna publish --exact --cd-version prepatch --yes && npm run changelog && git push"
+    "publish": "lerna publish --exact --cd-version patch --yes && npm run changelog && git push"
   },
   "useWorkspaces": true,
   "workspaces": [
