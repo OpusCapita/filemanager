@@ -10,6 +10,17 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+
+      - run:
           name: init-ci-container
           command: /ci-scripts/init.sh
 
@@ -21,6 +32,16 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run:
           name: init-ci-container
@@ -50,6 +71,16 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run:
           name: bootstrap-packages
