@@ -4,7 +4,6 @@ import { findIndex } from 'lodash';
 import './withSelectionHOC.less';
 
 import {
-  isDef,
   noop,
   addToSelection,
   removeFromSelection,
@@ -19,8 +18,6 @@ import {
   removeFirstFromSelection
 } from './utils';
 
-const SCROLL_STRENGTH = 80;
-
 export default class WithSelection extends PureComponent {
   static propTypes = {
     onSelection: PropTypes.func,
@@ -28,12 +25,9 @@ export default class WithSelection extends PureComponent {
     onRowRightClick: PropTypes.func,
     onRef: PropTypes.func,
     onKeyDown: PropTypes.func,
-    onScroll: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
     idPropName: PropTypes.string,
-    selection: PropTypes.array,
-    loading: PropTypes.bool,
-    rowHeight: PropTypes.number
+    selection: PropTypes.array
   }
 
   static defaultProps = {
@@ -41,18 +35,9 @@ export default class WithSelection extends PureComponent {
     onRowClick: noop,
     onRowRightClick: noop,
     onRef: noop,
-    onScroll: noop,
     items: [],
     idPropName: 'id',
-    selection: [],
-    loading: false
-  }
-
-  state = {
-    scrollToIndex: 0,
-    clientHeight: 0,
-    scrollTop: 0,
-    scrollHeight: 0
+    selection: []
   }
 
   componentWillReceiveProps(nextProps) {
@@ -60,20 +45,14 @@ export default class WithSelection extends PureComponent {
       // When FileNavigator navigates to parent dir, this last selected should be rigth
       this.lastSelected = nextProps.selection[0];
     }
-
-    if (this.props.loading !== nextProps.loading) {
-      // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
-      this.setState({ scrollHeight: nextProps.items.length * this.props.rowHeight });
-    }
   }
 
-  handleSelection = ids => this.props.onSelection(ids);
+  handleSelection = ({ selection, scrollToIndex }) => this.props.onSelection({ selection, scrollToIndex });
 
   handleSelectEvent = ({ selection, scrollToIndex }) => {
     const { items, idPropName } = this.props;
     this.lastSelected = items[scrollToIndex][idPropName];
-    this.handleSelection(selection);
-    this.scrollToIndex(scrollToIndex);
+    this.handleSelection({ selection, scrollToIndex });
   }
 
   handleRowClick = ({ event, rowData, ...args }) => {
@@ -84,20 +63,23 @@ export default class WithSelection extends PureComponent {
     if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
       this.rangeSelectionStartedAt = id;
 
-      this.handleSelection(selection.indexOf(id) !== -1 ?
-        removeFromSelection({ selection, id }) :
-        addToSelection({ selection, id })
-      );
+      this.handleSelection({
+        selection: selection.indexOf(id) !== -1 ?
+          removeFromSelection({ selection, id }) :
+          addToSelection({ selection, id })
+      });
     } else if (event.shiftKey) {
       this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
-      this.handleSelection(selectRange({
-        items,
-        fromId: this.rangeSelectionStartedAt,
-        toId: id
-      }));
+      this.handleSelection({
+        selection: selectRange({
+          items,
+          fromId: this.rangeSelectionStartedAt,
+          toId: id
+        })
+      });
     } else {
       this.rangeSelectionStartedAt = null;
-      this.handleSelection([id]);
+      this.handleSelection({ selection: [id] });
     }
 
     this.props.onRowClick({ event, rowData, ...args });
@@ -106,7 +88,7 @@ export default class WithSelection extends PureComponent {
   handleRowRightClick = ({ rowData, ...args }) => {
     const { idPropName, selection } = this.props;
     if (selection.indexOf(rowData[idPropName]) === -1) {
-      this.handleSelection([rowData[idPropName]]);
+      this.handleSelection({ selection: [rowData[idPropName]] });
     }
 
     this.props.onRowRightClick({ rowData, ...args });
@@ -207,43 +189,12 @@ export default class WithSelection extends PureComponent {
     if (e.which === 65 && (e.ctrlKey || e.metaKey)) { // Ctrl + A or Command + A
       // Select all
       let allIds = items.map(item => item[idPropName]);
-      this.handleSelection(allIds);
+      this.handleSelection({ selection: allIds });
     }
 
     if (e.which === 27) { // Esc
       // Clear selection
-      this.handleSelection([]);
-    }
-
-
-    if (e.which === 33) { // PageUp
-      // Scroll top
-      const { scrollTop } = this.state;
-      const newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
-
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    if (e.which === 34) { // PageDown
-      // Scroll bottom
-      const { scrollTop, scrollHeight, clientHeight } = this.state;
-      const newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
-        scrollHeight - clientHeight :
-        scrollTop + SCROLL_STRENGTH;
-
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    if (e.which === 36) { // Home
-      // Scroll to first item
-      this.setState({ scrollTop: 0 });
-    }
-
-    if (e.which === 35) { // End
-      // Scroll to first item
-      const { clientHeight, scrollHeight } = this.state;
-      const newScrollTop = scrollHeight - clientHeight;
-      this.setState({ scrollTop: newScrollTop });
+      this.handleSelection({ selection: [] });
     }
 
     if (this.containerRef) {
@@ -257,36 +208,8 @@ export default class WithSelection extends PureComponent {
     this.props.onRef(ref);
   }
 
-  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
-    this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
-    this.setState({
-      ...(isDef(clientHeight) && { clientHeight }),
-      ...(isDef(scrollHeight) && { scrollHeight }),
-      ...(isDef(scrollTop) && { scrollTop })
-    });
-  }
-
-  scrollToIndex = index => {
-    this.setState({ scrollToIndex: index });
-  }
-
-  handleCursorAbove = scrollTop => {
-    this.setState({ scrollTop });
-  }
-
-  handleCursorBellow = scrollTop => {
-    this.setState({ scrollTop });
-  }
-
   render() {
     const { children, selection } = this.props;
-
-    const {
-      clientHeight,
-      scrollTop,
-      scrollHeight,
-      scrollToIndex
-    } = this.state;
 
     return (
       <div
@@ -299,13 +222,6 @@ export default class WithSelection extends PureComponent {
           selection,
           onRowClick: this.handleRowClick,
           onRowRightClick: this.handleRowRightClick,
-          onScroll: this.handleScroll,
-          onCursorAbove: this.handleCursorAbove,
-          onCursorBelow: this.handleCursorBellow,
-          clientHeight,
-          scrollTop,
-          scrollHeight,
-          scrollToIndex,
           lastSelected: this.lastSelected
         })}
       </div>

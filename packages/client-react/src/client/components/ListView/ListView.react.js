@@ -14,9 +14,11 @@ import nanoid from 'nanoid';
 import detectIt from 'detect-it';
 import rawToReactElement from '../raw-to-react-element';
 import WithSelection from './withSelectionHOC';
+import { isDef } from './utils';
 
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
+const SCROLL_STRENGTH = 80;
 const HAS_TOUCH = detectIt.deviceType === 'hasTouch';
 
 const propTypes = {
@@ -66,12 +68,91 @@ const defaultProps = {
 
 export default
 class ListView extends Component {
+  state = {
+    scrollToIndex: 0,
+    clientHeight: 0,
+    scrollTop: 0,
+    scrollHeight: 0
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.loading !== nextProps.loading) {
+      // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
+      this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
+    }
+  }
+
+  scrollToIndex = index => {
+    this.setState({ scrollToIndex: index });
+  }
+
+  handleScrollTop = scrollTop => this.setState({ scrollTop });
+
+  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
+    this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
+    this.setState({
+      ...(isDef(clientHeight) && { clientHeight }),
+      ...(isDef(scrollHeight) && { scrollHeight }),
+      ...(isDef(scrollTop) && { scrollTop })
+    });
+  }
+
+  handlePageUp = _ => {
+    const { scrollTop } = this.state;
+    const newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handlePageDown = _ => {
+    const { scrollTop, scrollHeight, clientHeight } = this.state;
+    const newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
+      scrollHeight - clientHeight :
+      scrollTop + SCROLL_STRENGTH;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handleHome = _ => this.handleScrollTop(0);
+
+  handleEnd = _ => {
+    // Scroll to the first item
+    const { clientHeight, scrollHeight } = this.state;
+    const newScrollTop = scrollHeight - clientHeight;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handleKeyDown = e => {
+    e.preventDefault();
+
+    this.props.onKeyDown(e);
+
+    if (e.which === 33) { // PageUp
+      this.handlePageUp();
+    }
+
+    if (e.which === 34) { // PageDown
+      this.handlePageDown();
+    }
+
+    if (e.which === 36) { // Home
+      this.handleHome();
+    }
+
+    if (e.which === 35) { // End
+      this.handleEnd();
+    }
+  }
+
   handleSort = ({ sortBy, sortDirection }) => {
     this.props.onSort({ sortBy, sortDirection });
   }
 
   handleRowDoubleClick = ({ event, index, rowData }) => {
     this.props.onRowDoubleClick({ event, index, rowData });
+  }
+
+  handleSelection = ({ selection, scrollToIndex }) => {
+    this.props.onSelection(selection);
+    this.scrollToIndex(scrollToIndex)
   }
 
   render() {
@@ -85,6 +166,13 @@ class ListView extends Component {
       sortBy,
       sortDirection
     } = this.props;
+
+    const {
+      clientHeight,
+      scrollTop,
+      scrollHeight,
+      scrollToIndex
+    } = this.state;
 
     let itemsToRender = null;
     if (loading && this.containerHeight) {
@@ -101,23 +189,14 @@ class ListView extends Component {
 
           <WithSelection
             items={itemsToRender}
-            onKeyDown={this.props.onKeyDown}
-            onSelection={this.props.onSelection}
+            onKeyDown={this.handleKeyDown}
+            onSelection={this.handleSelection}
             selection={this.props.selection}
-            loading={loading}
-            rowHeight={ROW_HEIGHT} // TBD
           >
             {
               ({
                 onRowClick,
                 onRowRightClick,
-                onCursorAbove,
-                onCursorBellow,
-                onScroll,
-                clientHeight,
-                scrollTop,
-                scrollHeight,
-                scrollToIndex,
                 selection,
                 lastSelected
               }) => (
@@ -125,8 +204,8 @@ class ListView extends Component {
                   className="oc-fm--list-view"
                 >
                   <ScrollOnMouseOut
-                    onCursorAbove={onCursorAbove}
-                    onCursorBellow={onCursorBellow}
+                    onCursorAbove={this.handleScrollTop}
+                    onCursorBellow={this.handleScrollTop}
                     clientHeight={clientHeight}
                     scrollHeight={scrollHeight}
                     scrollTop={scrollTop}
@@ -148,7 +227,7 @@ class ListView extends Component {
                         className="oc-fm--list-view__table"
                         gridClassName="oc-fm--list-view__grid"
                         overscanRowCount={10}
-                        onScroll={onScroll}
+                        onScroll={this.handleScroll}
                         scrollToIndex={scrollToIndex}
                         scrollTop={scrollTop}
                         sort={this.handleSort}
