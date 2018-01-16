@@ -4,8 +4,6 @@
 [![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
 [![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
-> **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/issues/122) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
-
 ## [Demo](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
