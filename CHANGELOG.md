@@ -1,5 +1,27 @@
 # Change Log
 
+## [v1.0.1](https://github.com/OpusCapita/filemanager/tree/v1.0.1) (2018-01-16)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.13...v1.0.1)
+
+**Implemented enhancements:**
+
+- Need an event when file or directory selected [\#135](https://github.com/OpusCapita/filemanager/issues/135)
+- Add "size-limit" check to control bundle size [\#132](https://github.com/OpusCapita/filemanager/issues/132)
+- Show initial file name within "setNameDialog" \(Google Drive API v2\) [\#127](https://github.com/OpusCapita/filemanager/issues/127)
+- Show initial file name within "setNameDialog" \(server-nodejs-v1\) [\#126](https://github.com/OpusCapita/filemanager/issues/126)
+
+**Fixed bugs:**
+
+- CircleCI build issues using "lerna" [\#137](https://github.com/OpusCapita/filemanager/issues/137)
+- Src files changes don't apply during development \(wrong watcher config\) [\#128](https://github.com/OpusCapita/filemanager/issues/128)
+
+**Merged pull requests:**
+
+- \#135 Add FileNavigator callback props [\#141](https://github.com/OpusCapita/filemanager/pull/141) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+-  \#132 Add "size-limit" usage. Set 150KB limit [\#133](https://github.com/OpusCapita/filemanager/pull/133) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+-  \#126 \#127 Show initial file name within "setNameDialog" [\#130](https://github.com/OpusCapita/filemanager/pull/130) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+-  \#128 Fix - Src files changes don't apply during development [\#129](https://github.com/OpusCapita/filemanager/pull/129) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+
 ## [v1.0.0-beta.13](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.13) (2017-12-22)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.12...v1.0.0-beta.13)
 
