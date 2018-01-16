@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/react-filemanager-connector-google-drive-v2",
-  "version": "1.0.1-0",
+  "version": "1.0.1",
   "description": "@opuscapita/filemanager connector for Google Drive API v2",
   "main": "lib/index.js",
   "scripts": {
