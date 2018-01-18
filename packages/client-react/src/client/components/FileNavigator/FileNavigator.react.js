@@ -32,7 +32,9 @@ const propTypes = {
 const defaultProps = {
   id: '',
   api: 'nodeV1',
-  apiOptions: {},
+  apiOptions: {
+    locale: 'en'
+  },
   capabilities: () => [],
   className: '',
   initialResourceId: '',
