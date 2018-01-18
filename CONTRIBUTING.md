@@ -19,7 +19,7 @@ For [CHANGELOG.md](./CHANGELOG.md) generation we use https://github.com/skywinde
 Requirements:
 
 * Installed [docker](https://www.docker.com/community-edition)
-* `CHANGELOG_GITHUB_TOKEN` environment variable ([more details](https://github.com/skywinder/github-changelog-generator#github-token))
+* `GITHUB_TOKEN` environment variable ([more details](https://github.com/skywinder/github-changelog-generator#github-token))
 
 ```npm run bootstrap && npm run publish``` then choose proper version.
 
