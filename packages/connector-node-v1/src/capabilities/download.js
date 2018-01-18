@@ -4,9 +4,11 @@ import { promptToSaveBlob } from '../utils/download';
 import onFailError from '../utils/onFailError';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.fileDownload;
-let label = 'Download';
+let label = 'download';
+// let label = 'Download';
 
 function handler(apiOptions, {
   showDialog,
@@ -20,7 +22,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const notificationId = 'download';
+  let getMessage = getMess.bind(null, apiOptions.locale);
+
+  const notificationId = label;
+  // const notificationId = 'download';
   const notificationChildId = nanoid();
 
   const onStart = ({ archiveName, quantity }) => {
@@ -30,7 +35,8 @@ function handler(apiOptions, {
     const childElement = {
       elementType: 'NotificationProgressItem',
       elementProps: {
-        title: `Creating ${archiveName}...`,
+        title: `${getMessage('creating')} ${archiveName}...`,
+        // title: `Creating ${archiveName}...`,
         progress: 0
       }
     };
@@ -39,7 +45,8 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      title: `getMessage('zipping') ${quantity} ${quantity > 1 ? getMessage('items') : getMessage('item')}`,
+      // title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
@@ -71,7 +78,8 @@ function handler(apiOptions, {
 
   const onFail = _ => onFailError({
     getNotifications,
-    label,
+    label: getMessage(label),
+    // label,
     notificationId,
     updateNotifications
   });
@@ -121,49 +129,55 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'download',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
+}) => {
+  let localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: label,
+    // id: 'download',
+    icon: { svg: icon },
+    label: localeLabel,
+    // label,
+    shouldBeAvailable: (apiOptions) => {
+      let selectedResources = getSelectedResources();
 
-    return (
-      selectedResources.length > 0 &&
-      !selectedResources.some(r => r.type === 'dir') &&
-      selectedResources.every(r => r.capabilities.canDownload)
-    );
-  },
-  availableInContexts: ['row', 'toolbar'],
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+      return (
+        selectedResources.length > 0 &&
+        !selectedResources.some(r => r.type === 'dir') &&
+        selectedResources.every(r => r.capabilities.canDownload)
+      );
+    },
+    availableInContexts: ['row', 'toolbar'],
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+        // children: label
+      }
+    })
+  };
+}

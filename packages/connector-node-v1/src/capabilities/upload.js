@@ -4,9 +4,11 @@ import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.fileUpload;
-let label = 'Upload';
+let label = 'upload';
+// let label = 'Upload';
 
 function handler(apiOptions, {
   showDialog,
@@ -20,7 +22,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let notificationId = 'upload';
+  let getMessage = getMess.bind(null, apiOptions.locale);
+
+  let notificationId = label;
+  // let notificationId = 'upload';
   let notificationChildId = nanoid();
   let prevResourceId = getResource().id;
 
@@ -39,7 +44,8 @@ function handler(apiOptions, {
     let newChildren =
       notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
-      title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
+      title: `${getMessage('uploading')} ${newChildren.length} ${newChildren.length > 1 ? getMessage('items') : getMessage('item')}`,
+      // title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
@@ -77,7 +83,7 @@ function handler(apiOptions, {
 
   const onFail = _ => onFailError({
     getNotifications,
-    label,
+    label: getMessage(label),
     notificationId,
     updateNotifications
   });
@@ -116,48 +122,54 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'upload',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => {
-    let resource = getResource();
-    if (!resource || !resource.capabilities) {
-      return false;
-    }
+}) => {
+  let localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: label,
+    // id: 'upload',
+    icon: { svg: icon },
+    label: localeLabel,
+    // label,
+    shouldBeAvailable: (apiOptions) => {
+      let resource = getResource();
+      if (!resource || !resource.capabilities) {
+        return false;
+      }
 
-    return resource.capabilities.canAddChildren;
-  },
-  availableInContexts: ['files-view', 'new-button'],
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+      return resource.capabilities.canAddChildren;
+    },
+    availableInContexts: ['files-view', 'new-button'],
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+        // children: label
+      }
+    })
+  };
+}

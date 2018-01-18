@@ -1,9 +1,11 @@
 import api from '../api';
 import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.rename;
-let label = 'Rename';
+let label = 'rename';
+// let label = 'Rename';
 
 function handler(apiOptions, {
   showDialog,
@@ -17,6 +19,8 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
+  let getMessage = getMess.bind(null, apiOptions.locale);
+
   let rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
@@ -27,7 +31,8 @@ function handler(apiOptions, {
         let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: selectedResources[0].parents[0].id });
         let alreadyExists = resourceChildren.some((o) => o.title === name);
         if (alreadyExists) {
-          return `File or folder with name "${name}" already exists`;
+          return `${getMessage('fileExist1')} "${name}" ${getMessage('fileExist2')}`;
+          // return `File or folder with name "${name}" already exists`;
         } else {
           hideDialog();
           let result = await api.renameResource(apiOptions, selectedResources[0].id, name);
@@ -37,16 +42,21 @@ function handler(apiOptions, {
       },
       onValidate: async (name) => {
         if (!name) {
-          return 'Name can\'t be empty';
+          return getMessage('emptyName');
+          // return 'Name can\'t be empty';
         } else if (name.length >= 255) {
-          return 'Name can\'t contain more than 255 characters';
+          return getMessage('tooLongName');
+          // return 'Name can\'t contain more than 255 characters';
         } else if (name.trim() !== sanitizeFilename(name.trim())) {
-          return 'Name contains not allowed characters';
+          return getMessage('notAllowedCharacters');
+          // return 'Name contains not allowed characters';
         }
         return null;
       },
-      headerText: `New name`,
-      submitButtonText: `Rename`
+      headerText: getMessage('newName'),
+      submitButtonText: getMessage(label)
+      // headerText: `New name`,
+      // submitButtonText: `Rename`
     }
   };
 
@@ -64,47 +74,53 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'rename',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
-    return (
-      selectedResources.length === 1 &&
-      selectedResources[0].id !== 'root' // root is not mutable
-    );
-  },
-  availableInContexts: ['row', 'toolbar'],
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+}) => {
+  const localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: label,
+    // id: 'rename',
+    icon: { svg: icon },
+    label: localeLabel,
+    // label,
+    shouldBeAvailable: (apiOptions) => {
+      let selectedResources = getSelectedResources();
+      return (
+        selectedResources.length === 1 &&
+        selectedResources[0].id !== 'root' // root is not mutable
+      );
+    },
+    availableInContexts: ['row', 'toolbar'],
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+        // children: label
+      }
+    })
+  };
+}

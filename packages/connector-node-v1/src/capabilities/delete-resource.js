@@ -1,9 +1,11 @@
 import api from '../api';
 import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.delete;
-let label = 'Remove';
+let label = 'remove';
+// let label = 'Remove';
 
 function handler(apiOptions, {
   id,
@@ -18,6 +20,8 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
+  let getMessage = getMess.bind(null, apiOptions.locale);
+
   let onSuccess = () => {
     let resource = getResource();
     navigateToDir(resource.id, null, false);
@@ -25,16 +29,18 @@ function handler(apiOptions, {
 
   const onFail = _ => onFailError({
     getNotifications,
-    label,
+    label: getMessage(label),
     notificationId: 'delete',
     updateNotifications
   });
 
   let selectedResources = getSelectedResources();
 
-  let dialogNameText = `Do you really want to remove\n`;
+  let dialogNameText = getMessage('reallyRemove');
+  // let dialogNameText = `Do you really want to remove\n`;
   let dialogFilesText = selectedResources.length > 1 ?
-    `${selectedResources.length} files ?` :
+    `${selectedResources.length} ${getMessage('files')} ?` :
+    // `${selectedResources.length} files ?` :
     `"${selectedResources[0].name}" ?`;
 
   let rawDialogElement = {
@@ -46,8 +52,10 @@ function handler(apiOptions, {
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       },
       headerText: dialogNameText + dialogFilesText,
-      cancelButtonText: 'Cancel',
-      submitButtonText: 'Confirm'
+      cancelButtonText: getMessage('cancel'),
+      submitButtonText: getMessage('confirm')
+      // cancelButtonText: 'Cancel',
+      // submitButtonText: 'Confirm'
     }
   };
 
@@ -65,49 +73,54 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'delete',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => {
-    let selectedResources = getSelectedResources();
+}) => {
+  let localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: 'delete',
+    icon: { svg: icon },
+    label: localeLabel,
+    // label,
+    shouldBeAvailable: (apiOptions) => {
+      let selectedResources = getSelectedResources();
 
-    if (!selectedResources.length) {
-      return false;
-    }
+      if (!selectedResources.length) {
+        return false;
+      }
 
-    return selectedResources.every(resource => resource.capabilities.canDelete);
-  },
-  availableInContexts: ['row', 'toolbar'],
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+      return selectedResources.every(resource => resource.capabilities.canDelete);
+    },
+    availableInContexts: ['row', 'toolbar'],
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+        // children: label
+      }
+    })
+  };
+}
