@@ -4,7 +4,9 @@
 [![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
 [![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
-## [Demo + React Documentaion](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
+## [Demo](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
+
+## [React Documentation](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
