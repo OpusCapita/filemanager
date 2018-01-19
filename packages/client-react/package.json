@@ -1,15 +1,18 @@
 {
   "name": "@opuscapita/react-filemanager",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.1",
   "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
     "lint": "eslint src/client",
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
+    "test-all": "npm run test && npm run size",
+    "size": "npm run build && size-limit",
     "start": "cross-env NODE_ENV=development showroom-scan src && babel-node --presets es2015,stage-0 www/index",
     "build": "rimraf lib && cross-env NODE_ENV=production webpack --config ./config/webpack.config.js --hide-modules",
-    "publish": "npm run build"
+    "prepublish": "npm run build",
+    "gh-pages:build": "rimraf .gh-pages-tmp && showroom-scan src && webpack --config ./config/doc/webpack.config.js && cp www/index.html .gh-pages-tmp"
   },
   "license": "Apache-2.0",
   "repository": "OpusCapita/react-filemanager",
@@ -23,15 +26,15 @@
     "README.md"
   ],
   "peerDependencies": {
-    "react": "^0.14.8 || ^15.4.2",
-    "react-dom": "^0.14.8 || ^15.4.2"
+    "react": "0.14.x || 15.x.x || 16.x.x",
+    "react-dom": "0.14.x || 15.x.x || 16.x.x"
   },
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",
     "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
-    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.0.0-beta.4",
-    "@opuscapita/react-filemanager-connector-node-v1": "1.0.0-beta.4",
-    "@opuscapita/react-showroom-client": "1.2.10",
+    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.0.1",
+    "@opuscapita/react-filemanager-connector-node-v1": "1.0.1",
+    "@opuscapita/react-showroom-client": "1.3.0-beta.4",
     "@opuscapita/react-showroom-server": "1.3.0",
     "autoprefixer": "6.7.6",
     "babel-cli": "6.26.0",
@@ -57,7 +60,7 @@
     "eslint": "3.17.0",
     "eslint-config-opuscapita": "1.0.7",
     "eslint-plugin-react": "6.10.0",
-    "express": "4.15.1",
+    "express": "4.16.2",
     "file-loader": "0.10.1",
     "ignore-styles": "5.0.1",
     "jsdom": "9.12.0",
@@ -72,12 +75,13 @@
     "postcss-modules": "0.6.4",
     "progress-bar-webpack-plugin": "1.10.0",
     "raw-loader": "0.5.1",
-    "react": "15.6.1",
-    "react-dom": "15.6.1",
-    "react-test-renderer": "15.6.1",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-test-renderer": "16.2.0",
     "rimraf": "2.6.1",
     "sinon": "2.1.0",
     "sinon-chai": "2.9.0",
+    "size-limit": "0.13.2",
     "source-map-loader": "0.1.6",
     "style-loader": "0.13.2",
     "url-loader": "0.5.8",
@@ -108,6 +112,12 @@
     "sanitize-filename": "1.6.1",
     "superagent": "3.6.3"
   },
+  "size-limit": [
+    {
+      "limit": "150KB",
+      "path": "./lib/index.js"
+    }
+  ],
   "nyc": {
     "include": [
       "src/client/**/*.js"

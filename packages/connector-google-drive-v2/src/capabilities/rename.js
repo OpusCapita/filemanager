@@ -20,6 +20,7 @@ function handler(apiOptions, {
   let rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
+      initialValue: getSelectedResources()[0].title,
       onHide: hideDialog,
       onSubmit: async (name) => {
         let selectedResources = getSelectedResources();

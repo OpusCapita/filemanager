@@ -66,10 +66,3 @@ class FileNavigatorScope extends Component {
     );
   }
 }
-
-FileNavigatorScope.contextTypes = {
-  i18n: PropTypes.object
-};
-FileNavigatorScope.childContextTypes = {
-  i18n: PropTypes.object
-};

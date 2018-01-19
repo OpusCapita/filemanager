@@ -7,14 +7,12 @@ const env = require('./.env');
 
 const config = {
   fsRoot: path.resolve(__dirname, './demo-fs'),
-  rootName: 'Customization area',
-  port: process.env.PORT || '3020',
-  host: process.env.HOST || 'localhost'
+  rootName: 'Customization area'
 };
 
 const app = express();
-const host = config.host;
-const port = config.port;
+const host = process.env.HOST || 'localhost';
+const port = process.env.PORT || '3020';
 
 fs.writeFileSync(
   path.resolve(__dirname, './static/env.js'),
@@ -23,7 +21,6 @@ fs.writeFileSync(
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 

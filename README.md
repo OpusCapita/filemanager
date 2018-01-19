@@ -1,19 +1,19 @@
 # Filemanager
 
-![badge-circleci](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg) 
-![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)
-![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)
+[![badge-circleci](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)](https://circleci.com/gh/OpusCapita/filemanager)
+[![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
+[![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
-> **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/wiki/v1.0.0) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
+## [Demo](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
-## [Demo](http://opuscapita-filemanager-demo.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F1.0.0-beta.3%2FFileManager&maxContainerWidth=100%25&showSidebar=true)
+## [React Documentation](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
 
-> Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
+> Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
 ### Packages
 
 * [Client React](./packages/client-react)
-* [Server Node](./packages/server-node)
+* [Server Node](./packages/server-nodejs)
 * [Client React connector for Server Node API v1](./packages/connector-node-v1)
 * [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
 
@@ -21,20 +21,18 @@ Detailed documentation for each package is coming soon.
 
 ### Basic usage
 
-Client implementation is an npm package which can you can include to your application.
-It built using [Facebook ReactJS](https://reactjs.org/) library.
-
-It supports custom connectors to different file storages.
+Client implementation is an npm package which can be embed into your application.
+It uses [React](https://reactjs.org/) framework and supports connectors to different file storages.
 Predefined connectors are:
 
 * [Client React connector for Server Node API v1](./packages/connector-node-v1)
 * [Client React connector for Google Drive API v2](./packages/connector-google-drive-v2)
 
-You can write you own (documentation how to do it will appears a little later).
+You can write you own custom connectors (documentation on how to do it will appear later).
 
 #### How to use Server Node
 
-[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo.azurewebsites.net/api/docs/)
+[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo-master.azurewebsites.net/api/docs/)
 
 Install package
 
@@ -42,7 +40,7 @@ Install package
 npm install --save @opuscapita/filemanager-server
 ```
 
-Now you have at least two variants how to use it:
+Now you have at least two ways of using it:
 
 * Start as application
 
@@ -68,13 +66,13 @@ Install packages
 npm install --save @opuscapita/react-filemanager @opuscapita/react-filemanager-connector-node-v1
 ```
 
-Use it as a child of you application
+Use it as a child component of you application
 
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { FileManager, FileNavigator } from `@opuscapita/react-filemanager`;
-import connectorNodeV1 from `@opuscapita/react-filemanager-connector-node-v1`;
+import { FileManager, FileNavigator } from '@opuscapita/react-filemanager';
+import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 
 const apiOptions = {
   ...connectorNodeV1.apiOptions,
@@ -100,19 +98,9 @@ const fileManager = (
 ReactDOM.render(fileManager, document.body);
 ```
 
-# More detailed documentation coming soon!
-
-## Contributing
-
-### Run from clonned repo:
-
-```shell
-git clone git@github.com:OpusCapita/filemanager.git
-```
-
-```shell
-npm run bootstrap && npm start
-```
+#### [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
+#### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/.github/CODE_OF_CONDUCT.md)
+#### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/.github/CONTRIBUTING.md)
 
 ### Main contributors
 

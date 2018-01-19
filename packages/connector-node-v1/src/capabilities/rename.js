@@ -29,6 +29,7 @@ function handler(apiOptions, {
   let rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
+      initialValue: getSelectedResources()[0].name,
       onHide: hideDialog,
       onSubmit: async (name) => {
         let selectedResources = getSelectedResources();
@@ -79,7 +80,11 @@ export default (apiOptions, {
   label,
   shouldBeAvailable: (apiOptions) => {
     let selectedResources = getSelectedResources();
-    return selectedResources.length === 1;
+
+    return (
+      selectedResources.length === 1 &&
+      selectedResources.every(r => r.capabilities.canRename)
+    );
   },
   availableInContexts: ['row', 'toolbar'],
   handler: () => handler(apiOptions, {

@@ -24,10 +24,3 @@ class ScrollOnMouseOutScope extends Component {
     );
   }
 }
-
-ScrollOnMouseOutScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ScrollOnMouseOutScope.childContextTypes = {
-  i18n: PropTypes.object
-};

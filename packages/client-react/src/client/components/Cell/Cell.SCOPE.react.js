@@ -24,10 +24,3 @@ class CellScope extends Component {
     );
   }
 }
-
-CellScope.contextTypes = {
-  i18n: PropTypes.object
-};
-CellScope.childContextTypes = {
-  i18n: PropTypes.object
-};

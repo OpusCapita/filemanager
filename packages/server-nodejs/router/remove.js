@@ -11,6 +11,13 @@ module.exports = ({
   handleError,
   path: userPath
 }) => {
+  if (options.readOnly) {
+    return handleError(Object.assign(
+      new Error(`File Manager is in read-only mode`),
+      { httpCode: 403 }
+    ));
+  }
+
   if (userPath === path.sep) {
     return handleError(Object.assign(
       new Error(`User root must never be deleted`),

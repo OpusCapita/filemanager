@@ -49,10 +49,3 @@ class ListViewScope extends Component {
     );
   }
 }
-
-ListViewScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ListViewScope.childContextTypes = {
-  i18n: PropTypes.object
-};

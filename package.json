@@ -1,7 +1,7 @@
 {
   "devDependencies": {
-		"lerna": "^2.5.1"
-	},
+    "lerna": "2.6.0"
+  },
   "name": "@opuscapita/filemanager-packages",
   "private": true,
   "npmClient": "yarn",
@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap && cd demo && sh ./populate-demo-fs.sh",
+    "changelog": "docker run -it --rm -v \"$(pwd)\":/usr/local/src/your-app ockvolkovich/github-changelog-generator -u OpusCapita -p filemanager --token $GITHUB_TOKEN && git add ./CHANGELOG.md && git commit -m \"Update CHANGELOG.md [ci skip]\"",
     "clean": "lerna clean",
     "diff": "lerna diff",
     "distclean": "lerna clean --yes && rm -rf node_modules",
@@ -17,11 +18,10 @@
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
-    "publish": "lerna publish --exact --yes"
+    "publish": "lerna publish --exact --cd-version patch --yes && npm run changelog && git push"
   },
   "useWorkspaces": true,
   "workspaces": [
     "packages/*"
-  ],
-  "version": "1.0.0-beta.1"
+  ]
 }

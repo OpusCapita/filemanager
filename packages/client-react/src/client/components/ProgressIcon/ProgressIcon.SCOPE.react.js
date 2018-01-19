@@ -35,10 +35,3 @@ class ProgressIconScope extends Component {
     );
   }
 }
-
-ProgressIconScope.contextTypes = {
-  i18n: PropTypes.object
-};
-ProgressIconScope.childContextTypes = {
-  i18n: PropTypes.object
-};
