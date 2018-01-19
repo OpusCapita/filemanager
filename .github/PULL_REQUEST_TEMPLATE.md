@@ -2,7 +2,7 @@
 
 ## Before submitting a pull request, please make sure the following is done:
 
-* [ ] Have your pull request has title in this format? `Fixes #<issue_number> ...`
+* [ ] Have your pull request has title in this format? `(#<issue_number>) <pull_request_title>`
 
 It will close the issue(s) when PR gets merged.
 
