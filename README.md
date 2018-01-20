@@ -10,6 +10,7 @@
 
 > Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
+
 ### Packages
 
 * [Client React](./packages/client-react)
@@ -99,8 +100,8 @@ ReactDOM.render(fileManager, document.body);
 ```
 
 #### [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
-#### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
-#### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
+#### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/.github/CODE_OF_CONDUCT.md)
+#### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/.github/CONTRIBUTING.md)
 
 ### Main contributors
 
