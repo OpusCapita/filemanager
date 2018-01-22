@@ -168,8 +168,8 @@ jobs:
       - run:
           name: test-rest
           command: |
-            cd packages/server-nodejs
             mkdir junit
+            cd packages/server-nodejs
             npm run test-restapi --reporter mocha-junit-reporter
 
           environment:

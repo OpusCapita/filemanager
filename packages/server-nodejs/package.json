@@ -12,7 +12,7 @@
     "test-restapi_": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp && sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/rest-test.json && newman run api-tests.tmp/api-tests/rest-test.json",
     "prepare-demo": "cd ../.. && rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh && cd ../packages/server-nodejs",
     "copy-tests": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp && sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/api-tests.spec.js",
-    "test-restapi": "npm run copy-tests && mocha --require config/test/mocha-setup.js --recursive api-tests.tmp/api-tests/*.spec.js",
+    "test-restapi": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp && sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/api-tests.spec.js && mocha --require config/test/mocha-setup.js --recursive api-tests.tmp/api-tests/*.spec.js",
     "test-rest": "npm run prepare-demo && npm run test-restapi"
   },
   "publishConfig": {
