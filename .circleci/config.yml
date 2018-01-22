@@ -176,10 +176,10 @@ jobs:
             MOCHA_FILE: junit/test-results.xml
 
       - store_test_results:
-          path: junit16
+          path: junit
 
       - store_artifacts:
-          path: junit16
+          path: junit
 
   azure-maintenance:
     docker:
