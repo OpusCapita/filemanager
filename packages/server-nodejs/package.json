@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node -e \"require('./index').server.run()\"",
+    "start-with-demo": "npm run prepare-demo && npm start",
     "lint": "eslint .",
     "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
     "test-restapi_": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp && sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/rest-test.json && newman run api-tests.tmp/api-tests/rest-test.json",
-    "copy-test-restapi": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp",
-    "change-test-restapi": "sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/rest-test.json",
-    "test-restapi": "mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js"
+    "prepare-demo": "cd ../.. && rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh && cd ../packages/server-nodejs",
+    "copy-tests": "rm -rf api-tests.tmp && mkdir -p api-tests.tmp  && cp -r api-tests api-tests.tmp && sed -i s@__env__baseURI__@$SERVER_URL@g api-tests.tmp/api-tests/api-tests.spec.js",
+    "test-restapi": "npm run copy-tests && mocha --require config/test/mocha-setup.js --recursive api-tests.tmp/api-tests/*.spec.js",
+    "test-rest": "npm run prepare-demo && npm run test-restapi"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -36,6 +38,7 @@
     "eslint-config-opuscapita": "1.0.7",
     "eslint-plugin-react": "6.10.0",
     "ignore-styles": "5.0.1",
+    "mocha-junit-reporter": "1.13.0",
     "newman": "^3.9.3",
     "raml-js-validator": "0.6.1",
     "raml2html": "6.4.1",

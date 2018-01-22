@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 let request = require('superagent');
-let baseUrl = 'localhost:3020';
+let baseUrl = '__env__baseURI__';
+// let baseUrl = 'localhost:3020';
 
 let rootId = '';
 
@@ -146,7 +147,7 @@ describe('Get resources metadata', () => {
   });
 });
 
-describe('Get resources metadata', () => {
+describe.skip('Get resources metadata', () => {
   it('Rename dir', (done) => {
     let route = `${baseUrl}/api/files/${workChildDirId}`;
     let method = 'PATCH';

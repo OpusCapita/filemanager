@@ -124,6 +124,63 @@ jobs:
           name: update-github-commit-status
           command: ./.circleci/scripts/update-github-commit-status.js
 
+  test-rest-api:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+      - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
+          name: deploy-docker-demo-image
+          command: |
+            ./.circleci/scripts/deploy-docker-demo-image.js
+
+      - run:
+          name: azure-create-web-app
+          command: |
+            ./.circleci/scripts/azure-create-webapp.js
+
+      - run:
+          name: test-rest
+          command: |
+            cd packages/server-nodejs
+            mkdir junit
+            npm run test-restapi --reporter mocha-junit-reporter
+
+          environment:
+            MOCHA_FILE: junit/test-results.xml
+
+      - store_test_results:
+          path: junit16
+
+      - store_artifacts:
+          path: junit16
+
   azure-maintenance:
     docker:
       - image: opuscapita/ci-node8:latest
@@ -164,9 +221,12 @@ workflows:
               branches:
                 only:
                   - master
-        - deploy-demo:
+        - test-rest-api:
             requires:
               - build
+        - deploy-demo:
+            requires:
+              - test-rest-api
   nightly:
       triggers:
         - schedule:
