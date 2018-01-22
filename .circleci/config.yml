@@ -199,11 +199,12 @@ jobs:
           command: |
             cd packages/server-nodejs
             npm run copy-tests
-            mkdir apitests
-            cp -r api-tests.tmp/api-tests apitests
+            cat api-tests.tmp/api-tests/api-tests.spec.js
+#            mkdir apitests
+#            cp -r api-tests.tmp/api-tests apitests
 
-      - store_artifacts:
-          path: apitests
+#      - store_artifacts:
+#          path: apitests
 
   azure-maintenance:
     docker:
@@ -228,26 +229,24 @@ workflows:
 
   commit:
       jobs:
-        - build
-        - approve-publish-release:
-            type: approval
-            requires:
-              - build
-            filters:
-              branches:
-                only:
-                  - master
-        - publish-release:
-            requires:
-              - build
-              - approve-publish-release
-            filters:
-              branches:
-                only:
-                  - master
-        - create-tests-file:
-            requires:
-              - build
+#        - build
+#        - approve-publish-release:
+#            type: approval
+#            requires:
+#              - build
+#            filters:
+#              branches:
+#                only:
+#                  - master
+#        - publish-release:
+#            requires:
+#              - build
+#              - approve-publish-release
+#            filters:
+#              branches:
+#                only:
+#                  - master
+        - create-tests-file
 #        - test-rest-api:
 #            requires:
 #              - build
