@@ -246,7 +246,8 @@ workflows:
 #              branches:
 #                only:
 #                  - master
-        - create-tests-file
+#        - create-tests-file
+        - test-rest-api
 #        - test-rest-api:
 #            requires:
 #              - build
