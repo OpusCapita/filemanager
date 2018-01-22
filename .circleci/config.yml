@@ -200,7 +200,7 @@ jobs:
             cd packages/server-nodejs
             npm run copy-tests
             mkdir apitests
-            cp -r api-tests.tmp apitests
+            cp -r api-tests.tmp/api-tests apitests
 
       - store_artifacts:
           path: apitests
