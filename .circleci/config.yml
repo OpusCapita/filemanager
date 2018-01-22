@@ -202,6 +202,9 @@ jobs:
             mkdir apitests
             cp -r api-tests.tmp apitests
 
+      - store_artifacts:
+          path: apitests
+
   azure-maintenance:
     docker:
       - image: opuscapita/ci-node8:latest
