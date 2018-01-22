@@ -18,7 +18,8 @@
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
-    "publish": "lerna publish --exact --cd-version patch --yes && npm run changelog && git push"
+    "publish": "lerna publish --exact --cd-version patch --yes && npm run changelog && git push",
+    "start-server": "rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh"
   },
   "useWorkspaces": true,
   "workspaces": [

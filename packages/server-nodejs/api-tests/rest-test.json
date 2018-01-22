@@ -1,0 +1,2431 @@
+{
+	"info": {
+		"name": "rest-test",
+		"_postman_id": "487e6c9a-fcb3-41f2-06ef-bebde13ac7f6",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clear all",
+			"description": "",
+			"item": [
+				{
+					"name": "get rootId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"pm.globals.set(\"rootId\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Clear global variables",
+									"pm.globals.unset(\"rootId\");",
+									"pm.globals.unset(\"childDirId\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": [
+						{
+							"id": "ae1ee13b-156f-4624-9c8f-bbc848ee6540",
+							"name": "api/files_get_ex.1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "__env__baseURI__/api/files",
+									"host": [
+										"localhost"
+									],
+									"port": "3020",
+									"path": [
+										"api",
+										"files"
+									]
+								},
+								"description": ""
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.",
+									"key": "Access-Control-Allow-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"value": "Origin, X-Requested-With, Content-Type, Accept"
+								},
+								{
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request.",
+									"key": "Access-Control-Allow-Methods",
+									"name": "Access-Control-Allow-Methods",
+									"value": "GET,POST,HEAD,OPTIONS,PUT,PATCH,DELETE"
+								},
+								{
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource.",
+									"key": "Access-Control-Allow-Origin",
+									"name": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds",
+									"key": "Cache-Control",
+									"name": "Cache-Control",
+									"value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+								},
+								{
+									"description": "Options that are desired for the connection",
+									"key": "Connection",
+									"name": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"description": "The length of the response body in octets (8-bit bytes)",
+									"key": "Content-Length",
+									"name": "Content-Length",
+									"value": "309"
+								},
+								{
+									"description": "The mime type of this content",
+									"key": "Content-Type",
+									"name": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"description": "The date and time that the message was sent",
+									"key": "Date",
+									"name": "Date",
+									"value": "Mon, 20 Nov 2017 09:06:46 GMT"
+								},
+								{
+									"description": "An identifier for a specific version of a resource, often a message digest",
+									"key": "ETag",
+									"name": "ETag",
+									"value": "W/\"135-Ky1+pTedDdA7Nrqn0zzVLrsl1OY\""
+								},
+								{
+									"description": "Gives the date/time after which the response is considered stale",
+									"key": "Expires",
+									"name": "Expires",
+									"value": "0"
+								},
+								{
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain.",
+									"key": "Pragma",
+									"name": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"description": "Custom header",
+									"key": "Surrogate-Control",
+									"name": "Surrogate-Control",
+									"value": "no-store"
+								},
+								{
+									"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)",
+									"key": "X-Powered-By",
+									"name": "X-Powered-By",
+									"value": "Express"
+								}
+							],
+							"cookie": [],
+							"responseTime": 602,
+							"body": "{\"id\":\"XA\",\"name\":\"Customization area\",\"createdTime\":\"2017-11-20T09:00:12.080Z\",\"modifiedTime\":\"2017-11-20T09:00:12.206Z\",\"capabilities\":{\"canListChildren\":true,\"canAddChildren\":true,\"canRemoveChildren\":true,\"canDelete\":false,\"canRename\":false,\"canCopy\":false,\"caEdit\":false,\"canDownload\":false},\"type\":\"dir\"}"
+						}
+					]
+				},
+				{
+					"name": "create test dir before clear",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"pm.globals.set(\"newDirId\", jsonData.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"description": "",
+									"key": "parentId",
+									"type": "text",
+									"value": "{{rootId}}"
+								},
+								{
+									"description": "",
+									"key": "type",
+									"type": "text",
+									"value": "dir"
+								},
+								{
+									"description": "",
+									"key": "name",
+									"type": "text",
+									"value": "new dir 1"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "remove test dir",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{newDirId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "test dir does not exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Clear all: test dir does not exist (410)', () => {",
+									"    pm.expect(pm.response.code).to.equal(410);",
+									"});",
+									"",
+									"// Clear global variables",
+									"pm.globals.unset(\"rootId\");",
+									"pm.globals.unset(\"newDirId\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newDirId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get resouces metadata",
+			"description": "",
+			"item": [
+				{
+					"name": "Get rootId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('api/files_get should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.type).to.equal('dir');",
+									"    pm.expect(jsonData.capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(jsonData.capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(jsonData.capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(jsonData.capabilities.canDelete).to.equal(false);",
+									"    pm.expect(jsonData.capabilities.canRename).to.equal(false);",
+									"    pm.expect(jsonData.capabilities.canCopy).to.equal(false);",
+									"    pm.expect(jsonData.capabilities.caEdit).to.equal(false);",
+									"    pm.expect(jsonData.capabilities.canDownload).to.equal(false);",
+									"});",
+									"",
+									"pm.globals.set(\"rootId\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Clear global variables",
+									"// pm.globals.unset(\"rootId\");",
+									"// pm.globals.unset(\"childDirId\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get root children",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get root children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('all children shoud be dirs', () => {",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.type).to.equal('dir');",
+									"    }",
+									"});",
+									"",
+									"pm.test('all children shoud have parentId equal rootId', () => {",
+									"    let rootId = pm.globals.get(\"rootId\");",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.parentId).to.equal(rootId);",
+									"    }",
+									"});",
+									"",
+									"pm.globals.set(\"workChildDirId\", jsonData.items[0].id);",
+									"pm.globals.set(\"workChildDirName\", jsonData.items[0].name);",
+									"pm.globals.set(\"rootChildrenSize\", jsonData.items.length);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{rootId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{rootId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get workChildDir children",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workChildDir children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('all children shoud be files', () => {",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.type).to.equal('file');",
+									"    }",
+									"});",
+									"",
+									"pm.test('all children shoud have parentId equal workChildDirId', () => {",
+									"    let workChildDirId = pm.globals.get(\"workChildDirId\");",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.parentId).to.equal(workChildDirId);",
+									"    }",
+									"});",
+									"",
+									"pm.globals.set(\"workFileId\", jsonData.items[0].id);",
+									"pm.globals.set(\"workFileName\", jsonData.items[0].name);",
+									"pm.globals.set(\"workChildrenSize\", jsonData.items.length);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get children with incorrect id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Get children with incorrect id\" should have status 410', () => {",
+									"    pm.expect(pm.response.code).to.equal(410);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}{{workChildDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}{{workChildDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get workChildDir metadata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workChildDir children\" should have correct metadata', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.id).to.equal(pm.globals.get(\"workChildDirId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"workChildDirName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get workFile metadata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workFile metadata\" should have correct metadata', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.id).to.equal(pm.globals.get(\"workFileId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"workFileName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rename resource",
+			"description": "",
+			"item": [
+				{
+					"name": "Rename dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test('after renaming the dir should have correct data', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"rootId\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});",
+									"",
+									"",
+									"pm.globals.set(\"cahngedWorkChildDirId\", jsonData.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"changed dir\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rename resource with incorrect id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Rename resource with incorrect id\" should have status 410', () => {",
+									"    pm.expect(pm.response.code).to.equal(410);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"bad changed dir\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}{{workChildDirId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}{{workChildDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rename root dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Rename root dir\" should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"new root\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{rootId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{rootId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rename dir (restore dir name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test('after renaming the dir should have correct data', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"rootId\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"    pm.expect(jsonData.id).to.equal(pm.globals.get(\"workChildDirId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"workChildDirName\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"{{workChildDirName}}\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{cahngedWorkChildDirId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{cahngedWorkChildDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rename file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test('after renaming the dir should have correct data', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"workChildDirId\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});",
+									"",
+									"",
+									"pm.globals.set(\"cahngedFileId\", jsonData.id);",
+									"pm.globals.set(\"cahngedFileName\", jsonData.name);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"changed file\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rename file (restore file name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test('after renaming the dir should have correct data', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"workChildDirId\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"    pm.expect(jsonData.id).to.equal(pm.globals.get(\"workFileId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"workFileName\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"{{workFileName}}\" }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{cahngedFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{cahngedFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check root dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get root children\" should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"rootChildrenSize\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{rootId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{rootId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check workChildDir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workChildDir children\" should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"workChildrenSize\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create dirs",
+			"description": "",
+			"item": [
+				{
+					"name": "Create child dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"    ",
+									"pm.test('\"Create child dir\" should have correct response', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"rootId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"newDirName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});",
+									"    ",
+									"pm.test('New dir should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(false);",
+									"    pm.expect(capabilities.canDownload).to.equal(false);",
+									"});",
+									"",
+									"pm.globals.set(\"newDirId\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"newDirName\", \"new dir\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parentId",
+									"value": "{{rootId}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "dir",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "{{newDirName}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create grandchild dir 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"    ",
+									"pm.test('\"Create child dir\" should have correct response', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newDirId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"newgGandchildName1\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});",
+									"    ",
+									"pm.test('New dir should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(false);",
+									"    pm.expect(capabilities.canDownload).to.equal(false);",
+									"});",
+									"",
+									"pm.globals.set(\"newgGandchildId1\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"newgGandchildName1\", \"grandchild dir 1\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parentId",
+									"value": "{{newDirId}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "dir",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "{{newgGandchildName1}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create grandchild dir 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"    ",
+									"pm.test('\"Create child dir\" should have correct response', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newDirId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"newgGandchildName2\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});",
+									"    ",
+									"pm.test('New dir should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(false);",
+									"    pm.expect(capabilities.canDownload).to.equal(false);",
+									"});",
+									"",
+									"pm.globals.set(\"newgGandchildId2\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"newgGandchildName2\", \"grandchild dir 2\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parentId",
+									"value": "{{newDirId}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "dir",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "{{newgGandchildName2}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create grandchild dir 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"    ",
+									"pm.test('\"Create child dir\" should have correct response', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newDirId\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"newgGandchildName3\"));",
+									"    pm.expect(jsonData.type).to.equal(\"dir\");",
+									"});",
+									"    ",
+									"pm.test('New dir should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(false);",
+									"    pm.expect(capabilities.canDownload).to.equal(false);",
+									"});",
+									"",
+									"pm.globals.set(\"newgGandchildId3\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"newgGandchildName3\", \"grandchild dir 3\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parentId",
+									"value": "{{newDirId}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "dir",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "{{newgGandchildName3}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create dir with incorrect :id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Create dir with incorrect parentId should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"description": "",
+									"key": "parentId",
+									"type": "text",
+									"value": "{{rootId}}{{rootId}}{{rootId}}"
+								},
+								{
+									"description": "",
+									"key": "type",
+									"type": "text",
+									"value": "dir"
+								},
+								{
+									"description": "",
+									"key": "name",
+									"type": "text",
+									"value": "new dir 1"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create dir without parentId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Create dir without parentId should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"description": "",
+									"key": "type",
+									"type": "text",
+									"value": "dir"
+								},
+								{
+									"description": "",
+									"key": "name",
+									"type": "text",
+									"value": "new dir 1"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create dir without type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Create dir without type should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parentId",
+									"value": "{{newDirId}}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"description": "",
+									"key": "name",
+									"type": "text",
+									"value": "new dir 1"
+								}
+							]
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newDir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('api/files/:id/children_get should have correct children`s count', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"    pm.expect(jsonData.items.length).to.equal(3);",
+									"});",
+									"",
+									"pm.test('all children shoud be dirs', () => {",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.type).to.equal('dir');",
+									"    }",
+									"});",
+									"",
+									"pm.test('all children shoud have parentId equal newDirId', () => {",
+									"    let newDirId = pm.globals.get(\"newDirId\");",
+									"    for (let i = 0; i < jsonData.items.length; i++) {",
+									"        let item = jsonData.items[i];",
+									"        pm.expect(item.parentId).to.equal(newDirId);",
+									"    }",
+									"});",
+									"",
+									"pm.globals.set(\"newDirSize\", jsonData.items.length);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Copy resouces",
+			"description": "",
+			"item": [
+				{
+					"name": "Copy file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"",
+									"pm.test('\"Copy file\" should have correct status', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('Copied file should have correct metadata', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newgGandchildId1\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"workFileName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});",
+									"",
+									"pm.test('Copied file should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(true);",
+									"    pm.expect(capabilities.canDownload).to.equal(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"parents\": [\"{{newgGandchildId1}}\", \"{{workChildDirId}}\"] }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Copy file with new name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"",
+									"pm.test('\"Copy file with new name\" should have correct status', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('Copied file should have correct metadata', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newgGandchildId1\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"copiedFileName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});",
+									"",
+									"pm.test('Copied file should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(true);",
+									"    pm.expect(capabilities.canDownload).to.equal(true);",
+									"});",
+									"",
+									"pm.globals.set(\"copiedFileId\", jsonData.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"copiedFileName\", \"copied file\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"{{copiedFileName}}\", \"parents\": [\"{{newgGandchildId1}}\", \"{{workChildDirId}}\"] }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Copy file to sibling dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"",
+									"pm.test('\"Copy file with new name\" should have correct status', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('Copied file should have correct metadata', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newgGandchildId2\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"copiedFileName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});",
+									"",
+									"pm.test('Copied file should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(true);",
+									"    pm.expect(capabilities.canDownload).to.equal(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"{{copiedFileName}}\", \"parents\": [\"{{newgGandchildId1}}\", \"{{newgGandchildId2}}\"] }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{copiedFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{copiedFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check workChildDir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workChildDir children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('workChildDir children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"workChildrenSize\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId1\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId1 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(2);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId1}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId1}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId2\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId2 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(1);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId2}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId2}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Move resources",
+			"description": "",
+			"item": [
+				{
+					"name": "Move file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let capabilities = jsonData.capabilities;",
+									"",
+									"pm.test('\"Move file\" should have correct status', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('Moved file should have correct metadata', () => {",
+									"    pm.expect(jsonData.parentId).to.equal(pm.globals.get(\"newgGandchildId3\"));",
+									"    pm.expect(jsonData.name).to.equal(pm.globals.get(\"copiedFileName\"));",
+									"    pm.expect(jsonData.type).to.equal(\"file\");",
+									"});",
+									"",
+									"pm.test('Moved file should have correct capabilities', () => {",
+									"    pm.expect(capabilities.canListChildren).to.equal(true);",
+									"    pm.expect(capabilities.canAddChildren).to.equal(true);",
+									"    pm.expect(capabilities.canRemoveChildren).to.equal(true);",
+									"    pm.expect(capabilities.canDelete).to.equal(true);",
+									"    pm.expect(capabilities.canRename).to.equal(true);",
+									"    pm.expect(capabilities.canCopy).to.equal(true);",
+									"    pm.expect(capabilities.caEdit).to.equal(true);",
+									"    pm.expect(capabilities.canDownload).to.equal(true);",
+									"});",
+									"",
+									"pm.globals.set(\"copiedFileId3\", jsonData.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"parents\": [\"{{newgGandchildId3}}\"] }"
+						},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{copiedFileId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{copiedFileId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check workChildDir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get workChildDir children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('workChildDir children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"workChildrenSize\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{workChildDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{workChildDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId1\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId1 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(1);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId1}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId1}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId2\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId2 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(1);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId2}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId2}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId3\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId3 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(1);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId3}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId3}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remove resources",
+			"description": "",
+			"item": [
+				{
+					"name": "Remove file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Remove file\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{copiedFileId3}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{copiedFileId3}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newgGandchildId3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Check newgGandchildId3\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('newgGandchildId3 children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(0);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newgGandchildId3}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId3}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove resource with incorrect id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Remove resource with incorrect id\" should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{newDirId}}{{newDirId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}{{newDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove root dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Remove root dir\" should have status 400', () => {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{rootId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{rootId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Remove dir\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{newgGandchildId3}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newgGandchildId3}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check newDir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get newDir children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test('newDir children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"newDirSize\") - 1);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{newDirId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove not empty dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('\"Remove not empty dir\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://__env__baseURI__/api/files/{{newDirId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{newDirId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Download",
+			"description": "",
+			"item": []
+		},
+		{
+			"name": "Clear after",
+			"description": "",
+			"item": [
+				{
+					"name": "Check root dir",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"    ",
+									"pm.test('\"Get root children\" should have status 200', () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"    ",
+									"pm.test('root children should have correct size', () => {",
+									"    pm.expect(jsonData.items.length).to.equal(pm.globals.get(\"rootChildrenSize\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "__env__baseURI__/api/files/{{rootId}}/children",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"files",
+								"{{rootId}}",
+								"children"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
