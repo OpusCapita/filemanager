@@ -168,18 +168,39 @@ jobs:
       - run:
           name: test-rest
           command: |
-            mkdir junit
             cd packages/server-nodejs
-            npm run test-restapi --reporter mocha-junit-reporter
+            npm run test-restapi
 
-          environment:
-            MOCHA_FILE: junit/test-results.xml
+  create-tests-file:
+    docker:
+      - image: opuscapita/ci-node8:latest
 
-      - store_test_results:
-          path: junit
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
 
-      - store_artifacts:
-          path: junit
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: test-rest
+          command: |
+            cd packages/server-nodejs
+            npm run copy-tests
+            mkdir apitests
+            cp -r api-tests.tmp apitests
 
   azure-maintenance:
     docker:
@@ -221,12 +242,15 @@ workflows:
               branches:
                 only:
                   - master
-        - test-rest-api:
+        - create-tests-file:
             requires:
               - build
-        - deploy-demo:
-            requires:
-              - test-rest-api
+#        - test-rest-api:
+#            requires:
+#              - build
+#        - deploy-demo:
+#            requires:
+#              - test-rest-api
   nightly:
       triggers:
         - schedule:
