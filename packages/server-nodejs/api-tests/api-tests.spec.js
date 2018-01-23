@@ -30,6 +30,7 @@ let newGrandchildId3 = '';
 
 let copiedFileName = '';
 let copiedFileId = '';
+let copiedFileId3 = '';
 
 describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
@@ -729,6 +730,201 @@ describe('Copy resouces', () => {
 
       expect(res.status).to.equal(200);
       expect(jsonData.items.length).to.equal(1);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
+describe('Move resources', () => {
+  it('Move file', done => {
+    let route = `${baseUrl}/api/files/${copiedFileId}`;
+    let method = 'PATCH';
+    let params = {
+      parents: [newGrandchildId3]
+    };
+
+    request(method, route).
+    type('application/json').
+    send(params).
+    then(res => {
+      let jsonData = res.body;
+      let capabilities = jsonData.capabilities;
+
+      expect(res.status).to.equal(200);
+
+      expect(jsonData.parentId).to.equal(newGrandchildId3);
+      expect(jsonData.name).to.equal(copiedFileName);
+      expect(jsonData.type).to.equal("file");
+
+      expect(capabilities.canListChildren).to.equal(true);
+      expect(capabilities.canAddChildren).to.equal(true);
+      expect(capabilities.canRemoveChildren).to.equal(true);
+      expect(capabilities.canDelete).to.equal(true);
+      expect(capabilities.canRename).to.equal(true);
+      expect(capabilities.canCopy).to.equal(true);
+      expect(capabilities.canEdit).to.equal(true);
+      expect(capabilities.canDownload).to.equal(true);
+
+      copiedFileId3 = jsonData.id;
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId1', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId1}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(1);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId2', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId2}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(1);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId3', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId3}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(1);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
+describe('Remove resources', () => {
+  it('Remove file', done => {
+    let route = `${baseUrl}/api/files/${copiedFileId3}`;
+    let method = 'DELETE';
+    request(method, route).
+    then(res => {
+      expect(res.status).to.equal(200);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId3', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId3}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(0);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Remove resource with incorrect id', done => {
+    let route = `${baseUrl}/api/files/${newDirId}${newDirId}`;
+    let method = 'DELETE';
+    request(method, route).
+    then(res => {
+      expect(res.status).to.equal(200);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Remove root dir', done => {
+    let route = `${baseUrl}/api/files/${rootId}`;
+    let method = 'DELETE';
+    request(method, route).
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Remove dir', done => {
+    let route = `${baseUrl}/api/files/${newGrandchildId3}`;
+    let method = 'DELETE';
+    request(method, route).
+    then(res => {
+      expect(res.status).to.equal(200);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newDir', done => {
+    request.
+    get(`${baseUrl}/api/files/${newDirId}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(newDirSize - 1);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Remove not empty dir', done => {
+    let route = `${baseUrl}/api/files/${newDirId}`;
+    let method = 'DELETE';
+    request(method, route).
+    then(res => {
+      expect(res.status).to.equal(200);
 
       done();
     }).
