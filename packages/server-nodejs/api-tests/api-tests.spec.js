@@ -147,7 +147,7 @@ describe('Get resources metadata', () => {
   });
 });
 
-describe.skip('Get resources metadata', () => {
+describe('Get resources metadata', () => {
   it('Rename dir', (done) => {
     let route = `${baseUrl}/api/files/${workChildDirId}`;
     let method = 'PATCH';
