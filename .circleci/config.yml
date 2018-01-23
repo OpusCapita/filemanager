@@ -246,11 +246,11 @@ workflows:
               branches:
                 only:
                   - master
-        - create-tests-file
+#        - create-tests-file
 #        - test-rest-api
         - deploy-demo:
             requires:
-              - test-rest-api
+              - build
         - test-rest-api:
             requires:
               - deploy-demo
