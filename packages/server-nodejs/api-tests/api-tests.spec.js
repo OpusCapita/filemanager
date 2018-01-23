@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 let request = require('superagent');
-let baseUrl = '__env__baseURI__';
-// let baseUrl = 'localhost:3020';
+// let baseUrl = '__env__baseURI__';
+let baseUrl = 'localhost:3020';
 
 let rootId = '';
 

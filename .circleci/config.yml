@@ -147,10 +147,10 @@ jobs:
           name: bootstrap-packages
           command: yarn
 
-#      - run:
-#          name: install-demo-dependencies
-#          command: (cd demo && yarn install)
-#
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
 #      - run:
 #          name: init-ci-container
 #          command: /ci-scripts/init.sh
