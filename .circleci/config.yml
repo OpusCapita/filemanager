@@ -147,23 +147,23 @@ jobs:
           name: bootstrap-packages
           command: yarn
 
-      - run:
-          name: install-demo-dependencies
-          command: (cd demo && yarn install)
-
-      - run:
-          name: init-ci-container
-          command: /ci-scripts/init.sh
-
-      - run:
-          name: deploy-docker-demo-image
-          command: |
-            ./.circleci/scripts/deploy-docker-demo-image.js
-
-      - run:
-          name: azure-create-web-app
-          command: |
-            ./.circleci/scripts/azure-create-webapp.js
+#      - run:
+#          name: install-demo-dependencies
+#          command: (cd demo && yarn install)
+#
+#      - run:
+#          name: init-ci-container
+#          command: /ci-scripts/init.sh
+#
+#      - run:
+#          name: deploy-docker-demo-image
+#          command: |
+#            ./.circleci/scripts/deploy-docker-demo-image.js
+#
+#      - run:
+#          name: azure-create-web-app
+#          command: |
+#            ./.circleci/scripts/azure-create-webapp.js
 
       - run:
           name: test-rest
@@ -229,28 +229,28 @@ workflows:
 
   commit:
       jobs:
-        - build
-        - approve-publish-release:
-            type: approval
-            requires:
-              - build
-            filters:
-              branches:
-                only:
-                  - master
-        - publish-release:
-            requires:
-              - build
-              - approve-publish-release
-            filters:
-              branches:
-                only:
-                  - master
+#        - build
+#        - approve-publish-release:
+#            type: approval
+#            requires:
+#              - build
+#            filters:
+#              branches:
+#                only:
+#                  - master
+#        - publish-release:
+#            requires:
+#              - build
+#              - approve-publish-release
+#            filters:
+#              branches:
+#                only:
+#                  - master
 #        - create-tests-file
-#        - test-rest-api
-        - deploy-demo:
-            requires:
-              - build
+        - test-rest-api
+#        - deploy-demo:
+#            requires:
+#              - build
 #        - test-rest-api:
 #            requires:
 #              - deploy-demo
