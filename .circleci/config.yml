@@ -151,20 +151,6 @@ jobs:
           name: install-demo-dependencies
           command: (cd demo && yarn install)
 
-#      - run:
-#          name: init-ci-container
-#          command: /ci-scripts/init.sh
-#
-#      - run:
-#          name: deploy-docker-demo-image
-#          command: |
-#            ./.circleci/scripts/deploy-docker-demo-image.js
-#
-#      - run:
-#          name: azure-create-web-app
-#          command: |
-#            ./.circleci/scripts/azure-create-webapp.js
-
       - run:
           name: start-server
           command: |
