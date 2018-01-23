@@ -181,6 +181,7 @@ workflows:
   commit:
       jobs:
         - build
+        - test-rest-api
         - approve-publish-release:
             type: approval
             requires:
@@ -197,10 +198,6 @@ workflows:
               branches:
                 only:
                   - master
-        - test-rest-api
-#        - test-rest-api:
-#            requires:
-#             - build
         - deploy-demo:
             requires:
               - build
