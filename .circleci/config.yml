@@ -197,7 +197,7 @@ workflows:
               branches:
                 only:
                   - master
-        - test-rest-api:
+        - test-rest-api
 #        - test-rest-api:
 #            requires:
 #             - build
