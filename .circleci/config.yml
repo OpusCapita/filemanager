@@ -198,10 +198,12 @@ workflows:
                 only:
                   - master
         - test-rest-api:
-            requires:
-             - build
+#        - test-rest-api:
+#            requires:
+#             - build
         - deploy-demo:
             requires:
+              - build
               - test-rest-api
   nightly:
       triggers:

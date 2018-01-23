@@ -13,6 +13,8 @@ let workFileId = '';
 let workFileName = '';
 let workChildrenSize = '';
 
+let changedWorkChildDirId = '';
+
 describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
     request
@@ -161,15 +163,73 @@ describe('Get resources metadata', () => {
       expect(jsonData.parentId).to.equal(rootId);
       expect(jsonData.type).to.equal("dir");
 
+      changedWorkChildDirId = jsonData.id;
+
       done();
     }).
     catch((error) => {
-      console.error(`Filemanager. renameResource(${id})`, error);
-      onFail()
+     done(error);
     });
+  });
 
-    done();
-  })
+  it('Rename resource with incorrect id', (done) => {
+    let route = `${baseUrl}/api/files/${workChildDirId}${workChildDirId}`;
+    let method = 'PATCH';
+    let newName = 'bad changed dir';
+
+    request(method, route).type('application/json').send({ name: newName }).
+    catch(function(err) {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(410);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Rename root dir', (done) => {
+    let route = `${baseUrl}/api/files/${rootId}`;
+    let method = 'PATCH';
+    let newName = 'new root';
+
+    request(method, route).type('application/json').send({ name: newName }).
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Rename dir (restore dir name)', (done) => {
+    let route = `${baseUrl}/api/files/${changedWorkChildDirId}`;
+    let method = 'PATCH';
+
+    request(method, route).type('application/json').send({ name: workChildDirName }).
+    then(function(res) {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.parentId).to.equal(rootId);
+      expect(jsonData.type).to.equal("dir");
+      expect(jsonData.id).to.equal(workChildDirId);
+      expect(jsonData.name).to.equal(workChildDirName);
+
+      done();
+    }).
+    catch((error) => {
+      done(error);
+    });
+  });
 });
 
 // res.body, res.headers, res.status
