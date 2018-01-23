@@ -28,6 +28,9 @@ let newGrandchildId2 = '';
 let newGrandchildName3 = '';
 let newGrandchildId3 = '';
 
+let copiedFileName = '';
+let copiedFileId = '';
+
 describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
     request.
@@ -566,6 +569,166 @@ describe('Create dirs', () => {
         expect(item.type).to.equal('dir');
         expect(item.parentId).to.equal(newDirId);
       }
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
+describe('Copy resouces', () => {
+  it('Copy file', done => {
+    let route = `${baseUrl}/api/files/${workFileId}`;
+    let method = 'PATCH';
+
+    request(method, route).
+    type('application/json').
+    send({ parents: [newGrandchildId1, workChildDirId] }).
+    then(res => {
+      let jsonData = res.body;
+      let capabilities = jsonData.capabilities;
+
+      expect(res.status).to.equal(200);
+
+      expect(jsonData.parentId).to.equal(newGrandchildId1);
+      expect(jsonData.name).to.equal(workFileName);
+      expect(jsonData.type).to.equal("file");
+
+      expect(capabilities.canListChildren).to.equal(true);
+      expect(capabilities.canAddChildren).to.equal(true);
+      expect(capabilities.canRemoveChildren).to.equal(true);
+      expect(capabilities.canDelete).to.equal(true);
+      expect(capabilities.canRename).to.equal(true);
+      expect(capabilities.canCopy).to.equal(true);
+      expect(capabilities.canEdit).to.equal(true);
+      expect(capabilities.canDownload).to.equal(true);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Copy file with new name', done => {
+    copiedFileName = 'copied file';
+    let route = `${baseUrl}/api/files/${workFileId}`;
+    let method = 'PATCH';
+    let params = {
+      name: copiedFileName,
+      parents: [newGrandchildId1, workChildDirId]
+    };
+
+    request(method, route).
+    type('application/json').
+    send(params).
+    then(res => {
+      let jsonData = res.body;
+      let capabilities = jsonData.capabilities;
+
+      expect(res.status).to.equal(200);
+
+      expect(jsonData.parentId).to.equal(newGrandchildId1);
+      expect(jsonData.name).to.equal(copiedFileName);
+      expect(jsonData.type).to.equal("file");
+
+      expect(capabilities.canListChildren).to.equal(true);
+      expect(capabilities.canAddChildren).to.equal(true);
+      expect(capabilities.canRemoveChildren).to.equal(true);
+      expect(capabilities.canDelete).to.equal(true);
+      expect(capabilities.canRename).to.equal(true);
+      expect(capabilities.canCopy).to.equal(true);
+      expect(capabilities.canEdit).to.equal(true);
+      expect(capabilities.canDownload).to.equal(true);
+
+      copiedFileId = jsonData.id;
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Copy file to sibling dir', done => {
+    let route = `${baseUrl}/api/files/${copiedFileId}`;
+    let method = 'PATCH';
+    let params = {
+      name: copiedFileName,
+      parents: [newGrandchildId1, newGrandchildId2]
+    };
+
+    request(method, route).
+    type('application/json').
+    send(params).
+    then(res => {
+      let jsonData = res.body;
+      let capabilities = jsonData.capabilities;
+
+      expect(res.status).to.equal(200);
+
+      expect(jsonData.parentId).to.equal(newGrandchildId2);
+      expect(jsonData.name).to.equal(copiedFileName);
+      expect(jsonData.type).to.equal("file");
+
+      expect(capabilities.canListChildren).to.equal(true);
+      expect(capabilities.canAddChildren).to.equal(true);
+      expect(capabilities.canRemoveChildren).to.equal(true);
+      expect(capabilities.canDelete).to.equal(true);
+      expect(capabilities.canRename).to.equal(true);
+      expect(capabilities.canCopy).to.equal(true);
+      expect(capabilities.canEdit).to.equal(true);
+      expect(capabilities.canDownload).to.equal(true);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check workChildDir', done => {
+    request.
+    get(`${baseUrl}/api/files/${workChildDirId}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(workChildrenSize);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId1', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId1}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(2);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Check newGrandchildId2', done => {
+    request.
+    get(`${baseUrl}/api/files/${newGrandchildId2}/children`).
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+      expect(jsonData.items.length).to.equal(1);
 
       done();
     }).
