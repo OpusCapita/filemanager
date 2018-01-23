@@ -152,57 +152,10 @@ jobs:
           command: (cd demo && yarn install)
 
       - run:
-          name: start-server
-          command: |
-            cd packages/server-nodejs
-            npm start
-
-
-      - run:
           name: test-restapi
           command: |
             cd packages/server-nodejs
-            npm run test-restapi
-
-      - run:
-          name: kill-node-process
-          command: |
-            killall node
-
-  create-tests-file:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: bootstrap-packages
-          command: yarn
-
-      - run:
-          name: test-rest
-          command: |
-            cd packages/server-nodejs
-            npm run copy-tests
-            cat api-tests.tmp/api-tests/api-tests.spec.js
-#            mkdir apitests
-#            cp -r api-tests.tmp/api-tests apitests
-
-#      - store_artifacts:
-#          path: apitests
+            npm run start-hide && npm run test-restapi
 
   azure-maintenance:
     docker:
@@ -227,28 +180,28 @@ workflows:
 
   commit:
       jobs:
-#        - build
-#        - approve-publish-release:
-#            type: approval
-#            requires:
-#              - build
-#            filters:
-#              branches:
-#                only:
-#                  - master
-#        - publish-release:
-#            requires:
-#              - build
-#              - approve-publish-release
-#            filters:
-#              branches:
-#                only:
-#                  - master
-#        - create-tests-file
+        - build
         - test-rest-api
-#        - deploy-demo:
-#            requires:
-#              - build
+        - approve-publish-release:
+            type: approval
+            requires:
+              - build
+            filters:
+              branches:
+                only:
+                  - master
+        - publish-release:
+            requires:
+              - build
+              - approve-publish-release
+            filters:
+              branches:
+                only:
+                  - master
+        - deploy-demo:
+            requires:
+              - build
+              - test-rest-api
 #        - test-rest-api:
 #            requires:
 #              - deploy-demo
