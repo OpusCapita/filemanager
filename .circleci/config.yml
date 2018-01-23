@@ -169,7 +169,7 @@ jobs:
           name: start-server
           command: |
             cd packages/server-nodejs
-            npm start-hide
+            npm start
 
 
       - run:
