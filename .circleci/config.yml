@@ -165,11 +165,11 @@ jobs:
 #          command: |
 #            ./.circleci/scripts/azure-create-webapp.js
 
-      - run:
-          name: test-rest
-          command: |
-            cd packages/server-nodejs
-            npm run test-restapi
+#      - run:
+#          name: test-rest
+#          command: |
+#            cd packages/server-nodejs
+#            npm run test-restapi
 
   create-tests-file:
     docker:
