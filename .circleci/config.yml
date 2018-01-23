@@ -133,37 +133,37 @@ jobs:
       - checkout
       - setup_remote_docker
 
-#      - run:
-#          name: save-cache-checksum
-#          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-#
-#      - restore_cache:
-#          keys:
-#            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-#            # fallback to using the latest cache if no exact match is found
-#            - v1-dependencies-
-#
-#      - run:
-#          name: bootstrap-packages
-#          command: yarn
-#
-#      - run:
-#          name: install-demo-dependencies
-#          command: (cd demo && yarn install)
-#
-#      - run:
-#          name: init-ci-container
-#          command: /ci-scripts/init.sh
-#
-#      - run:
-#          name: deploy-docker-demo-image
-#          command: |
-#            ./.circleci/scripts/deploy-docker-demo-image.js
-#
-#      - run:
-#          name: azure-create-web-app
-#          command: |
-#            ./.circleci/scripts/azure-create-webapp.js
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+      - run:
+          name: init-ci-container
+          command: /ci-scripts/init.sh
+
+      - run:
+          name: deploy-docker-demo-image
+          command: |
+            ./.circleci/scripts/deploy-docker-demo-image.js
+
+      - run:
+          name: azure-create-web-app
+          command: |
+            ./.circleci/scripts/azure-create-webapp.js
 
       - run:
           name: test-rest
@@ -251,9 +251,9 @@ workflows:
         - deploy-demo:
             requires:
               - build
-        - test-rest-api:
-            requires:
-              - deploy-demo
+#        - test-rest-api:
+#            requires:
+#              - deploy-demo
   nightly:
       triggers:
         - schedule:
