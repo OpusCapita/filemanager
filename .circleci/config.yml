@@ -159,13 +159,13 @@ jobs:
             npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
 
           environment:
-            MOCHA_FILE: junit/test-results.xml
+            MOCHA_FILE: ~/repo/junit/test-results.xml
 
       - store_test_results:
-          path: ~/repo/packages/server-nodejs/junit
+          path: ~/repo/junit
 
       - store_artifacts:
-          path: ~/repo/packages/server-nodejs/junit
+          path: ~/repo/junit
 
   azure-maintenance:
     docker:
