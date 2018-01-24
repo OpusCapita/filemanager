@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import fs from 'fs';
 let request = require('superagent');
 let baseUrl = 'localhost:3020';
 
@@ -827,6 +828,93 @@ describe('Move resources', () => {
   });
 });
 
+describe('Download', () => {
+  it('Download file', done => {
+    const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId3}`;
+    request.get(downloadUrl).
+    responseType('blob').
+    then(res => {
+      expect(res.status).to.equal(200);
+      expect(res.headers['content-disposition']).to.equal(`attachment; filename="${copiedFileName}"`);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Download folder', done => {
+    const downloadUrl = `${baseUrl}/api/download?items=${newGrandchildId3}`;
+    request.get(downloadUrl).
+    responseType('blob').
+    then(res => {
+      expect(res.status).to.equal(200);
+      expect(res.headers['content-disposition']).to.equal(`attachment; filename="${newGrandchildName3}.zip"`);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Download file with incorrect id', done => {
+    const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId3}${copiedFileId3}`;
+    request.get(downloadUrl).
+    responseType('blob').
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(410);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
+describe('Upload file', () => {
+  it('Upload file', done => {
+    let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
+    let fileName = fs.readdirSync(workDirPath)[0];
+    let file = fs.readFileSync(`${workDirPath}/${fileName}`);
+    let route = `${baseUrl}/api/files`;
+
+    request.post(route).
+    field('type', 'file').
+    field('parentId', newGrandchildId3).
+    attach('files', file, fileName).
+    then(res => {
+      let jsonData = res.body[0];
+      let capabilities = jsonData.capabilities;
+
+      expect(res.status).to.equal(200);
+
+      expect(jsonData.parentId).to.equal(newGrandchildId3);
+      expect(jsonData.name).to.equal(fileName);
+      expect(jsonData.type).to.equal("file");
+
+      expect(capabilities.canListChildren).to.equal(true);
+      expect(capabilities.canAddChildren).to.equal(true);
+      expect(capabilities.canRemoveChildren).to.equal(true);
+      expect(capabilities.canDelete).to.equal(true);
+      expect(capabilities.canRename).to.equal(true);
+      expect(capabilities.canCopy).to.equal(true);
+      expect(capabilities.canEdit).to.equal(true);
+      expect(capabilities.canDownload).to.equal(true);
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
 describe('Remove resources', () => {
   it('Remove file', done => {
     let route = `${baseUrl}/api/files/${copiedFileId3}`;
@@ -849,7 +937,7 @@ describe('Remove resources', () => {
       let jsonData = res.body;
 
       expect(res.status).to.equal(200);
-      expect(jsonData.items.length).to.equal(0);
+      expect(jsonData.items.length).to.equal(1);
 
       done();
     }).
@@ -927,26 +1015,6 @@ describe('Remove resources', () => {
       expect(res.status).to.equal(200);
 
       done();
-    }).
-    catch(err => {
-      done(err);
-    });
-  });
-});
-
-describe('Download', () => {
-  it.skip('Download file', done => {
-    const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId}`;
-    request.get(downloadUrl).
-    responseType('blob').
-    // on('progress', event => {
-    //   onProgress((i * 100 + event.percent) / l);
-    // }).
-    then(res => {
-      expect(res.status).to.equal(200);
-      console.log(res.body)
-        // file: res.body,
-        // name: resource.name
     }).
     catch(err => {
       done(err);
