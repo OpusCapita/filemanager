@@ -862,14 +862,25 @@ describe('Remove resources', () => {
     let route = `${baseUrl}/api/files/${newDirId}${newDirId}`;
     let method = 'DELETE';
     request(method, route).
-    then(res => {
-      expect(res.status).to.equal(200);
-
-      done();
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
     }).
     catch(err => {
       done(err);
     });
+    // then(res => {
+    //   expect(res.status).to.equal(200);
+    //
+    //   done();
+    // }).
+    // catch(err => {
+    //   done(err);
+    // });
   });
 
   it('Remove root dir', done => {
@@ -927,6 +938,26 @@ describe('Remove resources', () => {
       expect(res.status).to.equal(200);
 
       done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+});
+
+describe('Download', () => {
+  it.skip('Download file', done => {
+    const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId}`;
+    request.get(downloadUrl).
+    responseType('blob').
+    // on('progress', event => {
+    //   onProgress((i * 100 + event.percent) / l);
+    // }).
+    then(res => {
+      expect(res.status).to.equal(200);
+      console.log(res.body)
+        // file: res.body,
+        // name: resource.name
     }).
     catch(err => {
       done(err);

@@ -180,28 +180,28 @@ workflows:
 
   commit:
       jobs:
-        - build
+#        - build
         - test-rest-api
-        - approve-publish-release:
-            type: approval
-            requires:
-              - build
-            filters:
-              branches:
-                only:
-                  - master
-        - publish-release:
-            requires:
-              - build
-              - approve-publish-release
-            filters:
-              branches:
-                only:
-                  - master
-        - deploy-demo:
-            requires:
-              - build
-              - test-rest-api
+#        - approve-publish-release:
+#            type: approval
+#            requires:
+#              - build
+#            filters:
+#              branches:
+#                only:
+#                  - master
+#        - publish-release:
+#            requires:
+#              - build
+#              - approve-publish-release
+#            filters:
+#              branches:
+#                only:
+#                  - master
+#        - deploy-demo:
+#            requires:
+#              - build
+#              - test-rest-api
   nightly:
       triggers:
         - schedule:
