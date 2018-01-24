@@ -152,16 +152,10 @@ jobs:
           command: (cd demo && yarn install)
 
       - run:
-          name: start-hide
-          command: |
-            cd packages/server-nodejs
-            npm run start-hide
-
-      - run:
           name: test-restapi
           command: |
             cd packages/server-nodejs
-            npm run test-restapi
+            npm run start-hide && npm run test-restapi
 
   azure-maintenance:
     docker:
