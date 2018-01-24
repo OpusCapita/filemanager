@@ -26,8 +26,8 @@
     "README.md"
   ],
   "peerDependencies": {
-    "react": "0.14.x || 15.x.x || 16.x.x",
-    "react-dom": "0.14.x || 15.x.x || 16.x.x"
+    "react": "^15.6.2 || ^16.2.0",
+    "react-dom": "^15.6.2 || ^16.2.0"
   },
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",
@@ -49,14 +49,15 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "babel-register": "6.26.0",
-    "chai": "3.5.0",
-    "chai-enzyme": "0.6.1",
+    "chai": "4.1.2",
+    "chai-enzyme": "1.0.0-beta.0",
     "compression": "1.6.2",
     "core-js": "2.5.0",
     "coveralls": "2.13.1",
     "cross-env": "5.0.1",
     "css-loader": "0.26.2",
-    "enzyme": "2.9.1",
+    "enzyme": "3.2.0",
+    "enzyme-adapter-react-15": "1.0.5",
     "eslint": "3.17.0",
     "eslint-config-opuscapita": "1.0.7",
     "eslint-plugin-react": "6.10.0",
@@ -75,8 +76,8 @@
     "postcss-modules": "0.6.4",
     "progress-bar-webpack-plugin": "1.10.0",
     "raw-loader": "0.5.1",
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
+    "react": "15.6.2",
+    "react-dom": "15.6.2",
     "react-test-renderer": "16.2.0",
     "rimraf": "2.6.1",
     "sinon": "2.1.0",

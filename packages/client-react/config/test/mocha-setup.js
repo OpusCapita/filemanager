@@ -1,5 +1,8 @@
 process.env.NODE_ENV = 'test';
 
+const Enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-15');
+
 require('babel-register')({
   presets: ['es2017', 'es2015', 'stage-0', 'react'],
   plugins: [
@@ -14,6 +17,8 @@ require('babel-register')({
 
 var jsdom = require('jsdom').jsdom;
 var chai = require('chai');
+
+Enzyme.configure({ adapter: new Adapter() });
 
 chai.use(require('sinon-chai'));
 chai.use(require('chai-enzyme')());
