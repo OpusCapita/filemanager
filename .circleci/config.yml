@@ -154,18 +154,18 @@ jobs:
       - run:
           name: test-restapi
           command: |
-            mkdir junit
+            mkdir ~/repo/junit
             cd packages/server-nodejs
             npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
 
           environment:
-            MOCHA_FILE: ../../junit/test-results.xml
+            MOCHA_FILE: ~/repo/junit/test-results.xml
 
       - store_test_results:
-          path: ../../junit
+          path: ~/repo/junit
 
       - store_artifacts:
-          path: ../../junit
+          path: ~/repo/junit
 
   azure-maintenance:
     docker:
