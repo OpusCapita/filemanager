@@ -162,10 +162,10 @@ jobs:
             MOCHA_FILE: junit/test-results.xml
 
       - store_test_results:
-          path: junit
+          path: ~/repo/packages/server-nodejs/junit
 
       - store_artifacts:
-          path: junit
+          path: ~/repo/packages/server-nodejs/junit
 
   azure-maintenance:
     docker:
