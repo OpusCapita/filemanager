@@ -859,28 +859,17 @@ describe('Remove resources', () => {
   });
 
   it('Remove resource with incorrect id', done => {
-    let route = `${baseUrl}/api/files/${newDirId}${newDirId}`;
+    let route = `${baseUrl}/api/files/${newDirId}${newDirId}${newDirId}`;
     let method = 'DELETE';
     request(method, route).
-    catch(err => {
-      if (err && err.response && err.response.request.res) {
-        expect(err.response.request.res.statusCode).to.equal(400);
-        done();
-      } else {
-        done(err);
-      }
+    then(res => {
+      expect(res.status).to.equal(200);
+
+      done();
     }).
     catch(err => {
       done(err);
     });
-    // then(res => {
-    //   expect(res.status).to.equal(200);
-    //
-    //   done();
-    // }).
-    // catch(err => {
-    //   done(err);
-    // });
   });
 
   it('Remove root dir', done => {
