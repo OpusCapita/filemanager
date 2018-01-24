@@ -154,18 +154,18 @@ jobs:
       - run:
           name: test-restapi
           command: |
-            mkdir junit
             cd packages/server-nodejs
+            mkdir junit
             npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
 
           environment:
-            MOCHA_FILE: ~/repo/junit/test-results.xml
+            MOCHA_FILE: junit/test-results.xml
 
       - store_test_results:
-          path: ~/repo/junit
+          path: ~/repo/packages/server-nodejs/junit
 
       - store_artifacts:
-          path: ~/repo/junit
+          path: ~/repo/packages/server-nodejs/junit
 
   azure-maintenance:
     docker:
@@ -190,28 +190,28 @@ workflows:
 
   commit:
       jobs:
-#        - build
+        - build
         - test-rest-api
-#        - approve-publish-release:
-#            type: approval
-#            requires:
-#              - build
-#            filters:
-#              branches:
-#                only:
-#                  - master
-#        - publish-release:
-#            requires:
-#              - build
-#              - approve-publish-release
-#            filters:
-#              branches:
-#                only:
-#                  - master
-#        - deploy-demo:
-#            requires:
-#              - build
-#              - test-rest-api
+        - approve-publish-release:
+            type: approval
+            requires:
+              - build
+            filters:
+              branches:
+                only:
+                  - master
+        - publish-release:
+            requires:
+              - build
+              - approve-publish-release
+            filters:
+              branches:
+                only:
+                  - master
+        - deploy-demo:
+            requires:
+              - build
+              - test-rest-api
   nightly:
       triggers:
         - schedule:

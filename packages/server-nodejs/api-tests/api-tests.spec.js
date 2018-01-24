@@ -1021,6 +1021,3 @@ describe('Remove resources', () => {
     });
   });
 });
-
-// res.body, res.headers, res.status
-// err.message, err.response
