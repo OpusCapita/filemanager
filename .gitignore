@@ -28,3 +28,4 @@ client-react/.nyc_output
 /demo/static
 /client-react/.gh-pages-tmp
 /client-react/www/static
+/packages/server-nodejs/api-tests.tmp/
