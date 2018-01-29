@@ -4,11 +4,11 @@ import './Toolbar.less';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 import DropdownMenu from '../DropdownMenu';
 import DropdownMenuItem from '../DropdownMenuItem';
+import { isHistoryStepPossible, doHistoryStep } from '../history';
 
 import icons from './icons-svg';
 
 const propTypes = {
-  history: PropTypes.array,
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     icon: PropTypes.object,
@@ -19,7 +19,13 @@ const propTypes = {
     icon: PropTypes.object,
     onClick: PropTypes.func
   })),
-  newButtonText: PropTypes.string
+  newButtonText: PropTypes.string,
+  history: PropTypes.shape({
+    stack: PropTypes.array,
+    currentPointer: PropTypes.number
+  }),
+  onMoveBackward: PropTypes.func,
+  onMoveForward: PropTypes.func
 };
 const defaultProps = {
   history: [],
@@ -44,8 +50,27 @@ class Toolbar extends Component {
     this.setState({ showDropdownMenu: false });
   }
 
+  handleMoveBackward = () => {
+    let { history } = this.props;
+    let newHistory = doHistoryStep(history, -1);
+    this.props.onMoveBackward(newHistory);
+  }
+
+  handleMoveForward = () => {
+    let { history } = this.props;
+    let newHistory = doHistoryStep(history, 1);
+    this.props.onMoveForward(newHistory);
+  }
+
   render() {
-    let { items, newButtonItems, newButtonText } = this.props;
+    let {
+      items,
+      newButtonItems,
+      newButtonText,
+      history,
+      onMoveBackward,
+      onMoveForward
+    } = this.props;
     let { showDropdownMenu } = this.state;
 
     let itemsElement = items.length ? (
@@ -115,27 +140,27 @@ class Toolbar extends Component {
     let navButtons = (
       <div className="oc-fm--toolbar__nav-buttons">
         <button
-          disabled={true}
+          disabled={!isHistoryStepPossible(history, -1)}
           className={`oc-fm--toolbar__item`}
           title={'Move back'}
-          onClick={() => {}}
+          onClick={() => this.handleMoveBackward()}
         >
           <SVG
             className="oc-fm--toolbar__item-icon"
-            svg={icons.arrowLeftSVG}
+            svg={icons.moveBackward}
             style={{ fill: '#424242' }}
           />
         </button>
 
         <button
-          disabled={true}
+          disabled={!isHistoryStepPossible(history, 1)}
           className={`oc-fm--toolbar__item`}
           title={'Move forward'}
-          onClick={() => {}}
+          onClick={() => this.handleMoveForward()}
         >
           <SVG
             className="oc-fm--toolbar__item-icon"
-            svg={icons.arrowRightSVG}
+            svg={icons.moveForward}
             style={{ fill: '#424242' }}
           />
         </button>

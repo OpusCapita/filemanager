@@ -12,6 +12,13 @@ import ContextMenu from '../ContextMenu';
 import nanoid from 'nanoid';
 import SVG from '@opuscapita/react-svg/lib/SVG';
 import rawToReactElement from '../raw-to-react-element';
+import {
+  createHistory,
+  pushToHistory,
+  getHistoryIndex,
+  doHistoryStep,
+  isHistoryStepPossible
+} from '../history';
 let spinnerIcon = require('../assets/spinners/spinner.svg');
 
 const propTypes = {
@@ -66,6 +73,7 @@ class FileNavigator extends Component {
       resource: {},
       resourceChildren: [],
       resourceLocation: [],
+      history: createHistory(),
       selection: [],
       sortBy: 'title',
       sortDirection: SortDirection.ASC,
@@ -165,8 +173,16 @@ class FileNavigator extends Component {
     this.navigateToDir(id, resource.id);
   }
 
-  navigateToDir = async (toId, idToSelect, startLoading = true) => {
-    let { sortBy, sortDirection } = this.state;
+  handleHistoryChange = (history) => {
+    this.setState({ history });
+
+    let navigateToId = history.stack[history.currentPointer];
+    this.navigateToDir(navigateToId, null, true, false);
+  }
+
+  navigateToDir = async (toId, idToSelect, startLoading = true, changeHistory = true) => {
+    let { initialResourceId } = this.props;
+    let { history, sortBy, sortDirection } = this.state;
 
     if (startLoading) {
       this.startViewLoading();
@@ -178,6 +194,10 @@ class FileNavigator extends Component {
     let { resourceChildren } = await this.getChildrenForId(resource.id, sortBy, sortDirection);
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
+
+    if (changeHistory) {
+      this.setState({ history: pushToHistory(history, toId) });
+    }
 
     this.handleSelectionChange(newSelection);
     this.handleResourceChildrenChange(resourceChildren);
@@ -367,6 +387,7 @@ class FileNavigator extends Component {
       config,
       dialogElement,
       error,
+      history,
       loadingResourceLocation,
       loadingView,
       notifications,
@@ -380,6 +401,8 @@ class FileNavigator extends Component {
     } = this.state;
 
     let viewLoadingElement = null;
+
+    console.log('history', history);
 
     if (!apiInitialized) {
       viewLoadingElement = 'Problems with server connection';
@@ -463,7 +486,9 @@ class FileNavigator extends Component {
           <Toolbar
             items={toolbarItems}
             newButtonItems={newButtonItems}
-            history={[]}
+            history={history}
+            onMoveForward={this.handleHistoryChange}
+            onMoveBackward={this.handleHistoryChange}
           />
         </div>
         <div className="oc-fm--file-navigator__view">
