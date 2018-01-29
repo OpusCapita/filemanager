@@ -10,8 +10,58 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+
+      - run:
           name: init-ci-container
           command: /ci-scripts/init.sh
+
+  publish-release:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: init-ci-container
+          command: |
+            /ci-scripts/init.sh
+            # NPM auth
+            npm config set registry ${NPM_DEFAULT_REGISTRY}
+            echo "_auth = ${NPM_DEFAULT_REGISTRY_AUTH}" >> ~/.npmrc
+            echo "email = ${NPM_DEFAULT_REGISTRY_MAIL}" >> ~/.npmrc
+            echo "always-auth = true" >> ~/.npmrc
+            git config --global user.email "${GH_MAIL}"
+            git config --global user.name "${GH_NAME}"
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: publish-to-npm
+          command: yarn run publish
 
   deploy-demo:
     docker:
@@ -21,6 +71,16 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run:
           name: bootstrap-packages
@@ -59,9 +119,53 @@ jobs:
           command: |
             ./.circleci/scripts/azure-create-webapp.js
 
+
       - run:
           name: update-github-commit-status
           command: ./.circleci/scripts/update-github-commit-status.js
+
+  test-rest-api:
+    docker:
+      - image: opuscapita/ci-node8:latest
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: bootstrap-packages
+          command: yarn
+
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+      - run:
+          name: test-restapi
+          command: |
+            cd packages/server-nodejs
+            mkdir junit
+            npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
+
+          environment:
+            MOCHA_FILE: junit/test-results.xml
+
+      - store_test_results:
+          path: ~/repo/packages/server-nodejs/junit
+
+      - store_artifacts:
+          path: ~/repo/packages/server-nodejs/junit
 
   azure-maintenance:
     docker:
@@ -87,9 +191,27 @@ workflows:
   commit:
       jobs:
         - build
+        - test-rest-api
+        - approve-publish-release:
+            type: approval
+            requires:
+              - build
+            filters:
+              branches:
+                only:
+                  - master
+        - publish-release:
+            requires:
+              - build
+              - approve-publish-release
+            filters:
+              branches:
+                only:
+                  - master
         - deploy-demo:
             requires:
               - build
+              - test-rest-api
   nightly:
       triggers:
         - schedule:

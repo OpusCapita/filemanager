@@ -4,11 +4,12 @@
 [![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
 [![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
-> **Initial release [v1.0.0](https://github.com/OpusCapita/filemanager/issues/122) is coming. [Stay tuned… :zap:](https://github.com/OpusCapita/filemanager/milestone/1)**
-
 ## [Demo](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
-> Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
+## [React Documentation](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
+
+> Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
+
 
 ### Packages
 
@@ -99,8 +100,8 @@ ReactDOM.render(fileManager, document.body);
 ```
 
 #### [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
-#### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/CODE_OF_CONDUCT.md)
-#### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/CONTRIBUTING.md)
+#### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/.github/CODE_OF_CONDUCT.md)
+#### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/.github/CONTRIBUTING.md)
 
 ### Main contributors
 
