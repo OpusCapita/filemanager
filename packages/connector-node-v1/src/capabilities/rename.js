@@ -6,7 +6,6 @@ import getMess from '../../translations';
 
 let icon = icons.rename;
 let label = 'rename';
-// let label = 'Rename';
 
 function handler(apiOptions, {
   showDialog,
@@ -26,9 +25,7 @@ function handler(apiOptions, {
   const onFail = ({ message }) => onFailError({
     getNotifications,
     label: localeLabel,
-    // label,
     notificationId: label,
-    // notificationId: 'rename',
     updateNotifications,
     message
   });
@@ -46,7 +43,6 @@ function handler(apiOptions, {
         let alreadyExists = resourceChildren.some((o) => o.name === name);
         if (alreadyExists) {
           return `${getMessage('fileExist1')} "${name}" ${getMessage('fileExist2')}`;
-          // return `File or folder with name "${name}" already exists`;
         } else {
           hideDialog();
           let result = await api.renameResource(apiOptions, selectedResources[0].id, name, { onFail });
@@ -57,20 +53,15 @@ function handler(apiOptions, {
       onValidate: async (name) => {
         if (!name) {
           return getMessage('emptyName');
-          // return 'Name can\'t be empty';
         } else if (name.length >= 255) {
           return getMessage('tooLongFolderName');
-          // return 'Folder name can\'t contain more than 255 characters';
         } else if (name.trim() !== sanitizeFilename(name.trim())) {
           return getMessage('folderNameNotAllowedCharacters');
-          // return 'Folder name contains not allowed characters';
         }
         return null;
       },
       headerText: getMessage('newName'),
       submitButtonText: localeLabel
-      // headerText: `New name`,
-      // submitButtonText: `Rename`
     }
   };
   showDialog(rawDialogElement);
@@ -91,10 +82,8 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    // id: 'rename',
     icon: { svg: icon },
     label: localeLabel,
-    // label,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
 
@@ -133,7 +122,6 @@ export default (apiOptions, {
           getNotifications
         }),
         children: localeLabel
-        // children: label
       }
     })
   };

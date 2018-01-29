@@ -5,7 +5,6 @@ import getMess from '../../translations';
 
 let icon = icons.delete;
 let label = 'remove';
-// let label = 'Remove';
 
 function handler(apiOptions, {
   id,
@@ -37,10 +36,8 @@ function handler(apiOptions, {
   let selectedResources = getSelectedResources();
 
   let dialogNameText = getMessage('reallyRemove');
-  // let dialogNameText = `Do you really want to remove\n`;
   let dialogFilesText = selectedResources.length > 1 ?
     `${selectedResources.length} ${getMessage('files')} ?` :
-    // `${selectedResources.length} files ?` :
     `"${selectedResources[0].name}" ?`;
 
   let rawDialogElement = {
@@ -54,8 +51,6 @@ function handler(apiOptions, {
       headerText: dialogNameText + dialogFilesText,
       cancelButtonText: getMessage('cancel'),
       submitButtonText: getMessage('confirm')
-      // cancelButtonText: 'Cancel',
-      // submitButtonText: 'Confirm'
     }
   };
 
@@ -79,7 +74,6 @@ export default (apiOptions, {
     id: 'delete',
     icon: { svg: icon },
     label: localeLabel,
-    // label,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
 
@@ -119,7 +113,6 @@ export default (apiOptions, {
           getNotifications
         }),
         children: localeLabel
-        // children: label
       }
     })
   };

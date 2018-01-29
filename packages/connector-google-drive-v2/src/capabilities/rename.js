@@ -5,7 +5,6 @@ import getMess from '../../translations';
 
 let icon = icons.rename;
 let label = 'rename';
-// let label = 'Rename';
 
 function handler(apiOptions, {
   showDialog,
@@ -32,7 +31,6 @@ function handler(apiOptions, {
         let alreadyExists = resourceChildren.some((o) => o.title === name);
         if (alreadyExists) {
           return `${getMessage('fileExist1')} "${name}" ${getMessage('fileExist2')}`;
-          // return `File or folder with name "${name}" already exists`;
         } else {
           hideDialog();
           let result = await api.renameResource(apiOptions, selectedResources[0].id, name);
@@ -43,20 +41,15 @@ function handler(apiOptions, {
       onValidate: async (name) => {
         if (!name) {
           return getMessage('emptyName');
-          // return 'Name can\'t be empty';
         } else if (name.length >= 255) {
           return getMessage('tooLongName');
-          // return 'Name can\'t contain more than 255 characters';
         } else if (name.trim() !== sanitizeFilename(name.trim())) {
           return getMessage('notAllowedCharacters');
-          // return 'Name contains not allowed characters';
         }
         return null;
       },
       headerText: getMessage('newName'),
       submitButtonText: getMessage(label)
-      // headerText: `New name`,
-      // submitButtonText: `Rename`
     }
   };
 
@@ -78,10 +71,8 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    // id: 'rename',
     icon: { svg: icon },
     label: localeLabel,
-    // label,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
       return (
@@ -119,7 +110,6 @@ export default (apiOptions, {
           getNotifications
         }),
         children: localeLabel
-        // children: label
       }
     })
   };

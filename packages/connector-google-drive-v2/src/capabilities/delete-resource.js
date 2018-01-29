@@ -4,7 +4,6 @@ import getMessage from '../../translations';
 
 let icon = icons.delete;
 let label = 'remove';
-// let label = 'Remove';
 
 function handler(apiOptions, {
   id,
@@ -40,11 +39,7 @@ export default (apiOptions, {
     icon: { svg: icon },
     label: localeLabel,
     title: localeLabel,
-    // label,
-    // title: 'Remove',
     shouldBeAvailable: (apiOptions) => {
-      // let selectedResources = getSelectedResources();
-      // return selectedResources.every(resource => resource.capabilities.canDelete);
       return false;
     },
     availableInContexts: ['row', 'toolbar'],
@@ -77,7 +72,6 @@ export default (apiOptions, {
           getNotifications
         }),
         children: localeLabel
-        // children: label
       }
     })
   };
