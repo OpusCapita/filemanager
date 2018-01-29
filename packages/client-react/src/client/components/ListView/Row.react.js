@@ -115,7 +115,8 @@ class Row extends Component {
             `}
             key={rowData.id}
             role="row"
-            style={style}>
+            style={style}
+          >
             {columns}
           </div>
         )))}
