@@ -5,7 +5,10 @@ import SVG from '@opuscapita/react-svg/lib/SVG';
 import DropdownMenu from '../DropdownMenu';
 import DropdownMenuItem from '../DropdownMenuItem';
 
+import icons from './icons-svg';
+
 const propTypes = {
+  history: PropTypes.array,
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     icon: PropTypes.object,
@@ -19,6 +22,7 @@ const propTypes = {
   newButtonText: PropTypes.string
 };
 const defaultProps = {
+  history: [],
   items: [],
   newButtonItems: []
 };
@@ -108,8 +112,39 @@ class Toolbar extends Component {
       </div>
     );
 
+    let navButtons = (
+      <div className="oc-fm--toolbar__nav-buttons">
+        <button
+          disabled={true}
+          className={`oc-fm--toolbar__item`}
+          title={'Move back'}
+          onClick={() => {}}
+        >
+          <SVG
+            className="oc-fm--toolbar__item-icon"
+            svg={icons.arrowLeftSVG}
+            style={{ fill: '#424242' }}
+          />
+        </button>
+
+        <button
+          disabled={true}
+          className={`oc-fm--toolbar__item`}
+          title={'Move forward'}
+          onClick={() => {}}
+        >
+          <SVG
+            className="oc-fm--toolbar__item-icon"
+            svg={icons.arrowRightSVG}
+            style={{ fill: '#424242' }}
+          />
+        </button>
+      </div>
+    );
+
     return (
       <div className="oc-fm--toolbar">
+        {navButtons}
         {newButtonContainer}
         {itemsElement}
       </div>

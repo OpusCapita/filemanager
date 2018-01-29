@@ -463,6 +463,7 @@ class FileNavigator extends Component {
           <Toolbar
             items={toolbarItems}
             newButtonItems={newButtonItems}
+            history={[]}
           />
         </div>
         <div className="oc-fm--file-navigator__view">
