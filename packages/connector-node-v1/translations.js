@@ -15,6 +15,7 @@ const translations = {
     confirm: 'Confirm',
     folderName: 'Folder name',
     files: 'files',
+    // TODO - add substitutions instead of splitting message in two parts
     fileExist1: 'File or folder with name',
     fileExist2: 'already exists',
     newName: 'New name',
@@ -26,8 +27,8 @@ const translations = {
     fileSize: 'File size',
     lastModified: 'Last modified',
     reallyRemove: `Do you really want to remove\n`,
-    unableReadDir: `Unable to read a directory.`,
-  },
+    unableReadDir: `Unable to read a directory.`
+  }
 };
 
 export default function getMessage(locale, key) {

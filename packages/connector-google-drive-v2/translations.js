@@ -13,6 +13,7 @@ const translations = {
     item: 'item',
     error: 'error',
     folderName: 'Folder name',
+    // TODO - add substitutions instead of splitting message in two parts
     fileExist1: 'File or folder with name',
     fileExist2: 'already exists',
     newName: 'New name',
@@ -26,8 +27,8 @@ const translations = {
     signInSuccess: 'Google Drive sign-in success',
     signInFail: 'Google Drive sign-in fail',
     notInitAPIClient: 'Can\'t init Google API client',
-    successInit: 'Google API client successfully initialized',
-  },
+    successInit: 'Google API client successfully initialized'
+  }
 };
 
 export default function getMessage(locale, key) {
