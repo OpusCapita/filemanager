@@ -316,7 +316,7 @@ class FileNavigator extends Component {
 
   }
 
-  handleViewRef = async (ref) => {
+  handleViewRef = (ref) => {
     this.viewRef = ref;
   }
 
