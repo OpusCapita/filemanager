@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const compression = require('compression');
 const express = require('express');
 const filemanagerMiddleware = require('@opuscapita/filemanager-server').middleware;
 const logger = require('@opuscapita/filemanager-server').logger;
@@ -19,6 +20,7 @@ fs.writeFileSync(
   'window.env = ' + JSON.stringify(env) + ';'
 );
 
+app.use(compression());
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   next();

@@ -2,19 +2,23 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ListView.less';
 import 'react-virtualized/styles.css';
-import { Table, AutoSizer, ColumnSizer, SortDirection } from 'react-virtualized';
+// TBD individual imports from 'react-virtualized' to decrease bundle size?
+// ex. import Table from 'react-virtualized/dist/commonjs/Table'
+import { Table, AutoSizer, SortDirection } from 'react-virtualized';
 import { ContextMenuTrigger } from "react-contextmenu";
 import NoFilesFoundStub from '../NoFilesFoundStub';
 import Row from './Row.react';
 import ScrollOnMouseOut from '../ScrollOnMouseOut';
-import { findIndex, range } from 'lodash';
+import { range } from 'lodash';
 import nanoid from 'nanoid';
 import detectIt from 'detect-it';
 import rawToReactElement from '../raw-to-react-element';
+import WithSelection from './withSelectionHOC';
+import { isDef } from './utils';
 
-const SCROLL_STRENGTH = 80;
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
+const SCROLL_STRENGTH = 80;
 const HAS_TOUCH = detectIt.deviceType === 'hasTouch';
 
 const propTypes = {
@@ -29,8 +33,8 @@ const propTypes = {
   })),
   layout: PropTypes.func,
   layoutOptions: PropTypes.object,
-  loading: PropTypes.bool,
   selection: PropTypes.arrayOf(PropTypes.string),
+  loading: PropTypes.bool,
   sortBy: PropTypes.string,
   sortDirection: PropTypes.string,
   onRowClick: PropTypes.func,
@@ -48,8 +52,8 @@ const defaultProps = {
   items: [],
   layout: () => [],
   layoutOptions: {},
-  loading: false,
   selection: [],
+  loading: false,
   sortBy: 'title',
   sortDirection: SortDirection.ASC,
   onRowClick: () => {},
@@ -64,447 +68,192 @@ const defaultProps = {
 
 export default
 class ListView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      scrollToIndex: 0,
-      clientHeight: 0,
-      scrollTop: 0,
-      scrollHeight: 0
-    };
-
-    this.rangeSelectionStartedAt = null;
-    this.lastSelected = null;
+  state = {
+    scrollToIndex: 0,
+    clientHeight: 0,
+    scrollTop: 0,
+    scrollHeight: 0
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selection.length === 1) {
-      // When FileNavigator navigates to parent dir, this last selected should be rigth
-      this.lastSelected = nextProps.selection[0];
-    }
-
     if (this.props.loading !== nextProps.loading) {
       // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
       this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
     }
   }
 
-  handleSelection(ids) {
-    this.props.onSelection(ids);
-  }
-
-  addToSelection(id) {
-    let index = this.props.selection.indexOf(id);
-    return index === -1 ? this.props.selection.concat([id]) : this.props.selection;
-  }
-
-  removeFromSelection(id) {
-    let index = this.props.selection.indexOf(id);
-    return index === -1 ?
-      this.props.selection :
-      [].
-      concat(this.props.selection.slice(0, index)).
-      concat(this.props.selection.slice(index + 1, this.props.selection.length));
-  }
-
-  selectRange(fromId, toId) {
-    let fromIdIndex = findIndex(this.props.items, (o) => o.id === fromId);
-    let toIdIndex = findIndex(this.props.items, (o) => o.id === toId);
-    let selectionDirection = toIdIndex > fromIdIndex ? 1 : -1;
-    let itemsSlice = selectionDirection === 1 ?
-        this.props.items.slice(fromIdIndex, toIdIndex + 1) :
-        this.props.items.slice(toIdIndex, fromIdIndex + 1);
-
-    let selection = itemsSlice.reduce((ids, item) => ids.concat([item.id]), []);
-
-    return selection;
-  }
-
-  handleRowClick = ({ event, index, rowData}) => {
-    let { selection } = this.props;
-    let { id } = rowData;
-    this.lastSelected = id;
-
-    if (event.ctrlKey || event.metaKey) { // metaKey is for handling "Command" key on MacOS
-      this.rangeSelectionStartedAt = id;
-      this.props.selection.indexOf(rowData.id) !== -1 ?
-        this.handleSelection(this.removeFromSelection(id)) :
-        this.handleSelection(this.addToSelection(id));
-    } else if (event.shiftKey) {
-      this.rangeSelectionStartedAt = this.rangeSelectionStartedAt || (selection.length === 1 && selection[0]);
-      this.handleSelection(this.selectRange(this.rangeSelectionStartedAt, id));
-    } else {
-      this.rangeSelectionStartedAt = null;
-      this.handleSelection([rowData.id]);
-    };
-
-    this.props.onRowClick({ event, index, rowData });
-  }
-
-  handleRowRightClick = ({ event, index, rowData}) => {
-    if (this.props.selection.indexOf(rowData.id) === -1) {
-      this.handleSelection([rowData.id]);
-    }
-
-    this.props.onRowRightClick({ event, index, rowData });
-  }
-
-  handleRowDoubleClick = ({ event, index, rowData }) => {
-    this.props.onRowDoubleClick({ event, index, rowData });
-  }
-
-  handleKeyDown = (e) => {
-    e.preventDefault();
-
-    // Debounce frequent events for performance reasons
-    let keyDownTime = new Date().getTime();
-    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 64)) {
-      return;
-    }
-    this.lastKeyDownTime = keyDownTime;
-
-
-    let { selection, items, onKeyDown } = this.props;
-    this.props.onKeyDown(e);
-
-    if (e.which === 38 && !e.shiftKey) { // Up arrow
-
-      if (!items.length) {
-        return;
-      }
-
-      if (!selection.length) {
-        let selectionData = this.selectLastItem();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-      } else {
-        let selectionData = this.selectPrev();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-      }
-    }
-
-    if (e.which === 40 && !e.shiftKey) { // Down arrow
-      if (!items.length) {
-        return;
-      }
-
-      if (!selection.length) {
-        let selectionData = this.selectFirstItem();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-      } else {
-        let selectionData = this.selectNext();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-      }
-    }
-
-    if (e.which === 38 && e.shiftKey) { // Up arrow holding Shift key
-      if (!items.length) {
-        return;
-      }
-
-      if (!selection.length) {
-        let selectionData = this.selectLastItem();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-        return;
-      }
-
-      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
-      let nextIdIndex = fromIdIndex > 0 ? fromIdIndex - 1 : 0;
-      let nextId = items[nextIdIndex].id;
-      let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
-
-      let selectionData = selectionDirection === -1 ? this.addPrevToSelection() : this.removeLastFromSelection();
-      this.lastSelected = items[selectionData.scrollToIndex].id;
-      this.handleSelection(selectionData.selection);
-      this.scrollToIndex(selectionData.scrollToIndex);
-    }
-
-    if (e.which === 40 && e.shiftKey) { // Down arrow holding Shift key
-      if (!items.length) {
-        return;
-      }
-
-      if (!selection.length) {
-        let selectionData = this.selectFirstItem();
-        this.lastSelected = items[selectionData.scrollToIndex].id;
-        this.handleSelection(selectionData.selection);
-        this.scrollToIndex(selectionData.scrollToIndex);
-        return;
-      }
-
-      let fromIdIndex = findIndex(items, (o) => o.id === this.lastSelected);
-      let nextIdIndex = fromIdIndex + 1 < items.length ? fromIdIndex + 1 : items.length - 1;
-      let nextId = items[nextIdIndex].id;
-      let selectionDirection = selection.indexOf(nextId) === -1 ? -1 : 1;
-
-      let selectionData = selectionDirection === -1 ? this.addNextToSelection() : this.removeFirstFromSelection();
-      this.lastSelected = items[selectionData.scrollToIndex].id;
-      this.handleSelection(selectionData.selection);
-      this.scrollToIndex(selectionData.scrollToIndex);
-    }
-
-    if (e.which === 65 && (e.ctrlKey || e.metaKey)) { // Ctrl + A or Command + A
-      // Select all
-      let { items } = this.props;
-      let allIds = items.map((o) => o.id);
-      this.handleSelection(allIds);
-    }
-
-    if (e.which === 27) { // Esc
-      // Clear selection
-      this.handleSelection([]);
-    }
-
-
-    if (e.which === 33) { // PageUp
-      // Scroll top
-      let { clientHeight, scrollHeight, scrollTop } = this.state;
-      let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
-
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    if (e.which === 34) { // PageDown
-      // Scroll bottom
-      let { clientHeight, scrollHeight, scrollTop } = this.state;
-      let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
-        scrollHeight - clientHeight :
-        scrollTop + SCROLL_STRENGTH;
-
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    if (e.which === 36) { // Home
-      // Scroll to first item
-      let { items } = this.props;
-      let { clientHeight, scrollHeight, scrollTop } = this.state;
-      let newScrollTop = 0;
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    if (e.which === 35) { // End
-      // Scroll to first item
-      let { items } = this.props;
-      let { clientHeight, scrollHeight, scrollTop } = this.state;
-      let newScrollTop = scrollHeight - clientHeight;
-      this.setState({ scrollTop: newScrollTop });
-    }
-
-    this.containerRef.focus(); // XXX fix for loosing focus on key navigation
-  }
-
-  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
-    this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
-    this.setState({ clientHeight, scrollHeight, scrollTop });
-  }
-
-  selectFirstItem = () => ({
-    selection: this.props.items.length ? [this.props.items[0].id] : [],
-    scrollToIndex: 0
-  });
-
-  selectLastItem = () => ({
-    selection: this.props.items.length ? [this.props.items[this.props.items.length - 1].id] : [],
-    scrollToIndex: this.props.items.length - 1
-  });
-
-  clearSelection = () => ({
-    selection: [],
-    scrollToIndex: this.state.scrollToIndex
-  });
-
-  selectNext = () => {
-    let { selection, items } = this.props;
-    let currentId = this.lastSelected;
-    let currentIndex = findIndex(items, (o) => o.id === currentId);
-    let nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
-    let nextId = items[nextIndex].id;
-    return { selection: [nextId], scrollToIndex: nextIndex };
-  }
-
-  selectPrev = () => {
-    let { selection, items } = this.props;
-    let currentId = this.lastSelected;
-    let currentIndex = findIndex(items, (o) => o.id === currentId);
-
-    if (currentIndex <= -1) {
-      // Fix for fast selection updates
-      return { selection, scrollToIndex: 0 };
-    }
-
-    let prevIndex = currentIndex === 0 ? currentIndex : currentIndex - 1;
-    let prevId = items[prevIndex].id;
-    return { selection: [prevId], scrollToIndex: prevIndex };
-  }
-
-  addNextToSelection = () => {
-    let { selection } = this.props;
-    let nextSelectionData = this.selectNext();
-    return {
-      selection: selection.concat(nextSelectionData.selection),
-      scrollToIndex: nextSelectionData.scrollToIndex
-    };
-  }
-
-  addPrevToSelection = () => {
-    let { selection } = this.props;
-    let prevSelectionData = this.selectPrev();
-    return {
-      selection: prevSelectionData.selection.concat(selection),
-      scrollToIndex: prevSelectionData.scrollToIndex
-    };
-  }
-
-  removeLastFromSelection = () => {
-    let { selection, items } = this.props;
-
-    if (selection.length > 1) {
-      let nextSelection = selection.slice(0, selection.length - 1);
-      return {
-        selection: nextSelection,
-        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[nextSelection.length - 1])
-      };
-    } else {
-      return {
-        selection,
-        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
-      };
-    }
-  }
-
-  removeFirstFromSelection = () => {
-    let { selection, items } = this.props;
-
-    if (selection.length > 1) {
-      let nextSelection = selection.slice(1, selection.length);
-      return {
-        selection: nextSelection,
-        scrollToIndex: findIndex(items, (o) => o.id === nextSelection[0])
-      };
-    } else {
-      return {
-        selection,
-        scrollToIndex: findIndex(items, (o) => o.id === selection[0])
-      };
-    }
-  }
-
-  scrollToIndex = (index) => {
+  scrollToIndex = index => {
     this.setState({ scrollToIndex: index });
   }
 
-  handleCursorAbove = (scrollTop) => {
-    this.setState({ scrollTop });
+  handleScrollTop = scrollTop => this.setState({ scrollTop });
+
+  handleScroll = ({ clientHeight, scrollHeight, scrollTop }) => {
+    this.props.onScroll({ clientHeight, scrollHeight, scrollTop });
+    this.setState({
+      ...(isDef(clientHeight) && { clientHeight }),
+      ...(isDef(scrollHeight) && { scrollHeight }),
+      ...(isDef(scrollTop) && { scrollTop })
+    });
   }
 
-  handleCursorBellow = (scrollTop) => {
-    this.setState({ scrollTop });
+  handlePageUp = _ => {
+    const { scrollTop } = this.state;
+    const newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handlePageDown = _ => {
+    const { scrollTop, scrollHeight, clientHeight } = this.state;
+    const newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
+      scrollHeight - clientHeight :
+      scrollTop + SCROLL_STRENGTH;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handleHome = _ => this.handleScrollTop(0);
+
+  handleEnd = _ => {
+    // Scroll to the first item
+    const { clientHeight, scrollHeight } = this.state;
+    const newScrollTop = scrollHeight - clientHeight;
+    this.handleScrollTop(newScrollTop);
+  }
+
+  handleKeyDown = e => {
+    e.preventDefault();
+
+    this.props.onKeyDown(e);
+
+    if (e.which === 33) { // PageUp
+      this.handlePageUp();
+    }
+
+    if (e.which === 34) { // PageDown
+      this.handlePageDown();
+    }
+
+    if (e.which === 36) { // Home
+      this.handleHome();
+    }
+
+    if (e.which === 35) { // End
+      this.handleEnd();
+    }
   }
 
   handleSort = ({ sortBy, sortDirection }) => {
     this.props.onSort({ sortBy, sortDirection });
   }
 
-  handleRef = (ref) => {
-    this.containerRef = ref;
-    this.props.onRef(ref);
+  handleRowDoubleClick = ({ event, index, rowData }) => {
+    this.props.onRowDoubleClick({ event, index, rowData });
+  }
+
+  handleSelection = ({ selection, scrollToIndex }) => {
+    this.props.onSelection(selection);
+    this.scrollToIndex(scrollToIndex)
   }
 
   render() {
-    let {
+    const {
       rowContextMenuId,
       filesViewContextMenuId,
       items,
       layout,
       layoutOptions,
       loading,
-      selection,
-      onSelection,
       sortBy,
       sortDirection
     } = this.props;
 
-    let {
-      scrollToIndex,
+    const {
       clientHeight,
+      scrollTop,
       scrollHeight,
-      scrollTop
+      scrollToIndex
     } = this.state;
-    let { rangeSelectionStartedAt, lastSelected } = this;
 
     let itemsToRender = null;
     if (loading && this.containerHeight) {
       // Generate items for "loading placeholder"
-      let itemsCount = Math.floor(this.containerHeight / ROW_HEIGHT - 1);
-      itemsToRender = range(itemsCount).map((o) => ({}));
+      const itemsCount = Math.floor(this.containerHeight / ROW_HEIGHT - 1);
+      itemsToRender = range(itemsCount).map(_ => ({}));
     } else {
       itemsToRender = items;
-    };
+    }
 
     return (
       <AutoSizer>
         {({ width, height }) => (this.containerHeight = height) && (
-          <div
-            className="oc-fm--list-view"
+
+          <WithSelection
+            items={itemsToRender}
             onKeyDown={this.handleKeyDown}
-            tabIndex="0"
-            ref={this.handleRef}
+            onSelection={this.handleSelection}
+            selection={this.props.selection}
           >
-            <ScrollOnMouseOut
-              onCursorAbove={this.handleCursorAbove}
-              onCursorBellow={this.handleCursorBellow}
-              clientHeight={clientHeight}
-              scrollHeight={scrollHeight}
-              scrollTop={scrollTop}
-              topCaptureOffset={40}
-              bottomCaptureOffset={0}
-              style={{
-                width: `${width}px`,
-                height: `${height}px`
-              }}
-            >
-              <ContextMenuTrigger id={filesViewContextMenuId}  holdToDisplay={HAS_TOUCH ? 1000 : -1}>
-                <Table
-                  width={width}
-                  height={height}
-                  rowCount={itemsToRender.length}
-                  rowGetter={({ index }) => itemsToRender[index]}
-                  rowHeight={ROW_HEIGHT}
-                  headerHeight={HEADER_HEIGHT}
-                  className="oc-fm--list-view__table"
-                  gridClassName="oc-fm--list-view__grid"
-                  overscanRowCount={10}
-                  onScroll={this.handleScroll}
-                  scrollToIndex={scrollToIndex}
-                  scrollTop={scrollTop}
-                  sort={this.handleSort}
-                  sortBy={sortBy}
-                  sortDirection={sortDirection}
-                  rowRenderer={Row({
-                    selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
-                  })}
-                  noRowsRenderer={NoFilesFoundStub}
-                  onRowClick={this.handleRowClick}
-                  onRowRightClick={this.handleRowRightClick}
-                  onRowDoubleClick={this.handleRowDoubleClick}
+            {
+              ({
+                onRowClick,
+                onRowRightClick,
+                selection,
+                lastSelected
+              }) => (
+                <div
+                  className="oc-fm--list-view"
                 >
-                  {layout({ ...layoutOptions, loading, width, height }).map(
-                    (rawLayoutChild, i) => rawToReactElement(rawLayoutChild, i)
-                  )}
-                </Table>
-              </ContextMenuTrigger>
-            </ScrollOnMouseOut>
-            {this.props.children}
-          </div>
+                  <ScrollOnMouseOut
+                    onCursorAbove={this.handleScrollTop}
+                    onCursorBellow={this.handleScrollTop}
+                    clientHeight={clientHeight}
+                    scrollHeight={scrollHeight}
+                    scrollTop={scrollTop}
+                    topCaptureOffset={40}
+                    bottomCaptureOffset={0}
+                    style={{
+                      width: `${width}px`,
+                      height: `${height}px`
+                    }}
+                  >
+                    <ContextMenuTrigger id={filesViewContextMenuId} holdToDisplay={HAS_TOUCH ? 1000 : -1}>
+                      <Table
+                        width={width}
+                        height={height}
+                        rowCount={itemsToRender.length}
+                        rowGetter={({ index }) => itemsToRender[index]}
+                        rowHeight={ROW_HEIGHT}
+                        headerHeight={HEADER_HEIGHT}
+                        className="oc-fm--list-view__table"
+                        gridClassName="oc-fm--list-view__grid"
+                        overscanRowCount={10}
+                        onScroll={this.handleScroll}
+                        scrollToIndex={scrollToIndex}
+                        scrollTop={scrollTop}
+                        sort={this.handleSort}
+                        sortBy={sortBy}
+                        sortDirection={sortDirection}
+                        rowRenderer={Row({
+                          selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
+                        })}
+                        noRowsRenderer={NoFilesFoundStub}
+                        onRowClick={onRowClick}
+                        onRowRightClick={onRowRightClick}
+                        onRowDoubleClick={this.handleRowDoubleClick}
+                      >
+                        {layout({ ...layoutOptions, loading, width, height }).map(
+                          (rawLayoutChild, i) => rawToReactElement(rawLayoutChild, i)
+                        )}
+                      </Table>
+                    </ContextMenuTrigger>
+                  </ScrollOnMouseOut>
+                  {this.props.children}
+                </div>
+              )
+            }
+          </WithSelection>
+
+
         )}
       </AutoSizer>
     );
