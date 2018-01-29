@@ -4,6 +4,7 @@ import { readLocalFile } from './utils/upload';
 import { serializePromises } from './utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
+import getMessage from '../translations';
 
 let signedIn = false;
 
@@ -32,10 +33,12 @@ async function appendGoogleApiScript() {
 
 async function updateSigninStatus(isSignedIn, options) {
   if (isSignedIn) {
-    options.onSignInSuccess('Google Drive sign-in success');
+    options.onSignInSuccess(getMessage(options.locale, 'signInSuccess'));
+    // options.onSignInSuccess('Google Drive sign-in success');
     console.log('Google Drive sign-in Success');
   } else {
-    options.onSignInFail('Google Drive sign-in fail');
+    options.onSignInFail(getMessage(options.locale, 'signInFail'));
+    // options.onSignInFail('Google Drive sign-in fail');
     console.log('Google Drive sign-in fail');
   }
 
@@ -52,12 +55,14 @@ async function initClient(options) {
   });
 
   if (!window.gapi.auth2.getAuthInstance()) {
-    options.onInitFail('Can\'t init Google API client');
+    options.onInitFail(getMessage(options.locale, 'notInitAPIClient'));
+    // options.onInitFail('Can\'t init Google API client');
     console.log('Can\'t init Google API client');
     return;
   }
 
-  options.onInitSuccess('Google API client successfully initialized');
+  options.onInitSuccess(getMessage(options.locale, 'successInit'));
+  // options.onInitSuccess('Google API client successfully initialized');
   // Listen for sign-in state changes.
   window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSigninStatus(isSignedIn, options));
 
@@ -181,15 +186,17 @@ async function downloadResources({ resources, apiOptions, trackers: {
 } }) {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
-    onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
+    onStart({ name: `${getMessage(apiOptions.locale, 'downloading')} ${downloadParams.fileName}...`, quantity: 1 });
+    // onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
     const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
     onSuccess();
     return result;
   }
 
-  const archiveName = apiOptions.archiveName || 'archive.zip'
+  const archiveName = apiOptions.archiveName || 'archive.zip';
 
-  onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
+  onStart({ name: `${getMessage(apiOptions.locale, 'creating')} ${archiveName}...`, quantity: resources.length });
+  // onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
   // multiple resources -> download one by one
   const files = await serializePromises({
@@ -204,7 +211,7 @@ async function downloadResources({ resources, apiOptions, trackers: {
       })
     ),
     onProgress
-  })
+  });
 
   onProgress(100);
 
@@ -212,7 +219,7 @@ async function downloadResources({ resources, apiOptions, trackers: {
   // add generated files to a zip bundle
   files.forEach(({ fileName, file }) => zip.file(fileName, file));
 
-  const blob = await zip.generateAsync({ type: 'blob' })
+  const blob = await zip.generateAsync({ type: 'blob' });
 
   setTimeout(onSuccess, 1000);
 

@@ -5,9 +5,11 @@ import notifUtils from '../utils/notifications';
 import nanoid from 'nanoid';
 import { getIcon } from '../icons';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.fileDownload;
-const label = 'Download';
+const label = 'download';
+// const label = 'Download';
 
 function handler(apiOptions, {
   showDialog,
@@ -21,7 +23,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  const notificationId = 'download';
+  const getMessage = getMess.bind(null, apiOptions.locale);
+
+  const notificationId = label;
+  // const notificationId = 'download';
   const notificationChildId = nanoid();
 
   const onStart = ({ name, quantity }) => {
@@ -41,7 +46,8 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      title: `${getMessage('downloading')} ${quantity} ${quantity > 1 ? getMessage('items') : getMessage('item')}`,
+      // title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
@@ -121,44 +127,50 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'download',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => {
-    const selectedResources = getSelectedResources();
-    return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
-  },
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  availableInContexts: ['row', 'toolbar'],
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+}) => {
+  const localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: label,
+    // id: 'download',
+    icon: { svg: icon },
+    label: localeLabel,
+    // label,
+    shouldBeAvailable: (apiOptions) => {
+      const selectedResources = getSelectedResources();
+      return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
+    },
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    availableInContexts: ['row', 'toolbar'],
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+        // children: label
+      }
+    })
+  };
+}

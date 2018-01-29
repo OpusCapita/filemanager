@@ -1,19 +1,22 @@
 import React from 'react';
 import notifUtils from './notifications';
 import icons from '../icons-svg';
+import getMessage from '../../translations';
 
 export default function onFailErrors({
   getNotifications,
   label,
   notificationId,
   updateNotifications,
-  message
+  message,
+  locale='en' // TODO: Add the locale parameter to the place of a call
 }) {
   const notifications = getNotifications();
   let newNotifications = notifUtils.removeNotification(notifications, notificationId);
 
   const newNotification = {
-    title: message || `${label} error`,
+    title: message || `${label} ${getMessage(locale, 'error')}`,
+    // title: message || `${label} error`,
     minimizable: false,
     closable: true,
     children: [],

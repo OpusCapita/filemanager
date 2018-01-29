@@ -20,7 +20,8 @@ See [FileNavigator documentation and example](http://opuscapita-filemanager-demo
         api={_scope.connectors.nodeV1.api}
         apiOptions={{
           ..._scope.connectors.nodeV1.apiOptions,
-          apiRoot: `${window.env.SERVER_URL}/api`
+          apiRoot: `${window.env.SERVER_URL}/api`,
+          locale: 'en'
         }}
         capabilities={_scope.connectors.nodeV1.capabilities}
         initialResourceId={_scope.state.nodejsInitId}
@@ -42,7 +43,8 @@ See [FileNavigator documentation and example](http://opuscapita-filemanager-demo
           CLIENT_ID: window.env.CLIENT_ID,
           API_KEY: window.env.API_KEY,
           DISCOVERY_DOCS: ['https://www.googleapis.com/discovery/v1/apis/drive/v2/rest'],
-          SCOPES: 'https://www.googleapis.com/auth/drive'
+          SCOPES: 'https://www.googleapis.com/auth/drive',
+          locale: 'de'
         }}
         capabilities={_scope.connectors.googleDriveV2.capabilities}
         initialResourceId="root"

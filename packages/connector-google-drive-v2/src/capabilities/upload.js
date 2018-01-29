@@ -3,9 +3,10 @@ import notifUtils from '../utils/notifications';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
+import getMess from '../../translations';
 
 let icon = icons.fileUpload;
-let label = 'Upload';
+let label = 'upload';
 
 function handler(apiOptions, {
   showDialog,
@@ -19,8 +20,9 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let notificationId = 'upload';
+  let notificationId = label;
   let notificationChildId = nanoid();
+  let getMessage = getMess.bind(null, apiOptions.locale);
 
   let onStart = ({ name, size }) => {
     let notifications = getNotifications();
@@ -36,7 +38,7 @@ function handler(apiOptions, {
 
     let newChildren = notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
-      title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
+      title: `${getMessage('uploading')} ${newChildren.length} ${newChildren.length > 1 ? getMessage('items') : getMessage('item')}`,
       children: newChildren
       // progressText: `2 minutes left…`, // TODO
       // cancelButtonText: "Cancel",
@@ -107,41 +109,44 @@ export default (apiOptions, {
   getResourceChildren,
   getResourceLocation,
   getNotifications
-}) => ({
-  id: 'upload',
-  icon: { svg: icon },
-  label,
-  shouldBeAvailable: (apiOptions) => true,
-  availableInContexts: ['files-view', 'new-button'],
-  handler: () => handler(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  contextMenuRenderer: (apiOptions) => ({
-    elementType: 'ContextMenuItem',
-    elementProps: {
-      icon: { svg: icon },
-      onClick: () => handler(apiOptions, {
-        showDialog,
-        hideDialog,
-        navigateToDir,
-        updateNotifications,
-        getSelection,
-        getSelectedResources,
-        getResource,
-        getResourceChildren,
-        getResourceLocation,
-        getNotifications
-      }),
-      children: label
-    }
-  })
-});
+}) => {
+  const localeLabel = getMess(apiOptions.locale, label);
+  return {
+    id: label,
+    icon: { svg: icon },
+    label: localeLabel,
+    shouldBeAvailable: (apiOptions) => true,
+    availableInContexts: ['files-view', 'new-button'],
+    handler: () => handler(apiOptions, {
+      showDialog,
+      hideDialog,
+      navigateToDir,
+      updateNotifications,
+      getSelection,
+      getSelectedResources,
+      getResource,
+      getResourceChildren,
+      getResourceLocation,
+      getNotifications
+    }),
+    contextMenuRenderer: (apiOptions) => ({
+      elementType: 'ContextMenuItem',
+      elementProps: {
+        icon: { svg: icon },
+        onClick: () => handler(apiOptions, {
+          showDialog,
+          hideDialog,
+          navigateToDir,
+          updateNotifications,
+          getSelection,
+          getSelectedResources,
+          getResource,
+          getResourceChildren,
+          getResourceLocation,
+          getNotifications
+        }),
+        children: localeLabel
+      }
+    })
+  };
+}

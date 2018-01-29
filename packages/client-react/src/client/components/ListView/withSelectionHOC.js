@@ -196,15 +196,10 @@ export default class WithSelection extends PureComponent {
       // Clear selection
       this.handleSelection({ selection: [] });
     }
-
-    if (this.containerRef) {
-      this.containerRef.focus(); // XXX fix for loosing focus on key navigation
-    }
   }
 
   // ref to wrapped container
   handleRef = ref => {
-    this.containerRef = ref;
     this.props.onRef(ref);
   }
 

@@ -163,6 +163,7 @@ class ListView extends Component {
       layout,
       layoutOptions,
       loading,
+      onRef,
       sortBy,
       sortDirection
     } = this.props;
@@ -192,6 +193,7 @@ class ListView extends Component {
             onKeyDown={this.handleKeyDown}
             onSelection={this.handleSelection}
             selection={this.props.selection}
+            onRef={onRef}
           >
             {
               ({
