@@ -13,7 +13,6 @@ const translations = {
     item: 'item',
     error: 'error',
     folderName: 'Folder name',
-    // TODO - add substitutions instead of splitting message in two parts
     fileExist: 'File or folder with name {name} already exists',
     newName: 'New name',
     emptyName: 'Name can\'t be empty',

@@ -15,7 +15,6 @@ const translations = {
     confirm: 'Confirm',
     folderName: 'Folder name',
     files: 'files',
-    // TODO - add substitutions instead of splitting message in two parts
     fileExist: 'File or folder with name {name} already exists',
     newName: 'New name',
     emptyName: 'Name can\'t be empty',
