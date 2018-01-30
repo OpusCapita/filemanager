@@ -402,8 +402,6 @@ class FileNavigator extends Component {
 
     let viewLoadingElement = null;
 
-    console.log('history', history);
-
     if (!apiInitialized) {
       viewLoadingElement = 'Problems with server connection';
     }
