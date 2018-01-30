@@ -32,11 +32,11 @@ let plugins = [
   new LodashModuleReplacementPlugin()
 ];
 
-if(IS_LINK_MODE) {
+if (IS_LINK_MODE) {
   plugins.push(new WriteFilePlugin());
 }
 
-if(WEBPACK_BUNDLE_ANALYZE && IS_PRODUCTION_MODE) {
+if (WEBPACK_BUNDLE_ANALYZE && IS_PRODUCTION_MODE) {
   let bundleAnalyzerPlugin = new BundleAnalyzerPlugin({
     analyzerMode: 'static',
     analyzerHost: '127.0.0.1',
