@@ -119,7 +119,6 @@ jobs:
           command: |
             ./.circleci/scripts/azure-create-webapp.js
 
-
       - run:
           name: update-github-commit-status
           command: ./.circleci/scripts/update-github-commit-status.js
