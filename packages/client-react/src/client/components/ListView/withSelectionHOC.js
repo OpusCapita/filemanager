@@ -101,7 +101,7 @@ export default class WithSelection extends PureComponent {
 
     // Debounce frequent events for performance reasons
     const keyDownTime = new Date().getTime();
-    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 64)) {
+    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 128)) {
       return;
     }
     this.lastKeyDownTime = keyDownTime;
