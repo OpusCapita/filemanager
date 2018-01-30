@@ -101,7 +101,7 @@ export default class WithSelection extends PureComponent {
 
     // Debounce frequent events for performance reasons
     const keyDownTime = new Date().getTime();
-    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 64)) {
+    if (this.lastKeyDownTime && (keyDownTime - this.lastKeyDownTime < 128)) {
       return;
     }
     this.lastKeyDownTime = keyDownTime;
@@ -196,10 +196,15 @@ export default class WithSelection extends PureComponent {
       // Clear selection
       this.handleSelection({ selection: [] });
     }
+
+    if (this.ref) {
+      this.ref.focus(); // XXX fix for loosing focus on key navigation
+    }
   }
 
   // ref to wrapped container
   handleRef = ref => {
+    this.ref = ref;
     this.props.onRef(ref);
   }
 

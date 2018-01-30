@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/filemanager-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -31,8 +31,8 @@
     "winston": "3.0.0-rc0"
   },
   "devDependencies": {
-    "cross-env": "5.0.1",
     "babel-eslint": "7.1.1",
+    "cross-env": "5.0.1",
     "eslint": "3.17.0",
     "eslint-config-opuscapita": "1.0.7",
     "eslint-plugin-react": "6.10.0",
