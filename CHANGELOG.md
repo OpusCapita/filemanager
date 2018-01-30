@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.0.2](https://github.com/OpusCapita/filemanager/tree/v1.0.2) (2018-01-30)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.1...v1.0.2)
+
+**Implemented enhancements:**
+
+- Add "Move back" and "Move forward" toolbar buttons [\#148](https://github.com/OpusCapita/filemanager/issues/148)
+- Add gzip compression for a demo installation [\#145](https://github.com/OpusCapita/filemanager/issues/145)
+
+**Closed issues:**
+
+- Place all GitHub-related files to .github directory [\#144](https://github.com/OpusCapita/filemanager/issues/144)
+- Extract ListView "selection"-related functions to separate file and write tests [\#131](https://github.com/OpusCapita/filemanager/issues/131)
+
+**Merged pull requests:**
+
+- \#148 Add "Move back" and "Move forward" toolbar buttons \(\#149\) [\#149](https://github.com/OpusCapita/filemanager/pull/149) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+- \(\#103\)Add REST-API tests to build-process  [\#147](https://github.com/OpusCapita/filemanager/pull/147) ([abaliunov-sc](https://github.com/abaliunov-sc))
+- Fixes \#145 - Add gzip compression for a demo installation [\#146](https://github.com/OpusCapita/filemanager/pull/146) ([kvolkovich-sc](https://github.com/kvolkovich-sc))
+- Add translations to filemanager \(Issue-\#29\) [\#143](https://github.com/OpusCapita/filemanager/pull/143) ([abaliunov-sc](https://github.com/abaliunov-sc))
+- Moved ListView keyboard listeners to a separate HOC [\#134](https://github.com/OpusCapita/filemanager/pull/134) ([estambakio-sc](https://github.com/estambakio-sc))
+
 ## [v1.0.1](https://github.com/OpusCapita/filemanager/tree/v1.0.1) (2018-01-16)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.13...v1.0.1)
 
