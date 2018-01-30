@@ -29,6 +29,7 @@ function handler(apiOptions, {
       onSubmit: async (folderName) => {
         let resource = getResource();
         let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id });
+
         let alreadyExists = resourceChildren.some((o) => o.title === folderName);
         if (alreadyExists) {
           return `${getMessage('fileExist1')} "${folderName}" ${getMessage('fileExist2')}`;
