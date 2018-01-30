@@ -75,7 +75,6 @@ function handler(apiOptions, {
   const onFail = _ => onFailError({
     getNotifications,
     label: getMessage(label),
-    // label,
     notificationId,
     updateNotifications
   });

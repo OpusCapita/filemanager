@@ -14,8 +14,7 @@ const translations = {
     error: 'error',
     folderName: 'Folder name',
     // TODO - add substitutions instead of splitting message in two parts
-    fileExist1: 'File or folder with name',
-    fileExist2: 'already exists',
+    fileExist: 'File or folder with name {name} already exists',
     newName: 'New name',
     emptyName: 'Name can\'t be empty',
     tooLongName: 'Name can\'t contain more than 255 characters',
@@ -31,12 +30,18 @@ const translations = {
   }
 };
 
-export default function getMessage(locale, key) {
+export default function getMessage(locale, key, params=null) {
   let translationExists = (translations[locale] && translations[locale][key]);
-
-  if (!translationExists) {
-    return translations['en'][key];
+  let translation = translationExists ? translations[locale][key] : translations['en'][key];
+  if (params === null) {
+    return translation;
   }
 
-  return translations[locale][key];
+  let re = /{\w+}/g;
+  function replace(match) {
+    let replacement = match.slice(1, -1);
+    return params[replacement] ? params[replacement] : '';
+  }
+
+  return translation.replace(re, replace);
 }
