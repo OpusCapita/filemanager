@@ -44,7 +44,8 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `${getMessage('downloading')} ${quantity} ${quantity > 1 ? getMessage('items') : getMessage('item')}`,
+      title: quantity > 1 ? getMessage('downloadingItems', { quantity }) : getMessage('downloadingItem'),
+      // title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 

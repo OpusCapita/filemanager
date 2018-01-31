@@ -182,7 +182,8 @@ async function downloadResources({ resources, apiOptions, trackers: {
 } }) {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
-    onStart({ name: `${getMessage(apiOptions.locale, 'downloading')} ${downloadParams.fileName}...`, quantity: 1 });
+    onStart({ name: getMessage(apiOptions.locale, 'downloadingName', { name: downloadParams.fileName }), quantity: 1 });
+    // onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
     const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
     onSuccess();
     return result;
