@@ -42,7 +42,10 @@ function handler(apiOptions, {
     let newChildren =
       notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
-      title: `${getMessage('uploading')} ${newChildren.length} ${newChildren.length > 1 ? getMessage('items') : getMessage('item')}`,
+      title: newChildren.length > 1 ?
+        getMessage('uploadingItems', { quantity: newChildren.length }) :
+        getMessage('uploadingItem'),
+      // title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 

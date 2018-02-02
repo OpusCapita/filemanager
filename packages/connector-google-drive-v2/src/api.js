@@ -191,7 +191,8 @@ async function downloadResources({ resources, apiOptions, trackers: {
 
   const archiveName = apiOptions.archiveName || 'archive.zip';
 
-  onStart({ name: `${getMessage(apiOptions.locale, 'creating')} ${archiveName}...`, quantity: resources.length });
+  onStart({ name: getMessage(apiOptions.locale, 'creatingName', { name: archiveName }), quantity: resources.length });
+  // onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
   // multiple resources -> download one by one
   const files = await serializePromises({

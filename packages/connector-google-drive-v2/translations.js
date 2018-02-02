@@ -5,13 +5,13 @@ const translations = {
     uploadingItems: 'Uploading {quantity} items', // en
     upload: 'Upload',
     remove: 'Remove',
-    downloading: 'Downloading', // en
     downloadingName: 'Downloading {name}...', // en
     downloadingItem: 'Downloading 1 item', // en
     downloadingItems: 'Downloading {quantity} items', // en
     download: 'Download',
     rename: 'Rename',
     creating: 'Creating',
+    creatingName: 'Creating {name}...', // en
     create: 'Create',
     createFolder: 'Create folder',
     items: 'items',
@@ -39,7 +39,6 @@ const translations = {
     uploadingItems: 'Uploading {quantity} items', // en
     upload: 'Hochladen',
     remove: 'Löschen',
-    downloading: 'Downloading', // en
     downloadingName: 'Downloading {name}...', // en
     downloadingItem: 'Downloading 1 item', // en
     downloadingItems: 'Downloading {quantity} items', // en
@@ -48,6 +47,7 @@ const translations = {
     creating: 'Wird erstellt',
     create: 'Erstellen',
     createFolder: 'Verzeichnis erstellen',
+    creatingName: 'Creating {name}...', // en
     items: 'Elemente',
     item: 'Element',
     error: 'error', // en
@@ -66,6 +66,26 @@ const translations = {
     notInitAPIClient: 'Can\'t init Google API client', // en
     successInit: 'Google API client successfully initialized', // en
   },
+
+  // need: {
+  //   creatingName: 'Creating {name}...',
+  //   doNotRespectBill: 'We too do not respect Bill',
+  //   downloadingItem: 'Downloading 1 item',
+  //   downloadingItems: 'Downloading {quantity} items',
+  //   downloadingName: 'Downloading {name}...',
+  //   error: 'error',
+  //   fileExist: 'File or folder with name {name} already exists',
+  //   notAllowedCharacters: 'Name contains not allowed characters',
+  //   notInitAPIClient: 'Can\'t init Google API client',
+  //   signInFail: 'Google Drive sign-in fail',
+  //   signInSuccess: 'Google Drive sign-in success',
+  //   successInit: 'Google API client successfully initialized',
+  //   tooLongName: 'Name can\'t contain more than 255 characters',
+  //   uploadingItem: 'Uploading 1 item',
+  //   uploadingItems: 'Uploading {quantity} items',
+  //   zippingItem: 'Zipping 1 item',
+  //   zippingItems: 'Zipping {quantity} items'
+  // },
 };
 
 export default function getMessage(locale, key, params=null) {
