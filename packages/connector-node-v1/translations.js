@@ -1,26 +1,26 @@
 const translations = {
   en: {
     uploading: 'Uploading',
-    uploadingItem: 'Uploading 1 item', // en
-    uploadingItems: 'Uploading {quantity} items', // en
+    uploadingItem: 'Uploading 1 item',
+    uploadingItems: 'Uploading {quantity} items',
     upload: 'Upload',
     remove: 'Remove',
     download: 'Download',
     rename: 'Rename',
     creating: 'Creating',
-    creatingName: 'Creating {name}...', // en
+    creatingName: 'Creating {name}...',
     create: 'Create',
     createFolder: 'Create folder',
     zipping: 'Zipping',
-    zippingItem: 'Zipping 1 item', // en
-    zippingItems: 'Zipping {quantity} items', // en
+    zippingItem: 'Zipping 1 item',
+    zippingItems: 'Zipping {quantity} items',
     items: 'items',
     item: 'item',
     cancel: 'Cancel',
     confirm: 'Confirm',
     folderName: 'Folder name',
     files: 'files',
-    fileExist: 'File or folder with name {name} already exists', // en
+    fileExist: 'File or folder with name {name} already exists',
     newName: 'New name',
     emptyName: 'Name can\'t be empty',
     tooLongFolderName: 'Folder name can\'t contain more than 255 characters',
@@ -34,14 +34,14 @@ const translations = {
 
   de: {
     uploading: 'Wird hochgeladen',
-    uploadingItem: 'Uploading 1 item', // en
-    uploadingItems: 'Uploading {quantity} items', // en
+    uploadingItem: '1 Element wird geladen',
+    uploadingItems: '{quantity} Elemente werden geladen',
     upload: 'Hochladen',
     remove: 'Löschen',
     download: 'Herunterladen',
     rename: 'Umbenennen',
     creating: 'Wird erstellt',
-    creatingName: 'Creating {name}...', // en
+    creatingName: '{name} wird angelegt...',
     create: 'Erstellen',
     createFolder: 'Verzeichnis erstellen',
     zipping: 'Zippen',
@@ -61,7 +61,7 @@ const translations = {
     lastModified: 'Zuletzt geändert',
     reallyRemove: ' wird/werden gelöscht. Möchten Sie wirklich fortfahren?',
     unableReadDir: 'Ein Directory kann nicht gelesen werden.'
-  }
+  },
 };
 
 export default function getMessage(locale, key, params=null) {

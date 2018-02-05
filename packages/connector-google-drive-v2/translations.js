@@ -1,91 +1,71 @@
 const translations = {
   en: {
     uploading: 'Uploading',
-    uploadingItem: 'Uploading 1 item', // en
-    uploadingItems: 'Uploading {quantity} items', // en
+    uploadingItem: 'Uploading 1 item',
+    uploadingItems: 'Uploading {quantity} items',
     upload: 'Upload',
     remove: 'Remove',
-    downloadingName: 'Downloading {name}...', // en
-    downloadingItem: 'Downloading 1 item', // en
-    downloadingItems: 'Downloading {quantity} items', // en
+    downloadingName: 'Downloading {name}...',
+    downloadingItem: 'Downloading 1 item',
+    downloadingItems: 'Downloading {quantity} items',
     download: 'Download',
     rename: 'Rename',
     creating: 'Creating',
-    creatingName: 'Creating {name}...', // en
+    creatingName: 'Creating {name}...',
     create: 'Create',
     createFolder: 'Create folder',
     items: 'items',
     item: 'item',
-    error: 'error', // en
+    error: 'error',
     folderName: 'Folder name',
     fileExist: 'File or folder with name {name} already exists',
     newName: 'New name',
     emptyName: 'Name can\'t be empty',
-    tooLongName: 'Name can\'t contain more than 255 characters', // en
-    notAllowedCharacters: 'Name contains not allowed characters', // en
+    tooLongName: 'Name can\'t contain more than 255 characters',
+    notAllowedCharacters: 'Name contains not allowed characters',
     doNotRespectBill: 'We too do not respect Bill', // en
     title: 'Title',
     fileSize: 'File size',
     lastModified: 'Last modified',
-    signInSuccess: 'Google Drive sign-in success', // en
-    signInFail: 'Google Drive sign-in fail', // en
-    notInitAPIClient: 'Can\'t init Google API client', // en
-    successInit: 'Google API client successfully initialized', // en
+    signInSuccess: 'Google Drive sign-in was successful',
+    signInFail: 'Google Drive sign-in failed',
+    notInitAPIClient: 'Google API client cannot be initialized',
+    successInit: 'Google API client successfully initialized',
   },
 
   de: {
     uploading: 'Wird hochgeladen',
-    uploadingItem: 'Uploading 1 item', // en
-    uploadingItems: 'Uploading {quantity} items', // en
+    uploadingItem: '1 Element wird geladen',
+    uploadingItems: '{quantity} Elemente werden geladen',
     upload: 'Hochladen',
     remove: 'Löschen',
-    downloadingName: 'Downloading {name}...', // en
-    downloadingItem: 'Downloading 1 item', // en
-    downloadingItems: 'Downloading {quantity} items', // en
+    downloadingName: '{name} wird hochgeladen...',
+    downloadingItem: '1 Element wird hochgeladen',
+    downloadingItems: '{quantity} Elemente werden hochgeladen',
     download: 'Herunterladen',
     rename: 'Umbenennen',
     creating: 'Wird erstellt',
     create: 'Erstellen',
     createFolder: 'Verzeichnis erstellen',
-    creatingName: 'Creating {name}...', // en
+    creatingName: '{name} wird angelegt...',
     items: 'Elemente',
     item: 'Element',
-    error: 'error', // en
+    error: 'Fehler',
     folderName: ' Verzeichnisname',
     fileExist: 'Die Datei oder Verzeichnis mit dem Namen {name} existiert bereits',
     newName: 'Neuer Name',
     emptyName: 'Der Name darf nicht leer sein',
-    tooLongName: 'Name can\'t contain more than 255 characters', // en
-    notAllowedCharacters: 'Name contains not allowed characters', // en
+    tooLongName: 'Der Verzeichnisname darf nicht mehr als 255 Symbole enthalten',
+    notAllowedCharacters: 'Der Name des Verzeichnisses enthält nicht erlaubte Zeichen',
     doNotRespectBill: 'We too do not respect Bill', // en
     title: 'Titel',
     fileSize: 'Dateigröße',
     lastModified: 'Zuletzt geändert',
-    signInSuccess: 'Google Drive sign-in success', // en
-    signInFail: 'Google Drive sign-in fail', // en
-    notInitAPIClient: 'Can\'t init Google API client', // en
-    successInit: 'Google API client successfully initialized', // en
+    signInSuccess: 'Google Drive-Anmeldung erfolgreich',
+    signInFail: 'Google Drive-Anmeldung fehlgeschlagen',
+    notInitAPIClient: 'Google API-Client konnte nicht initialisiert werden',
+    successInit: 'Google API-Client wurde erfolgreich initialisiert',
   },
-
-  // need: {
-  //   creatingName: 'Creating {name}...',
-  //   doNotRespectBill: 'We too do not respect Bill',
-  //   downloadingItem: 'Downloading 1 item',
-  //   downloadingItems: 'Downloading {quantity} items',
-  //   downloadingName: 'Downloading {name}...',
-  //   error: 'error',
-  //   fileExist: 'File or folder with name {name} already exists',
-  //   notAllowedCharacters: 'Name contains not allowed characters',
-  //   notInitAPIClient: 'Can\'t init Google API client',
-  //   signInFail: 'Google Drive sign-in fail',
-  //   signInSuccess: 'Google Drive sign-in success',
-  //   successInit: 'Google API client successfully initialized',
-  //   tooLongName: 'Name can\'t contain more than 255 characters',
-  //   uploadingItem: 'Uploading 1 item',
-  //   uploadingItems: 'Uploading {quantity} items',
-  //   zippingItem: 'Zipping 1 item',
-  //   zippingItems: 'Zipping {quantity} items'
-  // },
 };
 
 export default function getMessage(locale, key, params=null) {
