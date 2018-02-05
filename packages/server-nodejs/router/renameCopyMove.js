@@ -8,7 +8,7 @@ const getClientIp = require('../utils/get-client-ip');
 const {
   checkName,
   id2path,
-  stat2resource
+  getResource
 } = require('./lib');
 
 const MAX_RETRIES = 3;
@@ -141,11 +141,11 @@ module.exports = ({
       )
     );
   }(MAX_RETRIES)).
-    then(_ => fs.stat(path.join(targetAbsPath, basename))).
-    then(stat => stat2resource(options, {  // stat2resource must be called _after_ promise resolution!
-      dir: targetRelativePath,
+    then(_ => getResource({
+      options,
+      parent: targetRelativePath,
       basename
-    })(stat)).
+    })).
     then(resource => res.json(resource)).
     catch(handleError);
 };

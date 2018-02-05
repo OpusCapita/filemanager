@@ -182,7 +182,7 @@ describe('Rename resources', () => {
       done();
     }).
     catch(err => {
-     done(err);
+      done(err);
     });
   });
 

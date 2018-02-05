@@ -11,5 +11,3 @@ require('babel-register')({
     'lodash'
   ]
 });
-
-var chai = require('chai');

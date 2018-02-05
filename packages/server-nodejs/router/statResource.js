@@ -1,10 +1,9 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs-extra');
-const getClientIp = require('../utils/get-client-ip');
 
-const { stat2resource } = require('./lib');
+const getClientIp = require('../utils/get-client-ip');
+const { getResource } = require('./lib');
 
 module.exports = ({
   options,
@@ -13,11 +12,12 @@ module.exports = ({
   handleError,
   path: userPath
 }) => {
-  const absPath = path.join(options.fsRoot, userPath);
-  options.logger.info(`Stat for ${absPath} requested by ${getClientIp(req)}`);
+  options.logger.info(`Stat for ${path.join(options.fsRoot, userPath)} requested by ${getClientIp(req)}`);
 
-  fs.stat(absPath).
-    then(stat2resource(options, userPath)).
+  getResource({
+    options,
+    path: userPath
+  }).
     then(resource => res.json(resource)).
     catch(handleError);
 };
