@@ -18,10 +18,10 @@ class Dialog extends Component {
       e.stopPropagation();
       this.props.onHide();
     }
-  }
+  };
 
   render() {
-    let { onHide, autofocus } = this.props;
+    let { autofocus } = this.props;
 
     return (
       <div

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import './ContextMenu.less';
 import { ContextMenu as Menu } from "react-contextmenu";
 import rawToReactElement from '../raw-to-react-element';

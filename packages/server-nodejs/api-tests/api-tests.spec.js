@@ -16,7 +16,6 @@ let workChildrenSize = 0;
 let changedWorkChildDirId = '';
 
 let changedFileId = '';
-let changedFileName = '';
 
 let newDirName = '';
 let newDirId = '';
@@ -182,7 +181,7 @@ describe('Rename resources', () => {
       done();
     }).
     catch(err => {
-     done(err);
+      done(err);
     });
   });
 
@@ -267,7 +266,6 @@ describe('Rename resources', () => {
       expect(jsonData.type).to.equal("file");
 
       changedFileId = jsonData.id;
-      changedFileName = jsonData.name;
 
       done();
     }).

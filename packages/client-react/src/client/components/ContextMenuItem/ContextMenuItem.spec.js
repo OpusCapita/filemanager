@@ -1,7 +1,7 @@
-import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import ContextMenuItem from '.';
+import React from 'react'; // eslint-disable-line
+import { expect } from 'chai'; // eslint-disable-line
+import { shallow } from 'enzyme'; // eslint-disable-line
+import ContextMenuItem from '.'; // eslint-disable-line
 
 describe('<ContextMenuItem />', () => {
   /* Recommended test-cases

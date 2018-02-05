@@ -1,12 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import './NoFilesFoundStub.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 let nothingToShowIcon = require('@opuscapita/svg-icons/lib/add_to_photos.svg');
 
 export default () => (
   <div className="oc-fm--no-files-found-stub">
-    <SVG
+    <Svg
       className="oc-fm--no-files-found-stub__icon"
       svg={nothingToShowIcon}
     />

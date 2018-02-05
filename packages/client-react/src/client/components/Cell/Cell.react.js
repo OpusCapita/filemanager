@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import './Cell.less';
 import LoadingCell from '../LoadingCell';
 

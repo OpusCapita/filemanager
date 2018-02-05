@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './DropdownMenuItem.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 
 const propTypes = {
   icon: PropTypes.shape({
@@ -19,12 +19,12 @@ class DropdownMenuItem extends Component {
     let { icon, children, ...restProps } = this.props;
 
     let iconElement = icon ? (
-      <SVG
+      <Svg
         className="oc-fm--dropdown-menu-item__icon"
         svg={icon.svg}
         style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }}
       />
-    ): null;
+    ) : null;
 
     return (
       <div className="oc-fm--dropdown-menu-item" {...restProps}>

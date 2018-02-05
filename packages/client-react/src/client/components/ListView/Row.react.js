@@ -10,7 +10,7 @@ const RowDragSource = {
   canDrag(props) {
     // You can disallow drag based on props
     return true;
-    return props.isReady;
+    // return props.isReady;
   },
 
   isDragging(props, monitor) {
@@ -29,8 +29,8 @@ const RowDragSource = {
       return;
     }
 
-    const item = monitor.getItem();
-    const dropResult = monitor.getDropResult();
+    const item = monitor.getItem(); // eslint-disable-line
+    const dropResult = monitor.getDropResult(); // eslint-disable-line
   }
 };
 
@@ -45,6 +45,7 @@ function collect(connect, monitor) {
 @DragSource('filemanager-resource', RowDragSource, collect)
 class Row extends Component {
   render() {
+    /* eslint-disable */
     let {
       className,
       columns,
@@ -65,6 +66,7 @@ class Row extends Component {
       contextMenuId,
       hasTouch
     } = this.props;
+    /* eslint-enable */
 
     const a11yProps = {};
 
@@ -79,21 +81,21 @@ class Row extends Component {
       a11yProps.tabIndex = 0;
 
       if (onRowClick) {
-        a11yProps.onClick = event => onRowClick({event, index, rowData});
+        a11yProps.onClick = event => onRowClick({ event, index, rowData });
       }
       if (onRowDoubleClick) {
         a11yProps.onDoubleClick = event =>
-          onRowDoubleClick({event, index, rowData});
+          onRowDoubleClick({ event, index, rowData });
       }
       if (onRowMouseOut) {
-        a11yProps.onMouseOut = event => onRowMouseOut({event, index, rowData});
+        a11yProps.onMouseOut = event => onRowMouseOut({ event, index, rowData });
       }
       if (onRowMouseOver) {
-        a11yProps.onMouseOver = event => onRowMouseOver({event, index, rowData});
+        a11yProps.onMouseOver = event => onRowMouseOver({ event, index, rowData });
       }
       if (onRowRightClick) {
         a11yProps.onContextMenu = event =>
-          onRowRightClick({event, index, rowData});
+          onRowRightClick({ event, index, rowData });
       }
     }
 
@@ -123,7 +125,7 @@ class Row extends Component {
       </ContextMenuTrigger>
     );
   }
-};
+}
 
 export default ({ selection, lastSelected, loading, contextMenuId }) => (props) => (
   <Row

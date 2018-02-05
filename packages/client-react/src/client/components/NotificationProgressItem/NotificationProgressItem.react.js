@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './NotificationProgressItem.less';
 import ProgressIcon from '../ProgressIcon';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 
 const propTypes = {
   icon: PropTypes.shape({ svg: PropTypes.string, fill: PropTypes.string }),
@@ -26,12 +26,11 @@ class NotificationProgressItem extends Component {
       icon,
       title,
       progress,
-      onClick
     } = this.props;
 
     let iconElement = icon ? (
       <div className="oc-fm--notification-progress-item__icon">
-        <SVG svg={icon.svg} style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }} />
+        <Svg svg={icon.svg} style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }} />
       </div>
     ) : null;
 
