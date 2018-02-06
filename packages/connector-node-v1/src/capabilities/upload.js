@@ -45,7 +45,6 @@ function handler(apiOptions, {
       title: newChildren.length > 1 ?
         getMessage('uploadingItems', { quantity: newChildren.length }) :
         getMessage('uploadingItem'),
-      // title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 

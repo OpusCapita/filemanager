@@ -34,7 +34,6 @@ function handler(apiOptions, {
       elementType: 'NotificationProgressItem',
       elementProps: {
         title: getMessage('creatingName', { name: archiveName }),
-        // title: `Creating ${archiveName}...`,
         progress: 0
       }
     };
@@ -44,7 +43,6 @@ function handler(apiOptions, {
     );
     const newNotification = {
       title: quantity > 1 ? getMessage('zippingItems', { quantity }) : getMessage('zippingItem'),
-      // title: `Zipping ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 

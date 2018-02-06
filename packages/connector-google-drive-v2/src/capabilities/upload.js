@@ -39,7 +39,6 @@ function handler(apiOptions, {
     let newChildren = notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
       title: newChildren.length > 1 ? getMessage('uploadingItems', { quantity: newChildren.length }) : getMessage('uploadingItem'),
-      // title: `Uploading ${newChildren.length} ${newChildren.length > 1 ? 'items' : 'item'}`,
       children: newChildren
       // progressText: `2 minutes left…`, // TODO
       // cancelButtonText: "Cancel",

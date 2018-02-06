@@ -183,7 +183,6 @@ async function downloadResources({ resources, apiOptions, trackers: {
   if (resources.length === 1) {
     const downloadParams = getDownloadParams(resources[0]);
     onStart({ name: getMessage(apiOptions.locale, 'downloadingName', { name: downloadParams.fileName }), quantity: 1 });
-    // onStart({ name: `Downloading ${downloadParams.fileName}...`, quantity: 1 });
     const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
     onSuccess();
     return result;
@@ -192,7 +191,6 @@ async function downloadResources({ resources, apiOptions, trackers: {
   const archiveName = apiOptions.archiveName || 'archive.zip';
 
   onStart({ name: getMessage(apiOptions.locale, 'creatingName', { name: archiveName }), quantity: resources.length });
-  // onStart({ name: `Creating ${archiveName}...`, quantity: resources.length });
 
   // multiple resources -> download one by one
   const files = await serializePromises({

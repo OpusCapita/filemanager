@@ -45,7 +45,6 @@ function handler(apiOptions, {
     );
     const newNotification = {
       title: quantity > 1 ? getMessage('downloadingItems', { quantity }) : getMessage('downloadingItem'),
-      // title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
       children: newChildren
     };
 
