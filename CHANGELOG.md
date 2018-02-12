@@ -1,16 +1,27 @@
 # Change Log
 
-## [v1.0.2](https://github.com/OpusCapita/filemanager/tree/v1.0.2) (2018-01-30)
-[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.1...v1.0.2)
-
-**Implemented enhancements:**
-
-- Add "Move back" and "Move forward" toolbar buttons [\#148](https://github.com/OpusCapita/filemanager/issues/148)
-- Add gzip compression for a demo installation [\#145](https://github.com/OpusCapita/filemanager/issues/145)
+## [v1.0.3](https://github.com/OpusCapita/filemanager/tree/v1.0.3) (2018-02-12)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.2...v1.0.3)
 
 **Closed issues:**
 
+- Release Filemanager v1.0.0 [\#122](https://github.com/OpusCapita/filemanager/issues/122)
+- Tests for RESTful API [\#103](https://github.com/OpusCapita/filemanager/issues/103)
+
+**Merged pull requests:**
+
+- \(\#29\) Add variables' replacement into translations [\#151](https://github.com/OpusCapita/filemanager/pull/151) ([abaliunov-sc](https://github.com/abaliunov-sc))
+
+## [v1.0.2](https://github.com/OpusCapita/filemanager/tree/v1.0.2) (2018-01-30)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.1...v1.0.2)
+
+**Closed issues:**
+
+- Add "Move back" and "Move forward" toolbar buttons [\#148](https://github.com/OpusCapita/filemanager/issues/148)
+- Add gzip compression for a demo installation [\#145](https://github.com/OpusCapita/filemanager/issues/145)
 - Place all GitHub-related files to .github directory [\#144](https://github.com/OpusCapita/filemanager/issues/144)
+- Add the translations for the filemanager [\#142](https://github.com/OpusCapita/filemanager/issues/142)
+- Ability to set fsRoot sub-dir as client context dynamically with request [\#140](https://github.com/OpusCapita/filemanager/issues/140)
 - Extract ListView "selection"-related functions to separate file and write tests [\#131](https://github.com/OpusCapita/filemanager/issues/131)
 
 **Merged pull requests:**
@@ -24,17 +35,15 @@
 ## [v1.0.1](https://github.com/OpusCapita/filemanager/tree/v1.0.1) (2018-01-16)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.13...v1.0.1)
 
-**Implemented enhancements:**
-
-- Need an event when file or directory selected [\#135](https://github.com/OpusCapita/filemanager/issues/135)
-- Add "size-limit" check to control bundle size [\#132](https://github.com/OpusCapita/filemanager/issues/132)
-- Show initial file name within "setNameDialog" \(Google Drive API v2\) [\#127](https://github.com/OpusCapita/filemanager/issues/127)
-- Show initial file name within "setNameDialog" \(server-nodejs-v1\) [\#126](https://github.com/OpusCapita/filemanager/issues/126)
-
-**Fixed bugs:**
+**Closed issues:**
 
 - CircleCI build issues using "lerna" [\#137](https://github.com/OpusCapita/filemanager/issues/137)
+- Need an event when file or directory selected [\#135](https://github.com/OpusCapita/filemanager/issues/135)
+- Add "size-limit" check to control bundle size [\#132](https://github.com/OpusCapita/filemanager/issues/132)
 - Src files changes don't apply during development \(wrong watcher config\) [\#128](https://github.com/OpusCapita/filemanager/issues/128)
+- Show initial file name within "setNameDialog" \(Google Drive API v2\) [\#127](https://github.com/OpusCapita/filemanager/issues/127)
+- Show initial file name within "setNameDialog" \(server-nodejs-v1\) [\#126](https://github.com/OpusCapita/filemanager/issues/126)
+- Can't upload file [\#125](https://github.com/OpusCapita/filemanager/issues/125)
 
 **Merged pull requests:**
 
@@ -49,7 +58,7 @@
 ## [v1.0.0-beta.12](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.12) (2017-12-22)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.11...v1.0.0-beta.12)
 
-**Implemented enhancements:**
+**Closed issues:**
 
 - Implement Azure multibranch demo deploy [\#80](https://github.com/OpusCapita/filemanager/issues/80)
 
@@ -63,23 +72,20 @@
 ## [v1.0.0-beta.10](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.10) (2017-12-06)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.9...v1.0.0-beta.10)
 
-**Implemented enhancements:**
-
-- Provide possibility to configure resource capabilities for "server-nodejs" [\#120](https://github.com/OpusCapita/filemanager/issues/120)
-
 **Closed issues:**
 
+- Provide possibility to configure resource capabilities for "server-nodejs" [\#120](https://github.com/OpusCapita/filemanager/issues/120)
+- Impossible to do any actions in IE11 if enter to some folder [\#116](https://github.com/OpusCapita/filemanager/issues/116)
+- Breadcrums are not generated for folders in IE11  [\#115](https://github.com/OpusCapita/filemanager/issues/115)
+- Impossible to sort files and folders in directory by "Last Modified" in IE11 [\#114](https://github.com/OpusCapita/filemanager/issues/114)
 - Improve lerna bootstrap speed  [\#113](https://github.com/OpusCapita/filemanager/issues/113)
 
 ## [v1.0.0-beta.9](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.9) (2017-12-01)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.8...v1.0.0-beta.9)
 
-**Implemented enhancements:**
-
-- Add CHANGELOG.md generation/update during release [\#111](https://github.com/OpusCapita/filemanager/issues/111)
-
 **Closed issues:**
 
+- Add CHANGELOG.md generation/update during release [\#111](https://github.com/OpusCapita/filemanager/issues/111)
 - Add RAML validation to build process \(like tests and linting\) [\#101](https://github.com/OpusCapita/filemanager/issues/101)
 
 **Merged pull requests:**
@@ -98,6 +104,11 @@
 
 ## [v1.0.0-beta.5](https://github.com/OpusCapita/filemanager/tree/v1.0.0-beta.5) (2017-11-27)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.0-beta.4...v1.0.0-beta.5)
+
+**Closed issues:**
+
+- Do not download through npm [\#98](https://github.com/OpusCapita/filemanager/issues/98)
+- It is possible to upload two and more files with same names \(google.drive\) [\#61](https://github.com/OpusCapita/filemanager/issues/61)
 
 **Merged pull requests:**
 
@@ -122,32 +133,20 @@
 - Prepare "filemanager" for initial release \(v1.0.0-beta.0\) [\#82](https://github.com/OpusCapita/filemanager/issues/82)
 
 ## [v0.0.1](https://github.com/OpusCapita/filemanager/tree/v0.0.1) (2017-11-17)
-**Implemented enhancements:**
+**Closed issues:**
 
-- Improve display API errors on client side [\#78](https://github.com/OpusCapita/filemanager/issues/78)
-- Provide possibility to set initial path to folder for "nodejs\_v1" connector  [\#71](https://github.com/OpusCapita/filemanager/issues/71)
-- Improve download file capability [\#66](https://github.com/OpusCapita/filemanager/issues/66)
-- Implement "FileManager" react component [\#38](https://github.com/OpusCapita/filemanager/issues/38)
-- Implement sorting for "server-nodejs" [\#35](https://github.com/OpusCapita/filemanager/issues/35)
-- Implement sorting for "Google Drive API v2" [\#34](https://github.com/OpusCapita/filemanager/issues/34)
-- Implement "row" and "files-view" contexts for "ContextMenu" [\#28](https://github.com/OpusCapita/filemanager/issues/28)
-
-**Fixed bugs:**
-
+- Update RAML files for API [\#93](https://github.com/OpusCapita/filemanager/issues/93)
+- File manager has not "Last modified" column in IE 11 [\#90](https://github.com/OpusCapita/filemanager/issues/90)
 - Message about uploading file with same name doesn't appear [\#89](https://github.com/OpusCapita/filemanager/issues/89)
 - Context menu climbs on location bar [\#88](https://github.com/OpusCapita/filemanager/issues/88)
 - Strange direction of arrows for sorting folder content [\#87](https://github.com/OpusCapita/filemanager/issues/87)
 - Context menu is broken after downloading file in IE \(node.js v.1\) [\#85](https://github.com/OpusCapita/filemanager/issues/85)
-- Disable ContextMenu appering by long left mouse down on not touch devices [\#67](https://github.com/OpusCapita/filemanager/issues/67)
-- Fix - SetNameDialog submit on press "Enter" if value not specified and no input value changes [\#44](https://github.com/OpusCapita/filemanager/issues/44)
-- Rename for "Google Drive API v2" don't check for existing file with same name [\#31](https://github.com/OpusCapita/filemanager/issues/31)
-- Fix - wrong context menu items after pressing "Esc" key [\#23](https://github.com/OpusCapita/filemanager/issues/23)
-
-**Closed issues:**
-
-- Update RAML files for API [\#93](https://github.com/OpusCapita/filemanager/issues/93)
+- Improve display API errors on client side [\#78](https://github.com/OpusCapita/filemanager/issues/78)
 - Disable caching [\#75](https://github.com/OpusCapita/filemanager/issues/75)
 - Add preview capability to file download [\#72](https://github.com/OpusCapita/filemanager/issues/72)
+- Provide possibility to set initial path to folder for "nodejs\_v1" connector  [\#71](https://github.com/OpusCapita/filemanager/issues/71)
+- Disable ContextMenu appering by long left mouse down on not touch devices [\#67](https://github.com/OpusCapita/filemanager/issues/67)
+- Improve download file capability [\#66](https://github.com/OpusCapita/filemanager/issues/66)
 - Update mocha config to run tests using "webpack" instead of "babel" [\#63](https://github.com/OpusCapita/filemanager/issues/63)
 - Make default L&F that fits “styles”: https://opuscapita.github.io/styles/demo/html/css.html [\#57](https://github.com/OpusCapita/filemanager/issues/57)
 - Make different icons colors for different ListView item types [\#53](https://github.com/OpusCapita/filemanager/issues/53)
@@ -155,9 +154,16 @@
 - React.PropTypes =\> 'prop-types' [\#50](https://github.com/OpusCapita/filemanager/issues/50)
 - Fix build for IE11 [\#49](https://github.com/OpusCapita/filemanager/issues/49)
 - Add progress indication for "Google Drive API v2" upload [\#48](https://github.com/OpusCapita/filemanager/issues/48)
+- Fix - SetNameDialog submit on press "Enter" if value not specified and no input value changes [\#44](https://github.com/OpusCapita/filemanager/issues/44)
 - FileManager-scoped notification system for async events [\#43](https://github.com/OpusCapita/filemanager/issues/43)
+- Implement "FileManager" react component [\#38](https://github.com/OpusCapita/filemanager/issues/38)
 - Implement "Toolbar" component [\#37](https://github.com/OpusCapita/filemanager/issues/37)
 - Improve "capabilities" forceUpdate\(\) method by not appearing "loading-overlay" after each call [\#36](https://github.com/OpusCapita/filemanager/issues/36)
+- Implement sorting for "server-nodejs" [\#35](https://github.com/OpusCapita/filemanager/issues/35)
+- Implement sorting for "Google Drive API v2" [\#34](https://github.com/OpusCapita/filemanager/issues/34)
+- Rename for "Google Drive API v2" don't check for existing file with same name [\#31](https://github.com/OpusCapita/filemanager/issues/31)
+- Implement "row" and "files-view" contexts for "ContextMenu" [\#28](https://github.com/OpusCapita/filemanager/issues/28)
+- Fix - wrong context menu items after pressing "Esc" key [\#23](https://github.com/OpusCapita/filemanager/issues/23)
 - Implement "upload single file" for "server-nodejs" [\#21](https://github.com/OpusCapita/filemanager/issues/21)
 - Implement "upload single file" for "Google Drive API v2" [\#20](https://github.com/OpusCapita/filemanager/issues/20)
 - Implement "remove files" for "server-nodejs v1" [\#18](https://github.com/OpusCapita/filemanager/issues/18)
