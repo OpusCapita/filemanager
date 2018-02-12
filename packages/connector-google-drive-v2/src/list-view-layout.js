@@ -36,7 +36,6 @@ let listViewLayout = (viewLayoutOptions) => {
         dataKey: "title",
         width: 48,
         label: getMessage('title'),
-        // label: "Title",
         flexGrow: 1,
         cellRenderer: {
           elementType: 'NameCell',
@@ -55,7 +54,6 @@ let listViewLayout = (viewLayoutOptions) => {
         width: 100,
         dataKey: "size",
         label: getMessage('fileSize'),
-        // label: "File size",
         flexGrow: viewLayoutOptions.width > TABLET_WIDTH ? 1 : 0,
         cellRenderer: {
           elementType: 'Cell',
@@ -74,7 +72,6 @@ let listViewLayout = (viewLayoutOptions) => {
         width: 100,
         dataKey: "modifiedTime",
         label: getMessage('lastModified'),
-        // label: "Last modified",
         flexGrow: 1,
         cellRenderer: {
           elementType: 'Cell',

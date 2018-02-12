@@ -5,7 +5,6 @@ import getMess from '../../translations';
 
 let icon = icons.createNewFolder;
 let label = 'createFolder';
-// let label = 'Create folder';
 
 function handler(apiOptions, {
   id,
@@ -32,8 +31,7 @@ function handler(apiOptions, {
 
         let alreadyExists = resourceChildren.some((o) => o.title === folderName);
         if (alreadyExists) {
-          return `${getMessage('fileExist1')} "${folderName}" ${getMessage('fileExist2')}`;
-          // return `File or folder with name "${folderName}" already exists`;
+          return getMessage('fileExist', { name: folderName });
         } else {
           hideDialog();
           let result = await api.createFolder(apiOptions, resource.id, folderName);
@@ -43,23 +41,17 @@ function handler(apiOptions, {
       onValidate: async (folderName) => {
         if (!folderName) {
           return getMessage('emptyName');
-          // return 'Name can\'t be empty';
         } else if (folderName === 'CON') {
           return getMessage('doNotRespectBill');
-          // return 'We too do not respect Bill ;)';
         } else if (folderName.length >= 255) {
           return getMessage('tooLongName');
-          // return 'Folder name can\'t contain more than 255 characters';
         } else if (folderName.trim() !== sanitizeFilename(folderName.trim())) {
           return getMessage('notAllowedCharacters');
-          // return 'Folder name contains not allowed characters';
         }
         return null;
       },
       headerText: getMessage('folderName'),
       submitButtonText: getMessage('create')
-      // headerText: `Folder name`,
-      // submitButtonText: `Create`
     }
   };
 
@@ -81,7 +73,6 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    // id: 'createFolder',
     icon: { svg: icon },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,

@@ -48,7 +48,6 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
     console.error(`Filemanager. getChildrenForId(${id})`, error);
     if (onFail) {
       onFail({ message: getMessage(options.locale, 'unableReadDir') }) // TODO doesn't intercept for some reason
-      // onFail({ message: 'Unable to read a directory.' }) // TODO doesn't intercept for some reason
     }
   });
 

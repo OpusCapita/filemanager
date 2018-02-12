@@ -42,7 +42,7 @@ function handler(apiOptions, {
         );
         let alreadyExists = resourceChildren.some((o) => o.name === name);
         if (alreadyExists) {
-          return `${getMessage('fileExist1')} "${name}" ${getMessage('fileExist2')}`;
+          return getMessage('fileExist', { name });
         } else {
           hideDialog();
           let result = await api.renameResource(apiOptions, selectedResources[0].id, name, { onFail });
