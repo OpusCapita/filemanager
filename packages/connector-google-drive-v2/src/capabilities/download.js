@@ -9,7 +9,6 @@ import getMess from '../../translations';
 
 let icon = icons.fileDownload;
 const label = 'download';
-// const label = 'Download';
 
 function handler(apiOptions, {
   showDialog,
@@ -26,7 +25,6 @@ function handler(apiOptions, {
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const notificationId = label;
-  // const notificationId = 'download';
   const notificationChildId = nanoid();
 
   const onStart = ({ name, quantity }) => {
@@ -46,8 +44,7 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `${getMessage('downloading')} ${quantity} ${quantity > 1 ? getMessage('items') : getMessage('item')}`,
-      // title: `Downloading ${quantity} ${quantity > 1 ? 'items' : 'item'}`,
+      title: quantity > 1 ? getMessage('downloadingItems', { quantity }) : getMessage('downloadingItem'),
       children: newChildren
     };
 
@@ -131,10 +128,8 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    // id: 'download',
     icon: { svg: icon },
     label: localeLabel,
-    // label,
     shouldBeAvailable: (apiOptions) => {
       const selectedResources = getSelectedResources();
       return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
@@ -169,7 +164,6 @@ export default (apiOptions, {
           getNotifications
         }),
         children: localeLabel
-        // children: label
       }
     })
   };

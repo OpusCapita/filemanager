@@ -11,3 +11,5 @@ require('babel-register')({
     'lodash'
   ]
 });
+
+var chai = require('chai'); // eslint-disable-line
