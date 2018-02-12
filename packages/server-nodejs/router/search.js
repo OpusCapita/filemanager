@@ -7,6 +7,42 @@ const getClientIp = require('../utils/get-client-ip');
 const { TYPE_FILE, TYPE_DIR } = require('../constants');
 const { getResource } = require('./lib');
 
+const RESPONSE_TIMEOUT = process.env.NODE_ENV === 'development' ? 10 : 3000;
+const CACHE_TIMEOUT = process.env.NODE_ENV === 'development' ? 99000 : 20000;
+const gCache = {};
+
+const buildCacheId = req => {
+  return (Date.now().toString() - new Date(2018, 0, 1)).toString() + getClientIp(req).replace(/\./g, '');
+}
+
+const sendAvailable = ({ cacheId, req, res, handleError }) => {
+  const cacheItems = gCache[cacheId]; // an array with two optional custom properties: "finished" and "timeoutId".
+
+  if (!cacheItems) {
+    return handleError(Object.assign(
+      new Error(`Search cache with ID "${cacheId}" does not exist`),
+      { httpCode: 410 }
+    ));
+  }
+
+  if (cacheItems.timeoutId) {
+    clearTimeout(cacheItems.timeoutId);
+  }
+
+  const sendObj = {
+    items: cacheItems.splice(0)
+  };
+
+  if (cacheItems.finished) {
+    delete gCache[cacheId];
+  } else {
+    sendObj.next = req.path + '?cacheId=' + cacheId;
+    cacheItems.timeoutId = setTimeout(_ => delete gCache[cacheId], CACHE_TIMEOUT);
+  }
+
+  return res.json(sendObj);
+};
+
 module.exports = ({
   options,
   req,
@@ -14,6 +50,15 @@ module.exports = ({
   handleError,
   path: userPath
 }) => {
+  if (req.query.cacheId) {
+    return sendAvailable({
+      cacheId: req.query.cacheId,
+      req,
+      res,
+      handleError
+    });
+  }
+
   let recursive = true; // Assigning default value.
 
   if (req.query.hasOwnProperty('recursive')) {
@@ -115,6 +160,8 @@ module.exports = ({
   const absPath = path.join(options.fsRoot, userPath);
   options.logger.info(`Search inside ${absPath} requested by ${getClientIp(req)}`);
 
+  const cacheItems = [];
+
   const readTree = parentPath => fs.readdir(path.join(options.fsRoot, parentPath)).
     then(basenames => Promise.all(
       basenames.map(basename => {
@@ -130,19 +177,31 @@ module.exports = ({
                 stat,
                 path: childPath
               })).
-              catch(err => {
+              then(resource => cacheItems.push(resource)).
+              catch(err => { // err === undefined when at least one condition was not satisfied.
                 if (err) {
-                  throw err;
+                  throw err; // JavaScript error occured inside a condition.
                 }
               }),
-            recursive && stat.isDirectory() ? readTree(childPath) : []
-          ])).
-          then(([item, items]) => item ? [item, ...items] : items);
+            recursive && stat.isDirectory() && readTree(childPath)
+          ]));
       })
-    )).
-    then(arrayOfArrays => [].concat(...arrayOfArrays)); // Flattening an array of arrays.
+    ));
 
-  return readTree(userPath).
-    then(items => res.json({ items })).
+  return Promise.race([
+    new Promise((resolve, reject) => setTimeout(_ => resolve(), RESPONSE_TIMEOUT)),
+    readTree(userPath).then(_ => { cacheItems.finished = true; })
+  ]).
+    then(_ => {
+      if (cacheItems.finished) {
+        return res.json({
+          items: cacheItems
+        });
+      }
+
+      const cacheId = buildCacheId(req);
+      gCache[cacheId] = cacheItems;
+      return sendAvailable({ cacheId, req, res, handleError });
+    }).
     catch(handleError);
 };

@@ -162,6 +162,10 @@ const getResource = ({
         }
       };
 
+      if (process.env.NODE_ENV === 'development') {
+        resource.path = userPath + (stat.isDirectory() ? '/' : '');
+      }
+
       if (stat.isDirectory()) {
         resource.type = TYPE_DIR;
       } else if (stat.isFile()) {
