@@ -36,7 +36,7 @@ const sendAvailable = ({ cacheId, req, res, handleError }) => {
   if (cacheItems.finished) {
     delete gCache[cacheId];
   } else {
-    sendObj.next = req.path + '?cacheId=' + cacheId;
+    sendObj.nextPage = req.path + '?cacheId=' + cacheId;
     cacheItems.timeoutId = setTimeout(_ => delete gCache[cacheId], CACHE_TIMEOUT);
   }
 

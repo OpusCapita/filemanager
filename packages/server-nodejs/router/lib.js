@@ -146,6 +146,7 @@ const getResource = ({
   ]).
     then(([stat, parent]) => {
       const resource = {
+        // path: userPath + (stat.isDirectory() ? '/' : ''),
         id: path2id(userPath),
         name: userBasename || options.rootName,
         createdTime: stat.birthtime,
@@ -161,10 +162,6 @@ const getResource = ({
           canDownload: stat.isFile() // Only files can be downloaded
         }
       };
-
-      if (process.env.NODE_ENV === 'development') {
-        resource.path = userPath + (stat.isDirectory() ? '/' : '');
-      }
 
       if (stat.isDirectory()) {
         resource.type = TYPE_DIR;
