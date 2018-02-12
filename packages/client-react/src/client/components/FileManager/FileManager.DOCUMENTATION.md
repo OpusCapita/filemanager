@@ -21,7 +21,7 @@ See [FileNavigator documentation and example](http://opuscapita-filemanager-demo
         apiOptions={{
           ..._scope.connectors.nodeV1.apiOptions,
           apiRoot: `${window.env.SERVER_URL}/api`,
-          locale: 'en'
+          locale: 'en' // 'en' / 'de'
         }}
         capabilities={_scope.connectors.nodeV1.capabilities}
         initialResourceId={_scope.state.nodejsInitId}
