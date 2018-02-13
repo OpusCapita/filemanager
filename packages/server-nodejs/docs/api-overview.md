@@ -43,7 +43,7 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
     canDelete: <boolean>,
     canRename: <boolean>,
     canCopy: <boolean>,
-    caEdit: <boolean>,
+    canEdit: <boolean>,
     canDownload: <boolean>
   }
 }
