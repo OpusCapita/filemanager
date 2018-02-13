@@ -1,6 +1,11 @@
 import { expect } from 'chai';
 import fs from 'fs';
 let request = require('superagent');
+const base64url = require('base64url');
+const {
+  id2path
+} = require('../router/lib');
+
 let baseUrl = 'localhost:3020';
 
 let rootId = '';
@@ -31,6 +36,17 @@ let newGrandchildId3 = '';
 let copiedFileName = '';
 let copiedFileId = '';
 let copiedFileId3 = '';
+
+/**
+ * Function creates incorrect resource's id from correct directory id and nonexistent name
+ *
+ * @param {string} dirId - correct directory's id
+ * @param {string} addName - nonexistent name
+ * @returns {string}
+ */
+function createIncorrectId(dirId, addName) {
+  return base64url(`${id2path(dirId)}/${addName}`);
+}
 
 describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
@@ -109,7 +125,7 @@ describe('Get resources metadata', () => {
 
   it('Get children with incorrect id', (done) => {
     request.
-    get(`${baseUrl}/api/files/${workChildDirId}${workChildDirId}/children`).
+    get(`${baseUrl}/api/files/${createIncorrectId(workChildDirId, 'incorrect_dir_name')}/children`).
     catch(err => {
       if (err && err.response && err.response.request.res) {
         expect(err.response.request.res.statusCode).to.equal(410);
@@ -186,7 +202,7 @@ describe('Rename resources', () => {
   });
 
   it('Rename resource with incorrect id', (done) => {
-    let route = `${baseUrl}/api/files/${workChildDirId}${workChildDirId}`;
+    let route = `${baseUrl}/api/files/${createIncorrectId(changedWorkChildDirId, 'incorrect_dir_name')}`;
     let method = 'PATCH';
     let newName = 'bad changed dir';
 
@@ -490,8 +506,9 @@ describe('Create dirs', () => {
   it('Create dir with incorrect :id', done => {
     let route = `${baseUrl}/api/files`;
     let method = 'POST';
+    let incorrectId = createIncorrectId(newDirId, 'incorrect_dir');
     let params = {
-      parentId: `${rootId}${rootId}${rootId}`,
+      parentId: incorrectId,
       name: 'new dir 1',
       type: 'dir'
     };
@@ -499,7 +516,7 @@ describe('Create dirs', () => {
     send(params).
     catch(err => {
       if (err && err.response && err.response.request.res) {
-        expect(err.response.request.res.statusCode).to.equal(400);
+        expect(err.response.request.res.statusCode).to.equal(410);
         done();
       } else {
         done(err);
@@ -858,7 +875,7 @@ describe('Download', () => {
   });
 
   it('Download file with incorrect id', done => {
-    const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId3}${copiedFileId3}`;
+    const downloadUrl = `${baseUrl}/api/download?items=${createIncorrectId(newGrandchildId3, 'incorrect-dir')}`;
     request.get(downloadUrl).
     responseType('blob').
     catch(err => {
@@ -945,7 +962,7 @@ describe('Remove resources', () => {
   });
 
   it('Remove resource with incorrect id', done => {
-    let route = `${baseUrl}/api/files/${newDirId}${newDirId}${newDirId}`;
+    let route = `${baseUrl}/api/files/${createIncorrectId(newDirId, 'incorrect-dir')}`;
     let method = 'DELETE';
     request(method, route).
     then(res => {
