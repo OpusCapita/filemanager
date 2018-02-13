@@ -197,6 +197,42 @@ types:
 
                 A 410 status is returned if a resource with id does not exist.
 
+      /search:
+        get:
+          description: Search for files/dirs
+          queryParameters:
+            itemNameSubstring:
+              type: string
+              required: false
+            itemNameCaseSensitive:
+              type: boolean
+              default: false
+              required: false
+            itemType:
+              type: string | string[]
+              items:
+                pattern: ^file|dir$
+              default: [file|dir]
+              required: false
+            recursive:
+              type: boolean
+              default: false
+              required: true
+          responses:
+            200:
+              description:
+              body:
+                application/json:
+                  type: object
+                  properties:
+                    items: FileStatsResource[]
+                    nextPage:
+                      description: |
+                        url path part, i.e. everything after host/port,
+                        starting with slash
+                      type: string                    
+
+
   /download:
     get:
       description: Get file(s)/compressed dir
