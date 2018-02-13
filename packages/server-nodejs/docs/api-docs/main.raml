@@ -199,7 +199,10 @@ types:
 
       /search:
         get:
-          description: Search for files/dirs
+          description: |
+            Search for files/dirs
+
+            All query paramaters are optional
           queryParameters:
             itemNameSubstring:
               type: string
@@ -217,7 +220,7 @@ types:
             recursive:
               type: boolean
               default: false
-              required: true
+              required: false
           responses:
             200:
               description:
@@ -230,7 +233,7 @@ types:
                       description: |
                         url path part, i.e. everything after host/port,
                         starting with slash
-                      type: string                    
+                      type: string
 
 
   /download:
