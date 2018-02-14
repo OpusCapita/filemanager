@@ -3,8 +3,6 @@
    https://github.com/OpusCapita/react-showroom-client/blob/master/docs/scope-component.md
 */
 
-import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
@@ -86,7 +84,7 @@ class FileManagerScope extends Component {
   }
 
   render() {
-    let { nodejsInitPath, nodejsInitId } = this.state;
+    let { nodejsInitPath } = this.state;
     let nodejsPathChooserElement = (
       <select onChange={this.handleThemeChange} style={{ marginLeft: '12px' }}>
         {themes.map((theme) => (
@@ -138,10 +136,14 @@ class FileManagerScope extends Component {
             <div
               style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center' }}
             >
+              {/* eslint-disable */}
               <button type="button" onClick={window.googleDriveSignIn} style={{ marginRight: '8px' }}>
+                {/* eslint-enable */}
                 Sign in
               </button>
+              {/* eslint-disable */}
               <button type="button" onClick={window.googleDriveSignOut}>
+                {/* eslint-enable */}
                 Sign out
               </button>
             </div>

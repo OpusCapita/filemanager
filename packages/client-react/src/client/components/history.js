@@ -28,10 +28,15 @@ function getHistoryIndex({ stack, currentPointer }, step) {
   return newCurrentPointer;
 }
 
+function isHistoryStepPossible({ stack, currentPointer }, step) {
+  let newCurrentPointerCandidate = currentPointer + step;
+  return !((newCurrentPointerCandidate < 0) || (newCurrentPointerCandidate > stack.length - 1));
+}
+
 function doHistoryStep({ stack, currentPointer }, step) {
-  if (isHistoryStepPossible({ stack, currentPointer}, step)) {
+  if (isHistoryStepPossible({ stack, currentPointer }, step)) {
     let newCurrentPointer = getHistoryIndex({ stack, currentPointer }, step);
-    let newCurrentComponentId = stack[newCurrentPointer];
+    // let newCurrentComponentId = stack[newCurrentPointer];
 
     return ({
       stack,
@@ -40,11 +45,6 @@ function doHistoryStep({ stack, currentPointer }, step) {
   }
 
   return ({ stack, currentPointer });
-}
-
-function isHistoryStepPossible({ stack, currentPointer }, step) {
-  let newCurrentPointerCandidate = currentPointer + step;
-  return !((newCurrentPointerCandidate < 0) || (newCurrentPointerCandidate > stack.length - 1));
 }
 
 export {

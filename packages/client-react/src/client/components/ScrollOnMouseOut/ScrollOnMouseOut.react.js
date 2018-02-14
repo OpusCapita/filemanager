@@ -47,14 +47,6 @@ class ScrollOnMouseOut extends Component {
     window.addEventListener('drop', this.handleWindowMouseUp);
   }
 
-  componentWillUnmount() {
-    this.stopCaptureCursor();
-    this.clearTimeout();
-    window.removeEventListener('mouseup', this.handleWindowMouseUp);
-    window.removeEventListener('dragend', this.handleWindowMouseUp);
-    window.removeEventListener('drop', this.handleWindowMouseUp);
-  }
-
   componentWillUpdate(nextProps, nextState) {
     if (nextState.captureCursor) {
       this.startCaptureCursor();
@@ -67,6 +59,14 @@ class ScrollOnMouseOut extends Component {
     } else if (nextState.isCursorBellow && (this.state.isCursorBellow !== nextState.isCursorBellow)) {
       this.handleCursorBellow();
     }
+  }
+
+  componentWillUnmount() {
+    this.stopCaptureCursor();
+    this.clearTimeout();
+    window.removeEventListener('mouseup', this.handleWindowMouseUp);
+    window.removeEventListener('dragend', this.handleWindowMouseUp);
+    window.removeEventListener('drop', this.handleWindowMouseUp);
   }
 
   handleMouseDown = () => {
@@ -89,7 +89,7 @@ class ScrollOnMouseOut extends Component {
   }
 
   handleCursorAbove = () => {
-    let { clientHeight, scrollHeight, scrollTop } = this.props;
+    let { scrollTop } = this.props;
 
     let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
 
@@ -132,9 +132,6 @@ class ScrollOnMouseOut extends Component {
     let {
       topCaptureOffset,
       bottomCaptureOffset,
-      clientHeight,
-      scrollHeight,
-      scrollTop
     } = this.props;
 
     let rect = this.containerRef.getBoundingClientRect();
@@ -152,6 +149,7 @@ class ScrollOnMouseOut extends Component {
 
   render() {
     let {
+      /* eslint-disable */
       onCursorAbove,
       onCursorBellow,
       topCaptureOffset,
@@ -159,6 +157,7 @@ class ScrollOnMouseOut extends Component {
       scrollHeight,
       clientHeight,
       scrollTop,
+      /* eslint-enable */
       ...restProps
     } = this.props;
 

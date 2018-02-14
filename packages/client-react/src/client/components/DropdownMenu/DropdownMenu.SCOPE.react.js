@@ -2,8 +2,6 @@
    What is a SCOPE file. See documentation here:
    https://github.com/OpusCapita/react-showroom-client/blob/master/docs/scope-component.md
 */
-
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import DropdownMenuItem from '../DropdownMenuItem';
@@ -20,14 +18,14 @@ class DropdownMenuScope extends Component {
     };
   }
 
-  toggle = () => {
+  handleToggle = () => {
     this.setState({ show: !this.state.show });
-  }
+  };
 
   render() {
     return (
       <div>
-        <button onClick={this.toggle}>Toggle context menu</button>
+        <button onClick={this.handleToggle}>Toggle context menu</button>
         {this._renderChildren()}
       </div>
     );
