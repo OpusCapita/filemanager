@@ -38,7 +38,7 @@ function handler(apiOptions, {
         let alreadyExists = resourceChildren.some((o) => o.name === folderName);
 
         if (alreadyExists) {
-          return `${getMessage('fileExist1')} "${folderName}" ${getMessage('fileExist2')}`;
+          return getMessage('fileExist', { name: folderName });
         } else {
           hideDialog();
           let result = await api.createFolder(apiOptions, resource.id, folderName, { onFail });

@@ -33,7 +33,7 @@ function handler(apiOptions, {
     const childElement = {
       elementType: 'NotificationProgressItem',
       elementProps: {
-        title: `${getMessage('creating')} ${archiveName}...`,
+        title: getMessage('creatingName', { name: archiveName }),
         progress: 0
       }
     };
@@ -42,7 +42,7 @@ function handler(apiOptions, {
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: `getMessage('zipping') ${quantity} ${quantity > 1 ? getMessage('items') : getMessage('item')}`,
+      title: quantity > 1 ? getMessage('zippingItems', { quantity }) : getMessage('zippingItem'),
       children: newChildren
     };
 
@@ -75,7 +75,6 @@ function handler(apiOptions, {
   const onFail = _ => onFailError({
     getNotifications,
     label: getMessage(label),
-    // label,
     notificationId,
     updateNotifications
   });

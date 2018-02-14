@@ -466,6 +466,7 @@ class FileNavigator extends Component {
             history={history}
             onMoveForward={this.handleHistoryChange}
             onMoveBackward={this.handleHistoryChange}
+            locale={apiOptions.locale}
           />
         </div>
         <div className="oc-fm--file-navigator__view">

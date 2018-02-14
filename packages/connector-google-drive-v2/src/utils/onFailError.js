@@ -16,7 +16,6 @@ export default function onFailErrors({
 
   const newNotification = {
     title: message || `${label} ${getMessage(locale, 'error')}`,
-    // title: message || `${label} error`,
     minimizable: false,
     closable: true,
     children: [],

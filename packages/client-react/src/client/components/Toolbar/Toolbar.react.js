@@ -5,6 +5,7 @@ import Svg from '@opuscapita/react-svg/lib/SVG';
 import DropdownMenu from '../DropdownMenu';
 import DropdownMenuItem from '../DropdownMenuItem';
 import { isHistoryStepPossible, doHistoryStep } from '../history';
+import getMess from '../../../../translations';
 
 import icons from './icons-svg';
 
@@ -25,12 +26,14 @@ const propTypes = {
     currentPointer: PropTypes.number
   }),
   onMoveBackward: PropTypes.func,
-  onMoveForward: PropTypes.func
+  onMoveForward: PropTypes.func,
+  locale: PropTypes.string
 };
 const defaultProps = {
   history: [],
   items: [],
-  newButtonItems: []
+  newButtonItems: [],
+  locale: 'en'
 };
 
 export default
@@ -143,12 +146,14 @@ class Toolbar extends Component {
       </div>
     );
 
+    const getMessage = getMess.bind(null, this.props.locale);
+
     let navButtons = (
       <div className="oc-fm--toolbar__nav-buttons">
         <button
           disabled={!isHistoryStepPossible(history, -1)}
           className={`oc-fm--toolbar__item`}
-          title={'Move back'}
+          title={getMessage('moveBack')}
           onClick={() => this.handleMoveBackward()}
         >
           <Svg
@@ -161,7 +166,7 @@ class Toolbar extends Component {
         <button
           disabled={!isHistoryStepPossible(history, 1)}
           className={`oc-fm--toolbar__item`}
-          title={'Move forward'}
+          title={getMessage('moveForward')}
           onClick={() => this.handleMoveForward()}
         >
           <Svg
