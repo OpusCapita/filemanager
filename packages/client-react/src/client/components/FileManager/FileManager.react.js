@@ -4,7 +4,9 @@ import './FileManager.less';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 
-const propTypes = {};
+const propTypes = {
+  className: PropTypes.string
+};
 const defaultProps = {};
 
 export default

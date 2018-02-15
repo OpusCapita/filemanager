@@ -232,7 +232,7 @@ class ListView extends Component {
                         onScroll={this.handleScroll}
                         scrollToIndex={scrollToIndex}
                         scrollTop={scrollTop}
-                        sort={this.handleSort}
+                        sort={this.handleSort} // eslint-disable-line
                         sortBy={sortBy}
                         sortDirection={sortDirection}
                         rowRenderer={Row({

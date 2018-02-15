@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import './ProgressIcon.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 let completeIcon = require('@opuscapita/svg-icons/lib/done.svg');
 
 const propTypes = {
@@ -30,9 +30,9 @@ class ProgressIcon extends Component {
       return (
         <div
           className="oc-fm--progress-icon"
-          style={{ width: size, height : size }}
+          style={{ width: size, height: size }}
         >
-          <SVG
+          <Svg
             className="oc-fm--progress-icon__complete"
             svg={completeIcon}
             style={{ fill: '#fff', width: size, height: size }}
@@ -44,12 +44,12 @@ class ProgressIcon extends Component {
     let strokeWidth = Math.log(radius) * 5;
     let circleRadius = 60 - strokeWidth / 2;
     let circumference = 2 * Math.PI * circleRadius;
-    var dashOffset = circumference * (1 - progress / 100);
+    let dashOffset = circumference * (1 - progress / 100);
 
     return (
       <div
         className="oc-fm--progress-icon"
-        style={{ width: size, height : size }}
+        style={{ width: size, height: size }}
       >
         <svg className="oc-fm--progress-icon__svg" viewBox={`0 0 ${viewportSize} ${viewportSize}`}>
           <circle

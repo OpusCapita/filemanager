@@ -3,8 +3,6 @@
    https://github.com/OpusCapita/react-showroom-client/blob/master/docs/scope-component.md
 */
 
-import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import utils from './utils';

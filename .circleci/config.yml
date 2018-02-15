@@ -123,7 +123,7 @@ jobs:
           name: update-github-commit-status
           command: ./.circleci/scripts/update-github-commit-status.js
 
-  test-rest-api:
+  tests:
     docker:
       - image: opuscapita/ci-node8:latest
 
@@ -145,6 +145,10 @@ jobs:
       - run:
           name: bootstrap-packages
           command: yarn
+
+      - run:
+          name: lint
+          command: npm run lint
 
       - run:
           name: install-demo-dependencies
@@ -190,7 +194,7 @@ workflows:
   commit:
       jobs:
         - build
-        - test-rest-api
+        - tests
         - approve-publish-release:
             type: approval
             requires:
@@ -210,7 +214,7 @@ workflows:
         - deploy-demo:
             requires:
               - build
-              - test-rest-api
+              - tests
   nightly:
       triggers:
         - schedule:
