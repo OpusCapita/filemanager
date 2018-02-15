@@ -1,0 +1,7 @@
+{
+  "extends": "opuscapita",
+  "env": {
+    "browser": true,
+    "es6": true
+  }
+}

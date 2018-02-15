@@ -5,6 +5,7 @@
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
     "lint": "eslint src/client",
+    "lint-tab": "eslint src/client --rule '\"indent\": [2, \"tab\", { \"SwitchCase\": 1, \"VariableDeclarator\": 1 }]' --rule '\"react/jsx-indent-props\": [2, \"tab\"]'",
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
     "test-all": "npm run test && npm run size",
