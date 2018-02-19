@@ -6,7 +6,7 @@ import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
-import { find, findIndex, isEqual } from 'lodash';
+import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
@@ -79,12 +79,39 @@ class FileNavigator extends Component {
   }
 
   async componentDidMount() {
-    let { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
+    await this.setChanges({});
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    let needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+
+    if (needToNavigate) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
+
+    let { apiOptions, viewLayoutOptions } = nextProps;
+    if (!isEqual(apiOptions, this.state.apiOptions)) {
+      let { locale } = apiOptions;
+      viewLayoutOptions = { ...viewLayoutOptions, locale };
+      await this.setChanges({ apiOptions, viewLayoutOptions });
+    }
+  }
+
+  async setChanges({ apiOptions = null, viewLayoutOptions = null }) {
+    let { api, capabilities } = this.props;
+    let haveOptions = !!apiOptions;
+    if (!haveOptions) {
+      ({ apiOptions, viewLayoutOptions } = this.state);// eslint-disable-line
+    }
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    this.setState({ // eslint-disable-line
+    let stateChange = haveOptions ? { apiOptions, viewLayoutOptions } : {};
+    this.setState({
       initializedCapabilities,
+      ...stateChange,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
@@ -98,16 +125,6 @@ class FileNavigator extends Component {
     });
 
     this.monitorApiAvailability();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let needToNavigate =
-      (this.props.initialResourceId !== nextProps.initialResourceId) &&
-      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
-
-    if (needToNavigate) {
-      this.navigateToDir(nextProps.initialResourceId);
-    }
   }
 
   startViewLoading = () => {
@@ -141,55 +158,6 @@ class FileNavigator extends Component {
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
-
-  async componentWillReceiveProps(nextProps) {
-    let needToNavigate =
-      (this.props.initialResourceId !== nextProps.initialResourceId) &&
-      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
-
-    if (needToNavigate) {
-      this.navigateToDir(nextProps.initialResourceId);
-    }
-
-    let { apiOptions, viewLayoutOptions } = nextProps;
-    if (!isEqual(apiOptions, this.state.apiOptions)) {
-      let { locale } = apiOptions;
-      viewLayoutOptions = { ...viewLayoutOptions, locale };
-      await this.setChanges({ apiOptions, viewLayoutOptions });
-    }
-  }
-
-  async setChanges({ apiOptions = null, viewLayoutOptions = null }) {
-    let { api, capabilities } = this.props;
-    let haveOptions = !!apiOptions;
-    if (!haveOptions) {
-      ({ apiOptions, viewLayoutOptions } = this.state);
-    }
-
-    let capabilitiesProps = this.getCapabilitiesProps();
-    let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    let stateChange = haveOptions ? { apiOptions, viewLayoutOptions } : {};
-    this.setState({
-      initializedCapabilities,
-      ...stateChange,
-      sortBy: viewLayoutOptions.initialSortBy || 'title',
-      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
-    });
-
-    await api.init({
-      ...apiOptions,
-      onInitSuccess: this.handleApiInitSuccess,
-      onInitFail: this.handleApiInitFail,
-      onSignInSuccess: this.handleApiSignInSuccess,
-      onSignInFail: this.handleApiSignInFail
-    });
-
-    this.monitorApiAvailability();
-  }
-
-  async componentDidMount() {
-    await this.setChanges({});
-  }
 
   handleApiInitSuccess = () => {
     this.setState({ apiInitialized: true });
@@ -308,7 +276,7 @@ class FileNavigator extends Component {
   };
 
   handleSort = async ({ sortBy, sortDirection }) => {
-    let { apiOptions, initializedCapabilities } = this.state;
+    let { initializedCapabilities } = this.state;
     let sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
     if (!sortCapability) {
       return;
@@ -347,7 +315,7 @@ class FileNavigator extends Component {
 
   handleViewKeyDown = async (e) => {
     let { api } = this.props;
-    let { apiOptions, loadingView, resource } = this.state;
+    let { apiOptions, loadingView } = this.state;
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
       let { selection } = this.state;
@@ -417,8 +385,6 @@ class FileNavigator extends Component {
   render() {
     let {
       id,
-      api,
-      capabilities,
       className,
       listViewLayout,
       signInRenderer
