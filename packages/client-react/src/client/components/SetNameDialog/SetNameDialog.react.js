@@ -36,7 +36,7 @@ class SetNameDialog extends Component {
   }
 
   handleChange = async (e) => {
-    this.setState({ value: e.target.value  });
+    this.setState({ value: e.target.value });
     let validationError = await this.props.onValidate(e.target.value);
     this.setState({ validationError, valid: !validationError });
   }
@@ -63,10 +63,11 @@ class SetNameDialog extends Component {
     }
   }
 
-  moveCaretAtEnd = (e) => {
+  handleFocus = (e) => {
+    // Move caret at end
     let tmpValue = e.target.value;
-    e.target.value = '';
-    e.target.value = tmpValue;
+    e.target.value = ''; // eslint-disable-line
+    e.target.value = tmpValue; // eslint-disable-line
   }
 
   render() {
@@ -102,7 +103,7 @@ class SetNameDialog extends Component {
             `}
             value={value}
             onChange={this.handleChange}
-            onFocus={this.moveCaretAtEnd}
+            onFocus={this.handleFocus}
           />
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">

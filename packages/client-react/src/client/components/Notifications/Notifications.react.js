@@ -4,10 +4,12 @@ import './Notifications.less';
 import Notification from '../Notification';
 
 const propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.object)
+  notifications: PropTypes.arrayOf(PropTypes.object),
+  className: PropTypes.string
 };
 const defaultProps = {
-  notifications: []
+  notifications: [],
+  className: ''
 };
 
 export default

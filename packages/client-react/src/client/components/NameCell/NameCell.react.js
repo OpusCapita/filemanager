@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import './NameCell.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 import LoadingCell from '../LoadingCell';
 
 export default ({ loading, getIcon }) => (cellProps) => {
@@ -12,9 +11,9 @@ export default ({ loading, getIcon }) => (cellProps) => {
   let { svg, fill } = getIcon(cellProps.rowData);
 
   return (
-    <div  className="oc-fm--name-cell">
+    <div className="oc-fm--name-cell">
       <div className="oc-fm--name-cell__icon">
-        <SVG
+        <Svg
           className="oc-fm--name-cell__icon-image"
           svg={svg}
           style={{ fill }}
