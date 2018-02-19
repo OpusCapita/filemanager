@@ -191,6 +191,13 @@ types:
                     items: FileStatsResource[]
                     # will develop in v2
                     # nextPageToken:
+            400:
+              description: |
+                Bad request
+
+                A 400 status is returned if:
+                  1. orderBy exists but contains value which not equals name or modifiedTime
+                  2. orderDirection exists but contains value which not equal ASC or DESC
             410:
               description: |
                 GONE

@@ -2,8 +2,13 @@ type: object
 properties:
   id: string
   name: string
-  type: string
+  type:
+    type: string
+    required: true
+    pattern: ^dir|file$
+    example:dir
   createdTime: string
+  modifiedTime: string
   size:
     description: for files only
     type: string

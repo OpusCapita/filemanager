@@ -12,10 +12,14 @@ let rootId = '';
 
 let workChildDirId = '';
 let workChildDirName = '';
+let workChildDirId1 = '';
+let workChildDirName1 = '';
 let rootChildrenSize = 0;
 
 let workFileId = '';
 let workFileName = '';
+let workFileId1 = '';
+let workFileName1 = '';
 let workChildrenSize = 0;
 
 let changedWorkChildDirId = '';
@@ -77,6 +81,7 @@ describe('Get resources metadata', () => {
   it('Get root children', (done) => {
     request.
     get(`${baseUrl}/api/files/${rootId}/children`).
+    query({ action: 'edit', city: 'London' }). // query string
     then(res => {
       let jsonData = res.body;
 
@@ -99,6 +104,69 @@ describe('Get resources metadata', () => {
     });
   });
 
+  it('Get root children with query params', (done) => {
+    request.
+    get(`${baseUrl}/api/files/${rootId}/children`).
+    query({ orderBy: 'name', orderDirection: 'ASC' }). // query string
+    then(res => {
+      let jsonData = res.body;
+
+      expect(res.status).to.equal(200);
+
+      for (let i = 0; i < jsonData.items.length; i++) {
+        let item = jsonData.items[i];
+        expect(item.type).to.equal('dir');
+        expect(item.parentId).to.equal(rootId);
+      }
+
+      workChildDirId = jsonData.items[0].id;
+      workChildDirName = jsonData.items[0].name;
+      workChildDirId1 = jsonData.items[1].id;
+      workChildDirName1 = jsonData.items[1].name;
+      rootChildrenSize = jsonData.items.length;
+
+      done();
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Get root children with incorrect orderBy', (done) => {
+    request.
+    get(`${baseUrl}/api/files/${rootId}/children`).
+    query({ orderBy: 'nameOne' }).
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Get root children with incorrect orderDirection', (done) => {
+    request.
+    get(`${baseUrl}/api/files/${rootId}/children`).
+    query({ orderDirection: 'DSC' }).
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        console.log(err.response.request.res);
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
   it('Get workChildDir children', (done) => {
     request.
     get(`${baseUrl}/api/files/${workChildDirId}/children`).
@@ -110,6 +178,7 @@ describe('Get resources metadata', () => {
       for (let i = 0; i < jsonData.items.length; i++) {
         let item = jsonData.items[i];
         expect(item.parentId).to.equal(workChildDirId);
+        expect(item.type).to.equal('file');
       }
 
       workFileId = jsonData.items[0].id;
@@ -558,6 +627,30 @@ describe('Create dirs', () => {
     };
     request(method, route).
     send(params).
+    catch(err => {
+      if (err && err.response && err.response.request.res) {
+        expect(err.response.request.res.statusCode).to.equal(400);
+        done();
+      } else {
+        done(err);
+      }
+    }).
+    catch(err => {
+      done(err);
+    });
+  });
+
+  it('Create dir and attach file', done => {
+    let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
+    let fileName = fs.readdirSync(workDirPath)[0];
+    let file = fs.readFileSync(`${workDirPath}/${fileName}`);
+    let route = `${baseUrl}/api/files`;
+
+    request.post(route).
+    field('type', 'dir').
+    field('name', 'new dir 1').
+    field('parentId', newGrandchildId3).
+    attach('files', file, fileName).
     catch(err => {
       if (err && err.response && err.response.request.res) {
         expect(err.response.request.res.statusCode).to.equal(400);
