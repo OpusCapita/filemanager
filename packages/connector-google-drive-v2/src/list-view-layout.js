@@ -68,9 +68,9 @@ let listViewLayout = (viewLayoutOptions) => {
     }), (viewLayoutOptions.width > MOBILE_WIDTH) && ({
       elementType: 'Column',
       elementProps: {
-        key: "modifiedTime",
+        key: "modifiedDate",
         width: 100,
-        dataKey: "modifiedTime",
+        dataKey: "modifiedDate",
         label: getMessage('lastModified'),
         flexGrow: 1,
         cellRenderer: {
