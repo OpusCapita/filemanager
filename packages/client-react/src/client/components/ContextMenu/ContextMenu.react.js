@@ -2,31 +2,38 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ContextMenu.less';
 import { ContextMenu as Menu } from "react-contextmenu";
-import rawToReactElement from '../raw-to-react-element';
+import ContextMenuItem from '../ContextMenuItem';
 
 const propTypes = {
   triggerId: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.shape({
-      elementType: PropTypes.string,
-      elementProps: PropTypes.object
-    })),
-    PropTypes.arrayOf(PropTypes.node)
-  ])
+  items: PropTypes.arrayOf(PropTypes.shape({
+    icon: PropTypes.shape({
+      svg: PropTypes.string,
+      fill: PropTypes.string
+    }),
+    label: PropTypes.string,
+    onClick: PropTypes.func
+  }))
 };
 const defaultProps = {
   triggerId: '',
-  children: []
+  items: []
 };
 
 export default
 class ContextMenu extends Component {
   render() {
-    let { children, triggerId, ...restProps } = this.props;
+    let { items, triggerId, ...restProps } = this.props;
 
-    let childrenElement = children.map((rawChild, i) => {
-      return rawToReactElement({ ...rawChild }, i);
-    });
+    let childrenElement = items.map((item, i) => (
+      <ContextMenuItem
+        key={i}
+        onClick={item.onClick || (() => {})}
+        icon={item.icon}
+      >
+        <span>{item.label}</span>
+      </ContextMenuItem>
+    ));
 
     return (
       <div className="oc-fm--context-menu">
