@@ -5,7 +5,6 @@ import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileUpload;
 let label = 'upload';
 
 function handler(apiOptions, {
@@ -113,7 +112,7 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileUpload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],

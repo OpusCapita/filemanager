@@ -3,7 +3,6 @@ import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.rename;
 let label = 'rename';
 
 function handler(apiOptions, {
@@ -71,7 +70,7 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.rename },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();

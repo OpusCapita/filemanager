@@ -3,7 +3,6 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.delete;
 let label = 'remove';
 
 function handler(apiOptions, {
@@ -72,7 +71,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: 'delete',
-    icon: { svg: icon },
+    icon: { svg: icons.delete },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();

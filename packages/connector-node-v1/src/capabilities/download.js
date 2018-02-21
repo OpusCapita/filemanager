@@ -6,7 +6,6 @@ import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileDownload;
 let label = 'download';
 
 function handler(apiOptions, {
@@ -128,7 +127,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileDownload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();

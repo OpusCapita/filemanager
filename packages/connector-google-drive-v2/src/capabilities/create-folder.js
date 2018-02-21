@@ -3,7 +3,6 @@ import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.createNewFolder;
 let label = 'createFolder';
 
 function handler(apiOptions, {
@@ -73,7 +72,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.createNewFolder },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],
