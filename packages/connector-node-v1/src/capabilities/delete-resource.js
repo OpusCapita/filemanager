@@ -34,10 +34,11 @@ function handler(apiOptions, {
 
   let selectedResources = getSelectedResources();
 
-  let dialogNameText = getMessage('reallyRemove');
   let dialogFilesText = selectedResources.length > 1 ?
-    `${selectedResources.length} ${getMessage('files')} ?` :
-    `"${selectedResources[0].name}" ?`;
+    `${selectedResources.length} ${getMessage('files')}` :
+    `"${selectedResources[0].name}"`;
+
+  let dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
 
   let rawDialogElement = {
     elementType: 'ConfirmDialog',
@@ -47,7 +48,7 @@ function handler(apiOptions, {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       },
-      headerText: dialogNameText + dialogFilesText,
+      headerText: dialogNameText,
       cancelButtonText: getMessage('cancel'),
       submitButtonText: getMessage('confirm')
     }
