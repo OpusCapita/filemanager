@@ -146,25 +146,6 @@ export default (apiOptions, {
       getResourceLocation,
       getNotifications
     }),
-    availableInContexts: ['row', 'toolbar'],
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
-    })
+    availableInContexts: ['row', 'toolbar']
   };
 }

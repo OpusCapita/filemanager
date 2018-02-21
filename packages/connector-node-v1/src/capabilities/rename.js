@@ -104,25 +104,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }
