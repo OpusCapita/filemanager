@@ -30,9 +30,11 @@ const propTypes = {
   locale: PropTypes.string
 };
 const defaultProps = {
-  history: [],
+  history: { stack: [], currentPointer: 0 },
   items: [],
   newButtonItems: [],
+  onMoveBackward: () => {},
+  onMoveForward: () => {},
   locale: 'en'
 };
 
@@ -41,8 +43,16 @@ class Toolbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDropdownMenu: false
+      showDropdownMenu: false,
+      locale: props.locale
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { locale } = nextProps;
+    if (locale !== this.state.locale) {
+      this.setState({ locale });
+    }
   }
 
   handleShowDropdownMenu = () => {
@@ -146,7 +156,7 @@ class Toolbar extends Component {
       </div>
     );
 
-    const getMessage = getMess.bind(null, this.props.locale);
+    const getMessage = getMess.bind(null, this.state.locale);
 
     let navButtons = (
       <div className="oc-fm--toolbar__nav-buttons">
