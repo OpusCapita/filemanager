@@ -70,19 +70,21 @@ export default (apiOptions, {
     getNotifications,
     getSortState
   }),
-  deleteResource(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications,
-    getSortState
-  }),
+  // "deleteResource" disabled couse not implemented yet
+
+  // deleteResource(apiOptions, {
+  //   showDialog,
+  //   hideDialog,
+  //   navigateToDir,
+  //   updateNotifications,
+  //   getSelection,
+  //   getSelectedResources,
+  //   getResource,
+  //   getResourceChildren,
+  //   getResourceLocation,
+  //   getNotifications,
+  //   getSortState
+  // }),
   sort(apiOptions, {
     showDialog,
     hideDialog,
