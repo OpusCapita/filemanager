@@ -27,7 +27,9 @@ class ConfirmDialog extends Component {
   }
 
   componentDidMount() {
-    this.ref && this.ref.focus();
+    if (this.ref) {
+      this.ref.focus();
+    }
   }
 
   handleKeyDown = async (e) => {

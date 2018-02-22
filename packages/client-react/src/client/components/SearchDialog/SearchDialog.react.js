@@ -4,6 +4,7 @@ import './SearchDialog.less';
 import Dialog from '../Dialog';
 
 const propTypes = {
+  headerText: PropTypes.string,
   cancelButtonText: PropTypes.string,
   submitButtonText: PropTypes.string,
   onSubmit: PropTypes.func,

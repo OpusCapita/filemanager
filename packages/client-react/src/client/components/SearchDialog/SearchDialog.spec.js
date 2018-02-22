@@ -1,9 +1,9 @@
-import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import SearchDialog from '.';
+// import React from 'react';
+// import { expect } from 'chai';
+// import { shallow } from 'enzyme';
+// import SearchDialog from '.';
 
-describe('<SearchDialog />', () => {
+// describe('<SearchDialog />', () => {
   /* Recommended test-cases
 
   it('should have default props', () => {
@@ -18,4 +18,4 @@ describe('<SearchDialog />', () => {
   });
 
   */
-});
+// });
