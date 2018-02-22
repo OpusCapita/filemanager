@@ -26,6 +26,10 @@ class ConfirmDialog extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.ref && this.ref.focus();
+  }
+
   handleKeyDown = async (e) => {
     if (e.which === 13) { // Enter key
       this.handleSubmit();
@@ -45,7 +49,11 @@ class ConfirmDialog extends Component {
 
     return (
       <Dialog onHide={onHide}>
-        <div className="oc-fm--dialog__content" onKeyDown={this.handleKeyDown}>
+        <div
+          tabIndex="0"
+          ref={ref => (this.ref = ref)}
+          className="oc-fm--dialog__content" onKeyDown={this.handleKeyDown}
+        >
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
