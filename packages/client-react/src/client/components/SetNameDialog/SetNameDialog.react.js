@@ -105,6 +105,7 @@ class SetNameDialog extends Component {
             onChange={this.handleChange}
             onFocus={this.handleFocus}
           />
+          {validationErrorElement}
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
             <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
@@ -119,7 +120,6 @@ class SetNameDialog extends Component {
               {submitButtonText}
             </button>
           </div>
-          {validationErrorElement}
         </div>
       </Dialog>
     );
