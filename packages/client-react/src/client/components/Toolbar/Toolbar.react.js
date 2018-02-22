@@ -71,7 +71,7 @@ class Toolbar extends Component {
       newButtonItems,
       newButtonText,
       history,
-      onMoveBackward, // eslint-disable-line
+      onMoveBackward, // eslint-disable-line FIXME EVERYWHARE: eslint rules should not be disabled but fixed where possible.
       onMoveForward // eslint-disable-line
     } = this.props;
     let { showDropdownMenu } = this.state;
