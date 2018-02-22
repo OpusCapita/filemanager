@@ -6,6 +6,8 @@ import Dialog from '../Dialog';
 const propTypes = {
   cancelButtonText: PropTypes.string,
   headerText: PropTypes.string,
+  messageText: PropTypes.string,
+  inputLabelText: PropTypes.string,
   initialValue: PropTypes.string,
   onChange: PropTypes.func,
   onHide: PropTypes.func,
@@ -16,6 +18,8 @@ const propTypes = {
 const defaultProps = {
   cancelButtonText: 'Cancel',
   headerText: 'Set name',
+  messageText: '',
+  inputLabelText: '',
   initialValue: '',
   onChange: () => {},
   onHide: () => {},
@@ -71,7 +75,7 @@ class SetNameDialog extends Component {
   }
 
   render() {
-    let { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
+    let { onHide, headerText, inputLabelText, messageText, submitButtonText, cancelButtonText } = this.props;
     let { value, validationError, valid } = this.state;
 
     let showValidationErrorElement = typeof validationError === 'string' && validationError;
@@ -92,6 +96,14 @@ class SetNameDialog extends Component {
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
+
+          {messageText && (
+            <div className="oc-fm--dialog__message">{messageText}</div>
+          )}
+
+          {inputLabelText && (
+            <div className="oc-fm--dialog__input-label">{inputLabelText}</div>
+          )}
 
           <input
             ref={ref => (ref && ref.focus())}

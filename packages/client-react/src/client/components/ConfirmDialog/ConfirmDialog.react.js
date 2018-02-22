@@ -4,6 +4,7 @@ import Dialog from '../Dialog';
 
 const propTypes = {
   headerText: PropTypes.string,
+  messageText: PropTypes.string,
   cancelButtonText: PropTypes.string,
   submitButtonText: PropTypes.string,
   onHide: PropTypes.func,
@@ -11,6 +12,7 @@ const propTypes = {
 };
 const defaultProps = {
   headerText: 'Do you really want to remove the file?',
+  messageText: 'Message',
   cancelButtonText: 'Cancel',
   submitButtonText: 'OK',
   autofocus: false,
@@ -39,7 +41,7 @@ class ConfirmDialog extends Component {
   };
 
   render() {
-    let { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
+    let { onHide, headerText, messageText, submitButtonText, cancelButtonText } = this.props;
 
     return (
       <Dialog onHide={onHide}>
@@ -47,6 +49,10 @@ class ConfirmDialog extends Component {
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
+
+          {messageText && (
+            <div className="oc-fm--dialog__message">{messageText}</div>
+          )}
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
             <button
