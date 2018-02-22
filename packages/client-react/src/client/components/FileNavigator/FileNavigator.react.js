@@ -6,7 +6,7 @@ import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
-import { find } from 'lodash';
+import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
@@ -104,6 +104,13 @@ class FileNavigator extends Component {
 
     if (needToNavigate) {
       this.navigateToDir(nextProps.initialResourceId);
+    }
+
+    if (!isEqual(this.props.apiOptions, nextProps.apiOptions)) {
+      let { apiOptions, capabilities } = nextProps;
+      let capabilitiesProps = this.getCapabilitiesProps();
+      let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+      this.setState({ initializedCapabilities });
     }
   }
 
