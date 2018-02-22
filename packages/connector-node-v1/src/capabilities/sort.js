@@ -1,7 +1,7 @@
 import api from '../api';
 import onFailError from '../utils/onFailError';
 
-export default (apiOptions, {
+export default (apiOptions, { // FIXME: remove unused properties of 2nd argument; list them all either in docs or in comments for ./index.js
   showDialog,
   hideDialog,
   navigateToDir,

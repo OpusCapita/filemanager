@@ -9,6 +9,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
+// FIXME: functional component is more appropriate for stateless component without lifecycle methods.
 export default
 class FileManager extends Component {
   constructor(props) {

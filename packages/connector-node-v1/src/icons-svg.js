@@ -2,6 +2,14 @@
 // https://github.com/OpusCapita/react-svg or
 // https://github.com/OpusCapita/svg-icons
 
+/* FIXME: named export is more appropriate here.
+ * "default-exporting objects is usually an anti-pattern".
+ * https://medium.com/@rauschma/note-that-default-exporting-objects-is-usually-an-anti-pattern-if-you-want-to-export-the-cf674423ac38
+ * https://geedew.com/es6-module-gotchas/
+ * Use default export "to export a single value or to have a fallback value for our module".
+ * "Named exports are useful to export several values".
+ * see for details: https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export
+ */
 export default {
   fileDownload: `<svg  xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" focusable="false"><path d="M38 18h-8V6H18v12h-8l14 14 14-14zM10 36v4h28v-4H10z"/></svg>`,
   fileUpload: `<svg  xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" focusable="false"><path d="M18 32h12V20h8L24 6 10 20h8zm-8 4h28v4H10z"/></svg>`,

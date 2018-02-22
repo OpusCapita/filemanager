@@ -32,7 +32,7 @@ const propTypes = {
 };
 const defaultProps = {
   id: '',
-  api: 'nodeV1',
+  api: 'nodeV1', // FIXME: propType is "object", not "string". {} would not work either since particular methods are called. Seems like the prop is required.
   apiOptions: {
     locale: 'en'
   },
@@ -80,7 +80,7 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    this.setState({ // eslint-disable-line
+    this.setState({ // eslint-disable-line FIXME EVERYWHERE: antipatterns should not be eslint-disable'd but fixed.
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
@@ -205,7 +205,7 @@ class FileNavigator extends Component {
     this.setState({ loadingResourceLocation: false });
   }
 
-  async getParentsForId(id) {
+  async getParentsForId(id) { // FIXME: there is no need in called-once, one-line function.
     let { api, apiOptions } = this.props;
     return await api.getParentsForId(apiOptions, id);
   }

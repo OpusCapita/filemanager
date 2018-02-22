@@ -44,6 +44,8 @@ async function getResourceById(options, id) {
 async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 'ASC', onFail }) {
   let route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   let method = 'GET';
+  // FIXME EVERYWHERE: use "try {} catch () {}" with "await". It would fix the interception mentioned below.
+  // https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9#8014
   let response = await request(method, route).catch((error) => {
     console.error(`Filemanager. getChildrenForId(${id})`, error);
     if (onFail) {
@@ -53,7 +55,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
 
   let rawResourceChildren = response.body.items;
   let resourceChildren = await Promise.all(rawResourceChildren.map(async (o) => normalizeResource(o)));
-  return { resourceChildren };
+  return { resourceChildren }; // FIXME: no need to wrap into object because it gets unwrapped everywhere used.
 }
 
 async function getParentsForId(options, id, result = []) {
@@ -198,7 +200,7 @@ async function downloadResources({ apiOptions, resources, trackers: {
   if (resources.length === 1) {
     const { id, name } = resources[0];
     return {
-      direct: true,
+      direct: true, // FIXME: "direct" object property is never used.
       downloadUrl: `${apiOptions.apiRoot}/download?items=${id}`,
       name
     }
@@ -227,7 +229,7 @@ async function downloadResources({ apiOptions, resources, trackers: {
   setTimeout(onSuccess, 1000);
 
   return {
-    direct: false,
+    direct: false, // FIXME: "direct" object property is never used.
     file: blob,
     name: archiveName
   }
@@ -274,7 +276,7 @@ async function removeResource(options, resource) {
   return response;
 }
 
-async function removeResources(options, selectedResources, { onSuccess, onFail }) {
+async function removeResources(options, selectedResources, { onSuccess, onFail }) { // FIXME: tight coupling with onSuccess/onFail. Just return a promise.
   let success = await Promise.all(selectedResources.map(async (resource) => await removeResource(options, resource))).
   catch((error) => {
     console.error(`Filemanager. removeResources`, error);

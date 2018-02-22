@@ -5,6 +5,16 @@ import upload from './upload';
 import rename from './rename';
 import sort from './sort';
 
+/* FIXME: shorter version:
+export default (...args) => ([
+  createFolder(...args),
+  rename(...args),
+  download(...args),
+  upload(...args),
+  rename(...args),
+  sort(...args)
+]);
+*/
 export default (apiOptions, {
   showDialog,
   hideDialog,

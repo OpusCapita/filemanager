@@ -13,6 +13,9 @@ function pushToHistory({ stack, currentPointer }, item) {
   });
 }
 
+/*
+ * FIXME: currentPointer should be stored in newCurrentPointer form from the very beginning because behaviour of null in arithmetic/logical/array-access operations is ambiguous
+ */
 function getHistoryIndex({ stack, currentPointer }, step) {
   let newCurrentPointerCandidate = currentPointer + step;
 
@@ -31,6 +34,10 @@ function getHistoryIndex({ stack, currentPointer }, step) {
 function isHistoryStepPossible({ stack, currentPointer }, step) {
   let newCurrentPointerCandidate = currentPointer + step;
   return !((newCurrentPointerCandidate < 0) || (newCurrentPointerCandidate > stack.length - 1));
+  /*
+   * FIXME: negated statements is harder to read than confirmatory ones.
+   * return newCurrentPointerCandidate >= 0 && newCurrentPointerCandidate <= stack.length - 1;
+   */
 }
 
 function doHistoryStep({ stack, currentPointer }, step) {
@@ -40,7 +47,7 @@ function doHistoryStep({ stack, currentPointer }, step) {
 
     return ({
       stack,
-      currentPointer: newCurrentPointer
+      currentPointer: newCurrentPointer // FIXME: changing a pointer is transactional and should be changed only after havigation success.
     });
   }
 

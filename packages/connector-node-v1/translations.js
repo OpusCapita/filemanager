@@ -1,3 +1,4 @@
+// FIXME: create a dir with translations in a separate files per language.
 const translations = {
   en: {
     uploading: 'Uploading',
@@ -67,15 +68,16 @@ const translations = {
 export default function getMessage(locale, key, params=null) {
   let translationExists = (translations[locale] && translations[locale][key]);
   let translation = translationExists ? translations[locale][key] : translations['en'][key];
-  if (params === null) {
+  if (params === null) { // FIXME: unsubstituted param names should not be left => make params to be {} if it is falsy.
     return translation;
   }
 
-  let re = /{\w+}/g;
+  let re = /{\w+}/g; // FIXME: "{" and "}" are special characters and must be backslashed.
   function replace(match) {
     let replacement = match.slice(1, -1);
     return params[replacement] ? params[replacement] : '';
   }
 
   return translation.replace(re, replace);
+  // FIXME: make it short by replace(/\{(\w+)\}/g, (_,name) => params[name] || '');
 }

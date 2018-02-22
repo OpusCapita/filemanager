@@ -130,7 +130,7 @@ export default (apiOptions, {
     id: label,
     icon: { svg: icon },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: (apiOptions) => { // FIXME EVERYWHERE: apiOptions is already in the scope, no need to pass it to the function.
       let selectedResources = getSelectedResources();
 
       return (
@@ -152,7 +152,7 @@ export default (apiOptions, {
       getResourceLocation,
       getNotifications
     }),
-    contextMenuRenderer: (apiOptions) => ({
+    contextMenuRenderer: (apiOptions) => ({ // FIXME EVERYWHERE: apiOptions is already in the scope, no need to pass it to the function.
       elementType: 'ContextMenuItem',
       elementProps: {
         icon: { svg: icon },
