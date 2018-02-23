@@ -15,6 +15,7 @@
     "diff": "lerna diff",
     "distclean": "lerna clean --yes && rm -rf node_modules",
     "lint": "lerna run lint",
+    "test": "lerna run test",
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",

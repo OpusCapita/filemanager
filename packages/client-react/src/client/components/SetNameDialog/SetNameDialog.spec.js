@@ -4,8 +4,6 @@ import { shallow } from 'enzyme'; // eslint-disable-line
 import SetNameDialog from '.'; // eslint-disable-line
 
 describe('<SetNameDialog />', () => {
-  /* Recommended test-cases
-
   it('should have default props', () => {
     let component = <SetNameDialog />;
     expect(component.props.testProp).to.equal('Give me back my label!');
@@ -16,6 +14,4 @@ describe('<SetNameDialog />', () => {
     expect(wrapper).to.have.className('set-name-dialog');
     expect(wrapper).to.have.className('test-class-name');
   });
-
-  */
 });
