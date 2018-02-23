@@ -80,7 +80,7 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    this.setState({ // eslint-disable-line FIXME EVERYWHERE: antipatterns should not be eslint-disable'd but fixed.
+    this.setState({ // eslint-disable-line FIXME EVERYWHERE: ReactJS antipatterns should not be eslint-disable'd but fixed.
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
@@ -99,8 +99,8 @@ class FileNavigator extends Component {
 
   componentWillReceiveProps(nextProps) {
     let needToNavigate =
-      (this.props.initialResourceId !== nextProps.initialResourceId) &&
-      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+      (this.props.initialResourceId !== nextProps.initialResourceId) && // FIXME: the approach does not allow displaying the only dir => implement either defaultResourceId & resourceId or just resourceId (using it for both default and dynamic).
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId); // FIXME: functional arg for this.setState() should be used to access actual state.
 
     if (needToNavigate) {
       this.navigateToDir(nextProps.initialResourceId);
@@ -122,7 +122,7 @@ class FileNavigator extends Component {
   handleApiReady = () => {
     let { initialResourceId } = this.props;
     let resourceId = this.state.resource.id;
-    let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
+    let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId; // FIXME: allow root navigation if neither this.props.initialResourceId nor this.state.resource are specified.
     this.navigateToDir(idToNavigate);
   }
 
@@ -181,14 +181,14 @@ class FileNavigator extends Component {
     }
 
     let resource = await this.getResourceById(toId);
-    this.handleResourceChange(resource);
+    this.handleResourceChange(resource); // FIXME: should be called after this.setState() below for componentWillReceiveProps() to access actual state. Furthermore, this.getChildrenForId() may fail.
 
     let { resourceChildren } = await this.getChildrenForId(resource.id, sortBy, sortDirection);
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
     if (changeHistory) {
-      this.setState({ history: pushToHistory(history, toId) });
+      this.setState({ history: pushToHistory(history, toId) }); // FIXME: functional argument should be used for componentWillReceiveProps() to access actual state - in case of forcing a new resource ID.
     }
 
     this.handleSelectionChange(newSelection);
