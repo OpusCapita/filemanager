@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import './Notification.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 import rawToReactElement from '../raw-to-react-element';
 
 let minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
@@ -53,12 +53,12 @@ class Notification extends Component {
   }
 
   render() {
-    let { title, onHide, onCancel, minimizable, closable, progressText, cancelButtonText, children } = this.props;
+    let { title, onHide, minimizable, closable, progressText, cancelButtonText, children } = this.props;
     let { minimized } = this.state;
 
     let toggleElement = (minimizable && (progressText || children)) ? (
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={this.handleToggleClick}>
-        <SVG
+        <Svg
           svg={minimized ? maximizeIcon : minimizeIcon}
           style={{ fill: '#f5f5f5' }}
         />
@@ -67,7 +67,7 @@ class Notification extends Component {
 
     let closeElement = closable ? (
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={onHide}>
-        <SVG
+        <Svg
           svg={closeIcon}
           style={{ fill: '#f5f5f5' }}
         />

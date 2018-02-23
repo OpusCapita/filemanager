@@ -1,7 +1,7 @@
-import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import Toolbar from '.';
+import React from 'react'; // eslint-disable-line
+import { expect } from 'chai'; // eslint-disable-line
+import { shallow } from 'enzyme'; // eslint-disable-line
+import Toolbar from '.'; // eslint-disable-line
 
 describe('<Toolbar />', () => {
   /* Recommended test-cases

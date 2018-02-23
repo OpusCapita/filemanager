@@ -1,7 +1,7 @@
-import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import DropdownMenu from '.';
+import React from 'react'; // eslint-disable-line
+import { expect } from 'chai'; // eslint-disable-line
+import { shallow } from 'enzyme'; // eslint-disable-line
+import DropdownMenu from '.'; // eslint-disable-line
 
 describe('<DropdownMenu />', () => {
   /* Recommended test-cases

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './Toolbar.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 import DropdownMenu from '../DropdownMenu';
 import DropdownMenuItem from '../DropdownMenuItem';
 import { isHistoryStepPossible, doHistoryStep } from '../history';
@@ -45,11 +45,11 @@ class Toolbar extends Component {
     };
   }
 
-  showDropdownMenu = () => {
+  handleShowDropdownMenu = () => {
     this.setState({ showDropdownMenu: true });
   }
 
-  hideDropdownMenu = () => {
+  handleHideDropdownMenu = () => {
     this.setState({ showDropdownMenu: false });
   }
 
@@ -71,8 +71,8 @@ class Toolbar extends Component {
       newButtonItems,
       newButtonText,
       history,
-      onMoveBackward,
-      onMoveForward
+      onMoveBackward, // eslint-disable-line
+      onMoveForward // eslint-disable-line
     } = this.props;
     let { showDropdownMenu } = this.state;
 
@@ -86,7 +86,7 @@ class Toolbar extends Component {
             title={item.label || ''}
             onClick={(!item.disabled && item.onClick) || (() => {})}
           >
-            <SVG
+            <Svg
               className="oc-fm--toolbar__item-icon"
               svg={item.icon && item.icon.svg}
               style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
@@ -98,7 +98,10 @@ class Toolbar extends Component {
 
 
     let newButtonElement = newButtonText ? (
-      <button onClick={this.showDropdownMenu} className="oc-fm--toolbar__new-button">
+      <button
+        onClick={this.handleShowDropdownMenu}
+        className="oc-fm--toolbar__new-button"
+      >
         {newButtonText}
       </button>
     ) : newButtonItems.map((item, i) => (
@@ -109,7 +112,7 @@ class Toolbar extends Component {
         title={item.label || ''}
         onClick={(!item.disabled && item.onClick) || (() => {})}
       >
-        <SVG
+        <Svg
           className="oc-fm--toolbar__item-icon"
           svg={item.icon && item.icon.svg}
           style={{ fill: (item.icon && item.icon.fill) || '#424242' }}
@@ -124,7 +127,10 @@ class Toolbar extends Component {
     ));
 
     let dropdownMenuElement = showDropdownMenu ? (
-      <DropdownMenu show={showDropdownMenu} onHide={this.hideDropdownMenu}>
+      <DropdownMenu
+        show={showDropdownMenu}
+        onHide={this.handleHideDropdownMenu}
+      >
         {dropdownMenuItems}
       </DropdownMenu>
     ) : null;
@@ -150,7 +156,7 @@ class Toolbar extends Component {
           title={getMessage('moveBack')}
           onClick={() => this.handleMoveBackward()}
         >
-          <SVG
+          <Svg
             className="oc-fm--toolbar__item-icon"
             svg={icons.moveBackward}
             style={{ fill: '#424242' }}
@@ -163,7 +169,7 @@ class Toolbar extends Component {
           title={getMessage('moveForward')}
           onClick={() => this.handleMoveForward()}
         >
-          <SVG
+          <Svg
             className="oc-fm--toolbar__item-icon"
             svg={icons.moveForward}
             style={{ fill: '#424242' }}

@@ -138,8 +138,8 @@ module.exports = ({
       _ => new Promise((resolve, reject) =>
         itemType.includes(TYPE_DIR) && stat.isDirectory() ||
         itemType.includes(TYPE_FILE) && stat.isFile() ?
-        resolve() :
-        reject()
+          resolve() :
+          reject()
       ),
     ];
 
@@ -148,8 +148,8 @@ module.exports = ({
         _ => new Promise((resolve, reject) =>
           (itemNameCaseSensitive ? basename : basename.toLowerCase()).
             includes(itemNameSubstring) ?
-          resolve() :
-          reject()
+            resolve() :
+            reject()
         )
       );
     }

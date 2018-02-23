@@ -1,7 +1,7 @@
-import React from 'react';
-import { expect } from 'chai';
-import { shallow } from 'enzyme';
-import HeaderCell from '.';
+import React from 'react'; // eslint-disable-line
+import { expect } from 'chai'; // eslint-disable-line
+import { shallow } from 'enzyme'; // eslint-disable-line
+import HeaderCell from '.'; // eslint-disable-line
 
 describe('<HeaderCell />', () => {
   /* Recommended test-cases

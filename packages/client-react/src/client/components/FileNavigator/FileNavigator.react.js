@@ -6,20 +6,14 @@ import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
-import { find, findIndex } from 'lodash';
+import { find } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
-import nanoid from 'nanoid';
-import SVG from '@opuscapita/react-svg/lib/SVG';
 import rawToReactElement from '../raw-to-react-element';
 import {
   createHistory,
   pushToHistory,
-  getHistoryIndex,
-  doHistoryStep,
-  isHistoryStepPossible
 } from '../history';
-let spinnerIcon = require('../assets/spinners/spinner.svg');
 
 const propTypes = {
   id: PropTypes.string,
@@ -81,6 +75,38 @@ class FileNavigator extends Component {
     };
   }
 
+  async componentDidMount() {
+    let { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
+
+    let capabilitiesProps = this.getCapabilitiesProps();
+    let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+    this.setState({ // eslint-disable-line
+      initializedCapabilities,
+      sortBy: viewLayoutOptions.initialSortBy || 'title',
+      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
+    });
+
+    await api.init({
+      ...apiOptions,
+      onInitSuccess: this.handleApiInitSuccess,
+      onInitFail: this.handleApiInitFail,
+      onSignInSuccess: this.handleApiSignInSuccess,
+      onSignInFail: this.handleApiSignInFail
+    });
+
+    this.monitorApiAvailability();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
+
+    if (needToNavigate) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
+  }
+
   startViewLoading = () => {
     this.setState({ loadingView: true, loadingResourceLocation: true });
   }
@@ -113,39 +139,6 @@ class FileNavigator extends Component {
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
 
-  componentWillReceiveProps(nextProps) {
-    let needToNavigate =
-      (this.props.initialResourceId !== nextProps.initialResourceId) &&
-      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
-
-    if (needToNavigate) {
-      this.navigateToDir(nextProps.initialResourceId);
-    }
-  }
-
-  async componentDidMount() {
-    let { initialResourceId, apiOptions, api, capabilities, viewLayoutOptions } = this.props;
-    let { apiInitialized, apiSignedIn } = this.state;
-
-    let capabilitiesProps = this.getCapabilitiesProps();
-    let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-    this.setState({
-      initializedCapabilities,
-      sortBy: viewLayoutOptions.initialSortBy || 'title',
-      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
-    });
-
-    await api.init({
-      ...apiOptions,
-      onInitSuccess: this.handleApiInitSuccess,
-      onInitFail: this.handleApiInitFail,
-      onSignInSuccess: this.handleApiSignInSuccess,
-      onSignInFail: this.handleApiSignInFail
-    });
-
-    this.monitorApiAvailability();
-  }
-
   handleApiInitSuccess = () => {
     this.setState({ apiInitialized: true });
   }
@@ -169,19 +162,18 @@ class FileNavigator extends Component {
   }
 
   handleLocationBarChange = (id) => {
-    let { resource, resourceLocation } = this.state;
+    let { resource } = this.state;
     this.navigateToDir(id, resource.id);
-  }
+  };
 
   handleHistoryChange = (history) => {
     this.setState({ history });
 
     let navigateToId = history.stack[history.currentPointer];
     this.navigateToDir(navigateToId, null, true, false);
-  }
+  };
 
   navigateToDir = async (toId, idToSelect, startLoading = true, changeHistory = true) => {
-    let { initialResourceId } = this.props;
     let { history, sortBy, sortDirection } = this.state;
 
     if (startLoading) {
@@ -204,7 +196,7 @@ class FileNavigator extends Component {
 
     this.stopViewLoading();
     this.setParentsForResource(resource);
-  }
+  };
 
   async setParentsForResource(resource) {
     let resourceParents = await this.getParentsForId(resource.id);
@@ -248,20 +240,19 @@ class FileNavigator extends Component {
   handleSelectionChange = (selection) => {
     this.setState({ selection });
     this.props.onSelectionChange(selection);
-  }
+  };
 
   handleResourceChildrenChange = (resourceChildren) => {
-    this.setState({ resourceChildren});
+    this.setState({ resourceChildren });
     this.props.onResourceChildrenChange(resourceChildren);
-  }
+  };
 
   handleResourceChange = (resource) => {
     this.setState({ resource });
     this.props.onResourceChange(resource);
-  }
+  };
 
   handleSort = async ({ sortBy, sortDirection }) => {
-    let { apiOptions } = this.props;
     let { initializedCapabilities } = this.state;
     let sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
     if (!sortCapability) {
@@ -273,18 +264,18 @@ class FileNavigator extends Component {
     let newResourceChildren = await sort({ sortBy, sortDirection });
     this.handleResourceChildrenChange(newResourceChildren);
     this.setState({ sortBy, sortDirection, loadingView: false });
-  }
+  };
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
 
-  }
+  };
 
   handleResourceItemRightClick = async ({ event, number, rowData }) => {
 
-  }
+  };
 
   handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
-    let { loadingView, resource } = this.state;
+    let { loadingView } = this.state;
     let { id } = rowData;
 
     if (loadingView) {
@@ -297,27 +288,27 @@ class FileNavigator extends Component {
     }
 
     this.focusView();
-  }
+  };
 
   handleViewKeyDown = async (e) => {
     let { api, apiOptions } = this.props;
-    let { loadingView, resource } = this.state;
+    let { loadingView } = this.state;
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
       let { selection } = this.state;
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
-        let selectedResourceChildrens = this.getResourceChildrenBySelection(selection);
+        let selectedResourceChildren = this.getResourceChildrenBySelection(selection);
 
-        if (!selectedResourceChildrens[0]) {
+        if (!selectedResourceChildren[0]) {
           // Fix for fast selection updates
           return;
         }
 
-        let isDirectory = selectedResourceChildrens[0].type === 'dir';
+        let isDirectory = selectedResourceChildren[0].type === 'dir';
 
         if (isDirectory) {
-          this.navigateToDir(selectedResourceChildrens[0].id);
+          this.navigateToDir(selectedResourceChildren[0].id);
         }
       }
     }
@@ -330,7 +321,7 @@ class FileNavigator extends Component {
         this.navigateToDir(parentId, resource.id);
       }
     }
-  }
+  };
 
   handleKeyDown = async (e) => {
 
@@ -371,11 +362,8 @@ class FileNavigator extends Component {
   render() {
     let {
       id,
-      api,
       apiOptions,
-      capabilities,
       className,
-      initialResourceId,
       listViewLayout,
       signInRenderer,
       viewLayoutOptions
@@ -384,14 +372,11 @@ class FileNavigator extends Component {
     let {
       apiInitialized,
       apiSignedIn,
-      config,
       dialogElement,
-      error,
       history,
       loadingResourceLocation,
       loadingView,
       notifications,
-      resource,
       resourceChildren,
       resourceLocation,
       selection,
@@ -413,12 +398,6 @@ class FileNavigator extends Component {
     if (dialogElement) {
       viewLoadingElement = dialogElement;
     }
-
-    // Don't remove!
-    // if (showSpinner) {
-    //   viewLoadingElement = null;
-    //   (<SVG svg={spinnerIcon} className="oc-fm--file-navigator__view-loading-overlay-spinner" />);
-    // }
 
     let viewLoadingOverlay = (viewLoadingElement) ? (
       <div className="oc-fm--file-navigator__view-loading-overlay">

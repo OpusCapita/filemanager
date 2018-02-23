@@ -1,5 +1,9 @@
 {
   "devDependencies": {
+    "babel-eslint": "8.2.1",
+    "eslint": "4.17.0",
+    "eslint-config-opuscapita": "2.0.0",
+    "eslint-plugin-react": "7.6.1",
     "lerna": "2.6.0"
   },
   "name": "@opuscapita/filemanager-packages",

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './LocationBar.less';
-import SVG from '@opuscapita/react-svg/lib/SVG';
+import Svg from '@opuscapita/react-svg/lib/SVG';
 let arrowIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
 
 const propTypes = {
@@ -38,23 +38,23 @@ class LocationBar extends Component {
 
     let itemsElement = items.map((item, i) => {
       let arrow = i < items.length - 1 ? (
-        <SVG className="oc-fm--location-bar__item-arrow" svg={arrowIcon} />
+        <Svg className="oc-fm--location-bar__item-arrow" svg={arrowIcon} />
       ) : null;
 
       return (
         <div
           key={i}
           tabIndex="0"
-          onClick={item.onClick}
+          onClick={item.onClick} // eslint-disable-line
           className={`
             oc-fm--location-bar__item
-            ${i === items.length - 1 ? 'oc-fm--location-bar__item--last': ''}
+            ${i === items.length - 1 ? 'oc-fm--location-bar__item--last' : ''}
           `}
         >
           <div
             className={`
               oc-fm--location-bar__item-name
-              ${loading ? 'oc-fm--location-bar__item-name--loading': ''}
+              ${loading ? 'oc-fm--location-bar__item-name--loading' : ''}
             `}
             name={item.name}
           >
@@ -62,7 +62,8 @@ class LocationBar extends Component {
           </div>
           {arrow}
         </div>
-    )});
+      )
+    });
 
     return (
       <div className="oc-fm--location-bar">
