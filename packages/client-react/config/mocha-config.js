@@ -29,6 +29,10 @@ require('babel-register')({
   }
 });
 
+const Enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+Enzyme.configure({ adapter: new Adapter() });
+
 global.document = new JSDOM('<!doctype html><html><body></body></html>');
 global.window = global.document.window;
 global.document = window.document;

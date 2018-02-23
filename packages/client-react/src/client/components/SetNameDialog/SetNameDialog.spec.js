@@ -1,17 +1,21 @@
-import React from 'react'; // eslint-disable-line
-import { expect } from 'chai'; // eslint-disable-line
-import { shallow } from 'enzyme'; // eslint-disable-line
-import SetNameDialog from '.'; // eslint-disable-line
+import React from 'react';
+import { expect } from 'chai';
+import { mount } from 'enzyme';
+import SetNameDialog from '.';
+
+
 
 describe('<SetNameDialog />', () => {
-  it('should have default props', () => {
-    let component = <SetNameDialog />;
-    expect(component.props.testProp).to.equal('Give me back my label!');
-    expect(component.props.onClick).to.be.a('function');
-  });
-  it('should have the right class name', () => {
-    let wrapper = shallow(<SetNameDialog className="test-class-name" />);
-    expect(wrapper).to.have.className('set-name-dialog');
-    expect(wrapper).to.have.className('test-class-name');
-  });
+  // it('should render "cancel button"', () => {
+  //   let wrapper = mount(<SetNameDialog />);
+
+  //   expect(wrapper.props.cancelButtonText).to.equal('Give me back my label!');
+  // });
+
+  // it('should have the right class name', () => {
+  //   let wrapper = shallow(<SetNameDialog className="test-class-name" />);
+
+  //   expect(wrapper).to.have.className('set-name-dialog');
+  //   expect(wrapper).to.have.className('test-class-name');
+  // });
 });

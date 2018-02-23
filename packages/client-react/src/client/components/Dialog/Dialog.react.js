@@ -4,10 +4,12 @@ import './Dialog.less';
 
 const propTypes = {
   autofocus: PropTypes.bool,
+  className: PropTypes.string,
   onHide: PropTypes.func
 };
 const defaultProps = {
   autofocus: false,
+  className: '',
   onHide: () => {}
 };
 
@@ -21,12 +23,12 @@ class Dialog extends Component {
   };
 
   render() {
-    let { autofocus } = this.props;
+    let { autofocus, className } = this.props;
 
     return (
       <div
         ref={ref => (autofocus && ref && ref.focus())}
-        className="oc-fm--dialog"
+        className={`oc-fm--dialog ${className}`}
         onKeyDown={this.handleKeyDown}
         onClick={e => e.stopPropagation()}
         onMouseDown={e => e.stopPropagation()}
