@@ -283,7 +283,7 @@ class FileNavigator extends Component {
     }
 
     let isDirectory = rowData.type === 'dir';
-    if (isDirectory) {
+    if (isDirectory) { // FIXME: add "capabilities.canListChildren" check.
       this.navigateToDir(id);
     }
 
@@ -307,7 +307,7 @@ class FileNavigator extends Component {
 
         let isDirectory = selectedResourceChildren[0].type === 'dir';
 
-        if (isDirectory) {
+        if (isDirectory) { // FIXME: add "capabilities.canListChildren" check.
           this.navigateToDir(selectedResourceChildren[0].id);
         }
       }
