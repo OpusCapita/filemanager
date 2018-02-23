@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Dialog from '../Dialog';
 
 const propTypes = {
+  className: PropTypes.string,
   headerText: PropTypes.string,
   messageText: PropTypes.string,
   cancelButtonText: PropTypes.string,
@@ -11,6 +12,7 @@ const propTypes = {
   onSubmit: PropTypes.func
 };
 const defaultProps = {
+  className: '',
   headerText: 'Do you really want to remove the file?',
   messageText: 'Message',
   cancelButtonText: 'Cancel',
@@ -22,16 +24,6 @@ const defaultProps = {
 
 export default
 class ConfirmDialog extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    if (this.ref) {
-      this.ref.focus();
-    }
-  }
-
   handleKeyDown = async (e) => {
     if (e.which === 13) { // Enter key
       this.handleSubmit();
@@ -47,15 +39,16 @@ class ConfirmDialog extends Component {
   };
 
   render() {
-    let { onHide, headerText, messageText, submitButtonText, cancelButtonText } = this.props;
+    let { className, onHide, headerText, messageText, submitButtonText, cancelButtonText } = this.props;
 
     return (
-      <Dialog onHide={onHide}>
-        <div
-          tabIndex="0"
-          ref={ref => (this.ref = ref)}
-          className="oc-fm--dialog__content" onKeyDown={this.handleKeyDown}
-        >
+      <Dialog
+        onHide={onHide}
+        autofocus={true}
+        className={`oc-fm--confirm-dialog ${className}`}
+        onKeyDown={this.handleKeyDown}
+      >
+        <div className="oc-fm--dialog__content">
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
@@ -67,14 +60,22 @@ class ConfirmDialog extends Component {
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
             <button
               type="button"
-              className="oc-fm--dialog__button oc-fm--dialog__button--default"
+              className={`
+                oc-fm--dialog__button
+                oc-fm--dialog__button--default
+                oc-fm--confirm-dialog__cancel-button
+              `}
               onClick={this.handleCancel}
             >
               {cancelButtonText}
             </button>
             <button
               type="button"
-              className={`oc-fm--dialog__button oc-fm--dialog__button--primary`}
+              className={`
+                oc-fm--dialog__button
+                oc-fm--dialog__button--primary
+                oc-fm--confirm-dialog__submit-button
+              `}
               onClick={this.handleSubmit}
             >
               {submitButtonText}

@@ -5,12 +5,14 @@ import './Dialog.less';
 const propTypes = {
   autofocus: PropTypes.bool,
   className: PropTypes.string,
-  onHide: PropTypes.func
+  onHide: PropTypes.func,
+  onKeyDown: PropTypes.func
 };
 const defaultProps = {
   autofocus: false,
   className: '',
-  onHide: () => {}
+  onHide: () => {},
+  onKeyDown: () => {}
 };
 
 export default
@@ -20,10 +22,15 @@ class Dialog extends Component {
       e.stopPropagation();
       this.props.onHide();
     }
+
+    this.props.onKeyDown(e);
   };
 
   render() {
-    let { autofocus, className } = this.props;
+    let {
+      autofocus,
+      className
+    } = this.props;
 
     return (
       <div

@@ -1,48 +1,48 @@
 import React from 'react';
 import { expect } from 'chai';
-import { mount } from '../../test-utils';
+import { mount, hasClass } from '../../test-utils';
 import sinon from 'sinon';
 import Dialog from '.';
 
-describe('<Dialog />', () => {
+describe('<Dialog /> component', () => {
   it('should have "BEM" notation class name', () => {
-    let wrapper = mount(<Dialog className="hello"/>);
+    let wrapper = mount(<Dialog />);
 
-    expect(wrapper.find('.oc-fm--dialog')).to.have.length(1);
+    expect(hasClass(wrapper, 'oc-fm--dialog')).to.equal(true);
     wrapper.detach();
   });
 
 
   it('should take "className" property', () => {
-    let wrapper = mount(<Dialog className="test"/>, document.body);
+    let wrapper = mount(<Dialog className="test"/>);
 
-    expect(wrapper.find(Dialog).hasClass('test')).to.equal(true);
+    expect(hasClass(wrapper, 'test')).to.equal(true);
     wrapper.detach();
   });
 
 
   it('should focus if "autofocus" prop equal "true"', () => {
-    let wrapper = mount(<Dialog autofocus={true} />, document.body);
+    let wrapper = mount(<Dialog autofocus={true} />);
     let focusedElement = document.activeElement;
 
-    expect(wrapper.find('.oc-fm--dialog').instance()).to.equal(focusedElement);
+    expect(wrapper.getDOMNode()).to.equal(focusedElement);
     wrapper.detach();
   });
 
 
   it('should not focus if "autofocus" prop equal "false"', () => {
-    let wrapper = mount(<Dialog autofocus={false} />, document.body);
+    let wrapper = mount(<Dialog autofocus={false} />);
     let focusedElement = document.activeElement;
 
-    expect(wrapper.find('.oc-fm--dialog').instance()).to.not.equal(focusedElement);
+    expect(wrapper.getDOMNode()).to.not.equal(focusedElement);
     wrapper.detach();
   });
 
   it('should not focus if "autofocus" prop isn\'t passed' , () => {
-    let wrapper = mount(<Dialog />, document.body);
+    let wrapper = mount(<Dialog />);
     let focusedElement = document.activeElement;
 
-    expect(wrapper.find('.oc-fm--dialog').instance()).to.not.equal(focusedElement);
+    expect(wrapper.getDOMNode()).to.not.equal(focusedElement);
     wrapper.detach();
   });
 
@@ -50,7 +50,7 @@ describe('<Dialog />', () => {
   it('should call onHide on "Esc" keydown', () => {
     let callback = sinon.spy();
     let wrapper = mount(<Dialog onHide={callback}/>);
-    wrapper.find(Dialog).simulate('keyDown', { key: 'Escape', keycode: 27, which: 27 });
+    wrapper.simulate('keydown', { key: 'Escape', keycode: 27, which: 27 });
 
     expect(callback.calledOnce).to.equal(true);
     wrapper.detach();
@@ -60,7 +60,7 @@ describe('<Dialog />', () => {
   it('should stop Escape key "keydown" event propagation', () => {
     let callback = sinon.spy();
     let wrapper = mount(<div onKeyDown={callback}><Dialog /></div>);
-    wrapper.find(Dialog).simulate('keyDown', { key: 'Escape', keycode: 27, which: 27 });
+    wrapper.find(Dialog).simulate('keydown', { key: 'Escape', keycode: 27, which: 27 });
 
     expect(callback.notCalled).to.equal(true);
     wrapper.detach();
