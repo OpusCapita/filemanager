@@ -36,6 +36,7 @@ function handler(apiOptions, {
           let resource = getResource();
           navigateToDir(resource.id, result.body.id, false);
         }
+        return null;
       },
       onValidate: async (name) => {
         if (!name) {

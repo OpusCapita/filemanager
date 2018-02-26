@@ -1,4 +1,3 @@
-import api from '../api';
 import icons from '../icons-svg';
 import getMessage from '../../translations';
 

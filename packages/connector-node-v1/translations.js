@@ -64,7 +64,7 @@ const translations = {
   },
 };
 
-export default function getMessage(locale, key, params=null) {
+export default function getMessage(locale, key, params = null) {
   let translationExists = (translations[locale] && translations[locale][key]);
   let translation = translationExists ? translations[locale][key] : translations['en'][key];
   if (params === null) {

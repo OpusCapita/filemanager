@@ -48,7 +48,7 @@ function handler(apiOptions, {
     };
 
     let newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);

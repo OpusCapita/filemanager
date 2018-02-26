@@ -36,6 +36,7 @@ function handler(apiOptions, {
           let result = await api.createFolder(apiOptions, resource.id, folderName);
           navigateToDir(resource.id, result.id, false);
         }
+        return null;
       },
       onValidate: async (folderName) => {
         if (!folderName) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { triggerHiddenForm, promptToSaveBlob } from '../utils/download';
 import api from '../api';
 import notifUtils from '../utils/notifications';

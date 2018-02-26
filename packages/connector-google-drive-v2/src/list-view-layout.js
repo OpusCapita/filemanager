@@ -6,7 +6,7 @@ const TABLET_WIDTH = 1024;
 const MOBILE_WIDTH = 640;
 
 function formatSize(
-  viewLayoutOptions,  { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
+  viewLayoutOptions, { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
 ) {
   if (typeof cellData !== 'undefined' && viewLayoutOptions.humanReadableSize) {
     return filesize(cellData);
@@ -16,10 +16,10 @@ function formatSize(
 }
 
 function formatDate(
-  viewLayoutOptions,  { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
+  viewLayoutOptions, { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
 ) {
   if (cellData) {
-    let { locale, dateTimePattern } = viewLayoutOptions;
+    let { dateTimePattern } = viewLayoutOptions;
     return fecha.format(new Date().setTime(cellData), dateTimePattern);
   }
 

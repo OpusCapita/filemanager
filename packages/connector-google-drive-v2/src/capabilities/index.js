@@ -1,5 +1,6 @@
 import createFolder from './create-folder';
-import deleteResource from './delete-resource';
+// "deleteResource" disabled couse not implemented yet
+// import deleteResource from './delete-resource';
 import download from './download';
 import upload from './upload';
 import rename from './rename';
