@@ -210,7 +210,7 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   // multiple resources -> download one by one
 
-  const archiveName = apiOptions.archiveName || 'archive.zip';
+  const archiveName = apiOptions.archiveName || 'archive.zip'; // FIXME: move 'archive.zip' to ./apiOptions.js as default archiveName.
 
   onStart({ archiveName, quantity: resources.length });
 
