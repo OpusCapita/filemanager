@@ -76,6 +76,33 @@ class FileNavigator extends Component {
   }
 
   async componentDidMount() {
+    /* FIXME: connector initialization is done in main app:
+    api gets bound with apiOptions,
+    capabilities gets bound with api (which is bound with apiOptions),
+    listViewLayout gets bound with viewLayoutOptions.
+
+    import connector from '@opuscapita/react-filemanager-connector-node-v1';
+    const { api, listViewLayout, capabilities } = connector({ apiOptions, viewLayoutOptions });
+    <FileNavigator
+      options={{ locale, initialResourceId }}
+      api={api}
+      listViewLayout={listViewLayout}
+      capabilities={capabilities}
+    />
+
+    Since above "capabilities" and "api" need real-time access to apiOptions,
+    connector() function may be called with apiOptions as a set of getters of related variables.
+    However, it is up to main app how to link "capabilities" and "api" with actual value of apiOptions -
+    so any other approach may be used, ex. connector() function may be called again when necessary and
+    new api/listViewLayout/capabilities props resent to FileNavigator.
+
+    FileNavigator needs neither access to apiOptions nor viewLayoutOptions,
+    but they are accessible through properties of api/listViewLayout if needed.
+    All FileNavigator needs to do is to initialize capabilities:
+
+    let capabilitiesProps = this.getCapabilitiesProps();
+    let initializedCapabilities = capabilities(capabilitiesProps);
+    */
     let { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
 
     let capabilitiesProps = this.getCapabilitiesProps();

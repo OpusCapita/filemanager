@@ -17,9 +17,10 @@ let booksFilesExtensions = ['pdf', 'epub', 'fb2'];
 
 function matchFileExtensions(filename, extensions) {
   let extensionsRegExp = `(${extensions.join('|')})`;
-  return extensions.some((o) => new RegExp(`^.*\.${extensionsRegExp}$`).test(filename.toLowerCase()));
+  return extensions.some((o) => new RegExp(`^.*\.${extensionsRegExp}$`).test(filename.toLowerCase())); // FIXME: regexp erroneously works with hidden files => replace * with +. Also regexp is needlessly generated every time getIcon is called.
 };
 
+// FIXME: more correct name is getIconByResource.
 export function getIcon(resource) {
   if (resource.type === 'dir') {
     return { svg: dirIcon, fill: defaultFillColor };

@@ -89,4 +89,5 @@ let listViewLayout = (viewLayoutOptions) => {
   ];
 };
 
+// FIXME: Export function instead of object. The function would accept viewLayoutOptions and merge it with default values.
 export default listViewLayout;

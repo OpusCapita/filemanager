@@ -3,6 +3,8 @@ import JSZip from 'jszip';
 import { serializePromises } from './utils/common';
 import getMessage from '../translations';
 
+// FIXME: Export function instead of object. The function would accept apiOptions and merge it with default values. Individual function would not need apiOptions with every call.
+
 async function init(options) {
   options.onInitSuccess();
   options.onSignInSuccess();

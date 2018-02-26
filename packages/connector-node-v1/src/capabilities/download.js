@@ -113,6 +113,11 @@ function handler(apiOptions, {
     ).catch(err => console.error(err));
 }
 
+/* FIXME EVERYWHERE: new function would be
+export default api => ({ showDialog, hideDialog, ... }) => {
+  ...
+}
+*/
 export default (apiOptions, {
   showDialog,
   hideDialog,
