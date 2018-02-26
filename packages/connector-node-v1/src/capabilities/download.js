@@ -108,8 +108,8 @@ function handler(apiOptions, {
       onProgress
     }
   }).then(
-      ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-    ).catch(err => console.error(err));
+    ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
+  ).catch(err => console.error(err));
 }
 
 export default (apiOptions, {

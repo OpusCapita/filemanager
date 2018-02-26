@@ -18,7 +18,7 @@ let booksFilesExtensions = ['pdf', 'epub', 'fb2'];
 function matchFileExtensions(filename, extensions) {
   let extensionsRegExp = `(${extensions.join('|')})`;
   return extensions.some((o) => new RegExp(`^.*\.${extensionsRegExp}$`).test(filename.toLowerCase()));
-};
+}
 
 export function getIcon(resource) {
   if (resource.type === 'dir') {

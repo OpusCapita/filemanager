@@ -129,7 +129,6 @@ async function getParentIdForResource(options, resource) {
 async function readLocalFile() {
   return new Promise((resolve, reject) => {
     let uploadInput = document.createElement("input");
-    let reader = new FileReader();
 
     uploadInput.addEventListener('change', (e) => {
       let file = uploadInput.files[0];
@@ -152,21 +151,21 @@ async function uploadFileToId(options, parentId, { onStart, onSuccess, onFail, o
   let route = `${options.apiRoot}/files`;
   onStart({ name: file.name, size: file.file.size });
   request.post(route).
-  field('type', 'file').
-  field('parentId', parentId).
-  attach('files', file.file, file.name).
-  on('progress', event => {
-    onProgress(event.percent);
-  }).
-  end((error, response) => {
-    if (error) {
-      console.log(`Filemanager. uploadFileToId(${parentId})`, error);
-      onFail();
-    } else {
-      let newResource = normalizeResource(response.body[0]);
-      onSuccess(newResource.id);
-    }
-  });
+    field('type', 'file').
+    field('parentId', parentId).
+    attach('files', file.file, file.name).
+    on('progress', event => {
+      onProgress(event.percent);
+    }).
+    end((error, response) => {
+      if (error) {
+        console.log(`Filemanager. uploadFileToId(${parentId})`, error);
+        onFail();
+      } else {
+        let newResource = normalizeResource(response.body[0]);
+        onSuccess(newResource.id);
+      }
+    });
 }
 
 async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail }) {
@@ -186,7 +185,7 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
         console.error(err);
         onFail();
       }
-  );
+    );
 }
 
 async function downloadResources({ apiOptions, resources, trackers: {
@@ -242,10 +241,10 @@ async function createFolder(options, parentId, folderName, { onFail }) {
     type: 'dir'
   };
   let response = await request(method, route).send(params).
-  catch((error) => {
-    console.error(`Filemanager. createFolder(${id})`, error);
-    onFail()
-  });
+    catch((error) => {
+      console.error(`Filemanager. createFolder(${parentId})`, error);
+      onFail()
+    });
   return response;
 }
 
@@ -257,10 +256,10 @@ async function renameResource(options, id, newName, { onFail }) {
   let route = `${options.apiRoot}/files/${id}`;
   let method = 'PATCH';
   let response = await request(method, route).type('application/json').send({ name: newName }).
-  catch((error) => {
-    console.error(`Filemanager. renameResource(${id})`, error);
-    onFail()
-  });
+    catch((error) => {
+      console.error(`Filemanager. renameResource(${id})`, error);
+      onFail()
+    });
   return response;
 }
 
@@ -268,19 +267,19 @@ async function removeResource(options, resource) {
   let route = `${options.apiRoot}/files/${resource.id}`;
   let method = 'DELETE';
   let response = await request(method, route).
-  catch((error) => {
-    throw error;
-  });
+    catch((error) => {
+      throw error;
+    });
   return response;
 }
 
 async function removeResources(options, selectedResources, { onSuccess, onFail }) {
-  let success = await Promise.all(selectedResources.map(async (resource) => await removeResource(options, resource))).
-  catch((error) => {
-    console.error(`Filemanager. removeResources`, error);
-    onFail();
-  });
-  onSuccess();
+  await Promise.all(selectedResources.map(async (resource) => await removeResource(options, resource))).
+    then(onSuccess).
+    catch((error) => {
+      console.error(`Filemanager. removeResources`, error);
+      onFail();
+    });
 }
 
 export default {
