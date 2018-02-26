@@ -48,7 +48,8 @@ function handler(apiOptions, {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       },
-      headerText: dialogNameText,
+      headerText: getMessage('remove'),
+      messageText: dialogNameText,
       cancelButtonText: getMessage('cancel'),
       submitButtonText: getMessage('confirm')
     }

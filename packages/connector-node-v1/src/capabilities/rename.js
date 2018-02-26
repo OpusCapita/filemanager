@@ -59,7 +59,8 @@ function handler(apiOptions, {
         }
         return null;
       },
-      headerText: getMessage('newName'),
+      inputLabelText: getMessage('newName'),
+      headerText: getMessage('rename'),
       submitButtonText: localeLabel
     }
   };

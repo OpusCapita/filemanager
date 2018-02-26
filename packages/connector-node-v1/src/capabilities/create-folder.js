@@ -56,7 +56,8 @@ function handler(apiOptions, {
         }
         return null;
       },
-      headerText: getMessage('folderName'),
+      inputLabelText: getMessage('folderName'),
+      headerText: getMessage('createFolder'),
       submitButtonText: getMessage('create')
     }
   };
