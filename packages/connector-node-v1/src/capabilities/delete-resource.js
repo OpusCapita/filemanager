@@ -84,14 +84,6 @@ export default (apiOptions, {
       return selectedResources.every(resource => resource.capabilities.canDelete);
     },
     availableInContexts: ['row', 'toolbar'],
-    /*
-    TBD: replace "shouldBeAvailable" and "availableInContexts" with
-    availabe: ({ parent, selected, context }) => { ...; return <null|false|true> }
-    where null means that the resource is not applicable for the context, false - unavailable, true - available.
-    or (if icon/label/handler depends on context)
-    availabe: ({ parent, selected, context }) => { ...; return <null|{id,icon,label,handler,disabled}> }
-    and remove id/icon/label/handler from return object
-    */
     handler: () => handler(apiOptions, {
       showDialog,
       hideDialog,
