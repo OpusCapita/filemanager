@@ -7,7 +7,7 @@
     "start": "node -e \"require('./index').server.run()\"",
     "start-hide": "node -e \"require('./index').server.run()\" &",
     "start-with-demo": "npm run prepare-demo && npm start",
-    "lint": "eslint .",
+    "lint": "eslint --env node,es6 .",
     "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
     "prepare-demo": "cd ../.. && rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh && cd ../packages/server-nodejs",
