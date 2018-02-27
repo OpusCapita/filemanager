@@ -52,12 +52,13 @@ module.exports = ({ options, req, res, handleError }) => {
           res.sendFile(absPaths[0], {
             headers: {
               'Content-Disposition': `inline; filename="${encodeRFC5987ValueChars(path.basename(absPaths[0]))}"`
-            }
+            },
+            dotfiles: 'allow'
           });
         } else {
           // Sets the Content-Type response HTTP header field based on the filename’s extension.
           // Sets the Content-Disposition with "attachment" and "filename" equal to path.basename(absPaths[0])
-          res.download(absPaths[0]);
+          res.download(absPaths[0], absPaths[0], { dotfiles: 'allow' });
         }
       }).
       catch(handleError);

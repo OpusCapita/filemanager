@@ -142,7 +142,7 @@ module.exports = ({
     );
   }(MAX_RETRIES)).
     then(_ => fs.stat(path.join(targetAbsPath, basename))).
-    then(stat => stat2resource(options, {  // stat2resource must be called _after_ promise resolution!
+    then(stat => stat2resource(options, { // stat2resource must be called _after_ promise resolution!
       dir: targetRelativePath,
       basename
     })(stat)).
