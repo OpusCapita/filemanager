@@ -38,7 +38,7 @@ describe('<Dialog /> component', () => {
     wrapper.detach();
   });
 
-  it('should not focus if "autofocus" prop isn\'t passed' , () => {
+  it('should not focus if "autofocus" prop isn\'t passed', () => {
     let wrapper = mount(<Dialog />);
     let focusedElement = document.activeElement;
 

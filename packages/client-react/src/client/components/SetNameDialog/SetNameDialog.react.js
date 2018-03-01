@@ -41,9 +41,24 @@ class SetNameDialog extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    // Have issues with testing using Mocha + Enzyme + jsdom
+    // https://github.com/eleme/element-react/blob/0cc39d32fc98de07f3dfada7e5cef55b6c12e207/src/input/Input.jsx#L3// 7
+    setTimeout(() => {
+      if (this.inputRef) {
+        this.inputRef.focus();
+      }
+    });
+  }
+
   handleChange = async (e) => {
     this.setState({ value: e.target.value });
     let validationError = await this.props.onValidate(e.target.value);
+    console.log('vv', validationError);
     this.setState({ validationError, valid: !validationError });
   }
 
@@ -70,7 +85,7 @@ class SetNameDialog extends Component {
   }
 
   handleFocus = (e) => {
-    // Move caret at end
+    // Set caret after last char of input value
     let tmpValue = e.target.value;
     e.target.value = ''; // eslint-disable-line
     e.target.value = tmpValue; // eslint-disable-line
@@ -112,9 +127,10 @@ class SetNameDialog extends Component {
           )}
 
           <input
-            ref={ref => (ref && ref.focus())}
+            ref={ref => (this.inputRef = ref)}
             spellCheck={false}
             className={`
+              oc-fm--set-name-dialog__input
               oc-fm--dialog__input
               oc-fm--dialog__input--margin-bottom
               ${validationError ? '' : 'oc-fm--dialog__input--error'}
@@ -126,12 +142,24 @@ class SetNameDialog extends Component {
           {validationErrorElement}
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
-            <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
+            <button
+              type="button"
+              className={`
+                oc-fm--set-name-dialog__cancel-button
+                oc-fm--dialog__button
+                oc-fm--dialog__button--default
+              `}
+               onClick={onHide}
+            >
               {cancelButtonText}
             </button>
             <button
               type="button"
-              className={`oc-fm--dialog__button oc-fm--dialog__button--primary`}
+              className={`
+                oc-fm--set-name-dialog__submit-button
+                oc-fm--dialog__button
+                oc-fm--dialog__button--primary
+              `}
               onClick={this.handleSubmitButtonClick}
               disabled={!valid}
             >

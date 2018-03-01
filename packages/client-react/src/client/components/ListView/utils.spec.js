@@ -241,7 +241,7 @@ describe('<ListView /> utils', () => {
     });
 
     it('should not remove anything for a single-element array', () => {
-      const newSelection = selection.slice(2, 3)
+      const newSelection = selection.slice(2, 3);
       const result = removeLastFromSelection({ selection: newSelection, items });
       expect(result).to.deep.equal({
         selection: newSelection,
@@ -252,7 +252,7 @@ describe('<ListView /> utils', () => {
 
   describe('removeFirstFromSelection', () => {
     it('should remove first item', () => {
-      const newSelection = selection.slice(1, 4)
+      const newSelection = selection.slice(1, 4);
       const result = removeFirstFromSelection({ selection: newSelection, items });
       const afterSelection = newSelection.slice(1);
       expect(result).to.deep.equal({
@@ -262,7 +262,7 @@ describe('<ListView /> utils', () => {
     });
 
     it('should not remove anything for a single-element array', () => {
-      const newSelection = selection.slice(2, 3)
+      const newSelection = selection.slice(2, 3);
       const result = removeFirstFromSelection({ selection: newSelection, items });
       expect(result).to.deep.equal({
         selection: newSelection,
