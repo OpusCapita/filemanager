@@ -5,6 +5,7 @@ import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
+import Fetch from '../Fetch';
 import { SortDirection } from 'react-virtualized';
 import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
@@ -14,6 +15,22 @@ import {
   createHistory,
   pushToHistory,
 } from '../history';
+
+// TODO Simplify this function and move to separate file
+let getResourceLocationFetcher = ({
+  getParentsForId,
+  getResourceName,
+  handleLocationBarChange,
+  apiOptions
+}) => async ({ resource }) => {
+  let resourceParents = await getParentsForId(resource.id);
+  let resourceLocation = resourceParents.concat(resource);
+
+  return resourceLocation.map((o) => ({
+    name: getResourceName(apiOptions, o),
+    onClick: () => handleLocationBarChange(o.id)
+  }));
+};
 
 const propTypes = {
   id: PropTypes.string,
@@ -58,20 +75,17 @@ class FileNavigator extends Component {
     this.state = {
       apiInitialized: false,
       apiSignedIn: false,
-      config: {},
       dialogElement: null,
       error: null,
-      loadingResourceLocation: false,
+      history: createHistory(),
+      initializedCapabilities: [],
       loadingView: false,
       notifications: [],
       resource: {},
       resourceChildren: [],
-      resourceLocation: [],
-      history: createHistory(),
       selection: [],
       sortBy: 'title',
-      sortDirection: SortDirection.ASC,
-      initializedCapabilities: []
+      sortDirection: SortDirection.ASC
     };
   }
 
@@ -115,7 +129,7 @@ class FileNavigator extends Component {
   }
 
   startViewLoading = () => {
-    this.setState({ loadingView: true, loadingResourceLocation: true });
+    this.setState({ loadingView: true });
   }
 
   stopViewLoading = () => {
@@ -202,34 +216,27 @@ class FileNavigator extends Component {
     this.handleResourceChildrenChange(resourceChildren);
 
     this.stopViewLoading();
-    this.setParentsForResource(resource);
   };
 
-  async setParentsForResource(resource) {
-    let resourceParents = await this.getParentsForId(resource.id);
-    let resourceLocation = resourceParents.concat(resource);
-    this.handleResourceLocationChange(resourceLocation);
-    this.setState({ loadingResourceLocation: false });
-  }
-
-  async getParentsForId(id) {
+  getParentsForId = async (id) => {
     let { api, apiOptions } = this.props;
+    console.log('getParentsForId, id:', id);
     return await api.getParentsForId(apiOptions, id);
   }
 
-  async getResourceById(id) {
+  getResourceById = async (id) => {
     let { api, apiOptions } = this.props;
     let result = await api.getResourceById(apiOptions, id);
     return result;
   }
 
-  async getChildrenForId(id, sortBy, sortDirection) {
+  getChildrenForId = async (id, sortBy, sortDirection) => {
     let { api, apiOptions } = this.props;
     let { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
     return { resourceChildren };
   }
 
-  getResourceChildrenBySelection(selection) {
+  getResourceChildrenBySelection = (selection) => {
     let { resourceChildren } = this.state;
     let filteredResourceItems = resourceChildren.filter((o) => selection.indexOf(o.id) !== -1);
     return filteredResourceItems;
@@ -237,11 +244,6 @@ class FileNavigator extends Component {
 
   handleClickOutside = () => {
     this.handleSelectionChange([]);
-  }
-
-  handleResourceLocationChange = (resourceLocation) => {
-    this.setState({ resourceLocation });
-    this.props.onResourceLocationChange(resourceLocation);
   }
 
   handleSelectionChange = (selection) => {
@@ -369,6 +371,7 @@ class FileNavigator extends Component {
   render() {
     let {
       id,
+      api,
       apiOptions,
       className,
       listViewLayout,
@@ -381,11 +384,10 @@ class FileNavigator extends Component {
       apiSignedIn,
       dialogElement,
       history,
-      loadingResourceLocation,
       loadingView,
       notifications,
+      resource,
       resourceChildren,
-      resourceLocation,
       selection,
       sortBy,
       sortDirection,
@@ -411,11 +413,6 @@ class FileNavigator extends Component {
         {viewLoadingElement}
       </div>
     ) : null;
-
-    let locationItems = resourceLocation.map((o) => ({
-      name: this.props.api.getResourceName(this.props.apiOptions, o),
-      onClick: () => this.handleLocationBarChange(o.id)
-    }));
 
     // TODO replace it by method "getCapabilities" for performace reason
     let rowContextMenuItems = initializedCapabilities.
@@ -508,10 +505,22 @@ class FileNavigator extends Component {
           </ListView>
         </div>
         <div className="oc-fm--file-navigator__location-bar">
-          <LocationBar
-            items={locationItems}
-            loading={loadingResourceLocation}
-          />
+          <Fetch
+            fetcher={getResourceLocationFetcher({
+              apiOptions,
+              getParentsForId: this.getParentsForId,
+              getResourceName: api.getResourceName,
+              handleLocationBarChange: this.handleLocationBarChange
+            })}
+            fetcherArguments={{ resource }}
+          >
+            {({ loaded, loading, data, error }) => (
+              <LocationBar
+                loading={loading}
+                items={data}
+              />
+            )}
+          </Fetch>
         </div>
         <ContextMenu
           triggerId={rowContextMenuId}
