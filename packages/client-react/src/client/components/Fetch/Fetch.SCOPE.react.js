@@ -9,7 +9,7 @@ import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 
 @showroomScopeDecorator
 export default
-class LocationBarContainerScope extends Component {
+class FetchScope extends Component {
   constructor(props) {
     super(props);
     this.state = {};

@@ -1,6 +1,6 @@
 ### Synopsis
 
-LocationBarContainer is 
+Fetch is 
 *Write here a short introduction and/or overview that explains **what** component is.*
 
 ### Props Reference
@@ -12,12 +12,12 @@ LocationBarContainer is
 ### Code Example
 
 ```
-<LocationBarContainer />
+<Fetch />
 ```
 
 ### Component Name
 
-LocationBarContainer
+Fetch
 
 ### License
 

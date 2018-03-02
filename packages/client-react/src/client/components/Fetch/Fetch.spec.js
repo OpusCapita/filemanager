@@ -1,8 +1,8 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import LocationBarContainer from '.';
+import Fetch from '.';
 
-describe('<LocationBarContainer />', () => {
+describe('<Fetch />', () => {
 
 });
