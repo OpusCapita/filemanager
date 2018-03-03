@@ -5,10 +5,11 @@ import nanoid from 'nanoid';
 import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
+import { normalizeResource } from '../utils/common';
 
 let label = 'upload';
 
-function handler(apiOptions, {
+async function handler(apiOptions, {
   showDialog,
   hideDialog,
   navigateToDir,
@@ -86,7 +87,7 @@ function handler(apiOptions, {
     updateNotifications
   });
 
-  let onProgress = (progress) => {
+  let onProgress = progress => {
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
     let child = notifUtils.getChild(notification.children, notificationChildId);
@@ -106,7 +107,14 @@ function handler(apiOptions, {
   };
 
   let resource = getResource();
-  api.uploadFileToId(apiOptions, resource.id, { onStart, onSuccess, onFail, onProgress });
+  try {
+    const response = await api.uploadFileToId(apiOptions, resource.id, { onStart, onProgress });
+    let newResource = normalizeResource(response.body[0]);
+    onSuccess(newResource.id);
+  } catch (err) {
+    onFail();
+    console.log(err)
+  }
 }
 
 export default (apiOptions, {
@@ -121,18 +129,17 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
     icon: { svg: icons.fileUpload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let resource = getResource();
+      const resource = getResource();
       if (!resource || !resource.capabilities) {
-        return false;
+        return false
       }
-
-      return resource.capabilities.canAddChildren;
+      return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
     handler: () => handler(apiOptions, {

@@ -27,23 +27,30 @@ function handler(apiOptions, {
     updateNotifications
   });
 
-  let rawDialogElement = {
+  const rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
       onHide: hideDialog,
       onSubmit: async (folderName) => {
-        let resource = getResource();
-        let { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id, onFail });
-        let alreadyExists = resourceChildren.some((o) => o.name === folderName);
+        const resource = getResource();
+        try {
+          const { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id });
+          const alreadyExists = resourceChildren.some(({ name }) => name === folderName);
 
-        if (alreadyExists) {
-          return getMessage('fileExist', { name: folderName });
-        } else {
+          if (alreadyExists) {
+            return getMessage('fileExist', { name: folderName });
+          } else {
+            hideDialog();
+            const result = await api.createFolder(apiOptions, resource.id, folderName);
+            navigateToDir(resource.id, result.body.id, false);
+          }
+          return null
+        } catch (err) {
           hideDialog();
-          let result = await api.createFolder(apiOptions, resource.id, folderName, { onFail });
-          navigateToDir(resource.id, result.body.id, false);
+          onFail();
+          console.log(err);
+          return null
         }
-        return null;
       },
       onValidate: async (folderName) => {
         if (!folderName) {
@@ -78,13 +85,13 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
     icon: { svg: icons.createNewFolder },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let resource = getResource();
+      const resource = getResource();
 
       if (!resource || !resource.capabilities) {
         return false;

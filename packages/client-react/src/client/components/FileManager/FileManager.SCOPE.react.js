@@ -43,7 +43,11 @@ class FileManagerScope extends Component {
   }
 
   async componentDidMount() {
-    await this.handleNodejsInitPathChange('');
+    try {
+      await this.handleNodejsInitPathChange('')
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   googleDriveSignIn() {
@@ -78,6 +82,7 @@ class FileManagerScope extends Component {
     };
 
     let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
+
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }

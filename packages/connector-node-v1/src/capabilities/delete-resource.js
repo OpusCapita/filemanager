@@ -18,10 +18,10 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
-  let onSuccess = () => {
-    let resource = getResource();
+  const onSuccess = () => {
+    const resource = getResource();
     navigateToDir(resource.id, null, false);
   };
 
@@ -46,7 +46,13 @@ function handler(apiOptions, {
       onHide: hideDialog,
       onSubmit: async () => {
         hideDialog();
-        api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
+        try {
+          await api.removeResources(apiOptions, selectedResources);
+          onSuccess()
+        } catch (err) {
+          onFail();
+          console.log(err)
+        }
       },
       headerText: getMessage('remove'),
       messageText: dialogNameText,
@@ -70,13 +76,13 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: 'delete',
     icon: { svg: icons.delete },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let selectedResources = getSelectedResources();
+      const selectedResources = getSelectedResources();
 
       if (!selectedResources.length) {
         return false;

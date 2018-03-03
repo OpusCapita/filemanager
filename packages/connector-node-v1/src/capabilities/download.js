@@ -8,7 +8,7 @@ import getMess from '../../translations';
 
 let label = 'download';
 
-function handler(apiOptions, {
+async function handler(apiOptions, {
   showDialog,
   hideDialog,
   navigateToDir,
@@ -98,18 +98,24 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  return api.downloadResources({
-    resources: getSelectedResources(),
-    apiOptions,
-    trackers: {
-      onStart,
-      onSuccess,
-      onFail,
-      onProgress
+  try {
+    const response = await api.downloadResources({
+      resources: getSelectedResources(),
+      apiOptions,
+      trackers: {
+        onStart,
+        onProgress
+      }
+    });
+    const { direct, downloadUrl, file: content, name } = response;
+    if (!direct) {
+      setTimeout(onSuccess, 1000)
     }
-  }).then(
-    ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-  ).catch(err => console.error(err));
+    promptToSaveBlob({ content, name, downloadUrl })
+  } catch (err) {
+    onFail()
+    console.log(err)
+  }
 }
 
 export default (apiOptions, {
