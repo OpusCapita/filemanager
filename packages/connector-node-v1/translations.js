@@ -28,7 +28,7 @@ const translations = {
     title: 'Title',
     fileSize: 'File size',
     lastModified: 'Last modified',
-    reallyRemove: ' will be deleted. Do you really want to proceed?',
+    reallyRemove: '{files} will be deleted. Do you really want to proceed?',
     unableReadDir: 'Unable to read a directory.'
   },
 
@@ -59,12 +59,12 @@ const translations = {
     title: 'Titel',
     fileSize: 'Dateigröße',
     lastModified: 'Zuletzt geändert',
-    reallyRemove: ' wird/werden gelöscht. Möchten Sie wirklich fortfahren?',
+    reallyRemove: '{files}  wird/werden gelöscht. Möchten Sie wirklich fortfahren?',
     unableReadDir: 'Ein Directory kann nicht gelesen werden.'
   },
 };
 
-export default function getMessage(locale, key, params=null) {
+export default function getMessage(locale, key, params = null) {
   let translationExists = (translations[locale] && translations[locale][key]);
   let translation = translationExists ? translations[locale][key] : translations['en'][key];
   if (params === null) {

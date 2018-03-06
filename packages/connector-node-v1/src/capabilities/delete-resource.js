@@ -3,7 +3,6 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.delete;
 let label = 'remove';
 
 function handler(apiOptions, {
@@ -35,10 +34,11 @@ function handler(apiOptions, {
 
   let selectedResources = getSelectedResources();
 
-  let dialogNameText = getMessage('reallyRemove');
   let dialogFilesText = selectedResources.length > 1 ?
-    `${selectedResources.length} ${getMessage('files')} ?` :
-    `"${selectedResources[0].name}" ?`;
+    `${selectedResources.length} ${getMessage('files')}` :
+    `"${selectedResources[0].name}"`;
+
+  let dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
 
   let rawDialogElement = {
     elementType: 'ConfirmDialog',
@@ -48,7 +48,8 @@ function handler(apiOptions, {
         hideDialog();
         api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
       },
-      headerText: dialogNameText + dialogFilesText,
+      headerText: getMessage('remove'),
+      messageText: dialogNameText,
       cancelButtonText: getMessage('cancel'),
       submitButtonText: getMessage('confirm')
     }
@@ -72,7 +73,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: 'delete',
-    icon: { svg: icon },
+    icon: { svg: icons.delete },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
@@ -95,25 +96,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

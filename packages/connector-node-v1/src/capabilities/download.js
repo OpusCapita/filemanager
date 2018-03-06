@@ -6,7 +6,6 @@ import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileDownload;
 let label = 'download';
 
 function handler(apiOptions, {
@@ -109,8 +108,8 @@ function handler(apiOptions, {
       onProgress
     }
   }).then(
-      ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-    ).catch(err => console.error(err));
+    ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
+  ).catch(err => console.error(err));
 }
 
 export default (apiOptions, {
@@ -128,7 +127,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileDownload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
@@ -151,25 +150,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

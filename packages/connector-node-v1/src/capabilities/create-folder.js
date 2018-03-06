@@ -4,7 +4,6 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.createNewFolder;
 let label = 'createFolder';
 
 function handler(apiOptions, {
@@ -44,6 +43,7 @@ function handler(apiOptions, {
           let result = await api.createFolder(apiOptions, resource.id, folderName, { onFail });
           navigateToDir(resource.id, result.body.id, false);
         }
+        return null;
       },
       onValidate: async (folderName) => {
         if (!folderName) {
@@ -57,7 +57,8 @@ function handler(apiOptions, {
         }
         return null;
       },
-      headerText: getMessage('folderName'),
+      inputLabelText: getMessage('folderName'),
+      headerText: getMessage('createFolder'),
       submitButtonText: getMessage('create')
     }
   };
@@ -80,7 +81,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.createNewFolder },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let resource = getResource();
@@ -103,25 +104,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

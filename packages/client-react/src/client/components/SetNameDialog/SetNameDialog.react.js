@@ -6,6 +6,8 @@ import Dialog from '../Dialog';
 const propTypes = {
   cancelButtonText: PropTypes.string,
   headerText: PropTypes.string,
+  messageText: PropTypes.string,
+  inputLabelText: PropTypes.string,
   initialValue: PropTypes.string,
   onChange: PropTypes.func,
   onHide: PropTypes.func,
@@ -16,6 +18,8 @@ const propTypes = {
 const defaultProps = {
   cancelButtonText: 'Cancel',
   headerText: 'Set name',
+  messageText: '',
+  inputLabelText: '',
   initialValue: '',
   onChange: () => {},
   onHide: () => {},
@@ -71,7 +75,7 @@ class SetNameDialog extends Component {
   }
 
   render() {
-    let { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
+    let { onHide, headerText, inputLabelText, messageText, submitButtonText, cancelButtonText } = this.props;
     let { value, validationError, valid } = this.state;
 
     let showValidationErrorElement = typeof validationError === 'string' && validationError;
@@ -93,6 +97,14 @@ class SetNameDialog extends Component {
             {headerText}
           </div>
 
+          {messageText && (
+            <div className="oc-fm--dialog__message">{messageText}</div>
+          )}
+
+          {inputLabelText && (
+            <div className="oc-fm--dialog__input-label">{inputLabelText}</div>
+          )}
+
           <input
             ref={ref => (ref && ref.focus())}
             spellCheck={false}
@@ -105,6 +117,7 @@ class SetNameDialog extends Component {
             onChange={this.handleChange}
             onFocus={this.handleFocus}
           />
+          {validationErrorElement}
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
             <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
@@ -119,7 +132,6 @@ class SetNameDialog extends Component {
               {submitButtonText}
             </button>
           </div>
-          {validationErrorElement}
         </div>
       </Dialog>
     );

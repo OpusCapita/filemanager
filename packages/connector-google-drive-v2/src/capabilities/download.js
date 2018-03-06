@@ -1,4 +1,3 @@
-import React from 'react';
 import { triggerHiddenForm, promptToSaveBlob } from '../utils/download';
 import api from '../api';
 import notifUtils from '../utils/notifications';
@@ -7,7 +6,6 @@ import { getIcon } from '../icons';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileDownload;
 const label = 'download';
 
 function handler(apiOptions, {
@@ -128,7 +126,7 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileDownload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       const selectedResources = getSelectedResources();
@@ -146,25 +144,6 @@ export default (apiOptions, {
       getResourceLocation,
       getNotifications
     }),
-    availableInContexts: ['row', 'toolbar'],
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
-    })
+    availableInContexts: ['row', 'toolbar']
   };
 }

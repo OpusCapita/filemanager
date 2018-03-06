@@ -1,11 +1,11 @@
 {
   "name": "@opuscapita/react-filemanager-connector-node-v1",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "@opuscapita/filemanager connector for NodeJS API v1",
   "main": "lib/index.js",
   "scripts": {
     "start": "babel --watch --copy-files src --out-dir lib",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "build": "rimraf lib && babel --copy-files src --out-dir lib",
     "prepublish": "npm run build"
   },

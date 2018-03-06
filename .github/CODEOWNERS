@@ -1,6 +1,1 @@
-* @kvolkovich-sc @asergeev-sc
-
-/packages/client-react @kvolkovich-sc @asergeev-sc
-/packages/connector-node-v1 @kvolkovich-sc @asergeev-sc
-/packages/connector-google-drive-v2 @kvolkovich-sc @asergeev-sc
-/packages/server-nodejs @amourzenkov-sc @kvolkovich-sc @asergeev-sc
+* @kvolkovich-sc @asergeev-sc @amourzenkov-sc

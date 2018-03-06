@@ -6,8 +6,6 @@ import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
 import getMessage from '../translations';
 
-let signedIn = false;
-
 async function appendGoogleApiScript() {
   if (window.gapi) {
     return false;
@@ -39,8 +37,6 @@ async function updateSigninStatus(isSignedIn, options) {
     options.onSignInFail(getMessage(options.locale, 'signInFail'));
     console.log('Google Drive sign-in fail');
   }
-
-  signedIn = isSignedIn;
 }
 
 // Initializes the API client library and sets up sign-in state listeners.
@@ -85,7 +81,7 @@ function normalizeResource(resource) {
     modifiedDate: Date.parse(resource.modifiedDate),
     title: resource.title,
     type: resource.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
-    size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize),
+    size: typeof resource.fileSize === 'undefined' ? resource.fileSize : parseInt(resource.fileSize, 10),
     parents: resource.parents,
     capabilities: resource.capabilities,
     downloadUrl: resource.downloadUrl,
@@ -171,7 +167,7 @@ async function downloadResource({ resource, params, onProgress, i, l }) {
         fileName
       }),
       err => { throw new Error(`Failed to download resource: ${err}`) }
-  );
+    );
 }
 
 async function downloadResources({ resources, apiOptions, trackers: {
@@ -231,7 +227,7 @@ async function initResumableUploadSession({ name, size, parentId }) {
   let res = await agent.post(uploadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     set('X-Upload-Content-Length', size).
-    send({ title: name, parents: [{ id: parentId}] });
+    send({ title: name, parents: [{ id: parentId }] });
 
   return res.headers['location'];
 }
@@ -246,7 +242,7 @@ async function uploadChunk({ sessionUrl, size, startByte, content }) {
       set('Content-Encoding', 'base64').
       send(btoa(content.slice(startByte, endByte))).
       end((err, res) => {
-        if (err) { } // pass
+        // if (err) { } // pass
         resolve(res);
       });
   });
@@ -284,6 +280,8 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
       return res;
     }
   }
+
+  return null;
 }
 
 async function createFolder(apiOptions, parentId, folderName) {
