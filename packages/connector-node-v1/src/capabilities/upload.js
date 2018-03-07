@@ -21,16 +21,16 @@ async function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
-  let notificationId = label;
-  let notificationChildId = nanoid();
-  let prevResourceId = getResource().id;
+  const notificationId = label;
+  const notificationChildId = nanoid();
+  const prevResourceId = getResource().id;
 
-  let onStart = ({ name, size }) => {
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
-    let childElement = {
+  const onStart = ({ name, size }) => {
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const childElement = {
       elementType: 'NotificationProgressItem',
       elementProps: {
         title: name,
@@ -39,45 +39,20 @@ async function handler(apiOptions, {
       }
     };
 
-    let newChildren =
+    const newChildren =
       notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
-    let newNotification = {
+    const newNotification = {
       title: newChildren.length > 1 ?
         getMessage('uploadingItems', { quantity: newChildren.length }) :
         getMessage('uploadingItem'),
       children: newChildren
     };
 
-    let newNotifications = notification ?
+    const newNotifications = notification ?
       notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);
-  };
-
-  let onSuccess = (newResourceId) => {
-    let resource = getResource();
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
-    let notificationChildrenCount = notification.children.length;
-    let newNotifications;
-
-    if (notificationChildrenCount > 1) {
-      newNotifications = notifUtils.updateNotification(
-        notifications,
-        notificationId, {
-          children: notifUtils.removeChild(notification.children, notificationChildId)
-        }
-      );
-    } else {
-      newNotifications = notifUtils.removeNotification(notifications, notificationId);
-    }
-
-    updateNotifications(newNotifications);
-
-    if (prevResourceId === resource.id) {
-      navigateToDir(resource.id, newResourceId, false);
-    }
   };
 
   const onProgress = progress => {
@@ -99,11 +74,28 @@ async function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  let resource = getResource();
+  const resource = getResource();
   try {
     const response = await api.uploadFileToId(apiOptions, resource.id, { onStart, onProgress });
-    let newResource = normalizeResource(response.body[0]);
-    onSuccess(newResource.id);
+    const newResource = normalizeResource(response.body[0]);
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const notificationChildrenCount = notification.children.length;
+    let newNotifications;
+    if (notificationChildrenCount > 1) {
+      newNotifications = notifUtils.updateNotification(
+        notifications,
+        notificationId, {
+          children: notifUtils.removeChild(notification.children, notificationChildId)
+        }
+      );
+    } else {
+      newNotifications = notifUtils.removeNotification(notifications, notificationId);
+    }
+    updateNotifications(newNotifications);
+    if (prevResourceId === resource.id) {
+      navigateToDir(resource.id, newResource.id, false);
+    }
   } catch (err) {
     onFailError({
       getNotifications,
