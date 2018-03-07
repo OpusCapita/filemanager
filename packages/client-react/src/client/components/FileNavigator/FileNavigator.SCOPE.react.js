@@ -27,12 +27,8 @@ class FileNavigatorScope extends Component {
     };
   }
 
-  async componentDidMount() {
-    try {
-      await this.handleNodejsInitPathChange('')
-    } catch (err) {
-      console.log(err)
-    }
+  componentDidMount() {
+    this.handleNodejsInitPathChange('')
   }
 
   handleNodejsLocationChange = (resourceLocation) => {

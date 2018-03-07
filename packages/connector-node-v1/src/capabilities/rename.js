@@ -21,13 +21,6 @@ function handler(apiOptions, {
   const getMessage = getMess.bind(null, apiOptions.locale);
   const localeLabel = getMessage(label);
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: localeLabel,
-    notificationId: label,
-    updateNotifications
-  });
-
   const rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
@@ -51,7 +44,12 @@ function handler(apiOptions, {
           return null;
         } catch (err) {
           hideDialog();
-          onFail();
+          onFailError({
+            getNotifications,
+            label: localeLabel,
+            notificationId: label,
+            updateNotifications
+          });
           console.log(err)
           return null
         }

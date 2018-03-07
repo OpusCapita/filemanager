@@ -20,27 +20,15 @@ function handler(apiOptions, {
 }) {
   const getMessage = getMess.bind(null, apiOptions.locale);
 
-  const onSuccess = () => {
-    const resource = getResource();
-    navigateToDir(resource.id, null, false);
-  };
+  const selectedResources = getSelectedResources();
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: getMessage(label),
-    notificationId: 'delete',
-    updateNotifications
-  });
-
-  let selectedResources = getSelectedResources();
-
-  let dialogFilesText = selectedResources.length > 1 ?
+  const dialogFilesText = selectedResources.length > 1 ?
     `${selectedResources.length} ${getMessage('files')}` :
     `"${selectedResources[0].name}"`;
 
-  let dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
+  const dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
 
-  let rawDialogElement = {
+  const rawDialogElement = {
     elementType: 'ConfirmDialog',
     elementProps: {
       onHide: hideDialog,
@@ -48,9 +36,15 @@ function handler(apiOptions, {
         hideDialog();
         try {
           await api.removeResources(apiOptions, selectedResources);
-          onSuccess()
+          const resource = getResource();
+          navigateToDir(resource.id, null, false);
         } catch (err) {
-          onFail();
+          onFailError({
+            getNotifications,
+            label: getMessage(label),
+            notificationId: 'delete',
+            updateNotifications
+          });
           console.log(err)
         }
       },

@@ -42,12 +42,8 @@ class FileManagerScope extends Component {
     window.googleDriveSignOut = this.googleDriveSignOut.bind(this);
   }
 
-  async componentDidMount() {
-    try {
-      await this.handleNodejsInitPathChange('')
-    } catch (err) {
-      console.log(err)
-    }
+  componentDidMount() {
+    this.handleNodejsInitPathChange('')
   }
 
   googleDriveSignIn() {

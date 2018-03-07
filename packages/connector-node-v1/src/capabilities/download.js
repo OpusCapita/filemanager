@@ -71,13 +71,6 @@ async function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: getMessage(label),
-    notificationId,
-    updateNotifications
-  });
-
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -113,7 +106,12 @@ async function handler(apiOptions, {
     }
     promptToSaveBlob({ content, name, downloadUrl })
   } catch (err) {
-    onFail()
+    onFailError({
+      getNotifications,
+      label: getMessage(label),
+      notificationId,
+      updateNotifications
+    });
     console.log(err)
   }
 }

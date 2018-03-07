@@ -43,7 +43,7 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let parent = await getResourceById(options, parentId);
-  return getParentsForId(options, resource.parentId, [parent].concat(result));
+  return getParentsForId(options, resource.parentId, [parent, ...result]);
 }
 
 async function getBaseResource(options) {

@@ -80,18 +80,11 @@ async function handler(apiOptions, {
     }
   };
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: getMessage(label),
-    notificationId,
-    updateNotifications
-  });
-
-  let onProgress = progress => {
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
-    let child = notifUtils.getChild(notification.children, notificationChildId);
-    let newChild = {
+  const onProgress = progress => {
+    const notifications = getNotifications();
+    const notification = notifUtils.getNotification(notifications, notificationId);
+    const child = notifUtils.getChild(notification.children, notificationChildId);
+    const newChild = {
       ...child,
       element: {
         ...child.element,
@@ -101,8 +94,8 @@ async function handler(apiOptions, {
         }
       }
     };
-    let newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
-    let newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
+    const newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
+    const newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
     updateNotifications(newNotifications);
   };
 
@@ -112,7 +105,12 @@ async function handler(apiOptions, {
     let newResource = normalizeResource(response.body[0]);
     onSuccess(newResource.id);
   } catch (err) {
-    onFail();
+    onFailError({
+      getNotifications,
+      label: getMessage(label),
+      notificationId,
+      updateNotifications
+    });
     console.log(err)
   }
 }
