@@ -27,12 +27,12 @@ function handler(apiOptions, {
       initialValue: getSelectedResources()[0].name,
       onHide: hideDialog,
       onSubmit: async (name) => {
-        let selectedResources = getSelectedResources();
+        const selectedResources = getSelectedResources();
         try {
-          let { resourceChildren } = await api.getChildrenForId(
+          const resourceChildren = await api.getChildrenForId(
             apiOptions, { id: selectedResources[0].parentId }
           );
-          let alreadyExists = resourceChildren.some(o => o.name === name);
+          const alreadyExists = resourceChildren.some(o => o.name === name);
           if (alreadyExists) {
             return getMessage('fileExist', { name });
           } else {

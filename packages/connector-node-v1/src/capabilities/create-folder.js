@@ -27,7 +27,7 @@ function handler(apiOptions, {
       onSubmit: async (folderName) => {
         const resource = getResource();
         try {
-          const { resourceChildren } = await api.getChildrenForId(apiOptions, { id: resource.id });
+          const resourceChildren = await api.getChildrenForId(apiOptions, { id: resource.id });
           const alreadyExists = resourceChildren.some(({ name }) => name === folderName);
 
           if (alreadyExists) {

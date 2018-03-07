@@ -22,7 +22,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
   const route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   const method = 'GET';
   const response = await request(method, route);
-  return { resourceChildren: response.body.items.map(normalizeResource) }
+  return response.body.items.map(normalizeResource)
 }
 
 async function getParentsForId(options, id, result = []) {
@@ -53,7 +53,7 @@ async function getBaseResource(options) {
 }
 
 async function getIdForPartPath(options, currId, pathArr) {
-  const { resourceChildren } = await getChildrenForId(options, { id: currId });
+  const resourceChildren = await getChildrenForId(options, { id: currId });
   for (let i = 0; i < resourceChildren.length; i++) {
     const resource = resourceChildren[i];
     if (resource.name === pathArr[0]) {

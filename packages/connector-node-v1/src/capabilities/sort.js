@@ -19,8 +19,7 @@ export default (apiOptions, {
   handler: async ({ sortBy, sortDirection }) => {
     const id = getResource().id;
     try {
-      const { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
-      return resourceChildren;
+      return api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
     } catch (err) {
       onFailError({
         getNotifications,
