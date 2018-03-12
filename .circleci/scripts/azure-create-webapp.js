@@ -13,7 +13,7 @@ let resource = JSON.parse(
       --plan ${env.AZURE_APP_SERVICE_PLAN} \
       --resource-group ${env.AZURE_RESOURCE_GROUP} \
       --deployment-container-image-name ${env.DOCKER_DEMO_CONTAINER_NAME}:${env.DOCKER_TAG} \
-      --name ${env.AZURE_APP_NAME}-${env.DOCKER_TAG} \
+      --name ${env.AZURE_APP_NAME}-${env.DOCKER_TAG.slice(0, 59-env.AZURE_APP_NAME.length)} \
   `)
 );
 
