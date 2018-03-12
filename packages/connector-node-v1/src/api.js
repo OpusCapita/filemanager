@@ -177,10 +177,14 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l, onFail
       onProgress((i * 100 + event.percent) / l);
     }).
     then(
-      res => ({
-        file: res.body,
-        name: resource.name
-      }),
+      res => {
+        onProgress((i + 1) * 100 / l);
+
+        return {
+          file: res.body,
+          name: resource.name
+        };
+      },
       err => {
         console.error(err);
         onFail();
@@ -209,13 +213,11 @@ async function downloadResources({ apiOptions, resources, trackers: {
 
   onStart({ archiveName, quantity: resources.length });
 
-  const files = await serializePromises({
-    series: resources.map(resource => ({ onProgress, i, l, onFail }) => downloadResource({
-      resource, apiOptions, onProgress, i, l, onFail
-    })),
-    onProgress,
-    onFail
-  });
+  const files = await serializePromises(
+    resources.map((resource, i) => downloadResource.bind(null, {
+      resource, apiOptions, onProgress, i, l: resources.length, onFail
+    }))
+  );
 
   onProgress(100);
 
@@ -282,6 +284,55 @@ async function removeResources(options, selectedResources, { onSuccess, onFail }
     });
 }
 
+async function _searchForResources({ resourcesPromise, options, onProgress }) {
+  let { body: { items: resources, nextPage } } = await resourcesPromise;
+  resources = resources.map(normalizeResource);
+
+  if (!nextPage) {
+    return resources;
+  }
+
+  onProgress(resources);
+
+  // Delayed request for next page:
+  const NEXT_PAGE_REQUEST_DELAY = 2000;
+  return new Promise((resolve, reject) => setTimeout(
+    _ => _searchForResources({
+      options,
+      onProgress,
+      resourcesPromise: request.get(`${options.apiRoot}${nextPage}`)
+    }).
+      then(resolve).
+      catch(reject),
+    NEXT_PAGE_REQUEST_DELAY,
+  ));
+}
+
+const searchForResources = ({
+  options,
+  resourceId,
+  itemNameSubstring,
+  itemNameCaseSensitive,
+  isFile,
+  isDir,
+  recursive,
+  onProgress
+}) => _searchForResources({
+  options,
+  onProgress,
+  resourcesPromise: request.
+    get(`${options.apiRoot}/files/${resourceId}/search`).
+    query({
+      itemNameCaseSensitive,
+      recursive,
+      ...(itemNameSubstring && { itemNameSubstring }),
+      itemType: [
+        ...(isFile && ['file']),
+        ...(isDir && ['dir'])
+      ]
+    })
+});
+
 export default {
   init,
   getIdForPath,
@@ -296,5 +347,6 @@ export default {
   downloadResources,
   renameResource,
   removeResources,
-  uploadFileToId
+  uploadFileToId,
+  searchForResources
 };

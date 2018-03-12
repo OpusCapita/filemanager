@@ -4,6 +4,7 @@ import download from './download';
 import upload from './upload';
 import rename from './rename';
 import sort from './sort';
+import search from './search';
 
 export default (apiOptions, {
   showDialog,
@@ -78,6 +79,18 @@ export default (apiOptions, {
     getNotifications
   }),
   sort(apiOptions, {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelection,
+    getSelectedResources,
+    getResource,
+    getResourceChildren,
+    getResourceLocation,
+    getNotifications
+  }),
+  search(apiOptions, {
     showDialog,
     hideDialog,
     navigateToDir,
