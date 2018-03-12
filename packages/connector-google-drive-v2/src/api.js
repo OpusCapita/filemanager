@@ -132,9 +132,7 @@ async function getChildrenForId(options, { id, sortBy = 'title', sortDirection =
     orderBy: `folder,${sortBy} ${sortDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
   });
-
-  let resourceChildren = response.result.items.map((o) => normalizeResource({ ...o }));
-  return { resourceChildren };
+  return response.result.items.map((o) => normalizeResource({ ...o }));
 }
 
 async function getCapabilitiesForResource(options, resource) {
