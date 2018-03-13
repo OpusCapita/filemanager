@@ -59,7 +59,8 @@ function handler(apiOptions, {
       },
       inputLabelText: getMessage('folderName'),
       headerText: getMessage('createFolder'),
-      submitButtonText: getMessage('create')
+      submitButtonText: getMessage('create'),
+      cancelButtonText: getMessage('cancel')
     }
   };
 
