@@ -133,21 +133,7 @@ async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
     }));
 }
 
-async function downloadResources({ apiOptions, resources, trackers: { onStart, onProgress } }) {
-  // TBD: maybe split into 2 functions and handle side events (onStart, onSuccess) in capabilities/download
-  if (resources.length === 1) {
-    const { id, name } = resources[0];
-    return {
-      direct: true,
-      downloadUrl: `${apiOptions.apiRoot}/download?items=${id}`,
-      name
-    }
-  }
-
-  // multiple resources -> download one by one
-  const archiveName = apiOptions.archiveName || 'archive.zip';
-  onStart({ archiveName, quantity: resources.length });
-
+async function downloadResources({ apiOptions, resources, onProgress }) {
   const files = await serializePromises({
     series: resources.map(resource => ({ onProgress, i, l }) => downloadResource({
       resource, apiOptions, onProgress, i, l
@@ -159,13 +145,7 @@ async function downloadResources({ apiOptions, resources, trackers: { onStart, o
 
   const zip = new JSZip();
   files.forEach(({ name, file }) => zip.file(name, file));
-  const blob = await zip.generateAsync({ type: 'blob' });
-
-  return {
-    direct: false,
-    file: blob,
-    name: archiveName
-  }
+  return zip.generateAsync({ type: 'blob' });
 }
 
 async function createFolder(options, parentId, folderName) {

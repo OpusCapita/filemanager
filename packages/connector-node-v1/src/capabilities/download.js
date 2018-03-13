@@ -92,19 +92,28 @@ async function handler(apiOptions, {
   };
 
   try {
-    const response = await api.downloadResources({
-      resources: getSelectedResources(),
-      apiOptions,
-      trackers: {
-        onStart,
-        onProgress
-      }
-    });
-    const { direct, downloadUrl, file: content, name } = response;
-    if (!direct) {
-      setTimeout(onSuccess, 1000)
+    const resources = getSelectedResources();
+    if (resources.length === 1) {
+      const { id, name } = resources[0];
+      const downloadUrl = `${apiOptions.apiRoot}/download?items=${id}`;
+      // check if the file is available and trigger native browser saving prompt
+      // if server is down the error will be catched and trigger relevant notification
+      await api.getResourceById(apiOptions, id).then(_ => promptToSaveBlob({ name, downloadUrl }));
+      return;
     }
-    promptToSaveBlob({ content, name, downloadUrl })
+
+    // multiple resources -> download one by one and zip into a single archive
+    const archiveName = apiOptions.archiveName || 'archive.zip';
+    onStart({ archiveName, quantity: resources.length });
+
+    const content = await api.downloadResources({
+      resources,
+      apiOptions,
+      onProgress
+    });
+
+    setTimeout(onSuccess, 1000)
+    promptToSaveBlob({ content, name: archiveName })
   } catch (err) {
     onFailError({
       getNotifications,
