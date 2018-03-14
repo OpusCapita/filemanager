@@ -1,12 +1,15 @@
 # Change Log
 
-## [Unreleased](https://github.com/OpusCapita/filemanager/tree/HEAD)
-
-[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.4...HEAD)
+## [v1.0.5](https://github.com/OpusCapita/filemanager/tree/v1.0.5) (2018-03-13)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.4...v1.0.5)
 
 **Fixed bugs:**
 
 - Can't download file if file name begins with "." [\#162](https://github.com/OpusCapita/filemanager/issues/162)
+
+**Closed issues:**
+
+- Remove redundant contextMenuRenderer in connectors capabilities [\#155](https://github.com/OpusCapita/filemanager/issues/155)
 
 ## [v1.0.4](https://github.com/OpusCapita/filemanager/tree/v1.0.4) (2018-02-27)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.3...v1.0.4)

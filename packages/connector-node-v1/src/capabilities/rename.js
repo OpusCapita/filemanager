@@ -66,7 +66,8 @@ function handler(apiOptions, {
       },
       inputLabelText: getMessage('newName'),
       headerText: getMessage('rename'),
-      submitButtonText: localeLabel
+      submitButtonText: localeLabel,
+      cancelButtonText: getMessage('cancel')
     }
   };
   showDialog(rawDialogElement);
