@@ -8,7 +8,7 @@ import getMess from '../../translations';
 
 let label = 'download';
 
-function handler(apiOptions, {
+async function handler(apiOptions, {
   showDialog,
   hideDialog,
   navigateToDir,
@@ -71,13 +71,6 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: getMessage(label),
-    notificationId,
-    updateNotifications
-  });
-
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -98,18 +91,38 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  return api.downloadResources({
-    resources: getSelectedResources(),
-    apiOptions,
-    trackers: {
-      onStart,
-      onSuccess,
-      onFail,
-      onProgress
+  try {
+    const resources = getSelectedResources();
+    if (resources.length === 1) {
+      const { id, name } = resources[0];
+      const downloadUrl = `${apiOptions.apiRoot}/download?items=${id}`;
+      // check if the file is available and trigger native browser saving prompt
+      // if server is down the error will be catched and trigger relevant notification
+      await api.getResourceById(apiOptions, id).then(_ => promptToSaveBlob({ name, downloadUrl }));
+      return;
     }
-  }).then(
-    ({ downloadUrl, file: content, name }) => promptToSaveBlob({ content, name, downloadUrl })
-  ).catch(err => console.error(err));
+
+    // multiple resources -> download one by one and zip into a single archive
+    const archiveName = apiOptions.archiveName || 'archive.zip';
+    onStart({ archiveName, quantity: resources.length });
+
+    const content = await api.downloadResources({
+      resources,
+      apiOptions,
+      onProgress
+    });
+
+    setTimeout(onSuccess, 1000)
+    promptToSaveBlob({ content, name: archiveName })
+  } catch (err) {
+    onFailError({
+      getNotifications,
+      label: getMessage(label),
+      notificationId,
+      updateNotifications
+    });
+    console.log(err)
+  }
 }
 
 export default (apiOptions, {

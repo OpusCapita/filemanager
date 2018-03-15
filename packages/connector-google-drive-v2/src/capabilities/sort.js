@@ -17,7 +17,7 @@ export default (apiOptions, {
   shouldBeAvailable: () => true,
   handler: async ({ sortBy, sortDirection }) => {
     let id = getResource().id;
-    let { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
+    let resourceChildren = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
     return resourceChildren;
   }
 });
