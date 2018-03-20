@@ -15,10 +15,10 @@ export default (apiOptions, {
   getSortState
 }) => ({
   id: 'sort',
+  shouldBeAvailable: () => true,
   handler: async ({ sortBy, sortDirection }) => {
     const onFail = ({ message }) => onFailError({
       getNotifications,
-      label,
       notificationId: 'rename',
       updateNotifications,
       message

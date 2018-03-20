@@ -5,7 +5,6 @@ import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileUpload;
 let label = 'upload';
 
 function handler(apiOptions, {
@@ -36,9 +35,12 @@ function handler(apiOptions, {
       }
     };
 
-    let newChildren = notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
+    let newChildren =
+      notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
-      title: newChildren.length > 1 ? getMessage('uploadingItems', { quantity: newChildren.length }) : getMessage('uploadingItem'),
+      title: newChildren.length > 1 ?
+        getMessage('uploadingItems', { quantity: newChildren.length }) :
+        getMessage('uploadingItem'),
       children: newChildren
       // progressText: `2 minutes left…`, // TODO
       // cancelButtonText: "Cancel",
@@ -46,7 +48,7 @@ function handler(apiOptions, {
     };
 
     let newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);
@@ -113,7 +115,7 @@ export default (apiOptions, {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileUpload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],
@@ -128,25 +130,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

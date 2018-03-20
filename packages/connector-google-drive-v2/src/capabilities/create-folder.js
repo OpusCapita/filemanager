@@ -3,7 +3,6 @@ import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.createNewFolder;
 let label = 'createFolder';
 
 function handler(apiOptions, {
@@ -37,6 +36,7 @@ function handler(apiOptions, {
           let result = await api.createFolder(apiOptions, resource.id, folderName);
           navigateToDir(resource.id, result.id, false);
         }
+        return null;
       },
       onValidate: async (folderName) => {
         if (!folderName) {
@@ -73,7 +73,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.createNewFolder },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],
@@ -88,27 +88,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => (
-      {
-        elementType: 'ContextMenuItem',
-        elementProps: {
-          icon: { svg: icon },
-          onClick: () => handler(apiOptions, {
-            showDialog,
-            hideDialog,
-            navigateToDir,
-            updateNotifications,
-            getSelection,
-            getSelectedResources,
-            getResource,
-            getResourceChildren,
-            getResourceLocation,
-            getNotifications
-          }),
-          children: localeLabel
-        }
-      }
-    )
+    })
   };
 }

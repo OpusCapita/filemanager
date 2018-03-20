@@ -154,7 +154,7 @@ TODO in v2:
 ```javascript
 {
   items: [<file stats resource>, ...],
-  nextPage: <string, url path part, i.e. everything after host/port, starting with slash>
+  ?nextPage: <string, url path part, i.e. everything after host/port, starting with slash>
 }
 ```
 

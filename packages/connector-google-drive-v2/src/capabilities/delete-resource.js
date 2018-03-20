@@ -1,8 +1,6 @@
-import api from '../api';
 import icons from '../icons-svg';
 import getMessage from '../../translations';
 
-let icon = icons.delete;
 let label = 'remove';
 
 function handler(apiOptions, {
@@ -36,7 +34,7 @@ export default (apiOptions, {
   const localeLabel = getMessage(apiOptions.locale, label);
   return {
     id: 'delete',
-    icon: { svg: icon },
+    icon: { svg: icons.delete },
     label: localeLabel,
     title: localeLabel,
     shouldBeAvailable: (apiOptions) => {
@@ -54,25 +52,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

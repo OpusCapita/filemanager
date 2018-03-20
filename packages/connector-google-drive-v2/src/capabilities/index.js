@@ -1,5 +1,6 @@
 import createFolder from './create-folder';
-import deleteResource from './delete-resource';
+// "deleteResource" disabled couse not implemented yet
+// import deleteResource from './delete-resource';
 import download from './download';
 import upload from './upload';
 import rename from './rename';
@@ -70,19 +71,21 @@ export default (apiOptions, {
     getNotifications,
     getSortState
   }),
-  deleteResource(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications,
-    getSortState
-  }),
+  // "deleteResource" disabled couse not implemented yet
+
+  // deleteResource(apiOptions, {
+  //   showDialog,
+  //   hideDialog,
+  //   navigateToDir,
+  //   updateNotifications,
+  //   getSelection,
+  //   getSelectedResources,
+  //   getResource,
+  //   getResourceChildren,
+  //   getResourceLocation,
+  //   getNotifications,
+  //   getSortState
+  // }),
   sort(apiOptions, {
     showDialog,
     hideDialog,

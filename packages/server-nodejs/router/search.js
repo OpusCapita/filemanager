@@ -12,7 +12,7 @@ const CACHE_TIMEOUT = process.env.NODE_ENV === 'development' ? 99000 : 20000;
 const gCache = {};
 
 const buildCacheId = req => {
-  return (Date.now().toString() - new Date(2018, 0, 1)).toString() + getClientIp(req).replace(/\./g, '');
+  return (Date.now() - new Date(2018, 0, 1)).toString() + getClientIp(req).replace(/\./g, '');
 }
 
 const sendAvailable = ({ cacheId, req, res, handleError }) => {

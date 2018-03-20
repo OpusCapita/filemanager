@@ -1,6 +1,4 @@
-import React from 'react';
 import notifUtils from './notifications';
-import icons from '../icons-svg';
 
 export default function onFailErrors({
   getNotifications,

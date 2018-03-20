@@ -152,9 +152,6 @@ const getResource = ({
         createdTime: stat.birthtime,
         modifiedTime: stat.mtime,
         capabilities: {
-          canListChildren: true,
-          canAddChildren: !options.readOnly,
-          canRemoveChildren: !options.readOnly,
           canDelete: !!userParent && !options.readOnly,
           canRename: !!userParent && !options.readOnly,
           canCopy: !!userParent && !options.readOnly,
@@ -165,6 +162,9 @@ const getResource = ({
 
       if (stat.isDirectory()) {
         resource.type = TYPE_DIR;
+        resource.capabilities.canListChildren = true;
+        resource.capabilities.canAddChildren = !options.readOnly;
+        resource.capabilities.canRemoveChildren = !options.readOnly;
       } else if (stat.isFile()) {
         resource.type = TYPE_FILE;
         resource.size = stat.size;

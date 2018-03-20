@@ -1,5 +1,16 @@
 # Change Log
 
+## [Unreleased](https://github.com/OpusCapita/filemanager/tree/HEAD)
+
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.4...HEAD)
+
+**Fixed bugs:**
+
+- Can't download file if file name begins with "." [\#162](https://github.com/OpusCapita/filemanager/issues/162)
+
+## [v1.0.4](https://github.com/OpusCapita/filemanager/tree/v1.0.4) (2018-02-27)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.3...v1.0.4)
+
 ## [v1.0.3](https://github.com/OpusCapita/filemanager/tree/v1.0.3) (2018-02-12)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.2...v1.0.3)
 

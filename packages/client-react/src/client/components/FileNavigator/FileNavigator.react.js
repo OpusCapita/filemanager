@@ -6,7 +6,7 @@ import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
-import { find } from 'lodash';
+import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
@@ -104,6 +104,13 @@ class FileNavigator extends Component {
 
     if (needToNavigate) {
       this.navigateToDir(nextProps.initialResourceId);
+    }
+
+    if (!isEqual(this.props.apiOptions, nextProps.apiOptions)) {
+      let { apiOptions, capabilities } = nextProps;
+      let capabilitiesProps = this.getCapabilitiesProps();
+      let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+      this.setState({ initializedCapabilities });
     }
   }
 
@@ -411,28 +418,34 @@ class FileNavigator extends Component {
     }));
 
     // TODO replace it by method "getCapabilities" for performace reason
-    let rowContextMenuChildren = initializedCapabilities.
+    let rowContextMenuItems = initializedCapabilities.
         filter(capability => (
-        capability.contextMenuRenderer &&
-        capability.shouldBeAvailable(apiOptions) &&
-        (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
-      )).
-      map(capability => capability.contextMenuRenderer(apiOptions));
+          capability.shouldBeAvailable(apiOptions) &&
+          (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
+        )).
+        map(capability => ({
+          icon: capability.icon,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
 
-    let filesViewContextMenuChildren = initializedCapabilities.
+    let filesViewContextMenuItems = initializedCapabilities.
       filter(capability => (
-        capability.contextMenuRenderer &&
         capability.shouldBeAvailable(apiOptions) &&
         (capability.availableInContexts && capability.availableInContexts.indexOf('files-view') !== -1)
       )).
-      map(capability => capability.contextMenuRenderer(apiOptions));
+        map(capability => ({
+          icon: capability.icon,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {})
+        }));
 
     let toolbarItems = initializedCapabilities.
         filter(capability => (
           (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
         )).
         map(capability => ({
-          icon: capability.icon || null,
+          icon: capability.icon,
           label: capability.label || '',
           onClick: capability.handler || (() => {}),
           disabled: !capability.shouldBeAvailable(apiOptions)
@@ -443,7 +456,7 @@ class FileNavigator extends Component {
           (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
         )).
         map(capability => ({
-          icon: capability.icon || null,
+          icon: capability.icon,
           label: capability.label || '',
           onClick: capability.handler || (() => {}),
           disabled: !capability.shouldBeAvailable(apiOptions)
@@ -500,12 +513,14 @@ class FileNavigator extends Component {
             loading={loadingResourceLocation}
           />
         </div>
-        <ContextMenu triggerId={rowContextMenuId}>
-          {rowContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
-        </ContextMenu>
-        <ContextMenu triggerId={filesViewContextMenuId}>
-          {filesViewContextMenuChildren.map((contextMenuChild, i) => ({ ...contextMenuChild, key: i }))}
-        </ContextMenu>
+        <ContextMenu
+          triggerId={rowContextMenuId}
+          items={rowContextMenuItems}
+        />
+        <ContextMenu
+          triggerId={filesViewContextMenuId}
+          items={filesViewContextMenuItems}
+        />
       </div>
     );
   }

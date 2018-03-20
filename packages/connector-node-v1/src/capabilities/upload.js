@@ -6,7 +6,6 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.fileUpload;
 let label = 'upload';
 
 function handler(apiOptions, {
@@ -49,7 +48,7 @@ function handler(apiOptions, {
     };
 
     let newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification):
+      notifUtils.updateNotification(notifications, notificationId, newNotification) :
       notifUtils.addNotification(notifications, notificationId, newNotification);
 
     updateNotifications(newNotifications);
@@ -125,7 +124,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.fileUpload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let resource = getResource();
@@ -147,25 +146,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

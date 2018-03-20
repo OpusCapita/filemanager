@@ -195,6 +195,7 @@ workflows:
       jobs:
         - build
         - tests
+
         - approve-publish-release:
             type: approval
             requires:
@@ -203,6 +204,7 @@ workflows:
               branches:
                 only:
                   - master
+
         - publish-release:
             requires:
               - build
@@ -211,6 +213,7 @@ workflows:
               branches:
                 only:
                   - master
+
         - deploy-demo:
             requires:
               - build

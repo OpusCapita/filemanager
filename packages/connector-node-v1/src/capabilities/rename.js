@@ -4,7 +4,6 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../../translations';
 
-let icon = icons.rename;
 let label = 'rename';
 
 function handler(apiOptions, {
@@ -49,6 +48,7 @@ function handler(apiOptions, {
           let resource = getResource();
           navigateToDir(resource.id, result.body.id, false);
         }
+        return null;
       },
       onValidate: async (name) => {
         if (!name) {
@@ -60,7 +60,8 @@ function handler(apiOptions, {
         }
         return null;
       },
-      headerText: getMessage('newName'),
+      inputLabelText: getMessage('newName'),
+      headerText: getMessage('rename'),
       submitButtonText: localeLabel
     }
   };
@@ -82,7 +83,7 @@ export default (apiOptions, {
   let localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
-    icon: { svg: icon },
+    icon: { svg: icons.rename },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       let selectedResources = getSelectedResources();
@@ -104,25 +105,6 @@ export default (apiOptions, {
       getResourceChildren,
       getResourceLocation,
       getNotifications
-    }),
-    contextMenuRenderer: (apiOptions) => ({
-      elementType: 'ContextMenuItem',
-      elementProps: {
-        icon: { svg: icon },
-        onClick: () => handler(apiOptions, {
-          showDialog,
-          hideDialog,
-          navigateToDir,
-          updateNotifications,
-          getSelection,
-          getSelectedResources,
-          getResource,
-          getResourceChildren,
-          getResourceLocation,
-          getNotifications
-        }),
-        children: localeLabel
-      }
     })
   };
 }

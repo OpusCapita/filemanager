@@ -26,7 +26,10 @@ See [FileNavigator documentation and example](http://opuscapita-filemanager-demo
         capabilities={_scope.connectors.nodeV1.capabilities}
         initialResourceId={_scope.state.nodejsInitId}
         listViewLayout={_scope.connectors.nodeV1.listViewLayout}
-        viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
+        viewLayoutOptions={{
+          ..._scope.connectors.nodeV1.viewLayoutOptions,
+          locale: 'en' // 'en' / 'de'
+        }}
         signInRenderer={() => (
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           </div>
