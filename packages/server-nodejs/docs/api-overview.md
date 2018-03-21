@@ -6,9 +6,10 @@
 | [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
 | [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
 | [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | ?orderBy=...&orderDirection=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPageToken<br />} |
-| [Rename and/or copy/move file/dir to destination](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
-| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">?preview=...&items=:id&items=:id...</span>                          | :binary-data                          |
+| [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | orderBy=...<br />&orderDirection=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource]<br />} |
+| [Search for files/dirs](#search-for-filesdirs)              | GET    | api/files/:id/search | itemNameSubstring=...<br />&itemNameCaseSensitive=...<br />&itemType=...<br />&recursive=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPage<br />} |
+| [Rename/copy/move](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
+| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">preview=...<br />&items=:id<br />&items=:id...</span>                          | :binary-data                          |
 
 File/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/package/base64url)-variation).  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
@@ -22,6 +23,8 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
 # API
 
 ## File stats resource
+
+### Standard resource structure
 
 ```javascript
 {
@@ -40,9 +43,17 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
     canDelete: <boolean>,
     canRename: <boolean>,
     canCopy: <boolean>,
-    caEdit: <boolean>,
+    canEdit: <boolean>,
     canDownload: <boolean>
   }
+}
+```
+
+### Optional custom properties
+
+```javascript
+{
+  ancestors: [<file stats resource>, ...] // list of ancestors starting with user root dir, empty for the root
 }
 ```
 
@@ -77,7 +88,7 @@ For file(s) upload:
 [<file stats resource>, ...]
 ```
 
-A 204 status is returned if a dir with parentId does not exist.
+A 410 status is returned if a dir with parentId does not exist.
 
 ## Delete file or directory
 
@@ -108,17 +119,42 @@ All query paramaters are optional
 
 TODO in v2:
 
-* maxResults: \<number\>,
-* pageToken: \<string\>,
-* searchQuery: \<string\>,
-* searchRecursively: \<bool\>
+* maxResults: \<number\>
+
+### Response
+
+```javascript
+{
+  items: [<file stats resource>, ...]
+}
+```
+
+## Search for files/dirs
+
+* URL: `api/files/:id/search`
+* Method: GET
+
+### Request Query Parameters
+
+All query paramaters are optional
+
+| Name                     | Possible Values | Default           |
+|--------------------------|-----------------|-------------------|
+| itemNameSubstring        | any string      | -                 |
+| itemNameCaseSensitive    | true<br />false | false             |
+| itemType                 | file<br />dir   | both file and dir |
+| recursive                | true<br />false | true              |
+
+TODO in v2:
+
+* maxResults: \<number\>
 
 ### Response
 
 ```javascript
 {
   items: [<file stats resource>, ...],
-  nextPageToken // TODO in v2
+  ?nextPage: <string, url path part, i.e. everything after host/port, starting with slash>
 }
 ```
 

@@ -9,7 +9,7 @@ const getClientIp = require('../utils/get-client-ip');
 const {
   checkName,
   id2path,
-  stat2resource
+  getResource
 } = require('./lib');
 
 const {
@@ -140,9 +140,9 @@ module.exports = ({ options, req, res, handleError }) => {
 
       return fs.access(parentPath). // Check whether parent exists.
         then(_ => fs.ensureDir(dirPath)).
-        then(_ => fs.stat(dirPath)).
-        then(stat2resource(options, {
-          dir: reqParentPath,
+        then(_ => getResource({
+          options,
+          parent: reqParentPath,
           basename: name
         })).
         then(resource => res.json(resource)).
@@ -157,13 +157,13 @@ module.exports = ({ options, req, res, handleError }) => {
 
       options.logger.info(`Upload ${req.files.map(({ path }) => path)} requested by ${getClientIp(req)}`);
 
-      return Promise.all(req.files.map(({ path, filename }) =>
-        fs.stat(path).
-          then(stat2resource(options, {
-            dir: reqParentPath,
-            basename: filename
-          }))
-      )).
+      return Promise.all(
+        req.files.map(({ filename }) => getResource({
+          options,
+          parent: reqParentPath,
+          basename: filename
+        }))
+      ).
         then(items => res.json(items)).
         catch(handleError);
     } else {
