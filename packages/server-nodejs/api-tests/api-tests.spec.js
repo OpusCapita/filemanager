@@ -313,7 +313,7 @@ describe('Search for files/dirs', () => {
   });
 
   describe('Various itemNameCaseSensitive', () => {
-    it.skip('Default params', (done) => {
+    it('Default params', (done) => {
       let nameSubstring = workChildDirName.slice(1, -1).toUpperCase();
 
       request.
@@ -331,7 +331,6 @@ describe('Search for files/dirs', () => {
           expect(item0.type).to.equal('dir');
           expect(item0.parentId).to.equal(rootId);
           expect(item0.name).to.equal(workChildDirName);
-          expect(item0.ancestors.length).to.equal(1);
 
           done();
         }).
@@ -967,7 +966,7 @@ describe('Create dirs', () => {
 });
 
 describe('Copy resouces', () => {
-  it.skip('Copy file', done => {
+  it('Copy file', done => {
     let route = `${baseUrl}/api/files/${workFileId}`;
     let method = 'PATCH';
 
@@ -984,9 +983,9 @@ describe('Copy resouces', () => {
         expect(jsonData.name).to.equal(workFileName);
         expect(jsonData.type).to.equal("file");
 
-        expect(capabilities.canListChildren).to.equal(true);
-        expect(capabilities.canAddChildren).to.equal(true);
-        expect(capabilities.canRemoveChildren).to.equal(true);
+        // expect(capabilities.canListChildren).to.equal(true);
+        // expect(capabilities.canAddChildren).to.equal(true);
+        // expect(capabilities.canRemoveChildren).to.equal(true);
         expect(capabilities.canDelete).to.equal(true);
         expect(capabilities.canRename).to.equal(true);
         expect(capabilities.canCopy).to.equal(true);
@@ -1060,7 +1059,7 @@ describe('Copy resouces', () => {
       });
   });
 
-  it.skip('Copy file with new name', done => {
+  it('Copy file with new name', done => {
     copiedFileName = 'copied file';
     let route = `${baseUrl}/api/files/${workFileId}`;
     let method = 'PATCH';
@@ -1082,9 +1081,9 @@ describe('Copy resouces', () => {
         expect(jsonData.name).to.equal(copiedFileName);
         expect(jsonData.type).to.equal("file");
 
-        expect(capabilities.canListChildren).to.equal(true);
-        expect(capabilities.canAddChildren).to.equal(true);
-        expect(capabilities.canRemoveChildren).to.equal(true);
+        // expect(capabilities.canListChildren).to.equal(true);
+        // expect(capabilities.canAddChildren).to.equal(true);
+        // expect(capabilities.canRemoveChildren).to.equal(true);
         expect(capabilities.canDelete).to.equal(true);
         expect(capabilities.canRename).to.equal(true);
         expect(capabilities.canCopy).to.equal(true);
@@ -1100,7 +1099,7 @@ describe('Copy resouces', () => {
       });
   });
 
-  it.skip('Copy file to sibling dir', done => {
+  it('Copy file to sibling dir', done => {
     let route = `${baseUrl}/api/files/${copiedFileId}`;
     let method = 'PATCH';
     let params = {
@@ -1121,9 +1120,9 @@ describe('Copy resouces', () => {
         expect(jsonData.name).to.equal(copiedFileName);
         expect(jsonData.type).to.equal("file");
 
-        expect(capabilities.canListChildren).to.equal(true);
-        expect(capabilities.canAddChildren).to.equal(true);
-        expect(capabilities.canRemoveChildren).to.equal(true);
+        // expect(capabilities.canListChildren).to.equal(true);
+        // expect(capabilities.canAddChildren).to.equal(true);
+        // expect(capabilities.canRemoveChildren).to.equal(true);
         expect(capabilities.canDelete).to.equal(true);
         expect(capabilities.canRename).to.equal(true);
         expect(capabilities.canCopy).to.equal(true);
@@ -1153,7 +1152,7 @@ describe('Copy resouces', () => {
       });
   });
 
-  it.skip('Check newGrandchildId1', done => {
+  it('Check newGrandchildId1', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId1}/children`).
       then(res => {
@@ -1169,7 +1168,7 @@ describe('Copy resouces', () => {
       });
   });
 
-  it.skip('Check newGrandchildId2', done => {
+  it('Check newGrandchildId2', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId2}/children`).
       then(res => {
@@ -1187,7 +1186,7 @@ describe('Copy resouces', () => {
 });
 
 describe('Move resources', () => {
-  it.skip('Move file with incorrect id-1', (done) => {
+  it('Move file with incorrect id-1', (done) => {
     let route = `${baseUrl}/api/files/${createIncorrectId(copiedFileId, 'incorrect_dir_name')}`;
     let method = 'PATCH';
     let params = {
@@ -1210,7 +1209,7 @@ describe('Move resources', () => {
       });
   });
 
-  it.skip('Move file with incorrect id-2', (done) => {
+  it('Move file with incorrect id-2', (done) => {
     let route = `${baseUrl}/api/files/${copiedFileId}`;
     let method = 'PATCH';
     let params = {
@@ -1233,7 +1232,7 @@ describe('Move resources', () => {
       });
   });
 
-  it.skip('Move file', done => {
+  it('Move file', done => {
     let route = `${baseUrl}/api/files/${copiedFileId}`;
     let method = 'PATCH';
     let params = {
@@ -1253,9 +1252,9 @@ describe('Move resources', () => {
         expect(jsonData.name).to.equal(copiedFileName);
         expect(jsonData.type).to.equal("file");
 
-        expect(capabilities.canListChildren).to.equal(true);
-        expect(capabilities.canAddChildren).to.equal(true);
-        expect(capabilities.canRemoveChildren).to.equal(true);
+        // expect(capabilities.canListChildren).to.equal(true);
+        // expect(capabilities.canAddChildren).to.equal(true);
+        // expect(capabilities.canRemoveChildren).to.equal(true);
         expect(capabilities.canDelete).to.equal(true);
         expect(capabilities.canRename).to.equal(true);
         expect(capabilities.canCopy).to.equal(true);
@@ -1271,7 +1270,7 @@ describe('Move resources', () => {
       });
   });
 
-  it.skip('Check newGrandchildId1', done => {
+  it('Check newGrandchildId1', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId1}/children`).
       then(res => {
@@ -1287,7 +1286,7 @@ describe('Move resources', () => {
       });
   });
 
-  it.skip('Check newGrandchildId2', done => {
+  it('Check newGrandchildId2', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId2}/children`).
       then(res => {
@@ -1303,7 +1302,7 @@ describe('Move resources', () => {
       });
   });
 
-  it.skip('Check newGrandchildId3', done => {
+  it('Check newGrandchildId3', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId3}/children`).
       then(res => {
@@ -1321,7 +1320,7 @@ describe('Move resources', () => {
 });
 
 describe('Download', () => {
-  it.skip('Download file', done => {
+  it('Download file', done => {
     const downloadUrl = `${baseUrl}/api/download?items=${copiedFileId3}`;
     request.get(downloadUrl).
       responseType('blob').
@@ -1394,7 +1393,7 @@ describe('Upload file', () => {
       });
   });
 
-  it.skip('Upload file', done => {
+  it('Upload file', done => {
     let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
     let fileName = fs.readdirSync(workDirPath)[0];
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
@@ -1414,9 +1413,9 @@ describe('Upload file', () => {
         expect(jsonData.name).to.equal(fileName);
         expect(jsonData.type).to.equal("file");
 
-        expect(capabilities.canListChildren).to.equal(true);
-        expect(capabilities.canAddChildren).to.equal(true);
-        expect(capabilities.canRemoveChildren).to.equal(true);
+        // expect(capabilities.canListChildren).to.equal(true);
+        // expect(capabilities.canAddChildren).to.equal(true);
+        // expect(capabilities.canRemoveChildren).to.equal(true);
         expect(capabilities.canDelete).to.equal(true);
         expect(capabilities.canRename).to.equal(true);
         expect(capabilities.canCopy).to.equal(true);
@@ -1432,7 +1431,7 @@ describe('Upload file', () => {
 });
 
 describe('Remove resources', () => {
-  it.skip('Remove file', done => {
+  it('Remove file', done => {
     let route = `${baseUrl}/api/files/${copiedFileId3}`;
     let method = 'DELETE';
     request(method, route).
@@ -1446,7 +1445,7 @@ describe('Remove resources', () => {
       });
   });
 
-  it.skip('Check newGrandchildId3', done => {
+  it('Check newGrandchildId3', done => {
     request.
       get(`${baseUrl}/api/files/${newGrandchildId3}/children`).
       then(res => {
