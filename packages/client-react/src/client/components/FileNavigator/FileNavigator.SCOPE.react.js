@@ -27,8 +27,8 @@ class FileNavigatorScope extends Component {
     };
   }
 
-  async componentDidMount() {
-    await this.handleNodejsInitPathChange('');
+  componentDidMount() {
+    this.handleNodejsInitPathChange('')
   }
 
   handleNodejsLocationChange = (resourceLocation) => {
@@ -49,6 +49,7 @@ class FileNavigatorScope extends Component {
     };
 
     let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
+
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
     }

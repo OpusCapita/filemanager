@@ -190,7 +190,8 @@ class FileNavigator extends Component {
     let resource = await this.getResourceById(toId);
     this.handleResourceChange(resource);
 
-    let { resourceChildren } = await this.getChildrenForId(resource.id, sortBy, sortDirection);
+    let resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
+    console.log({ resourceChildren })
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
@@ -224,9 +225,8 @@ class FileNavigator extends Component {
   }
 
   async getChildrenForId(id, sortBy, sortDirection) {
-    let { api, apiOptions } = this.props;
-    let { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
-    return { resourceChildren };
+    const { api, apiOptions } = this.props;
+    return api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
   }
 
   getResourceChildrenBySelection(selection) {

@@ -18,35 +18,35 @@ function handler(apiOptions, {
   getResourceLocation,
   getNotifications
 }) {
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
-  let onSuccess = () => {
-    let resource = getResource();
-    navigateToDir(resource.id, null, false);
-  };
+  const selectedResources = getSelectedResources();
 
-  const onFail = _ => onFailError({
-    getNotifications,
-    label: getMessage(label),
-    notificationId: 'delete',
-    updateNotifications
-  });
-
-  let selectedResources = getSelectedResources();
-
-  let dialogFilesText = selectedResources.length > 1 ?
+  const dialogFilesText = selectedResources.length > 1 ?
     `${selectedResources.length} ${getMessage('files')}` :
     `"${selectedResources[0].name}"`;
 
-  let dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
+  const dialogNameText = getMessage('reallyRemove', { files: dialogFilesText });
 
-  let rawDialogElement = {
+  const rawDialogElement = {
     elementType: 'ConfirmDialog',
     elementProps: {
       onHide: hideDialog,
       onSubmit: async () => {
         hideDialog();
-        api.removeResources(apiOptions, selectedResources, { onSuccess, onFail });
+        try {
+          await api.removeResources(apiOptions, selectedResources);
+          const resource = getResource();
+          navigateToDir(resource.id, null, false);
+        } catch (err) {
+          onFailError({
+            getNotifications,
+            label: getMessage(label),
+            notificationId: 'delete',
+            updateNotifications
+          });
+          console.log(err)
+        }
       },
       headerText: getMessage('remove'),
       messageText: dialogNameText,
@@ -70,13 +70,13 @@ export default (apiOptions, {
   getResourceLocation,
   getNotifications
 }) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: 'delete',
     icon: { svg: icons.delete },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let selectedResources = getSelectedResources();
+      const selectedResources = getSelectedResources();
 
       if (!selectedResources.length) {
         return false;
