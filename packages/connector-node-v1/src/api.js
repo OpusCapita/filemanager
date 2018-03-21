@@ -1,6 +1,5 @@
 import request from 'superagent';
-import JSZip from 'jszip';
-import { serializePromises, normalizeResource } from './utils/common';
+import { normalizeResource } from './utils/common';
 
 async function init(options) {
   options.onInitSuccess();
@@ -120,32 +119,20 @@ async function uploadFileToId(options, parentId, { onStart, onProgress }) {
     });
 }
 
-async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
-  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`;
+async function downloadResources({ apiOptions, resources, onProgress }) {
+  const downloadUrl = resources.reduce(
+    (url, resource, num) => url + (num === 0 ? '' : '&') + `items=${resource.id}`,
+    `${apiOptions.apiRoot}/download?`
+  );
+
   return request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
-      onProgress((i * 100 + event.percent) / l);
+      onProgress(event.percent);
     }).
-    then(res => ({
-      file: res.body,
-      name: resource.name
-    }));
-}
-
-async function downloadResources({ apiOptions, resources, onProgress }) {
-  const files = await serializePromises({
-    series: resources.map(resource => ({ onProgress, i, l }) => downloadResource({
-      resource, apiOptions, onProgress, i, l
-    })),
-    onProgress
-  });
-
-  onProgress(100);
-
-  const zip = new JSZip();
-  files.forEach(({ name, file }) => zip.file(name, file));
-  return zip.generateAsync({ type: 'blob' });
+    then(res => {
+      return res.body;
+    });
 }
 
 async function createFolder(options, parentId, folderName) {
