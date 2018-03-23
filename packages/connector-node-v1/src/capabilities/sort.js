@@ -17,15 +17,16 @@ export default (apiOptions, {
   id: 'sort',
   shouldBeAvailable: () => true,
   handler: async ({ sortBy, sortDirection }) => {
-    const onFail = ({ message }) => onFailError({
-      getNotifications,
-      notificationId: 'rename',
-      updateNotifications,
-      message
-    });
-
-    let id = getResource().id;
-    let { resourceChildren } = await api.getChildrenForId(apiOptions, { id, sortBy, sortDirection, onFail });
-    return resourceChildren;
+    const id = getResource().id;
+    try {
+      return api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
+    } catch (err) {
+      onFailError({
+        getNotifications,
+        notificationId: 'rename',
+        updateNotifications
+      });
+      return null
+    }
   }
 });

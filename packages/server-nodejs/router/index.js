@@ -54,6 +54,9 @@ module.exports = options => {
   router.route('/api/files/:id/children').
     get(connect('./listChildren', _ => ({ path: reqPath })));
 
+  router.route('/api/files/:id/search').
+    get(connect('./search', _ => ({ path: reqPath })));
+
   router.route('/api/files/:id').
     get(connect('./statResource', _ => ({ path: reqPath }))).
     patch(connect('./renameCopyMove', _ => ({ path: reqPath }))).

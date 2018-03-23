@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs-extra');
 
 const getClientIp = require('../utils/get-client-ip');
 
@@ -14,7 +15,60 @@ const {
   TYPE_DIR
 } = require('../constants');
 
-const UNKNOWN_RESOURCE_TYPE_ERROR = 'Unknown resource type';
+const
+  UNKNOWN_RESOURCE_TYPE_ERROR = 'Unknown resource type',
+
+  ORDER_BY_NAME = 'name',
+  ORDER_BY_MODIFIED_TIME = 'modifiedTime',
+  DEFAULT_ORDER_BY = ORDER_BY_NAME,
+
+  ORDER_DIRECTION_ASC = 'ASC',
+  ORDER_DIRECTION_DESC = 'DESC',
+  DEFAULT_ORDER_DIRECTION = ORDER_DIRECTION_ASC;
+
+const getSorter = ({
+  orderBy = DEFAULT_ORDER_BY,
+  orderDirection = DEFAULT_ORDER_DIRECTION
+}) => {
+  let sameTypeSorter;
+
+  switch (orderBy) {
+    case ORDER_BY_NAME:
+      sameTypeSorter = (itemA, itemB) => itemA.name.toLowerCase().localeCompare(itemB.name.toLowerCase());
+      break;
+    case ORDER_BY_MODIFIED_TIME:
+      sameTypeSorter = (itemA, itemB) => itemA.modifiedTime - itemB.modifiedTime;
+      break;
+    default:
+      throw Object.assign(
+        new Error(`Invalid order by: ${orderBy}`),
+        { httpCode: 400 }
+      );
+  }
+
+  let swapArgs;
+
+  switch (orderDirection) {
+    case ORDER_DIRECTION_ASC:
+      swapArgs = false;
+      break;
+    case ORDER_DIRECTION_DESC:
+      swapArgs = true;
+      break;
+    default:
+      throw Object.assign(
+        new Error(`Invalid order direction: ${orderDirection}`),
+        { httpCode: 400 }
+      );
+  }
+
+  return (itemA, itemB) => (itemB.type === TYPE_DIR) - (itemA.type === TYPE_DIR) || sameTypeSorter(...(
+    swapArgs ?
+      [itemB, itemA] :
+      [itemA, itemB]
+  ));
+};
+
 
 const id2path = id => {
   const userPath = decode(id);
@@ -54,55 +108,79 @@ const checkName = name => {
   return name;
 };
 
-const stat2resource = (options, pathInfo) => stat => {
-  let userPath, userBasename, userParent; // For root: userPath === path.sep, userBasename and userParent are falsy.
-
-  if (typeof pathInfo === 'string') {
-    userPath = pathInfo;
-
-    if (userPath !== path.sep) {
+/*
+ * Either path or parent/basename must be specified in input args.
+ * The function returns a promise.
+ */
+const getResource = ({
+  options,
+  path: userPath, // path relative to options.fsRoot, path.sep for user root. Optional.
+  parent: userParent, // path relative to options.fsRoot, null for user root. Optional.
+  basename: userBasename, // null for user root. Optional.
+  stat // a result of fs.stat() call. Optional.
+}) => {
+  /* eslint-disable no-param-reassign */
+  if (userPath) {
+    if (userPath === path.sep) {
+      userBasename = null;
+      userParent = null;
+    } else {
       userBasename = path.basename(userPath);
       userParent = path.dirname(userPath);
     }
+  } else if (userBasename && userParent) {
+    userPath = path.join(userParent, userBasename);
+  } else if (!userBasename && !userParent) {
+    userPath = path.sep;
   } else {
-    userParent = pathInfo.dir;
-    userBasename = pathInfo.basename;
-    userPath = userParent ? path.join(userParent, userBasename) : path.sep;
+    throw new Error(`Invalid parent ${userParent} and basename ${userBasename}`);
   }
+  /* eslint-enable no-param-reassign */
 
-  const id = path2id(userPath);
+  return Promise.all([
+    stat || fs.stat(path.join(options.fsRoot, userPath)),
+    userParent && getResource({
+      options,
+      path: userParent
+    })
+  ]).
+    then(([stat, parent]) => {
+      const resource = {
+        // path: userPath + (stat.isDirectory() ? '/' : ''),
+        id: path2id(userPath),
+        name: userBasename || options.rootName,
+        createdTime: stat.birthtime,
+        modifiedTime: stat.mtime,
+        capabilities: {
+          canDelete: !!userParent && !options.readOnly,
+          canRename: !!userParent && !options.readOnly,
+          canCopy: !!userParent && !options.readOnly,
+          canEdit: stat.isFile() && !options.readOnly, // Only files can be edited
+          canDownload: stat.isFile() // Only files can be downloaded
+        }
+      };
 
-  const resource = {
-    id,
-    name: userBasename || options.rootName,
-    createdTime: stat.birthtime,
-    modifiedTime: stat.mtime,
-    capabilities: {
-      canListChildren: true,
-      canAddChildren: !options.readOnly,
-      canRemoveChildren: !options.readOnly,
-      canDelete: !!userParent && !options.readOnly,
-      canRename: !!userParent && !options.readOnly,
-      canCopy: !!userParent && !options.readOnly,
-      canEdit: stat.isFile() && !options.readOnly, // Only files can be edited
-      canDownload: stat.isFile() // Only files can be downloaded
-    }
-  };
+      if (stat.isDirectory()) {
+        resource.type = TYPE_DIR;
+        resource.capabilities.canListChildren = true;
+        resource.capabilities.canAddChildren = !options.readOnly;
+        resource.capabilities.canRemoveChildren = !options.readOnly;
+      } else if (stat.isFile()) {
+        resource.type = TYPE_FILE;
+        resource.size = stat.size;
+      } else {
+        throw new Error(UNKNOWN_RESOURCE_TYPE_ERROR);
+      }
 
-  if (userParent) {
-    resource.parentId = path2id(userParent);
-  }
+      if (parent) {
+        resource.parentId = parent.id;
+        resource.ancestors = [...parent.ancestors, parent];
+      } else {
+        resource.ancestors = [];
+      }
 
-  if (stat.isDirectory()) {
-    resource.type = TYPE_DIR;
-  } else if (stat.isFile()) {
-    resource.type = TYPE_FILE;
-    resource.size = stat.size;
-  } else {
-    throw new Error(UNKNOWN_RESOURCE_TYPE_ERROR);
-  }
-
-  return resource;
+      return resource;
+    });
 };
 
 const handleError = ({ options, req, res }) => err => {
@@ -132,9 +210,10 @@ const handleError = ({ options, req, res }) => err => {
 
 module.exports = {
   UNKNOWN_RESOURCE_TYPE_ERROR,
+  getSorter,
   checkName,
   id2path,
   path2id,
-  stat2resource,
+  getResource,
   handleError
 }

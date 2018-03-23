@@ -1,7 +1,7 @@
 #%RAML 1.0
 title: File manager
 description: File manager
-version: 0.0.1
+version: 1.0.3
 baseUri: __env__baseURI__
 mediaType:
   - application/json
@@ -191,11 +191,62 @@ types:
                     items: FileStatsResource[]
                     # will develop in v2
                     # nextPageToken:
+            400:
+              description: |
+                Bad request
+
+                A 400 status is returned if:
+                  1. orderBy exists but contains value which not equals name or modifiedTime
+                  2. orderDirection exists but contains value which not equal ASC or DESC
             410:
               description: |
                 GONE
 
                 A 410 status is returned if a resource with id does not exist.
+
+      /search:
+        get:
+          description: |
+            Search for files/dirs
+
+            All query paramaters are optional
+          queryParameters:
+            itemNameSubstring:
+              type: string
+              required: false
+            itemNameCaseSensitive:
+              type: boolean
+              default: false
+              required: false
+            itemType:
+              type: string | string[]
+              items:
+                pattern: ^file|dir$
+              default: [file|dir]
+              required: false
+            recursive:
+              type: boolean
+              default: false
+              required: false
+          responses:
+            200:
+              description:
+              body:
+                application/json:
+                  type: object
+                  properties:
+                    items: FileStatsResource[]
+                    nextPage:
+                      description: |
+                        url path part, i.e. everything after host/port,
+                        starting with slash
+                      type: string
+            410:
+              description: |
+                GONE
+
+                A 410 status is returned if a resource with id does not exist.
+
 
   /download:
     get:

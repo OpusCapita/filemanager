@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -e \"require('./index').server.run()\"",
+    "start": "cross-env NODE_ENV=development node -e \"require('./index').server.run()\"",
     "start-hide": "node -e \"require('./index').server.run()\" &",
     "start-with-demo": "npm run prepare-demo && npm start",
+    "debug": "npm start -- --inspect",
     "lint": "eslint --env node,es6 .",
     "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
@@ -31,11 +32,11 @@
     "winston": "3.0.0-rc0"
   },
   "devDependencies": {
-    "babel-eslint": "7.1.1",
+    "babel-eslint": "8.2.1",
     "cross-env": "5.0.1",
-    "eslint": "3.17.0",
-    "eslint-config-opuscapita": "1.0.7",
-    "eslint-plugin-react": "6.10.0",
+    "eslint": "4.17.0",
+    "eslint-config-opuscapita": "2.0.0",
+    "eslint-plugin-react": "7.6.1",
     "ignore-styles": "5.0.1",
     "mocha": "3.4.2",
     "mocha-junit-reporter": "1.13.0",
