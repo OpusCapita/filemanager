@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.6](https://github.com/OpusCapita/filemanager/tree/v1.0.6) (2018-03-23)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.5...v1.0.6)
+
+**Implemented enhancements:**
+
+- Server-side "Search Files" [\#185](https://github.com/OpusCapita/filemanager/issues/185)
+
 ## [v1.0.5](https://github.com/OpusCapita/filemanager/tree/v1.0.5) (2018-03-13)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.4...v1.0.5)
 
