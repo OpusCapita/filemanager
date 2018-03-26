@@ -3,9 +3,16 @@ import JSZip from 'jszip';
 import { serializePromises, normalizeResource } from './utils/common';
 
 async function init(options) {
-  options.onInitSuccess();
-  options.onSignInSuccess();
+  return {
+    isInit: true,
+    isSignIn: true
+  };
 }
+
+// async function init(options) {
+//   options.onInitSuccess();
+//   options.onSignInSuccess();
+// }
 
 async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];

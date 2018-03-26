@@ -86,13 +86,27 @@ class FileNavigator extends Component {
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
-    await api.init({
-      ...apiOptions,
-      onInitSuccess: this.handleApiInitSuccess,
-      onInitFail: this.handleApiInitFail,
-      onSignInSuccess: this.handleApiSignInSuccess,
-      onSignInFail: this.handleApiSignInFail
-    });
+    let initRes = await api.init({ ...apiOptions });
+
+    if (!initRes.isInit) {
+      this.handleApiInitFail();
+    } else {
+      this.handleApiInitSuccess();
+
+      if (initRes.isSignIn) {
+        this.handleApiSignInSuccess();
+      } else {
+        this.handleApiSignInFail();
+      }
+    }
+
+    // await api.init({
+    //   ...apiOptions,
+    //   onInitSuccess: this.handleApiInitSuccess,
+    //   onInitFail: this.handleApiInitFail,
+    //   onSignInSuccess: this.handleApiSignInSuccess,
+    //   onSignInFail: this.handleApiSignInFail
+    // });
 
     this.monitorApiAvailability();
   }
