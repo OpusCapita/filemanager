@@ -3,7 +3,7 @@ import notifUtils from '../utils/notifications';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
-import getMess from '../../translations';
+import getMess from '../translations';
 
 let label = 'upload';
 

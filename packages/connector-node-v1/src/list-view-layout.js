@@ -1,6 +1,6 @@
 import fecha from 'fecha';
 import filesize from 'filesize';
-import getMess from '../translations';
+import getMess from './translations';
 
 const TABLET_WIDTH = 1024;
 const MOBILE_WIDTH = 640;

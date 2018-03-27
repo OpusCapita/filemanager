@@ -4,7 +4,7 @@ import { readLocalFile } from './utils/upload';
 import { serializePromises } from './utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
-import getMessage from '../translations';
+import getMessage from './translations';
 
 async function appendGoogleApiScript() {
   if (window.gapi) {
