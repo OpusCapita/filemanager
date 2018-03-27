@@ -1,5 +1,5 @@
 import icons from '../icons-svg';
-import getMessage from '../../translations';
+import getMessage from '../translations';
 
 let label = 'remove';
 

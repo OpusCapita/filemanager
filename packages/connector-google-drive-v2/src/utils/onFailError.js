@@ -1,5 +1,5 @@
 import notifUtils from './notifications';
-import getMessage from '../../translations';
+import getMessage from '../translations';
 
 export default function onFailErrors({
   getNotifications,

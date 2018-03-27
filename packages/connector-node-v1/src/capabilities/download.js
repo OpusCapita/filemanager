@@ -4,7 +4,7 @@ import { promptToSaveBlob } from '../utils/download';
 import onFailError from '../utils/onFailError';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
-import getMess from '../../translations';
+import getMess from '../translations';
 
 let label = 'download';
 

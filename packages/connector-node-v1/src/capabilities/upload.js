@@ -4,7 +4,7 @@ import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
-import getMess from '../../translations';
+import getMess from '../translations';
 import { normalizeResource } from '../utils/common';
 
 let label = 'upload';
