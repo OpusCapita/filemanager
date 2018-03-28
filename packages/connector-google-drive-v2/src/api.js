@@ -69,7 +69,7 @@ async function initClient(options) {
   if (!window.gapi.auth2.getAuthInstance()) {
     initStatus.isInit = false;
     console.log('Can\'t init Google API client');
-    return;
+    return initStatus;
   }
 
   initStatus.isInit = true;
