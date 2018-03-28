@@ -80,15 +80,17 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+
+    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+
     this.setState({ // eslint-disable-line
+      apiInitialized,
+      apiSignedIn,
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
-    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
-
-    this.setState({ apiInitialized, apiSignedIn });
     if (apiInitialized) {
       if (apiSignedIn) {
         this.handleApiReady();
