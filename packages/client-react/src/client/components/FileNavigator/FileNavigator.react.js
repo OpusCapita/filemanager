@@ -88,9 +88,8 @@ class FileNavigator extends Component {
 
     let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
-    this.setState({ apiInitialized });
+    this.setState({ apiInitialized, apiSignedIn });
     if (apiInitialized) {
-      this.setState({ apiSignedIn });
       if (apiSignedIn) {
         this.handleApiReady();
       } else {
