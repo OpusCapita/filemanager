@@ -90,18 +90,13 @@ class FileNavigator extends Component {
 
     this.setState({ apiInitialized });
     if (apiInitialized) {
-      // this.setState({ apiInitialized: true });
-
       this.setState({ apiSignedIn });
       if (apiSignedIn) {
-        // this.setState({ apiSignedIn: true });
         this.handleApiReady();
       } else {
         this.handleApiSignInFail();
-        // this.setState({ apiSignedIn: false });
       }
     } else {
-      // this.setState({ apiInitialized: false });
       this.handleApiInitFail();
     }
   }
@@ -155,26 +150,16 @@ class FileNavigator extends Component {
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
 
-  // handleApiInitSuccess = () => {
-  //   this.setState({ apiInitialized: true });
-  // };
-
   handleApiInitFail = () => {
-    // this.setState({ apiInititalized: false });
     this.handleResourceChildrenChange([]);
     this.monitorApiAvailability();
   };
-
-  // handleApiSignInSuccess = () => {
-  //   this.setState({ apiSignedIn: true });
-  // };
 
   handleApiSignInFail = () => {
     this.monitorApiAvailability();
     this.handleSelectionChange([]);
     this.handleResourceChildrenChange([]);
     this.handleResourceChange({});
-    // this.setState({ apiSignedIn: false });
   };
 
   handleLocationBarChange = (id) => {
