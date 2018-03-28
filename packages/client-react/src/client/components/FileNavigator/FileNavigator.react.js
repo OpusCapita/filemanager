@@ -95,20 +95,11 @@ class FileNavigator extends Component {
 
       if (initRes.isSignIn) {
         this.handleApiSignInSuccess();
+        this.handleApiReady();
       } else {
         this.handleApiSignInFail();
       }
     }
-
-    // await api.init({
-    //   ...apiOptions,
-    //   onInitSuccess: this.handleApiInitSuccess,
-    //   onInitFail: this.handleApiInitFail,
-    //   onSignInSuccess: this.handleApiSignInSuccess,
-    //   onSignInFail: this.handleApiSignInFail
-    // });
-
-    this.monitorApiAvailability();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -130,22 +121,22 @@ class FileNavigator extends Component {
 
   startViewLoading = () => {
     this.setState({ loadingView: true, loadingResourceLocation: true });
-  }
+  };
 
   stopViewLoading = () => {
     this.setState({ loadingView: false });
-  }
+  };
 
   focusView = () => {
     this.viewRef.focus();
-  }
+  };
 
   handleApiReady = () => {
     let { initialResourceId } = this.props;
     let resourceId = this.state.resource.id;
     let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
     this.navigateToDir(idToNavigate);
-  }
+  };
 
   monitorApiAvailability = () => {
     clearTimeout(this.apiAvailabilityTimeout);
@@ -162,17 +153,17 @@ class FileNavigator extends Component {
 
   handleApiInitSuccess = () => {
     this.setState({ apiInitialized: true });
-  }
+  };
 
   handleApiInitFail = () => {
     this.setState({ apiInititalized: false });
     this.handleResourceChildrenChange([]);
     this.monitorApiAvailability();
-  }
+  };
 
   handleApiSignInSuccess = () => {
     this.setState({ apiSignedIn: true });
-  }
+  };
 
   handleApiSignInFail = () => {
     this.monitorApiAvailability();
@@ -180,7 +171,7 @@ class FileNavigator extends Component {
     this.handleResourceChildrenChange([]);
     this.handleResourceChange({});
     this.setState({ apiSignedIn: false });
-  }
+  };
 
   handleLocationBarChange = (id) => {
     let { resource } = this.state;
@@ -205,7 +196,7 @@ class FileNavigator extends Component {
     this.handleResourceChange(resource);
 
     let resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
-    console.log({ resourceChildren })
+    console.log({ resourceChildren });
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
@@ -251,12 +242,12 @@ class FileNavigator extends Component {
 
   handleClickOutside = () => {
     this.handleSelectionChange([]);
-  }
+  };
 
   handleResourceLocationChange = (resourceLocation) => {
     this.setState({ resourceLocation });
     this.props.onResourceLocationChange(resourceLocation);
-  }
+  };
 
   handleSelectionChange = (selection) => {
     this.setState({ selection });
@@ -346,25 +337,25 @@ class FileNavigator extends Component {
 
   handleKeyDown = async (e) => {
 
-  }
+  };
 
   handleViewRef = (ref) => {
     this.viewRef = ref;
-  }
+  };
 
   showDialog = (rawDialogElement) => {
     let dialogElement = rawToReactElement(rawDialogElement);
 
     this.setState({ dialogElement });
-  }
+  };
 
   hideDialog = () => {
     this.setState({ dialogElement: null });
-  }
+  };
 
   updateNotifications = (notifications) => {
     this.setState({ notifications });
-  }
+  };
 
   getCapabilitiesProps = () => ({
     showDialog: this.showDialog,

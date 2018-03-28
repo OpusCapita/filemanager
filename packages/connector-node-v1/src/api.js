@@ -9,11 +9,6 @@ async function init(options) {
   };
 }
 
-// async function init(options) {
-//   options.onInitSuccess();
-//   options.onSignInSuccess();
-// }
-
 async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }

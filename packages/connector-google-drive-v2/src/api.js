@@ -29,18 +29,36 @@ async function appendGoogleApiScript() {
   });
 }
 
-async function updateSigninStatus(isSignedIn, options) {
-  if (isSignedIn) {
-    options.onSignInSuccess(getMessage(options.locale, 'signInSuccess'));
-    console.log('Google Drive sign-in Success');
-  } else {
-    options.onSignInFail(getMessage(options.locale, 'signInFail'));
-    console.log('Google Drive sign-in fail');
-  }
+/**
+ * Load the auth2 library.
+ *
+ * @returns {Promise<any>}
+ */
+function loadAuth2Library() {
+  return new Promise(resolve => {
+    window.gapi.load('client:auth2', () => resolve());
+  });
 }
 
-// Initializes the API client library and sets up sign-in state listeners.
+/**
+ * Initializes the API client library and sets up sign-in state listeners.
+ *
+ * @param options
+ * @returns {Promise<{}>}
+ */
 async function initClient(options) {
+  let initStatus = {};
+
+  async function updateSignInStatus(isSignedIn, options) {
+    if (isSignedIn) {
+      initStatus.isSignIn = true;
+      console.log('Google Drive sign-in Success');
+    } else {
+      initStatus.isSignIn = false;
+      console.log('Google Drive sign-in fail');
+    }
+  }
+
   await window.gapi.client.init({
     apiKey: options.API_KEY,
     clientId: options.CLIENT_ID,
@@ -49,31 +67,41 @@ async function initClient(options) {
   });
 
   if (!window.gapi.auth2.getAuthInstance()) {
-    options.onInitFail(getMessage(options.locale, 'notInitAPIClient'));
+    initStatus.isInit = false;
     console.log('Can\'t init Google API client');
     return;
   }
 
-  options.onInitSuccess(getMessage(options.locale, 'successInit'));
+  initStatus.isInit = true;
+
   // Listen for sign-in state changes.
-  window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSigninStatus(isSignedIn, options));
+  await window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSignInStatus(isSignedIn, options));
 
   // Handle the initial sign-in state.
-  updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
+  await updateSignInStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
+
+  return initStatus;
 }
 
-// On load, called to load the auth2 library and API client library.
-async function handleClientLoad(options) {
-  await window.gapi.load('client:auth2', () => initClient(options));
-}
-
+/**
+ * Init Google API
+ *
+ * @param options
+ * @returns {Promise<*>}
+ */
 async function init(options) {
   await appendGoogleApiScript();
-
+  await loadAuth2Library();
   console.log('Try auth on Google Drive API');
-  await handleClientLoad(options);
+  return await initClient(options); // Initializes API client library.
 }
 
+/**
+ * Normalize Resource
+ *
+ * @param resource
+ * @returns {{}} Normalized resource
+ */
 function normalizeResource(resource) {
   return {
     createdDate: Date.parse(resource.createdDate),
