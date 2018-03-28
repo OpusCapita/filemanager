@@ -86,19 +86,23 @@ class FileNavigator extends Component {
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
-    let initRes = await api.init({ ...apiOptions });
+    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
-    if (!initRes.isInit) {
-      this.handleApiInitFail();
-    } else {
-      this.handleApiInitSuccess();
+    this.setState({ apiInitialized });
+    if (apiInitialized) {
+      // this.setState({ apiInitialized: true });
 
-      if (initRes.isSignIn) {
-        this.handleApiSignInSuccess();
+      this.setState({ apiSignedIn });
+      if (apiSignedIn) {
+        // this.setState({ apiSignedIn: true });
         this.handleApiReady();
       } else {
         this.handleApiSignInFail();
+        // this.setState({ apiSignedIn: false });
       }
+    } else {
+      // this.setState({ apiInitialized: false });
+      this.handleApiInitFail();
     }
   }
 
@@ -151,26 +155,26 @@ class FileNavigator extends Component {
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
 
-  handleApiInitSuccess = () => {
-    this.setState({ apiInitialized: true });
-  };
+  // handleApiInitSuccess = () => {
+  //   this.setState({ apiInitialized: true });
+  // };
 
   handleApiInitFail = () => {
-    this.setState({ apiInititalized: false });
+    // this.setState({ apiInititalized: false });
     this.handleResourceChildrenChange([]);
     this.monitorApiAvailability();
   };
 
-  handleApiSignInSuccess = () => {
-    this.setState({ apiSignedIn: true });
-  };
+  // handleApiSignInSuccess = () => {
+  //   this.setState({ apiSignedIn: true });
+  // };
 
   handleApiSignInFail = () => {
     this.monitorApiAvailability();
     this.handleSelectionChange([]);
     this.handleResourceChildrenChange([]);
     this.handleResourceChange({});
-    this.setState({ apiSignedIn: false });
+    // this.setState({ apiSignedIn: false });
   };
 
   handleLocationBarChange = (id) => {

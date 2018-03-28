@@ -4,8 +4,8 @@ import { serializePromises, normalizeResource } from './utils/common';
 
 async function init(options) {
   return {
-    isInit: true,
-    isSignIn: true
+    apiInitialized: true,
+    apiSignedIn: true
   };
 }
 

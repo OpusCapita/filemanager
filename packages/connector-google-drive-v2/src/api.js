@@ -51,10 +51,10 @@ async function initClient(options) {
 
   async function updateSignInStatus(isSignedIn, options) {
     if (isSignedIn) {
-      initStatus.isSignIn = true;
+      initStatus.apiSignedIn = true;
       console.log('Google Drive sign-in Success');
     } else {
-      initStatus.isSignIn = false;
+      initStatus.apiSignedIn = false;
       console.log('Google Drive sign-in fail');
     }
   }
@@ -67,12 +67,12 @@ async function initClient(options) {
   });
 
   if (!window.gapi.auth2.getAuthInstance()) {
-    initStatus.isInit = false;
+    initStatus.apiInitialized = false;
     console.log('Can\'t init Google API client');
     return initStatus;
   }
 
-  initStatus.isInit = true;
+  initStatus.apiInitialized = true;
 
   // Listen for sign-in state changes.
   await window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSignInStatus(isSignedIn, options));
