@@ -80,7 +80,7 @@ async function initClient(options) {
   await window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSignInStatus(isSignedIn, options));
 
   // Handle the initial sign-in state.
-  await updateSignInStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
+  updateSignInStatus(await window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
 
   return initStatus;
 }

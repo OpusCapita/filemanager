@@ -81,25 +81,52 @@ class FileNavigator extends Component {
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
 
-    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+    // let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+    //
+    // this.setState({ // eslint-disable-line
+    //   apiInitialized,
+    //   apiSignedIn,
+    //   initializedCapabilities,
+    //   sortBy: viewLayoutOptions.initialSortBy || 'title',
+    //   sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
+    // });
+    //
+    // if (apiInitialized) {
+    //   if (apiSignedIn) {
+    //     this.handleApiReady();
+    //   } else {
+    //     this.handleApiSignInFail();
+    //   }
+    // } else {
+    //   this.handleApiInitFail();
+    // }
 
     this.setState({ // eslint-disable-line
-      apiInitialized,
-      apiSignedIn,
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
+    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+
+    // this.setState({ apiInitialized });
     if (apiInitialized) {
+      this.setState({ apiInitialized: true });
+
+      // this.setState({ apiSignedIn });
       if (apiSignedIn) {
-        this.handleApiReady();
+        this.setState({ apiSignedIn: true });
+        // this.handleApiReady();
       } else {
         this.handleApiSignInFail();
+        this.setState({ apiSignedIn: false });
       }
     } else {
+      this.setState({ apiInitialized: false });
       this.handleApiInitFail();
     }
+
+    this.monitorApiAvailability();
   }
 
   componentWillReceiveProps(nextProps) {
