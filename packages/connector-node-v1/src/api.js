@@ -9,6 +9,15 @@ async function init(options) {
   };
 }
 
+/**
+ * isSignedIn
+ *
+ * @returns {boolean}
+ */
+function isSignedIn() {
+  return true;
+}
+
 async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
@@ -183,6 +192,7 @@ async function removeResources(options, selectedResources) {
 
 export default {
   init,
+  isSignedIn,
   getIdForPath,
   getResourceById,
   getCapabilitiesForResource,

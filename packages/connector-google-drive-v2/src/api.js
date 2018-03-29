@@ -99,6 +99,15 @@ async function init(options) {
 }
 
 /**
+ * isSignedIn
+ *
+ * @returns {boolean}
+ */
+function isSignedIn() {
+  return window.gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+/**
  * Normalize Resource
  *
  * @param resource
@@ -345,6 +354,7 @@ async function signOut() {
 
 export default {
   init,
+  isSignedIn,
   getResourceById,
   getChildrenForId,
   getRootId,

@@ -81,26 +81,6 @@ class FileNavigator extends Component {
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
 
-    // let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
-    //
-    // this.setState({ // eslint-disable-line
-    //   apiInitialized,
-    //   apiSignedIn,
-    //   initializedCapabilities,
-    //   sortBy: viewLayoutOptions.initialSortBy || 'title',
-    //   sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
-    // });
-    //
-    // if (apiInitialized) {
-    //   if (apiSignedIn) {
-    //     this.handleApiReady();
-    //   } else {
-    //     this.handleApiSignInFail();
-    //   }
-    // } else {
-    //   this.handleApiInitFail();
-    // }
-
     this.setState({ // eslint-disable-line
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
@@ -109,14 +89,11 @@ class FileNavigator extends Component {
 
     let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
-    // this.setState({ apiInitialized });
     if (apiInitialized) {
       this.setState({ apiInitialized: true });
 
-      // this.setState({ apiSignedIn });
       if (apiSignedIn) {
         this.setState({ apiSignedIn: true });
-        // this.handleApiReady();
       } else {
         this.handleApiSignInFail();
         this.setState({ apiSignedIn: false });
@@ -166,11 +143,12 @@ class FileNavigator extends Component {
   };
 
   monitorApiAvailability = () => {
+    let { api } = this.props;
     clearTimeout(this.apiAvailabilityTimeout);
 
     this.apiAvailabilityTimeout = setTimeout(() => {
-      let { apiInitialized, apiSignedIn } = this.state;
-      if (apiInitialized && apiSignedIn) {
+      if (api.isSignedIn()) {
+        this.setState({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
         this.monitorApiAvailability();
