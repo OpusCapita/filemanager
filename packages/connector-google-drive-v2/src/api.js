@@ -41,24 +41,21 @@ function loadAuth2Library() {
 }
 
 /**
+ * hasSignedIn
+ *
+ * @returns {boolean}
+ */
+function hasSignedIn() {
+  return window.gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+/**
  * Initializes the API client library and sets up sign-in state listeners.
  *
  * @param options
  * @returns {Promise<{}>}
  */
 async function initClient(options) {
-  let initStatus = {};
-
-  async function updateSignInStatus(isSignedIn, options) {
-    if (isSignedIn) {
-      initStatus.apiSignedIn = true;
-      console.log('Google Drive sign-in Success');
-    } else {
-      initStatus.apiSignedIn = false;
-      console.log('Google Drive sign-in fail');
-    }
-  }
-
   await window.gapi.client.init({
     apiKey: options.API_KEY,
     clientId: options.CLIENT_ID,
@@ -74,37 +71,31 @@ async function initClient(options) {
     };
   }
 
-  initStatus.apiInitialized = true;
+  let isSignedIn = hasSignedIn();
 
-  // Listen for sign-in state changes.
-  await window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSignInStatus(isSignedIn, options));
+  if (isSignedIn) {
+    console.log('Google Drive sign-in Success');
+  } else {
+    console.log('Google Drive sign-in fail');
+  }
 
-  // Handle the initial sign-in state.
-  updateSignInStatus(await window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
-
-  return initStatus;
+  return {
+    apiInitialized: true,
+    apiSignedIn: isSignedIn
+  };
 }
 
 /**
  * Init Google API
  *
  * @param options
- * @returns {Promise<*>}
+ * @returns {Promise<{apiInitialized: boolean, apiSignedIn: boolean}>}
  */
 async function init(options) {
   await appendGoogleApiScript();
   await loadAuth2Library();
   console.log('Try auth on Google Drive API');
   return await initClient(options); // Initializes API client library.
-}
-
-/**
- * isSignedIn
- *
- * @returns {boolean}
- */
-function isSignedIn() {
-  return window.gapi.auth2.getAuthInstance().isSignedIn.get();
 }
 
 /**
@@ -354,7 +345,7 @@ async function signOut() {
 
 export default {
   init,
-  isSignedIn,
+  hasSignedIn,
   getResourceById,
   getChildrenForId,
   getRootId,

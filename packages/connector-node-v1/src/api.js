@@ -2,20 +2,25 @@ import request from 'superagent';
 import JSZip from 'jszip';
 import { serializePromises, normalizeResource } from './utils/common';
 
-async function init(options) {
+/**
+ * hasSignedIn
+ *
+ * @returns {boolean}
+ */
+function hasSignedIn() {
+  return true;
+}
+
+/**
+ * Init API
+ *
+ * @returns {Promise<{apiInitialized: boolean, apiSignedIn: boolean}>}
+ */
+async function init() {
   return {
     apiInitialized: true,
     apiSignedIn: true
   };
-}
-
-/**
- * isSignedIn
- *
- * @returns {boolean}
- */
-function isSignedIn() {
-  return true;
 }
 
 async function getCapabilitiesForResource(options, resource) {
@@ -192,7 +197,7 @@ async function removeResources(options, selectedResources) {
 
 export default {
   init,
-  isSignedIn,
+  hasSignedIn,
   getIdForPath,
   getResourceById,
   getCapabilitiesForResource,

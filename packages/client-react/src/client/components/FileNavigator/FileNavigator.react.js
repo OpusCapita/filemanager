@@ -81,29 +81,27 @@ class FileNavigator extends Component {
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
 
+    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+
     this.setState({ // eslint-disable-line
+      apiInitialized,
+      apiSignedIn,
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
-    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
-
-    if (apiInitialized) {
-      this.setState({ apiInitialized: true });
-
-      if (apiSignedIn) {
-        this.setState({ apiSignedIn: true });
-      } else {
-        this.handleApiSignInFail();
-        this.setState({ apiSignedIn: false });
-      }
+    if (apiSignedIn) {
+      this.handleApiReady();
     } else {
-      this.setState({ apiInitialized: false });
-      this.handleApiInitFail();
-    }
+      if (apiInitialized) {
+        this.handleApiSignInFail();
+      } else {
+        this.handleApiInitFail();
+      }
 
-    this.monitorApiAvailability();
+      this.monitorApiAvailability();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -144,10 +142,9 @@ class FileNavigator extends Component {
 
   monitorApiAvailability = () => {
     let { api } = this.props;
-    clearTimeout(this.apiAvailabilityTimeout);
 
     this.apiAvailabilityTimeout = setTimeout(() => {
-      if (api.isSignedIn()) {
+      if (api.hasSignedIn()) {
         this.setState({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
@@ -158,11 +155,9 @@ class FileNavigator extends Component {
 
   handleApiInitFail = () => {
     this.handleResourceChildrenChange([]);
-    this.monitorApiAvailability();
   };
 
   handleApiSignInFail = () => {
-    this.monitorApiAvailability();
     this.handleSelectionChange([]);
     this.handleResourceChildrenChange([]);
     this.handleResourceChange({});
