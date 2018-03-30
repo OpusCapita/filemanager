@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/react-filemanager",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
@@ -32,8 +32,8 @@
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",
     "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
-    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.0.4",
-    "@opuscapita/react-filemanager-connector-node-v1": "1.0.5",
+    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.0.7",
+    "@opuscapita/react-filemanager-connector-node-v1": "1.0.7",
     "@opuscapita/react-showroom-client": "1.3.0-beta.6",
     "@opuscapita/react-showroom-server": "1.3.1",
     "autoprefixer": "6.7.6",
