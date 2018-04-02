@@ -6,18 +6,17 @@ import getMess from '../translations';
 
 const label = 'rename';
 
-function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+function handler(apiOptions, actions) {
+  const {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelectedResources,
+    getResource,
+    getNotifications
+  } = actions;
+
   const getMessage = getMess.bind(null, apiOptions.locale);
   const localeLabel = getMessage(label);
 
@@ -50,7 +49,7 @@ function handler(apiOptions, {
             notificationId: label,
             updateNotifications
           });
-          console.log(err)
+          console.log(err);
           return null
         }
       },
@@ -73,19 +72,9 @@ function handler(apiOptions, {
   showDialog(rawDialogElement);
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getSelectedResources } = actions;
   return {
     id: label,
     icon: { svg: icons.rename },
@@ -98,17 +87,6 @@ export default (apiOptions, {
       );
     },
     availableInContexts: ['row', 'toolbar'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

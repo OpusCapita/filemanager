@@ -5,19 +5,16 @@ import getMess from '../translations';
 
 let label = 'rename';
 
-function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+function handler(apiOptions, actions) {
   let getMessage = getMess.bind(null, apiOptions.locale);
+
+  const {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    getSelectedResources,
+    getResource,
+  } = actions;
 
   let rawDialogElement = {
     elementType: 'SetNameDialog',
@@ -56,19 +53,9 @@ function handler(apiOptions, {
   showDialog(rawDialogElement);
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getSelectedResources } = actions;
   return {
     id: label,
     icon: { svg: icons.rename },
@@ -81,17 +68,6 @@ export default (apiOptions, {
       );
     },
     availableInContexts: ['row', 'toolbar'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

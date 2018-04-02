@@ -1,6 +1,5 @@
 import request from 'superagent';
-import JSZip from 'jszip';
-import { serializePromises, normalizeResource } from './utils/common';
+import { normalizeResource } from './utils/common';
 
 /**
  * hasSignedIn
@@ -59,7 +58,7 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let parent = await getResourceById(options, parentId);
-  return getParentsForId(options, resource.parentId, [parent, ...result]);
+  return await getParentsForId(options, resource.parentId, [parent, ...result]);
 }
 
 async function getBaseResource(options) {
@@ -76,7 +75,7 @@ async function getIdForPartPath(options, currId, pathArr) {
       if (pathArr.length === 1) {
         return resource.id;
       } else {
-        return getIdForPartPath(options, resource.id, pathArr.slice(1));
+        return await getIdForPartPath(options, resource.id, pathArr.slice(1));
       }
     }
   }
@@ -96,38 +95,16 @@ async function getIdForPath(options, path) {
     return resource.id;
   }
 
-  return getIdForPartPath(options, resource.id, pathArr.slice(1));
+  return await getIdForPartPath(options, resource.id, pathArr.slice(1));
 }
 
 async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function readLocalFile() {
-  return new Promise((resolve, reject) => {
-    const uploadInput = document.createElement("input");
-
-    uploadInput.addEventListener('change', _ => {
-      const file = uploadInput.files[0];
-      resolve({
-        type: file.type,
-        name: file.name,
-        file
-      });
-    });
-
-    uploadInput.type = "file";
-    document.body.appendChild(uploadInput);
-    uploadInput.click();
-    document.body.removeChild(uploadInput);
-  });
-}
-
-async function uploadFileToId(options, parentId, { onStart, onProgress }) {
-  let file = await readLocalFile(true);
+async function uploadFileToId({ options, parentId, file, onProgress }) {
   let route = `${options.apiRoot}/files`;
-  onStart({ name: file.name, size: file.file.size });
-  return request.post(route).
+  return await request.post(route).
     field('type', 'file').
     field('parentId', parentId).
     attach('files', file.file, file.name).
@@ -136,32 +113,19 @@ async function uploadFileToId(options, parentId, { onStart, onProgress }) {
     });
 }
 
-async function downloadResource({ apiOptions, resource, onProgress, i, l }) {
-  const downloadUrl = `${apiOptions.apiRoot}/download?items=${resource.id}`;
-  return request.get(downloadUrl).
+async function downloadResources({ apiOptions, resources, onProgress }) {
+  const downloadUrl = resources.reduce(
+    (url, resource, num) => url + (num === 0 ? '' : '&') + `items=${resource.id}`,
+    `${apiOptions.apiRoot}/download?`
+  );
+
+  let res = await request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
-      onProgress((i * 100 + event.percent) / l);
-    }).
-    then(res => ({
-      file: res.body,
-      name: resource.name
-    }));
-}
+      onProgress(event.percent);
+    });
 
-async function downloadResources({ apiOptions, resources, onProgress }) {
-  const files = await serializePromises({
-    series: resources.map(resource => ({ onProgress, i, l }) => downloadResource({
-      resource, apiOptions, onProgress, i, l
-    })),
-    onProgress
-  });
-
-  onProgress(100);
-
-  const zip = new JSZip();
-  files.forEach(({ name, file }) => zip.file(name, file));
-  return zip.generateAsync({ type: 'blob' });
+  return res.body;
 }
 
 async function createFolder(options, parentId, folderName) {

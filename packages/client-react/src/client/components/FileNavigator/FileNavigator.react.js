@@ -15,6 +15,10 @@ import {
   pushToHistory,
 } from '../history';
 
+function hasContext(capability, context) {
+  return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
+}
+
 const propTypes = {
   id: PropTypes.string,
   api: PropTypes.object,
@@ -361,6 +365,27 @@ class FileNavigator extends Component {
     getSortState: () => ({ sortBy: this.state.sortBy, sortDirection: this.state.sortDirection })
   });
 
+  getCapability = ({ context, isDataView = false }) => {
+    let { apiOptions } = this.props;
+    let { initializedCapabilities } = this.state;
+    return initializedCapabilities.
+      filter(capability => (
+        (isDataView ? capability.shouldBeAvailable(apiOptions) : true) && hasContext(capability, context)
+      )).
+      map(capability => {
+        let res = ({
+          icon: capability.icon,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {}),
+        });
+
+        if (!isDataView) {
+          res.disabled = !capability.shouldBeAvailable(apiOptions);
+        }
+        return res;
+      });
+  };
+
   render() {
     let {
       id,
@@ -383,8 +408,7 @@ class FileNavigator extends Component {
       resourceLocation,
       selection,
       sortBy,
-      sortDirection,
-      initializedCapabilities
+      sortDirection
     } = this.state;
 
     let viewLoadingElement = null;
@@ -412,50 +436,10 @@ class FileNavigator extends Component {
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
-    // TODO replace it by method "getCapabilities" for performace reason
-    let rowContextMenuItems = initializedCapabilities.
-        filter(capability => (
-          capability.shouldBeAvailable(apiOptions) &&
-          (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {})
-        }));
-
-    let filesViewContextMenuItems = initializedCapabilities.
-      filter(capability => (
-        capability.shouldBeAvailable(apiOptions) &&
-        (capability.availableInContexts && capability.availableInContexts.indexOf('files-view') !== -1)
-      )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {})
-        }));
-
-    let toolbarItems = initializedCapabilities.
-        filter(capability => (
-          (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {}),
-          disabled: !capability.shouldBeAvailable(apiOptions)
-        }));
-
-    let newButtonItems = initializedCapabilities.
-        filter(capability => (
-          (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {}),
-          disabled: !capability.shouldBeAvailable(apiOptions)
-        }));
+    let rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
+    let filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
+    let toolbarItems = this.getCapability({ context: 'toolbar' });
+    let newButtonItems = this.getCapability({ context: 'new-button' });
 
     let rowContextMenuId = `row-context-menu-${id}`;
     let filesViewContextMenuId = `files-view-context-menu-${id}`;

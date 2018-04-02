@@ -1,10 +1,8 @@
 import agent from 'superagent';
 import JSZip from 'jszip';
-import { readLocalFile } from './utils/upload';
 import { serializePromises } from './utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
-import getMessage from './translations';
 
 async function appendGoogleApiScript() {
   if (window.gapi) {
@@ -169,7 +167,7 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource({ resource, params, onProgress, i, l }) {
+async function downloadResource({ resource, params, onProgress, i = 0, l = 1 }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 
   const { downloadUrl, direct, mimeType, fileName } = params;
@@ -182,40 +180,27 @@ async function downloadResource({ resource, params, onProgress, i, l }) {
     }
   }
 
-  return agent.get(downloadUrl).
-    set('Authorization', `Bearer ${accessToken}`).
-    responseType('blob').
-    on('progress', event => {
-      onProgress((i * 100 + event.percent) / l)
-    }).
-    then(
-      res => ({
-        direct,
-        file: res.body,
-        fileName
-      }),
-      err => { throw new Error(`Failed to download resource: ${err}`) }
-    );
-}
+  let res;
 
-async function downloadResources({ resources, apiOptions, trackers: {
-  onStart,
-  onSuccess,
-  onFail,
-  onProgress
-} }) {
-  if (resources.length === 1) {
-    const downloadParams = getDownloadParams(resources[0]);
-    onStart({ name: getMessage(apiOptions.locale, 'downloadingName', { name: downloadParams.fileName }), quantity: 1 });
-    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
-    onSuccess();
-    return result;
+  try {
+    res = await agent.get(downloadUrl).
+      set('Authorization', `Bearer ${accessToken}`).
+      responseType('blob').
+      on('progress', event => {
+        onProgress((i * 100 + event.percent) / l)
+      });
+  } catch (err) {
+    throw new Error(`Failed to download resource: ${err}`);
   }
 
-  const archiveName = apiOptions.archiveName || 'archive.zip';
+  return {
+    direct,
+    file: res.body,
+    fileName
+  };
+}
 
-  onStart({ name: getMessage(apiOptions.locale, 'creatingName', { name: archiveName }), quantity: resources.length });
-
+async function downloadResources({ resources, apiOptions, onProgress }) {
   // multiple resources -> download one by one
   const files = await serializePromises({
     series: resources.map(
@@ -238,8 +223,6 @@ async function downloadResources({ resources, apiOptions, trackers: {
   files.forEach(({ fileName, file }) => zip.file(fileName, file));
 
   const blob = await zip.generateAsync({ type: 'blob' });
-
-  setTimeout(onSuccess, 1000);
 
   return {
     direct: false,
@@ -280,12 +263,10 @@ async function getRootId() {
   return 'root';
 }
 
-async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file = await readLocalFile();
+async function uploadFileToId(parentId, file, onProgress) {
   let size = file.content.length;
   let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
   let startByte = 0;
-  onStart({ name: file.name, size });
 
   while (startByte < size) {
     let res = await uploadChunk({
@@ -304,7 +285,6 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
     }
 
     if (res.status === 200 || res.status === 201) {
-      onSuccess(res);
       return res;
     }
   }
@@ -354,6 +334,7 @@ export default {
   getCapabilitiesForResource,
   getResourceName,
   createFolder,
+  downloadResource,
   downloadResources,
   uploadFileToId,
   renameResource,
