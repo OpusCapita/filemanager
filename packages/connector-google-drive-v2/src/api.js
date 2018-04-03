@@ -54,12 +54,14 @@ function hasSignedIn() {
  * @returns {Promise<{}>}
  */
 async function initClient(options) {
+  // This code doesn't work in IE11
   await window.gapi.client.init({
     apiKey: options.API_KEY,
     clientId: options.CLIENT_ID,
     discoveryDocs: options.DISCOVERY_DOCS,
     scope: options.SCOPES
   });
+  // End of not working code
 
   if (!window.gapi.auth2.getAuthInstance()) {
     console.log('Can\'t init Google API client');
