@@ -14,7 +14,7 @@ This module was created for testing in IE11 FileNavigator for nodeV1 API
       padding: '12px',
       backgroundColor: '#f5f5f5'
   }}>
-    <FileManager_ className={_scope.state.themeClassName}>
+    <FileManagerOne className={_scope.state.themeClassName}>
     
       {/* Use NodeJS API v1 connector */}
       <FileNavigator
@@ -39,14 +39,14 @@ This module was created for testing in IE11 FileNavigator for nodeV1 API
         onLocationChange={_scope.handleNodejsLocationChange}
       />
 
-    </FileManager_>
+    </FileManagerOne>
   </div>
 </div>
 ```
 
 ### Component Name
 
-FileManager_
+FileManagerOne
 
 ### License
 

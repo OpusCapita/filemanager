@@ -27,7 +27,7 @@ let themes = requireAll(require.context('../themes', true, /.*\.less$/));
 
 @showroomScopeDecorator
 export default
-class FileManager_Scope extends Component {
+class FileManagerOneScope extends Component {
   constructor(props) {
     super(props);
     this.state = {

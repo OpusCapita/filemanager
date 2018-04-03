@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component, Children } from 'react';
-import './FileManager_.less';
+import './FileManagerOne.less';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 
@@ -10,7 +10,7 @@ const propTypes = {
 const defaultProps = {};
 
 export default
-class FileManager_ extends Component {
+class FileManagerOne extends Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -35,5 +35,5 @@ class FileManager_ extends Component {
   }
 }
 
-FileManager_.propTypes = propTypes;
-FileManager_.defaultProps = defaultProps;
+FileManagerOne.propTypes = propTypes;
+FileManagerOne.defaultProps = defaultProps;

@@ -1,9 +1,9 @@
 import React from 'react'; // eslint-disable-line
 import { expect } from 'chai'; // eslint-disable-line
 import { shallow } from 'enzyme'; // eslint-disable-line
-import FileManager_ from '.'; // eslint-disable-line
+import FileManagerOne from '.'; // eslint-disable-line
 
-describe('<FileManager_ />', () => {
+describe('<FileManagerOne />', () => {
   /* Recommended test-cases
 
   it('should have default props', () => {
