@@ -102,9 +102,9 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function uploadFileToId({ options, parentId, file, onProgress }) {
-  let route = `${options.apiRoot}/files`;
-  return await request.post(route).
+async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
+  let route = `${apiOptions.apiRoot}/files`;
+  return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
     attach('files', file.file, file.name).
