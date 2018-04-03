@@ -15,7 +15,7 @@ const capabilities = [
 ];
 
 /**
- * Actions' fields list: *
+ * Actions' fields list:
  *  showDialog,
  *  hideDialog,
  *  navigateToDir,
@@ -28,7 +28,7 @@ const capabilities = [
  *  getNotifications,
  *  getSortState
  *
- *  Called from FileNavigator (componentDidMount and componentWillReceiveProps)
+ *  Called from FileNavigator (componentDidMount() and componentWillReceiveProps())
  *
  * @param apiOptions
  * @param {object} actions
