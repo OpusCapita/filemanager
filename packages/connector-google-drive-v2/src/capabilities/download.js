@@ -4,7 +4,7 @@ import notifUtils from '../utils/notifications';
 import nanoid from 'nanoid';
 import { getIcon } from '../icons';
 import icons from '../icons-svg';
-import getMess from '../../translations';
+import getMess from '../translations';
 
 const label = 'download';
 

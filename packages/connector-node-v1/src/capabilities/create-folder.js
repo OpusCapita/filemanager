@@ -2,7 +2,7 @@ import api from '../api';
 import sanitizeFilename from 'sanitize-filename';
 import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
-import getMess from '../../translations';
+import getMess from '../translations';
 
 let label = 'createFolder';
 
