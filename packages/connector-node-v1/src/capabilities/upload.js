@@ -121,6 +121,6 @@ export default (apiOptions, actions) => {
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: async () => await handler(apiOptions, actions)
+    handler: () => handler(apiOptions, actions)
   };
 }

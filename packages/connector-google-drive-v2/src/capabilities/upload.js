@@ -115,6 +115,6 @@ export default (apiOptions, actions) => {
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],
-    handler: async () => await handler(apiOptions, actions)
+    handler: () => handler(apiOptions, actions)
   };
 }

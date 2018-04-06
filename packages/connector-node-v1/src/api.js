@@ -15,7 +15,7 @@ function hasSignedIn() {
  *
  * @returns {Promise<{apiInitialized: boolean, apiSignedIn: boolean}>}
  */
-async function init() {
+function init() {
   return {
     apiInitialized: true,
     apiSignedIn: true
@@ -58,7 +58,7 @@ async function getParentsForId(options, id, result = []) {
   }
 
   let parent = await getResourceById(options, parentId);
-  return await getParentsForId(options, resource.parentId, [parent, ...result]);
+  return getParentsForId(options, resource.parentId, [parent, ...result]);
 }
 
 async function getBaseResource(options) {
@@ -75,7 +75,7 @@ async function getIdForPartPath(options, currId, pathArr) {
       if (pathArr.length === 1) {
         return resource.id;
       } else {
-        return await getIdForPartPath(options, resource.id, pathArr.slice(1));
+        return getIdForPartPath(options, resource.id, pathArr.slice(1));
       }
     }
   }
@@ -95,7 +95,7 @@ async function getIdForPath(options, path) {
     return resource.id;
   }
 
-  return await getIdForPartPath(options, resource.id, pathArr.slice(1));
+  return getIdForPartPath(options, resource.id, pathArr.slice(1));
 }
 
 async function getParentIdForResource(options, resource) {

@@ -133,7 +133,7 @@ export default (apiOptions, actions) => {
       const selectedResources = getSelectedResources();
       return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
     },
-    handler: async () => await handler(apiOptions, actions),
+    handler: () => handler(apiOptions, actions),
     availableInContexts: ['row', 'toolbar']
   };
 }

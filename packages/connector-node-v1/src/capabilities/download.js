@@ -132,6 +132,6 @@ export default (apiOptions, actions) => {
       );
     },
     availableInContexts: ['row', 'toolbar'],
-    handler: async () => await handler(apiOptions, actions)
+    handler: () => handler(apiOptions, actions)
   };
 }
