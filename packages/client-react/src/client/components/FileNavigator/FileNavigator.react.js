@@ -15,6 +15,10 @@ import {
   pushToHistory,
 } from '../history';
 
+function hasContext(capability, context) {
+  return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
+}
+
 const propTypes = {
   id: PropTypes.string,
   api: PropTypes.object,
@@ -80,21 +84,28 @@ class FileNavigator extends Component {
 
     let capabilitiesProps = this.getCapabilitiesProps();
     let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+
+    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+
     this.setState({ // eslint-disable-line
+      apiInitialized,
+      apiSignedIn,
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
     });
 
-    await api.init({
-      ...apiOptions,
-      onInitSuccess: this.handleApiInitSuccess,
-      onInitFail: this.handleApiInitFail,
-      onSignInSuccess: this.handleApiSignInSuccess,
-      onSignInFail: this.handleApiSignInFail
-    });
+    if (apiSignedIn) {
+      this.handleApiReady();
+    } else {
+      if (apiInitialized) {
+        this.handleApiSignInFail();
+      } else {
+        this.handleApiInitFail();
+      }
 
-    this.monitorApiAvailability();
+      this.monitorApiAvailability();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,29 +127,29 @@ class FileNavigator extends Component {
 
   startViewLoading = () => {
     this.setState({ loadingView: true, loadingResourceLocation: true });
-  }
+  };
 
   stopViewLoading = () => {
     this.setState({ loadingView: false });
-  }
+  };
 
   focusView = () => {
     this.viewRef.focus();
-  }
+  };
 
   handleApiReady = () => {
     let { initialResourceId } = this.props;
     let resourceId = this.state.resource.id;
     let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
     this.navigateToDir(idToNavigate);
-  }
+  };
 
   monitorApiAvailability = () => {
-    clearTimeout(this.apiAvailabilityTimeout);
+    let { api } = this.props;
 
     this.apiAvailabilityTimeout = setTimeout(() => {
-      let { apiInitialized, apiSignedIn } = this.state;
-      if (apiInitialized && apiSignedIn) {
+      if (api.hasSignedIn()) {
+        this.setState({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
         this.monitorApiAvailability();
@@ -146,27 +157,15 @@ class FileNavigator extends Component {
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
 
-  handleApiInitSuccess = () => {
-    this.setState({ apiInitialized: true });
-  }
-
   handleApiInitFail = () => {
-    this.setState({ apiInititalized: false });
     this.handleResourceChildrenChange([]);
-    this.monitorApiAvailability();
-  }
-
-  handleApiSignInSuccess = () => {
-    this.setState({ apiSignedIn: true });
-  }
+  };
 
   handleApiSignInFail = () => {
-    this.monitorApiAvailability();
     this.handleSelectionChange([]);
     this.handleResourceChildrenChange([]);
     this.handleResourceChange({});
-    this.setState({ apiSignedIn: false });
-  }
+  };
 
   handleLocationBarChange = (id) => {
     let { resource } = this.state;
@@ -191,7 +190,7 @@ class FileNavigator extends Component {
     this.handleResourceChange(resource);
 
     let resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
-    console.log({ resourceChildren })
+    console.log({ resourceChildren });
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
@@ -237,12 +236,12 @@ class FileNavigator extends Component {
 
   handleClickOutside = () => {
     this.handleSelectionChange([]);
-  }
+  };
 
   handleResourceLocationChange = (resourceLocation) => {
     this.setState({ resourceLocation });
     this.props.onResourceLocationChange(resourceLocation);
-  }
+  };
 
   handleSelectionChange = (selection) => {
     this.setState({ selection });
@@ -332,25 +331,25 @@ class FileNavigator extends Component {
 
   handleKeyDown = async (e) => {
 
-  }
+  };
 
   handleViewRef = (ref) => {
     this.viewRef = ref;
-  }
+  };
 
   showDialog = (rawDialogElement) => {
     let dialogElement = rawToReactElement(rawDialogElement);
 
     this.setState({ dialogElement });
-  }
+  };
 
   hideDialog = () => {
     this.setState({ dialogElement: null });
-  }
+  };
 
   updateNotifications = (notifications) => {
     this.setState({ notifications });
-  }
+  };
 
   getCapabilitiesProps = () => ({
     showDialog: this.showDialog,
@@ -365,6 +364,27 @@ class FileNavigator extends Component {
     getNotifications: () => this.state.notifications,
     getSortState: () => ({ sortBy: this.state.sortBy, sortDirection: this.state.sortDirection })
   });
+
+  getCapability = ({ context, isDataView = false }) => {
+    let { apiOptions } = this.props;
+    let { initializedCapabilities } = this.state;
+    return initializedCapabilities.
+      filter(capability => (
+        (isDataView ? capability.shouldBeAvailable(apiOptions) : true) && hasContext(capability, context)
+      )).
+      map(capability => {
+        let res = ({
+          icon: capability.icon,
+          label: capability.label || '',
+          onClick: capability.handler || (() => {}),
+        });
+
+        if (!isDataView) {
+          res.disabled = !capability.shouldBeAvailable(apiOptions);
+        }
+        return res;
+      });
+  };
 
   render() {
     let {
@@ -388,8 +408,7 @@ class FileNavigator extends Component {
       resourceLocation,
       selection,
       sortBy,
-      sortDirection,
-      initializedCapabilities
+      sortDirection
     } = this.state;
 
     let viewLoadingElement = null;
@@ -417,50 +436,10 @@ class FileNavigator extends Component {
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
-    // TODO replace it by method "getCapabilities" for performace reason
-    let rowContextMenuItems = initializedCapabilities.
-        filter(capability => (
-          capability.shouldBeAvailable(apiOptions) &&
-          (capability.availableInContexts && capability.availableInContexts.indexOf('row') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {})
-        }));
-
-    let filesViewContextMenuItems = initializedCapabilities.
-      filter(capability => (
-        capability.shouldBeAvailable(apiOptions) &&
-        (capability.availableInContexts && capability.availableInContexts.indexOf('files-view') !== -1)
-      )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {})
-        }));
-
-    let toolbarItems = initializedCapabilities.
-        filter(capability => (
-          (capability.availableInContexts && capability.availableInContexts.indexOf('toolbar') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {}),
-          disabled: !capability.shouldBeAvailable(apiOptions)
-        }));
-
-    let newButtonItems = initializedCapabilities.
-        filter(capability => (
-          (capability.availableInContexts && capability.availableInContexts.indexOf('new-button') !== -1)
-        )).
-        map(capability => ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {}),
-          disabled: !capability.shouldBeAvailable(apiOptions)
-        }));
+    let rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
+    let filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
+    let toolbarItems = this.getCapability({ context: 'toolbar' });
+    let newButtonItems = this.getCapability({ context: 'new-button' });
 
     let rowContextMenuId = `row-context-menu-${id}`;
     let filesViewContextMenuId = `files-view-context-menu-${id}`;

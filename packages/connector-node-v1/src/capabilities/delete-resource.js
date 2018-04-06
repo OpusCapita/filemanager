@@ -5,19 +5,17 @@ import getMess from '../translations';
 
 let label = 'remove';
 
-function handler(apiOptions, {
-  id,
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+function handler(apiOptions, actions) {
+  const {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getSelectedResources,
+    getResource,
+    getNotifications
+  } = actions;
+
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const selectedResources = getSelectedResources();
@@ -58,19 +56,9 @@ function handler(apiOptions, {
   showDialog(rawDialogElement);
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getSelectedResources } = actions;
   return {
     id: 'delete',
     icon: { svg: icons.delete },
@@ -85,17 +73,6 @@ export default (apiOptions, {
       return selectedResources.every(resource => resource.capabilities.canDelete);
     },
     availableInContexts: ['row', 'toolbar'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

@@ -1,4 +1,3 @@
-// execute Promises in series
 export function normalizeResource(resource) {
   if (resource) {
     return {

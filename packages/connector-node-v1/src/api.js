@@ -1,9 +1,25 @@
 import request from 'superagent';
 import { normalizeResource } from './utils/common';
 
-async function init(options) {
-  options.onInitSuccess();
-  options.onSignInSuccess();
+/**
+ * hasSignedIn
+ *
+ * @returns {boolean}
+ */
+function hasSignedIn() {
+  return true;
+}
+
+/**
+ * Init API
+ *
+ * @returns {Promise<{apiInitialized: boolean, apiSignedIn: boolean}>}
+ */
+function init() {
+  return {
+    apiInitialized: true,
+    apiSignedIn: true
+  };
 }
 
 async function getCapabilitiesForResource(options, resource) {
@@ -86,30 +102,8 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function readLocalFile() {
-  return new Promise((resolve, reject) => {
-    const uploadInput = document.createElement("input");
-
-    uploadInput.addEventListener('change', _ => {
-      const file = uploadInput.files[0];
-      resolve({
-        type: file.type,
-        name: file.name,
-        file
-      });
-    });
-
-    uploadInput.type = "file";
-    document.body.appendChild(uploadInput);
-    uploadInput.click();
-    document.body.removeChild(uploadInput);
-  });
-}
-
-async function uploadFileToId(options, parentId, { onStart, onProgress }) {
-  let file = await readLocalFile(true);
-  let route = `${options.apiRoot}/files`;
-  onStart({ name: file.name, size: file.file.size });
+async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
+  let route = `${apiOptions.apiRoot}/files`;
   return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
@@ -125,14 +119,13 @@ async function downloadResources({ apiOptions, resources, onProgress }) {
     `${apiOptions.apiRoot}/download?`
   );
 
-  return request.get(downloadUrl).
+  let res = await request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
       onProgress(event.percent);
-    }).
-    then(res => {
-      return res.body;
     });
+
+  return res.body;
 }
 
 async function createFolder(options, parentId, folderName) {
@@ -168,6 +161,7 @@ async function removeResources(options, selectedResources) {
 
 export default {
   init,
+  hasSignedIn,
   getIdForPath,
   getResourceById,
   getCapabilitiesForResource,

@@ -5,88 +5,35 @@ import upload from './upload';
 import rename from './rename';
 import sort from './sort';
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => ([
-  createFolder(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  rename(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  download(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  upload(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  deleteResource(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  }),
-  sort(apiOptions, {
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  })
-]);
+const capabilities = [
+  createFolder,
+  rename,
+  download,
+  upload,
+  deleteResource,
+  sort
+];
+
+/**
+ * Actions' fields list:
+ *  showDialog,
+ *  hideDialog,
+ *  navigateToDir,
+ *  updateNotifications,
+ *  getSelection,
+ *  getSelectedResources,
+ *  getResource,
+ *  getResourceChildren,
+ *  getResourceLocation,
+ *  getNotifications,
+ *  getSortState
+ *
+ *  Called from FileNavigator (componentDidMount() and componentWillReceiveProps())
+ *
+ * @param apiOptions
+ * @param {object} actions
+ * @returns {array}
+ */
+export default (apiOptions, actions) => (
+  capabilities.map(capability => capability(apiOptions, actions))
+);

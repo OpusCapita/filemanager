@@ -1,10 +1,8 @@
 import agent from 'superagent';
 import JSZip from 'jszip';
-import { readLocalFile } from './utils/upload';
 import { serializePromises } from './utils/common';
 import { getDownloadParams } from './google-drive-utils';
 import parseRange from 'range-parser';
-import getMessage from './translations';
 
 async function appendGoogleApiScript() {
   if (window.gapi) {
@@ -29,51 +27,83 @@ async function appendGoogleApiScript() {
   });
 }
 
-async function updateSigninStatus(isSignedIn, options) {
-  if (isSignedIn) {
-    options.onSignInSuccess(getMessage(options.locale, 'signInSuccess'));
-    console.log('Google Drive sign-in Success');
-  } else {
-    options.onSignInFail(getMessage(options.locale, 'signInFail'));
-    console.log('Google Drive sign-in fail');
-  }
+/**
+ * Load the auth2 library.
+ *
+ * @returns {Promise<any>}
+ */
+function loadAuth2Library() {
+  return new Promise(resolve => {
+    window.gapi.load('client:auth2', () => resolve());
+  });
 }
 
-// Initializes the API client library and sets up sign-in state listeners.
+/**
+ * hasSignedIn
+ *
+ * @returns {boolean}
+ */
+function hasSignedIn() {
+  return window.gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+/**
+ * Initializes the API client library and sets up sign-in state listeners.
+ *
+ * @param options
+ * @returns {Promise<{}>}
+ */
 async function initClient(options) {
+  // This code doesn't work in IE11
   await window.gapi.client.init({
     apiKey: options.API_KEY,
     clientId: options.CLIENT_ID,
     discoveryDocs: options.DISCOVERY_DOCS,
     scope: options.SCOPES
   });
+  // End of not working code
 
   if (!window.gapi.auth2.getAuthInstance()) {
-    options.onInitFail(getMessage(options.locale, 'notInitAPIClient'));
     console.log('Can\'t init Google API client');
-    return;
+    return {
+      apiInitialized: false,
+      apiSignedIn: false
+    };
   }
 
-  options.onInitSuccess(getMessage(options.locale, 'successInit'));
-  // Listen for sign-in state changes.
-  window.gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => updateSigninStatus(isSignedIn, options));
+  let isSignedIn = hasSignedIn();
 
-  // Handle the initial sign-in state.
-  updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get(), options);
+  if (isSignedIn) {
+    console.log('Google Drive sign-in Success');
+  } else {
+    console.log('Google Drive sign-in fail');
+  }
+
+  return {
+    apiInitialized: true,
+    apiSignedIn: isSignedIn
+  };
 }
 
-// On load, called to load the auth2 library and API client library.
-async function handleClientLoad(options) {
-  await window.gapi.load('client:auth2', () => initClient(options));
-}
-
+/**
+ * Init Google API
+ *
+ * @param options
+ * @returns {Promise<{apiInitialized: boolean, apiSignedIn: boolean}>}
+ */
 async function init(options) {
   await appendGoogleApiScript();
-
+  await loadAuth2Library();
   console.log('Try auth on Google Drive API');
-  await handleClientLoad(options);
+  return await initClient(options); // Initializes API client library.
 }
 
+/**
+ * Normalize Resource
+ *
+ * @param resource
+ * @returns {{}} Normalized resource
+ */
 function normalizeResource(resource) {
   return {
     createdDate: Date.parse(resource.createdDate),
@@ -139,7 +169,7 @@ async function getCapabilitiesForResource(options, resource) {
   return resource.capabilities || [];
 }
 
-async function downloadResource({ resource, params, onProgress, i, l }) {
+async function downloadResource({ resource, params, onProgress, i = 0, l = 1 }) {
   let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 
   const { downloadUrl, direct, mimeType, fileName } = params;
@@ -152,40 +182,27 @@ async function downloadResource({ resource, params, onProgress, i, l }) {
     }
   }
 
-  return agent.get(downloadUrl).
-    set('Authorization', `Bearer ${accessToken}`).
-    responseType('blob').
-    on('progress', event => {
-      onProgress((i * 100 + event.percent) / l)
-    }).
-    then(
-      res => ({
-        direct,
-        file: res.body,
-        fileName
-      }),
-      err => { throw new Error(`Failed to download resource: ${err}`) }
-    );
-}
+  let res;
 
-async function downloadResources({ resources, apiOptions, trackers: {
-  onStart,
-  onSuccess,
-  onFail,
-  onProgress
-} }) {
-  if (resources.length === 1) {
-    const downloadParams = getDownloadParams(resources[0]);
-    onStart({ name: getMessage(apiOptions.locale, 'downloadingName', { name: downloadParams.fileName }), quantity: 1 });
-    const result = await downloadResource({ resource: resources[0], params: downloadParams, onProgress, i: 0, l: 1 });
-    onSuccess();
-    return result;
+  try {
+    res = await agent.get(downloadUrl).
+      set('Authorization', `Bearer ${accessToken}`).
+      responseType('blob').
+      on('progress', event => {
+        onProgress((i * 100 + event.percent) / l)
+      });
+  } catch (err) {
+    throw new Error(`Failed to download resource: ${err}`);
   }
 
-  const archiveName = apiOptions.archiveName || 'archive.zip';
+  return {
+    direct,
+    file: res.body,
+    fileName
+  };
+}
 
-  onStart({ name: getMessage(apiOptions.locale, 'creatingName', { name: archiveName }), quantity: resources.length });
-
+async function downloadResources({ resources, apiOptions, onProgress }) {
   // multiple resources -> download one by one
   const files = await serializePromises({
     series: resources.map(
@@ -208,8 +225,6 @@ async function downloadResources({ resources, apiOptions, trackers: {
   files.forEach(({ fileName, file }) => zip.file(fileName, file));
 
   const blob = await zip.generateAsync({ type: 'blob' });
-
-  setTimeout(onSuccess, 1000);
 
   return {
     direct: false,
@@ -250,12 +265,10 @@ async function getRootId() {
   return 'root';
 }
 
-async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress }) {
-  let file = await readLocalFile();
+async function uploadFileToId(parentId, file, onProgress) {
   let size = file.content.length;
   let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
   let startByte = 0;
-  onStart({ name: file.name, size });
 
   while (startByte < size) {
     let res = await uploadChunk({
@@ -274,7 +287,6 @@ async function uploadFileToId(parentId, { onStart, onSuccess, onFail, onProgress
     }
 
     if (res.status === 200 || res.status === 201) {
-      onSuccess(res);
       return res;
     }
   }
@@ -315,6 +327,7 @@ async function signOut() {
 
 export default {
   init,
+  hasSignedIn,
   getResourceById,
   getChildrenForId,
   getRootId,
@@ -323,6 +336,7 @@ export default {
   getCapabilitiesForResource,
   getResourceName,
   createFolder,
+  downloadResource,
   downloadResources,
   uploadFileToId,
   renameResource,

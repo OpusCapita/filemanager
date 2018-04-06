@@ -4,26 +4,23 @@ import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../translations';
+import { readLocalFile } from "../utils/upload";
 
 let label = 'upload';
 
-function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+async function handler(apiOptions, actions) {
+  const {
+    navigateToDir,
+    updateNotifications,
+    getResource,
+    getNotifications
+  } = actions;
+
   let notificationId = label;
   let notificationChildId = nanoid();
   let getMessage = getMess.bind(null, apiOptions.locale);
 
-  let onStart = ({ name, size }) => {
+  let onStart = (name) => {
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
     let childElement = {
@@ -77,6 +74,7 @@ function handler(apiOptions, {
   };
 
   let onFail = () => {};
+
   let onProgress = (progress) => {
     let notifications = getNotifications();
     let notification = notifUtils.getNotification(notifications, notificationId);
@@ -97,21 +95,19 @@ function handler(apiOptions, {
   };
 
   let resource = getResource();
-  api.uploadFileToId(resource.id, { onStart, onSuccess, onFail, onProgress });
+  let file = await readLocalFile();
+
+  onStart(file.name);
+
+  let res = await api.uploadFileToId(resource.id, file, onProgress);
+  if (res && (res.status === 200 || res.status === 201)) {
+    onSuccess(res);
+  } else {
+    onFail();
+  }
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
@@ -119,17 +115,6 @@ export default (apiOptions, {
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => true,
     availableInContexts: ['files-view', 'new-button'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

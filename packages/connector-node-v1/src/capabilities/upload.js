@@ -3,24 +3,21 @@ import notifUtils from '../utils/notifications';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import onFailError from '../utils/onFailError';
+import { readLocalFile } from '../utils/upload';
 import icons from '../icons-svg';
 import getMess from '../translations';
 import { normalizeResource } from '../utils/common';
 
 let label = 'upload';
 
-async function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+async function handler(apiOptions, actions) {
+  const {
+    navigateToDir,
+    updateNotifications,
+    getResource,
+    getNotifications
+  } = actions;
+
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const notificationId = label;
@@ -76,7 +73,9 @@ async function handler(apiOptions, {
 
   const resource = getResource();
   try {
-    const response = await api.uploadFileToId(apiOptions, resource.id, { onStart, onProgress });
+    let file = await readLocalFile(true);
+    onStart({ name: file.name, size: file.file.size });
+    const response = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress });
     const newResource = normalizeResource(response.body[0]);
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -107,19 +106,9 @@ async function handler(apiOptions, {
   }
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getResource } = actions;
   return {
     id: label,
     icon: { svg: icons.fileUpload },
@@ -132,17 +121,6 @@ export default (apiOptions, {
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

@@ -5,21 +5,17 @@ import nanoid from 'nanoid';
 import { getIcon } from '../icons';
 import icons from '../icons-svg';
 import getMess from '../translations';
+import { getDownloadParams } from "../google-drive-utils";
 
 const label = 'download';
 
-function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+async function handler(apiOptions, actions) {
+  const {
+    updateNotifications,
+    getSelectedResources,
+    getNotifications
+  } = actions;
+
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const notificationId = label;
@@ -72,7 +68,8 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  const onFail = () => { };
+  const onFail = err => console.log(err);
+
   const onProgress = (progress) => {
     const notifications = getNotifications();
     const notification = notifUtils.getNotification(notifications, notificationId);
@@ -92,58 +89,51 @@ function handler(apiOptions, {
     updateNotifications(newNotifications);
   };
 
-  return api.downloadResources({
-    resources: getSelectedResources(),
-    apiOptions,
-    trackers: {
-      onStart,
-      onSuccess,
-      onFail,
-      onProgress
+  try {
+    let result;
+    let resources = getSelectedResources();
+    let quantity = resources.length;
+
+    if (quantity === 1) {
+      const resource = resources[0];
+      const params = getDownloadParams(resource);
+      onStart({ name: getMessage('downloadingName', { name: params.fileName }), quantity });
+      result = await api.downloadResource({ resource, params, onProgress });
+    } else {
+      const archiveName = apiOptions.archiveName || 'archive.zip';
+      onStart({ name: getMessage('creatingName', { name: archiveName }), quantity });
+      result = await api.downloadResources({ resources, apiOptions, onProgress });
     }
-  }).
-    then(({ direct, downloadUrl, file, fileName, mimeType }) => direct ?
+
+    let { direct, downloadUrl, file, fileName, mimeType } = result;
+
+    if (direct) {
       triggerHiddenForm({
         downloadUrl,
         ...(mimeType === 'application/pdf' ? { target: '_blank' } : null)
-      }) :
-      promptToSaveBlob({ content: file, name: fileName })
-    ).catch(err => console.log(err))
+      });
+    } else {
+      promptToSaveBlob({ content: file, name: fileName });
+    }
+
+    onSuccess();
+  } catch (err) {
+    onFail(err);
+  }
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getSelectedResources } = actions;
   return {
     id: label,
     icon: { svg: icons.fileDownload },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: () => {
       const selectedResources = getSelectedResources();
       return selectedResources.length > 0 && selectedResources[0].type !== 'dir';
     },
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    }),
+    handler: () => handler(apiOptions, actions),
     availableInContexts: ['row', 'toolbar']
   };
 }

@@ -8,18 +8,13 @@ import getMess from '../translations';
 
 let label = 'download';
 
-async function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+async function handler(apiOptions, actions) {
+  const {
+    updateNotifications,
+    getSelectedResources,
+    getNotifications
+  } = actions;
+
   let getMessage = getMess.bind(null, apiOptions.locale);
 
   const notificationId = label;
@@ -93,27 +88,22 @@ async function handler(apiOptions, {
 
   try {
     const resources = getSelectedResources();
-    if (resources.length === 1) {
+    const quantity = resources.length;
+    if (quantity === 1) {
       const { id, name } = resources[0];
       const downloadUrl = `${apiOptions.apiRoot}/download?items=${id}`;
       // check if the file is available and trigger native browser saving prompt
       // if server is down the error will be catched and trigger relevant notification
-      await api.getResourceById(apiOptions, id).then(_ => promptToSaveBlob({ name, downloadUrl }));
-      return;
+      await api.getResourceById(apiOptions, id);
+      promptToSaveBlob({ name, downloadUrl });
+    } else {
+      // multiple resources -> download as a single archive
+      const archiveName = apiOptions.archiveName || 'archive.zip';
+      onStart({ archiveName, quantity });
+      const content = await api.downloadResources({ resources, apiOptions, onProgress });
+      setTimeout(onSuccess, 1000);
+      promptToSaveBlob({ content, name: archiveName })
     }
-
-    // multiple resources -> download one by one and zip into a single archive
-    const archiveName = apiOptions.archiveName || 'archive.zip';
-    onStart({ archiveName, quantity: resources.length });
-
-    const content = await api.downloadResources({
-      resources,
-      apiOptions,
-      onProgress
-    });
-
-    setTimeout(onSuccess, 1000)
-    promptToSaveBlob({ content, name: archiveName })
   } catch (err) {
     onFailError({
       getNotifications,
@@ -125,19 +115,9 @@ async function handler(apiOptions, {
   }
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   let localeLabel = getMess(apiOptions.locale, label);
+  const { getSelectedResources } = actions;
   return {
     id: label,
     icon: { svg: icons.fileDownload },
@@ -152,17 +132,6 @@ export default (apiOptions, {
       );
     },
     availableInContexts: ['row', 'toolbar'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }

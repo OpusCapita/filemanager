@@ -6,18 +6,16 @@ import getMess from '../translations';
 
 let label = 'createFolder';
 
-function handler(apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) {
+function handler(apiOptions, actions) {
+  const {
+    showDialog,
+    hideDialog,
+    navigateToDir,
+    updateNotifications,
+    getResource,
+    getNotifications
+  } = actions;
+
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const rawDialogElement = {
@@ -72,19 +70,9 @@ function handler(apiOptions, {
   showDialog(rawDialogElement);
 }
 
-export default (apiOptions, {
-  showDialog,
-  hideDialog,
-  navigateToDir,
-  updateNotifications,
-  getSelection,
-  getSelectedResources,
-  getResource,
-  getResourceChildren,
-  getResourceLocation,
-  getNotifications
-}) => {
+export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
+  const { getResource } = actions;
   return {
     id: label,
     icon: { svg: icons.createNewFolder },
@@ -99,17 +87,6 @@ export default (apiOptions, {
       return resource.capabilities.canAddChildren;
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: () => handler(apiOptions, {
-      showDialog,
-      hideDialog,
-      navigateToDir,
-      updateNotifications,
-      getSelection,
-      getSelectedResources,
-      getResource,
-      getResourceChildren,
-      getResourceLocation,
-      getNotifications
-    })
+    handler: () => handler(apiOptions, actions)
   };
 }
