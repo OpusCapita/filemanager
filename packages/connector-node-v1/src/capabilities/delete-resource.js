@@ -10,10 +10,11 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    updateNotifications,
+    // updateNotifications,
     getSelectedResources,
     getResource,
-    getNotifications
+    // getNotifications,
+    notices
   } = actions;
 
   const getMessage = getMess.bind(null, apiOptions.locale);
@@ -38,10 +39,11 @@ function handler(apiOptions, actions) {
           navigateToDir(resource.id, null, false);
         } catch (err) {
           onFailError({
-            getNotifications,
+            // getNotifications,
             label: getMessage(label),
             notificationId: 'delete',
-            updateNotifications
+            // updateNotifications,
+            notices
           });
           console.log(err)
         }

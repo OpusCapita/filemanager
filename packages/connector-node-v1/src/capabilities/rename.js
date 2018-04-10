@@ -11,10 +11,11 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    updateNotifications,
+    // updateNotifications,
     getSelectedResources,
     getResource,
-    getNotifications
+    // getNotifications,
+    notices
   } = actions;
 
   const getMessage = getMess.bind(null, apiOptions.locale);
@@ -44,10 +45,11 @@ function handler(apiOptions, actions) {
         } catch (err) {
           hideDialog();
           onFailError({
-            getNotifications,
+            // getNotifications,
             label: localeLabel,
             notificationId: label,
-            updateNotifications
+            // updateNotifications,
+            notices
           });
           console.log(err);
           return null

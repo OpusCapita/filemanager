@@ -1,28 +1,42 @@
-import notifUtils from './notifications';
+// import notifUtils from './notifications';
 
 export default function onFailErrors({
-  getNotifications,
+  // getNotifications,
   label,
   notificationId,
-  updateNotifications,
-  message
+  // updateNotifications,
+  message,
+  notices
 }) {
-  const notifications = getNotifications();
-  let newNotifications = notifUtils.removeNotification(notifications, notificationId);
+  // const notifications = getNotifications();
+  // let newNotifications = notifUtils.removeNotification(notifications, notificationId);
+  notices.removeNotification(notificationId);
 
   const newNotification = {
     title: message || `${label} error`,
     minimizable: false,
     closable: true,
     children: [],
-    onHide: _ => updateNotifications(notifUtils.removeNotification(notifications, notificationId))
+    onHide: _ => notices.removeNotification(notificationId)
   };
+  // const newNotification = {
+  //   title: message || `${label} error`,
+  //   minimizable: false,
+  //   closable: true,
+  //   children: [],
+  //   onHide: _ => updateNotifications(notifUtils.removeNotification(notifications, notificationId))
+  // };
 
-  const notification = notifUtils.getNotification(notifications, notificationId);
+  const notification = notices.getNotification(notificationId);
+  // const notification = notifUtils.getNotification(notifications, notificationId);
 
-  newNotifications = notification ?
-    notifUtils.updateNotification(notifications, notificationId, newNotification) :
-    notifUtils.addNotification(notifications, notificationId, newNotification);
+  notification ?
+    notices.updateNotification(notificationId, newNotification) :
+    notices.addNotification(notificationId, newNotification);
 
-  updateNotifications(newNotifications);
+  // newNotifications = notification ?
+  //   notifUtils.updateNotification(notifications, notificationId, newNotification) :
+  //   notifUtils.addNotification(notifications, notificationId, newNotification);
+  //
+  // updateNotifications(newNotifications);
 }

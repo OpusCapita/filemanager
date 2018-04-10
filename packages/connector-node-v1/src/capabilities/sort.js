@@ -3,10 +3,11 @@ import onFailError from '../utils/onFailError';
 
 export default (apiOptions, actions) => {
   const {
-    updateNotifications,
+    // updateNotifications,
     getResource,
-    getNotifications,
-    getSortState // eslint-disable-line
+    // getNotifications,
+    getSortState, // eslint-disable-line
+    notices
   } = actions;
   return ({
     id: 'sort',
@@ -17,9 +18,10 @@ export default (apiOptions, actions) => {
         return api.getChildrenForId(apiOptions, { id, sortBy, sortDirection });
       } catch (err) {
         onFailError({
-          getNotifications,
+          // getNotifications,
           notificationId: 'rename',
-          updateNotifications
+          // updateNotifications,
+          notices
         });
         return null
       }

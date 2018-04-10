@@ -17,6 +17,7 @@ const capabilities = [
 
 /**
  * Actions' fields list:
+ *  notices,
  *  showDialog,
  *  hideDialog,
  *  navigateToDir,

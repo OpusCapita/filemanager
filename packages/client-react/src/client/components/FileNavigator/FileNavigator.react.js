@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './FileNavigator.less';
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
+import Notices from '../Notices';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
 import { SortDirection } from 'react-virtualized';
@@ -59,6 +60,9 @@ export default
 class FileNavigator extends Component {
   constructor(props) {
     super(props);
+    this.notices = new Notices(
+      notifications => this && this.setState({ notifications })
+    );
     this.state = {
       apiInitialized: false,
       apiSignedIn: false,
@@ -352,6 +356,7 @@ class FileNavigator extends Component {
   };
 
   getCapabilitiesProps = () => ({
+    notices: this.notices,
     showDialog: this.showDialog,
     hideDialog: this.hideDialog,
     updateNotifications: this.updateNotifications,

@@ -1,5 +1,5 @@
 import api from '../api';
-import notifUtils from '../utils/notifications';
+// import notifUtils from '../utils/notifications';
 import { promptToSaveBlob } from '../utils/download';
 import onFailError from '../utils/onFailError';
 import nanoid from 'nanoid';
@@ -10,9 +10,10 @@ let label = 'download';
 
 async function handler(apiOptions, actions) {
   const {
-    updateNotifications,
+    // updateNotifications,
     getSelectedResources,
-    getNotifications
+    // getNotifications,
+    notices
   } = actions;
 
   let getMessage = getMess.bind(null, apiOptions.locale);
@@ -21,8 +22,9 @@ async function handler(apiOptions, actions) {
   const notificationChildId = nanoid();
 
   const onStart = ({ archiveName, quantity }) => {
-    const notifications = getNotifications();
-    const notification = notifUtils.getNotification(notifications, notificationId);
+    // const notifications = getNotifications();
+    // const notification = notifUtils.getNotification(notifications, notificationId);
+    const notification = notices.getNotification(notificationId);
 
     const childElement = {
       elementType: 'NotificationProgressItem',
@@ -32,44 +34,62 @@ async function handler(apiOptions, actions) {
       }
     };
 
-    const newChildren = notifUtils.addChild(
+    // const newChildren = notifUtils.addChild(
+    //   (notification && notification.children) || [], notificationChildId, childElement
+    // );
+    const newChildren = notices.addChild(
       (notification && notification.children) || [], notificationChildId, childElement
     );
     const newNotification = {
-      title: quantity > 1 ? getMessage('zippingItems', { quantity }) : getMessage('zippingItem'),
+      title: quantity > 1 ?
+        getMessage('zippingItems', { quantity }) :
+        getMessage('zippingItem'),
       children: newChildren
     };
 
-    const newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification) :
-      notifUtils.addNotification(notifications, notificationId, newNotification);
+    notification ?
+      notices.updateNotification(notificationId, newNotification) :
+      notices.addNotification(notificationId, newNotification);
 
-    updateNotifications(newNotifications);
+    // const newNotifications = notification ?
+    //   notifUtils.updateNotification(notifications, notificationId, newNotification) :
+    //   notifUtils.addNotification(notifications, notificationId, newNotification);
+    //
+    // updateNotifications(newNotifications);
   };
 
   const onSuccess = _ => {
-    const notifications = getNotifications();
-    const notification = notifUtils.getNotification(notifications, notificationId);
+    // const notifications = getNotifications();
+    // const notification = notifUtils.getNotification(notifications, notificationId);
+    const notification = notices.getNotification(notificationId);
     const notificationChildrenCount = notification.children.length;
-    let newNotifications;
+    // let newNotifications;
 
     if (notificationChildrenCount > 1) {
-      newNotifications = notifUtils.updateNotification(
-        notifications,
+      notices.updateNotification(
         notificationId, {
-          children: notifUtils.removeChild(notification.children, notificationChildId)
+          children: notices.removeChild(notification.children, notificationChildId)
         }
       );
+      // newNotifications = notifUtils.updateNotification(
+      //   notifications,
+      //   notificationId, {
+      //     children: notifUtils.removeChild(notification.children, notificationChildId)
+      //   }
+      // );
     } else {
-      newNotifications = notifUtils.removeNotification(notifications, notificationId);
+      notices.removeNotification(notificationId);
+      // newNotifications = notifUtils.removeNotification(notifications, notificationId);
     }
-    updateNotifications(newNotifications);
+    // updateNotifications(newNotifications);
   };
 
   const onProgress = (progress) => {
-    const notifications = getNotifications();
-    const notification = notifUtils.getNotification(notifications, notificationId);
-    const child = notifUtils.getChild(notification.children, notificationChildId);
+    // const notifications = getNotifications();
+    // const notification = notifUtils.getNotification(notifications, notificationId);
+    // const child = notifUtils.getChild(notification.children, notificationChildId);
+    const notification = notices.getNotification(notificationId);
+    const child = notices.getChild(notification.children, notificationChildId);
 
     const newChild = {
       ...child,
@@ -81,9 +101,11 @@ async function handler(apiOptions, actions) {
         }
       }
     };
-    const newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
-    const newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
-    updateNotifications(newNotifications);
+    // const newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
+    // const newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
+    // updateNotifications(newNotifications);
+    const newChildren = notices.updateChild(notification.children, notificationChildId, newChild);
+    notices.updateNotification(notificationId, { children: newChildren });
   };
 
   try {
@@ -106,10 +128,11 @@ async function handler(apiOptions, actions) {
     }
   } catch (err) {
     onFailError({
-      getNotifications,
+      // getNotifications,
       label: getMessage(label),
       notificationId,
-      updateNotifications
+      // updateNotifications,
+      notices
     });
     console.log(err)
   }
