@@ -11,9 +11,7 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    // updateNotifications,
     getResource,
-    // getNotifications,
     notices
   } = actions;
 
@@ -40,10 +38,8 @@ function handler(apiOptions, actions) {
         } catch (err) {
           hideDialog();
           onFailError({
-            // getNotifications,
             label: getMessage(label),
             notificationId: label,
-            // updateNotifications,
             notices
           });
           console.log(err);

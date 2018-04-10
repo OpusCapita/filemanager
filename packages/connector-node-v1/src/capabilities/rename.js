@@ -11,10 +11,8 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    // updateNotifications,
     getSelectedResources,
     getResource,
-    // getNotifications,
     notices
   } = actions;
 
@@ -45,10 +43,8 @@ function handler(apiOptions, actions) {
         } catch (err) {
           hideDialog();
           onFailError({
-            // getNotifications,
             label: localeLabel,
             notificationId: label,
-            // updateNotifications,
             notices
           });
           console.log(err);

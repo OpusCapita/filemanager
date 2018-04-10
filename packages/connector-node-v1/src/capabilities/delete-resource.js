@@ -10,10 +10,8 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    // updateNotifications,
     getSelectedResources,
     getResource,
-    // getNotifications,
     notices
   } = actions;
 
@@ -39,10 +37,8 @@ function handler(apiOptions, actions) {
           navigateToDir(resource.id, null, false);
         } catch (err) {
           onFailError({
-            // getNotifications,
             label: getMessage(label),
             notificationId: 'delete',
-            // updateNotifications,
             notices
           });
           console.log(err)
