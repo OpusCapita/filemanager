@@ -27,7 +27,7 @@ jobs:
           command: yarn install
 
       - save_cache:
-          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
           paths:
             - ./yarn.lock
             - ./node_modules
@@ -84,7 +84,7 @@ jobs:
           command: yarn install
 
       - save_cache:
-          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
           paths:
             - ./yarn.lock
             - ./node_modules
@@ -95,7 +95,7 @@ jobs:
 
       - run:
           name: publish-to-npm
-          command: npm run bootstrap && npm run publish
+          command: npm run publish
 
   deploy-demo:
     <<: *defaults
