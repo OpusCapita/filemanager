@@ -11,6 +11,10 @@ async function readLocalFile() {
       });
     });
 
+    // This input element in IE11 becomes visible after it is added on the page
+    // Hide an input element
+    uploadInput.style.visibility = 'hidden';
+
     uploadInput.type = "file";
     document.body.appendChild(uploadInput);
     uploadInput.click();

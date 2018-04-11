@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.8](https://github.com/OpusCapita/filemanager/tree/v1.0.8) (2018-04-11)
+[Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.7...v1.0.8)
+
+**Implemented enhancements:**
+
+- Stream download of archived files [\#194](https://github.com/OpusCapita/filemanager/issues/194)
+
+**Fixed bugs:**
+
+- Client React: Out of the box install is missing translations module [\#197](https://github.com/OpusCapita/filemanager/issues/197)
+
 ## [v1.0.7](https://github.com/OpusCapita/filemanager/tree/v1.0.7) (2018-03-27)
 [Full Changelog](https://github.com/OpusCapita/filemanager/compare/v1.0.6...v1.0.7)
 
