@@ -1,3 +1,12 @@
+
+Release 1.0.9 Wed Apr 11 2018 14:35:39 GMT+0000 (UTC)
+=======================================================
+
+- Updated build config. (Dmitry Shienok dshienok@scand.com, 2018-04-11 17:19:39 +0300)
+- Updated build config. (Dmitry Shienok dshienok@scand.com, 2018-04-11 17:17:10 +0300)
+- Updated build config. (Dmitry Shienok dshienok@scand.com, 2018-04-11 17:09:50 +0300)
+- Updated build config. (Dmitry Shienok dshienok@scand.com, 2018-04-11 17:08:58 +0300)
+- Update CHANGELOG.md [ci skip] (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-04-11 15:36:34 +0300)
 # Change Log
 
 ## [v1.0.8](https://github.com/OpusCapita/filemanager/tree/v1.0.8) (2018-04-11)
@@ -162,7 +171,7 @@
 - Disable caching [\#75](https://github.com/OpusCapita/filemanager/issues/75)
 - Add preview capability to file download [\#72](https://github.com/OpusCapita/filemanager/issues/72)
 - Update mocha config to run tests using "webpack" instead of "babel" [\#63](https://github.com/OpusCapita/filemanager/issues/63)
-- Make default L&F that fits “styles”: https://opuscapita.github.io/styles/demo/html/css.html [\#57](https://github.com/OpusCapita/filemanager/issues/57)
+- Make default L&F that fits ?styles?: https://opuscapita.github.io/styles/demo/html/css.html [\#57](https://github.com/OpusCapita/filemanager/issues/57)
 - Make different icons colors for different ListView item types [\#53](https://github.com/OpusCapita/filemanager/issues/53)
 - Decrease font-size or/and font-weight for ListView items  [\#52](https://github.com/OpusCapita/filemanager/issues/52)
 - React.PropTypes =\> 'prop-types' [\#50](https://github.com/OpusCapita/filemanager/issues/50)
