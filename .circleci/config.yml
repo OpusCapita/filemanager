@@ -63,7 +63,7 @@ jobs:
       - store_artifacts:
           path: ~/repo/packages/server-nodejs/junit
 
-  build-release:
+  build_release:
     <<: *defaults
     steps:
       - run:
