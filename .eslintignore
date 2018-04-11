@@ -1,4 +1,0 @@
-/webpack.*.config.js
-/test/**
-tmp/**
-src/client/components/serializer/**

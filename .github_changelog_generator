@@ -1,8 +1,0 @@
-pull-requests=false
-issue-line-labels=true
-
-bug-labels=type/bug
-enhancement-labels=type/enhancement
-
-include-labels=closed/completed
-exclude-labels=closed/wontfix,closed/duplicate
