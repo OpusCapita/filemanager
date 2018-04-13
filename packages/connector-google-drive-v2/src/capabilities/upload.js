@@ -1,5 +1,5 @@
 import api from '../api';
-import notifUtils from '../utils/notifications';
+// import notifUtils from '../utils/notifications';
 import { getIcon } from '../icons';
 import nanoid from 'nanoid';
 import icons from '../icons-svg';
@@ -11,9 +11,10 @@ let label = 'upload';
 async function handler(apiOptions, actions) {
   const {
     navigateToDir,
-    updateNotifications,
+    // updateNotifications,
     getResource,
-    getNotifications
+    // getNotifications,
+    notices
   } = actions;
 
   let notificationId = label;
@@ -21,8 +22,10 @@ async function handler(apiOptions, actions) {
   let getMessage = getMess.bind(null, apiOptions.locale);
 
   let onStart = (name) => {
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
+    // let notifications = getNotifications();
+    // let notification = notifUtils.getNotification(notifications, notificationId);
+    const notification = notices.getNotification(notificationId);
+
     let childElement = {
       elementType: 'NotificationProgressItem',
       elementProps: {
@@ -33,7 +36,7 @@ async function handler(apiOptions, actions) {
     };
 
     let newChildren =
-      notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
+      notices.addChild((notification && notification.children) || [], notificationChildId, childElement);
     let newNotification = {
       title: newChildren.length > 1 ?
         getMessage('uploadingItems', { quantity: newChildren.length }) :
@@ -43,42 +46,69 @@ async function handler(apiOptions, actions) {
       // cancelButtonText: "Cancel",
       // onCancel: () => console.log('cancel')
     };
+    // let newChildren =
+    //   notifUtils.addChild((notification && notification.children) || [], notificationChildId, childElement);
+    // let newNotification = {
+    //   title: newChildren.length > 1 ?
+    //     getMessage('uploadingItems', { quantity: newChildren.length }) :
+    //     getMessage('uploadingItem'),
+    //   children: newChildren
+    //   // progressText: `2 minutes left…`, // TODO
+    //   // cancelButtonText: "Cancel",
+    //   // onCancel: () => console.log('cancel')
+    // };
 
-    let newNotifications = notification ?
-      notifUtils.updateNotification(notifications, notificationId, newNotification) :
-      notifUtils.addNotification(notifications, notificationId, newNotification);
-
-    updateNotifications(newNotifications);
+    notification ?
+      notices.updateNotification(notificationId, newNotification) :
+      notices.addNotification(notificationId, newNotification);
+    // let newNotifications = notification ?
+    //   notifUtils.updateNotification(notifications, notificationId, newNotification) :
+    //   notifUtils.addNotification(notifications, notificationId, newNotification);
+    //
+    // updateNotifications(newNotifications);
   };
 
   let onSuccess = (res) => {
     let resource = getResource();
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
+    // let notifications = getNotifications();
+    // let notification = notifUtils.getNotification(notifications, notificationId);
+    const notification = notices.getNotification(notificationId);
     let notificationChildrenCount = notification.children.length;
-    let newNotifications;
 
     if (notificationChildrenCount > 1) {
-      newNotifications = notifUtils.updateNotification(
-        notifications,
+      notices.updateNotification(
         notificationId, {
-          children: notifUtils.removeChild(notification.children, notificationChildId)
+          children: notices.removeChild(notification.children, notificationChildId)
         }
       );
     } else {
-      newNotifications = notifUtils.removeNotification(notifications, notificationId);
+      notices.removeNotification(notificationId);
     }
-
-    updateNotifications(newNotifications);
+    // let newNotifications;
+    //
+    // if (notificationChildrenCount > 1) {
+    //   newNotifications = notifUtils.updateNotification(
+    //     notifications,
+    //     notificationId, {
+    //       children: notifUtils.removeChild(notification.children, notificationChildId)
+    //     }
+    //   );
+    // } else {
+    //   newNotifications = notifUtils.removeNotification(notifications, notificationId);
+    // }
+    //
+    // updateNotifications(newNotifications);
     navigateToDir(resource.id, null, false);
   };
 
   let onFail = () => {};
 
   let onProgress = (progress) => {
-    let notifications = getNotifications();
-    let notification = notifUtils.getNotification(notifications, notificationId);
-    let child = notifUtils.getChild(notification.children, notificationChildId);
+    // let notifications = getNotifications();
+    // let notification = notifUtils.getNotification(notifications, notificationId);
+    const notification = notices.getNotification(notificationId);
+
+    let child = notices.getChild(notification.children, notificationChildId);
     let newChild = {
       ...child,
       element: {
@@ -89,9 +119,22 @@ async function handler(apiOptions, actions) {
         }
       }
     };
-    let newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
-    let newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
-    updateNotifications(newNotifications);
+    let newChildren = notices.updateChild(notification.children, notificationChildId, newChild);
+    notices.updateNotification(notificationId, { children: newChildren });
+    // let child = notifUtils.getChild(notification.children, notificationChildId);
+    // let newChild = {
+    //   ...child,
+    //   element: {
+    //     ...child.element,
+    //     elementProps: {
+    //       ...child.element.elementProps,
+    //       progress
+    //     }
+    //   }
+    // };
+    // let newChildren = notifUtils.updateChild(notification.children, notificationChildId, newChild);
+    // let newNotifications = notifUtils.updateNotification(notifications, notificationId, { children: newChildren });
+    // updateNotifications(newNotifications);
   };
 
   let resource = getResource();

@@ -10,13 +10,12 @@ function handler(apiOptions, actions) {
     showDialog,
     hideDialog,
     navigateToDir,
-    updateNotifications,
     getSelection,
     getSelectedResources,
     getResource,
     getResourceChildren,
     getResourceLocation,
-    getNotifications
+    notices
   } = actions;
   /* eslint-enable */
 }
