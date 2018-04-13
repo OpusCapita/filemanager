@@ -20,13 +20,11 @@ const capabilities = [
  *  showDialog,
  *  hideDialog,
  *  navigateToDir,
- *  updateNotifications,
  *  getSelection,
  *  getSelectedResources,
  *  getResource,
  *  getResourceChildren,
  *  getResourceLocation,
- *  getNotifications,
  *  getSortState
  *
  *  Called from FileNavigator (componentDidMount() and componentWillReceiveProps())

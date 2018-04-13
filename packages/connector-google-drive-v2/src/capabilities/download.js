@@ -41,9 +41,11 @@ async function handler(apiOptions, actions) {
       children: newChildren
     };
 
-    notification ?
-      notices.updateNotification(notificationId, newNotification) :
+    if (notification) {
+      notices.updateNotification(notificationId, newNotification);
+    } else {
       notices.addNotification(notificationId, newNotification);
+    }
   };
 
   const onSuccess = _ => {
@@ -57,7 +59,7 @@ async function handler(apiOptions, actions) {
         }
       );
     } else {
-      notices.removeNotification(notifications, notificationId);
+      notices.removeNotification(notificationId);
     }
   };
 

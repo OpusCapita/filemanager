@@ -21,7 +21,9 @@ export default function onFailErrors({
 
   const notification = notices.getNotification(notificationId);
 
-  notification ?
-    notices.updateNotification(notificationId, newNotification) :
+  if (notification) {
+    notices.updateNotification(notificationId, newNotification);
+  } else {
     notices.addNotification(notificationId, newNotification);
+  }
 }

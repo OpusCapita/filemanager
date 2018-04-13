@@ -66,4 +66,4 @@ class Notices {
   getChild(notificationChildren, id) {
     return find(notificationChildren, (o) => o.id === id);
   }
-};
+}

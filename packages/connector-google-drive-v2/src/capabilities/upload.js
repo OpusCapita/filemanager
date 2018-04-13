@@ -42,9 +42,11 @@ async function handler(apiOptions, actions) {
       // onCancel: () => console.log('cancel')
     };
 
-    notification ?
-      notices.updateNotification(notificationId, newNotification) :
+    if (notification) {
+      notices.updateNotification(notificationId, newNotification);
+    } else {
       notices.addNotification(notificationId, newNotification);
+    }
   };
 
   let onSuccess = (res) => {
