@@ -1,30 +1,27 @@
-import notifUtils from './notifications';
+// This code don't use
+
 import getMessage from '../translations';
 
 export default function onFailErrors({
-  getNotifications,
   label,
   notificationId,
-  updateNotifications,
   message,
+  notices,
   locale = 'en' // TODO: Add the locale parameter to the place of a call
 }) {
-  const notifications = getNotifications();
-  let newNotifications = notifUtils.removeNotification(notifications, notificationId);
+  notices.removeNotification(notificationId);
 
   const newNotification = {
     title: message || `${label} ${getMessage(locale, 'error')}`,
     minimizable: false,
     closable: true,
     children: [],
-    onHide: _ => updateNotifications(notifUtils.removeNotification(notifications, notificationId))
+    onHide: _ => notices.removeNotification(notificationId)
   };
 
-  const notification = notifUtils.getNotification(notifications, notificationId);
+  const notification = notices.getNotification(notificationId);
 
-  newNotifications = notification ?
-    notifUtils.updateNotification(notifications, notificationId, newNotification) :
-    notifUtils.addNotification(notifications, notificationId, newNotification);
-
-  updateNotifications(newNotifications);
+  notification ?
+    notices.updateNotification(notificationId, newNotification) :
+    notices.addNotification(notificationId, newNotification);
 }
