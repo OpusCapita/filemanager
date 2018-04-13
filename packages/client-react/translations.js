@@ -1,12 +1,28 @@
 const translations = {
   en: {
     moveForward: 'Move forward',
-    moveBack: 'Move back ',
+    moveBack: 'Move back',
   },
 
   de: {
     moveForward: 'Vorwärts',
     moveBack: 'Zurück',
+  },
+  fi: {
+    moveForward: 'Siirrä eteenpäin',
+    moveBack: 'Siirrä taaksepäin',
+  },
+  ru: {
+    moveForward: 'Переместить вперед',
+    moveBack: 'Переместить назад',
+  },
+  no: {
+    moveForward: 'Flytt fremover',
+    moveBack: 'Flytt bakover',
+  },
+  sv: {
+    moveForward: 'Flytta framåt',
+    moveBack: 'Flytta bakåt',
   }
 };
 
