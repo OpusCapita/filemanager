@@ -1,6 +1,24 @@
 import request from 'superagent';
 import { normalizeResource } from './utils/common';
 
+const NEXT_PAGE_REQUEST_DELAY = 2000; // Delayed request for next page.
+
+function sleep(ms) {
+  let abort;
+
+  return {
+    promise: new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(resolve, ms);
+
+      abort = _ => {
+        clearTimeout(timeoutId);
+        reject();
+      }
+    }),
+    abort
+  };
+}
+
 /**
  * hasSignedIn
  *
@@ -159,6 +177,78 @@ async function removeResources(options, selectedResources) {
   return Promise.all(selectedResources.map(resource => removeResource(options, resource)))
 }
 
+const searchForResources = ({
+  options, // mandatory.
+  resourceId, // mandatory.
+  itemNameSubstring, // optional, no default value.
+  itemNameCaseSensitive = false,
+  isFile = false,
+  isDir = false,
+  recursive = false,
+  onProgress = _ => {}
+}) => {
+  let abort = _ => {};
+  const abortErr = { aborted: true };
+  const urlOrigin = `${options.apiRoot}/files/${resourceId}/search`;
+
+  const _searchForResources = async resourcesPromise => {
+    let aborted;
+
+    abort = _ => {
+      aborted = true;
+    }
+
+    let { body: { items: resources, nextPage } } = await resourcesPromise;
+
+    if (aborted) {
+      throw abortErr;
+    }
+
+    abort = _ => {}; // In case it is called in onProgress() below or function exits without nextPage.
+    resources = resources.map(normalizeResource);
+
+    if (!nextPage) {
+      return resources;
+    }
+
+    onProgress(resources);
+
+    const {
+      promise: sleepPromise,
+      abort: abortSleep
+    } = sleep(NEXT_PAGE_REQUEST_DELAY);
+
+    abort = abortSleep;
+
+    try {
+      await sleepPromise;
+    } catch (err) {
+      throw abortErr;
+    }
+
+    return _searchForResources(request.get(`${urlOrigin}?${nextPage}`));
+  }
+
+  return {
+    promise: _searchForResources(request.
+      get(urlOrigin).
+      query({
+        itemNameCaseSensitive,
+        recursive,
+        ...(itemNameSubstring && { itemNameSubstring }),
+        itemType: [
+          ...(isFile && ['file']),
+          ...(isDir && ['dir'])
+        ]
+      })
+    ),
+
+    // Dynamically substituting with up-to-date abort() function,
+    // as it changes during api call lifecycle:
+    abort: _ => abort()
+  };
+}
+
 export default {
   init,
   hasSignedIn,
@@ -173,5 +263,6 @@ export default {
   downloadResources,
   renameResource,
   removeResources,
-  uploadFileToId
+  uploadFileToId,
+  searchForResources
 };

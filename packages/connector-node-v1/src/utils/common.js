@@ -1,16 +1,16 @@
-export function normalizeResource(resource) {
-  if (resource) {
-    return {
-      capabilities: resource.capabilities,
-      createdTime: Date.parse(resource.createdTime),
-      id: resource.id,
-      modifiedTime: Date.parse(resource.modifiedTime),
-      name: resource.name,
-      type: resource.type,
-      size: resource.size,
-      parentId: resource.parentId ? resource.parentId : null
-    };
-  } else {
-    return {};
-  }
-}
+export const normalizeResource = ({
+  id,
+  createdTime,
+  modifiedTime,
+  parentId,
+  ancestors,
+  ...rest
+} = {}) => id ? {
+  id,
+  createdTime: Date.parse(createdTime),
+  modifiedTime: Date.parse(modifiedTime),
+  parentId: parentId || null,
+  ...rest,
+  ...(ancestors && { ancestors: ancestors.map(normalizeResource) })
+} :
+  {};

@@ -77,7 +77,7 @@ export default (apiOptions, actions) => {
     id: label,
     icon: { svg: icons.createNewFolder },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: _ => {
       const resource = getResource();
 
       if (!resource || !resource.capabilities) {

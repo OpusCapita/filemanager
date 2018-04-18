@@ -9,6 +9,7 @@ import Notification from './Notification';
 import NotificationProgressItem from './NotificationProgressItem';
 import ProgressIcon from './ProgressIcon';
 import SetNameDialog from './SetNameDialog';
+import SearchDialog from './SearchDialog';
 import { Column } from 'react-virtualized';
 
 export default {
@@ -23,5 +24,6 @@ export default {
   Notification,
   NotificationProgressItem,
   ProgressIcon,
-  SetNameDialog
+  SetNameDialog,
+  SearchDialog
 };

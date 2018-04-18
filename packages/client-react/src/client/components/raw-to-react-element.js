@@ -18,24 +18,14 @@ let rawToReactElement = (rawElement, key) => {
     return sharedComponents[rawElement.elementType](...rawElement.callArguments);
   }
 
-  if (rawElement.elementType === 'Column') {
-    let rawCellRenderer = rawElement.elementProps.cellRenderer;
-    let rawHeaderRenderer = rawElement.elementProps.headerRenderer;
-
-    let cellRenderer = rawToReactElement(rawCellRenderer);
-    let headerRenderer = rawToReactElement(rawHeaderRenderer);
-    let columnProps = {
-      ...rawElement.elementProps,
-      cellRenderer,
-      headerRenderer
-    };
-
-    return React.createElement(sharedComponents[rawElement.elementType], { ...columnProps, key });
-  }
-
-  return typeof key === 'undefined' ?
-    React.createElement(sharedComponents[rawElement.elementType], { ...rawElement.elementProps }) :
-    React.createElement(sharedComponents[rawElement.elementType], { ...rawElement.elementProps, key });
+  return React.createElement(sharedComponents[rawElement.elementType], {
+    ...rawElement.elementProps,
+    ...(typeof key !== 'undefined' && { key }),
+    ...(rawElement.elementType === 'Column' && {
+      cellRenderer: rawToReactElement(rawElement.elementProps.cellRenderer),
+      headerRenderer: rawToReactElement(rawElement.elementProps.headerRenderer)
+    })
+  });
 };
 
 export default rawToReactElement;

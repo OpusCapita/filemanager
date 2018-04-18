@@ -113,11 +113,13 @@ export default (apiOptions, actions) => {
     id: label,
     icon: { svg: icons.fileUpload },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: _ => {
       const resource = getResource();
+
       if (!resource || !resource.capabilities) {
         return false
       }
+
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],

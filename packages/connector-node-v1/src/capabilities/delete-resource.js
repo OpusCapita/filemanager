@@ -63,7 +63,7 @@ export default (apiOptions, actions) => {
     id: 'delete',
     icon: { svg: icons.delete },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: _ => {
       const selectedResources = getSelectedResources();
 
       if (!selectedResources.length) {

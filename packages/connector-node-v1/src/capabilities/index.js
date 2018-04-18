@@ -4,6 +4,7 @@ import download from './download';
 import upload from './upload';
 import rename from './rename';
 import sort from './sort';
+import search from './search';
 
 const capabilities = [
   createFolder,
@@ -11,7 +12,8 @@ const capabilities = [
   download,
   upload,
   deleteResource,
-  sort
+  sort,
+  search
 ];
 
 /**

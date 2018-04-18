@@ -79,12 +79,9 @@ export default (apiOptions, actions) => {
     id: label,
     icon: { svg: icons.rename },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: _ => {
       const selectedResources = getSelectedResources();
-      return (
-        selectedResources.length === 1 &&
-        selectedResources.every(r => r.capabilities.canRename)
-      );
+      return selectedResources.length === 1 && selectedResources[0].capabilities.canRename;
     },
     availableInContexts: ['row', 'toolbar'],
     handler: () => handler(apiOptions, actions)

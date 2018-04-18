@@ -122,13 +122,13 @@ export default (apiOptions, actions) => {
     id: label,
     icon: { svg: icons.fileDownload },
     label: localeLabel,
-    shouldBeAvailable: (apiOptions) => {
+    shouldBeAvailable: _ => {
       let selectedResources = getSelectedResources();
 
       return (
         selectedResources.length > 0 &&
-        !selectedResources.some(r => r.type === 'dir') &&
-        selectedResources.every(r => r.capabilities.canDownload)
+        !selectedResources.some(resource => resource.type === 'dir') &&
+        selectedResources.every(resource => resource.capabilities.canDownload)
       );
     },
     availableInContexts: ['row', 'toolbar'],

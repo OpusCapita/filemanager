@@ -15,10 +15,6 @@ import {
   pushToHistory,
 } from '../history';
 
-function hasContext(capability, context) {
-  return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
-}
-
 const propTypes = {
   id: PropTypes.string,
   api: PropTypes.object,
@@ -337,10 +333,17 @@ class FileNavigator extends Component {
     this.viewRef = ref;
   };
 
-  showDialog = (rawDialogElement) => {
+  /*
+   * Create a React element representing a Modal Dialog from its object-descriptor
+   * and return function-updater of the element props.
+   */
+  showDialog = rawDialogElement => {
     let dialogElement = rawToReactElement(rawDialogElement);
-
     this.setState({ dialogElement });
+
+    return props => this.state.dialogElement && this.setState({
+      dialogElement: React.cloneElement(dialogElement, props)
+    });
   };
 
   hideDialog = () => {
@@ -365,26 +368,34 @@ class FileNavigator extends Component {
     getSortState: () => ({ sortBy: this.state.sortBy, sortDirection: this.state.sortDirection })
   });
 
-  getCapability = ({ context, isDataView = false }) => {
-    let { apiOptions } = this.props;
-    let { initializedCapabilities } = this.state;
-    return initializedCapabilities.
-      filter(capability => (
-        (isDataView ? capability.shouldBeAvailable(apiOptions) : true) && hasContext(capability, context)
-      )).
-      map(capability => {
-        let res = ({
-          icon: capability.icon,
-          label: capability.label || '',
-          onClick: capability.handler || (() => {}),
-        });
+  /*
+   * Toolbar is static for a given context
+   * => Toolbar items set is determined by context only and its individual items are enabled/disabled dynamically.
+   *
+   * Data View's ContextMenu is dynamic for a given context and does not show disabled items
+   * => Data View items set is determined by both context and individual items enablement in this context.
+   */
+  getCapabilityItems = ({ context, isDataView = false }) => this.state.initializedCapabilities.reduce(
+    (items, capability) => {
+      if (!capability.availableInContexts || capability.availableInContexts.indexOf(context) === -1) {
+        return items;
+      }
 
-        if (!isDataView) {
-          res.disabled = !capability.shouldBeAvailable(apiOptions);
-        }
-        return res;
-      });
-  };
+      const disabled = !capability.shouldBeAvailable(this.props.apiOptions);
+
+      if (isDataView && disabled) {
+        return items;
+      }
+
+      return [...items, {
+        icon: capability.icon,
+        label: capability.label || '',
+        disabled,
+        onClick: capability.handler
+      }];
+    },
+    []
+  );
 
   render() {
     let {
@@ -436,10 +447,10 @@ class FileNavigator extends Component {
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
-    let rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
-    let filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
-    let toolbarItems = this.getCapability({ context: 'toolbar' });
-    let newButtonItems = this.getCapability({ context: 'new-button' });
+    let rowContextMenuItems = this.getCapabilityItems({ context: 'row', isDataView: true });
+    let filesViewContextMenuItems = this.getCapabilityItems({ context: 'files-view', isDataView: true });
+    let toolbarItems = this.getCapabilityItems({ context: 'toolbar' });
+    let newButtonItems = this.getCapabilityItems({ context: 'new-button' });
 
     let rowContextMenuId = `row-context-menu-${id}`;
     let filesViewContextMenuId = `files-view-context-menu-${id}`;
