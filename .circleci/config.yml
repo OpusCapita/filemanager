@@ -1,86 +1,126 @@
+defaults: &defaults
+  docker:
+    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9-docker
+  working_directory: ~/build
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
+    <<: *defaults
     steps:
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
       - checkout
-      - setup_remote_docker
-
       - run:
           name: save-cache-checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-
-      - run:
-          name: init-ci-container
-          command: /ci-scripts/init.sh
-
-  publish-release:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: init-ci-container
-          command: |
-            /ci-scripts/init.sh
-            # NPM auth
-            npm config set registry ${NPM_DEFAULT_REGISTRY}
-            echo "_auth = ${NPM_DEFAULT_REGISTRY_AUTH}" >> ~/.npmrc
-            echo "email = ${NPM_DEFAULT_REGISTRY_MAIL}" >> ~/.npmrc
-            echo "always-auth = true" >> ~/.npmrc
-            git config --global user.email "${GH_MAIL}"
-            git config --global user.name "${GH_NAME}"
+            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+            - v1-filemanager-{{ .Branch }}
+            - v1-filemanager-
 
       - run:
           name: bootstrap-packages
-          command: yarn
+          command: yarn install
+
+      - run:
+          name: lint
+          command: npm run lint
+
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
+
+
+      - save_cache:
+          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+          paths:
+            - ./yarn.lock
+            - ./node_modules
+            - ./packages/connector-node-v1/node_modules
+            - ./packages/server-nodejs/node_modules
+            - ./packages/connector-google-drive-v2/node_modules
+            - ./packages/client-react/node_modules
+            - ./demo/yarn.lock
+            - ./demo/node_modules
+
+      - run:
+          name: test-restapi
+          command: |
+            cd packages/server-nodejs
+            mkdir junit
+            npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
+
+          environment:
+            MOCHA_FILE: junit/test-results.xml
+
+      - store_test_results:
+          path: ~/repo/packages/server-nodejs/junit
+
+      - store_artifacts:
+          path: ~/repo/packages/server-nodejs/junit
+
+  build_release:
+    <<: *defaults
+    steps:
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
+
+      - checkout
+
+      - run:
+          name: save-cache-checksum
+          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
+
+      - restore_cache:
+          keys:
+            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+            - v1-filemanager-{{ .Branch }}
+            - v1-filemanager-
+
+      - run:
+          name: bootstrap-packages
+          command: yarn install
+
+      - save_cache:
+          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+          paths:
+            - ./yarn.lock
+            - ./node_modules
+            - ./packages/connector-node-v1/node_modules
+            - ./packages/server-nodejs/node_modules
+            - ./packages/connector-google-drive-v2/node_modules
+            - ./packages/client-react/node_modules
+            - ./demo/yarn.lock
+            - ./demo/node_modules
 
       - run:
           name: publish-to-npm
-          command: yarn run publish
+          command: npm run publish
 
   deploy-demo:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
+    <<: *defaults
     steps:
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
+
       - checkout
       - setup_remote_docker
 
       - run:
           name: save-cache-checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+            - v1-filemanager-{{ .Branch }}
+            - v1-filemanager-
 
       - run:
           name: bootstrap-packages
@@ -89,10 +129,6 @@ jobs:
       - run:
           name: install-demo-dependencies
           command: (cd demo && yarn install)
-
-      - run:
-          name: init-ci-container
-          command: /ci-scripts/init.sh
 
       - run:
           name: build-client-static
@@ -123,66 +159,29 @@ jobs:
           name: update-github-commit-status
           command: ./.circleci/scripts/update-github-commit-status.js
 
-  tests:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
+  release:
+    <<: *defaults
     steps:
+
+      - run:
+          name: Environment inject
+          command: env_inject.sh
+
       - checkout
-      - setup_remote_docker
 
       - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+          name: Executing release scrtipt.
+          command: .circleci/release.sh
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: bootstrap-packages
-          command: yarn
-
-      - run:
-          name: lint
-          command: npm run lint
-
-      - run:
-          name: install-demo-dependencies
-          command: (cd demo && yarn install)
-
-      - run:
-          name: test-restapi
-          command: |
-            cd packages/server-nodejs
-            mkdir junit
-            npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
-
-          environment:
-            MOCHA_FILE: junit/test-results.xml
-
-      - store_test_results:
-          path: ~/repo/packages/server-nodejs/junit
-
-      - store_artifacts:
-          path: ~/repo/packages/server-nodejs/junit
 
   azure-maintenance:
-    docker:
-      - image: opuscapita/ci-node8:latest
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
-      - checkout
-      - setup_remote_docker
-
       - run:
-          name: init-ci-container
-          command: /ci-scripts/init.sh
+          name: Environment inject
+          command: /bin/env_inject.sh
+
+      - checkout
 
       - run:
           name: azure-cleanup
@@ -190,34 +189,26 @@ jobs:
 
 workflows:
   version: 2
-
   commit:
       jobs:
-        - build
-        - tests
-
-        - approve-publish-release:
-            type: approval
-            requires:
-              - build
+        - build:
             filters:
               branches:
-                only:
-                  - master
-
-        - publish-release:
-            requires:
-              - build
-              - approve-publish-release
-            filters:
-              branches:
-                only:
-                  - master
-
+                ignore:
+                  - release
         - deploy-demo:
             requires:
               - build
-              - tests
+        - release:
+            filters:
+              branches:
+                only: release
+        - build_release:
+            filters:
+              tags:
+                only: /.*/
+              branches:
+                ignore: /.*/
   nightly:
       triggers:
         - schedule:

@@ -1,7 +1,7 @@
 .*.swp
 *.log
 *.iml
-.idea
+.idea/
 tmp
 npm-debug.log
 /static
