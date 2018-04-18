@@ -3,7 +3,7 @@
 let run = require('./run');
 let env = require('./env');
 
-run(`az login -u ${env.AZURE_USER} -p ${env.AZURE_PASS}`);
+run(`az login -u "${env.AZURE_USER}" -p "${env.AZURE_PASS}"`);
 
 // Create Azure Web App
 
