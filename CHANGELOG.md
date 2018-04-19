@@ -1,4 +1,10 @@
 
+Release 1.0.11 Thu Apr 19 2018 08:36:53 GMT+0000 (UTC)
+=======================================================
+
+- Added missing translations. (PR [#204](https://github.com/OpusCapita/filemanager/issues/204)) (Kirill Volkovich nhryhoryeva-sc@users.noreply.github.com, 2018-04-19 11:26:19 +0300)
+- Fixing login into Azure [skip ci] (Alexey Sergeev sab@scand.com, 2018-04-18 09:33:38 +0300)
+
 Release 1.0.10 Wed Apr 11 2018 14:40:27 GMT+0000 (UTC)
 =======================================================
 
