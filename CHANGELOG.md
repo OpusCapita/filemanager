@@ -1,4 +1,10 @@
 
+Release 1.0.12 Thu May 17 2018 01:14:02 GMT+0300 (MSK)
+=======================================================
+
+-  [#205](https://github.com/OpusCapita/filemanager/issues/205) Fix - some code hasn't been processed to ES5 by babel (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-05-17 01:02:35 +0300)
+- Adding an issue template file [ci skip] (Egor Stambakio egor.stambakio@opuscapita.com, 2018-05-02 12:27:18 +0300)
+
 Release 1.0.11 Thu Apr 19 2018 08:36:53 GMT+0000 (UTC)
 =======================================================
 
