@@ -5,7 +5,7 @@ import Svg from '@opuscapita/react-svg/lib/SVG';
 import DropdownMenu from '../DropdownMenu';
 import DropdownMenuItem from '../DropdownMenuItem';
 import { isHistoryStepPossible, doHistoryStep } from '../history';
-import getMess from '../../../../translations';
+import getMess from '../../../translations';
 
 import icons from './icons-svg';
 

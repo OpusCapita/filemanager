@@ -1,1 +1,1 @@
-export default require('./FileManager.react').default;
+export default require('./FileManagerOne.react').default;
