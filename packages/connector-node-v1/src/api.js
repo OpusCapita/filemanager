@@ -24,14 +24,15 @@ function init() {
 
 function setupRequestOptions(options) {
   let newOptions = { ...options };
+
   if (!newOptions.header) {
     newOptions.header = {};
-  } else {
-    newOptions.header['Content-Type'] = 'application/json';
   }
+
   if (!newOptions.parameters) {
     newOptions.parameters = {};
   }
+
   return newOptions;
 }
 
@@ -52,7 +53,7 @@ async function getChildrenForId(options, { id, sortBy = 'name', sortDirection = 
   const route = `${options.apiRoot}/files/${id}/children?orderBy=${sortBy}&orderDirection=${sortDirection}`;
   const method = 'GET';
   const response = await request(method, route).set(requestOptions.header).query(requestOptions.parameters);
-  return response.body.items.map(normalizeResource)
+  return response.body.items.map(normalizeResource);
 }
 
 async function getParentsForId(options, id, result = []) {
@@ -78,7 +79,10 @@ async function getParentsForId(options, id, result = []) {
 
 async function getBaseResource(options) {
   const route = `${options.apiRoot}/files`;
-  const response = await request.get(route);
+  const requestOptions = setupRequestOptions(options);
+  const response = await request.get(route).
+    set(requestOptions.header).
+    query(requestOptions.parameters);
   return normalizeResource(response.body);
 }
 
@@ -120,6 +124,7 @@ async function getParentIdForResource(options, resource) {
 async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
   let route = `${apiOptions.apiRoot}/files`;
   const requestOptions = setupRequestOptions(apiOptions);
+
   return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
@@ -187,7 +192,7 @@ async function removeResource(options, resource) {
 }
 
 async function removeResources(options, selectedResources) {
-  return Promise.all(selectedResources.map(resource => removeResource(options, resource)))
+  return Promise.all(selectedResources.map(resource => removeResource(options, resource)));
 }
 
 export default {
