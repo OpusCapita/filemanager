@@ -1,4 +1,12 @@
 
+[Release 1.1.0-beta.0](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.0) Sun Jul 29 2018 19:58:27 GMT+0300 (MSK)
+=======================================================
+
+-  [#209](https://github.com/OpusCapita/filemanager/issues/209) Remove "/api" postfix for server-nodejs (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-29 19:48:20 +0300)
+-  [#209](https://github.com/OpusCapita/filemanager/issues/209) Add possibility to pass "logger" as config param to server (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-29 19:32:04 +0300)
+-  [#209](https://github.com/OpusCapita/filemanager/issues/209) Remove odd console.log (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-29 17:25:36 +0300)
+- Update config.yml (GitHub asergeev-sc@users.noreply.github.com, 2018-07-21 20:45:19 +0300)
+
 [Release 1.0.13](https://github.com/OpusCapita/filemanager/releases/tag/v1.0.13) Sun Jul 29 2018 17:30:13 GMT+0300 (MSK)
 =======================================================
 
