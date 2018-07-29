@@ -1,4 +1,10 @@
 
+[Release 1.0.13](https://github.com/OpusCapita/filemanager/releases/tag/v1.0.13) Sun Jul 29 2018 17:30:13 GMT+0300 (MSK)
+=======================================================
+
+-  [#209](https://github.com/OpusCapita/filemanager/issues/209) Remove odd console.log (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-29 17:25:36 +0300)
+- Update config.yml (GitHub asergeev-sc@users.noreply.github.com, 2018-07-21 20:45:19 +0300)
+
 Release 1.0.12 Thu May 17 2018 01:14:02 GMT+0300 (MSK)
 =======================================================
 
