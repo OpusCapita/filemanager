@@ -190,7 +190,6 @@ class FileNavigator extends Component {
     this.handleResourceChange(resource);
 
     let resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
-    console.log({ resourceChildren });
 
     let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
