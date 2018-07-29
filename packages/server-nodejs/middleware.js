@@ -7,5 +7,5 @@ module.exports = config => router({
   fsRoot: config.fsRoot,
   rootName: config.rootName,
   readOnly: config.readOnly,
-  logger
+  logger: config.logger || logger
 });
