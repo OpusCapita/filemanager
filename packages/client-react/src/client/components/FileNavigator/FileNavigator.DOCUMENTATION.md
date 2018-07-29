@@ -129,7 +129,7 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
       api={_scope.connectors.nodeV1.api}
       apiOptions={{
         ..._scope.connectors.nodeV1.apiOptions,
-        apiRoot: `${window.env.SERVER_URL}/api`,
+        apiRoot: `${window.env.SERVER_URL}`,
         locale: 'en'
       }}
       capabilities={_scope.connectors.nodeV1.capabilities}

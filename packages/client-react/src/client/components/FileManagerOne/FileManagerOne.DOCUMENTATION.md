@@ -22,7 +22,7 @@ This module was created for testing in IE11 FileNavigator for nodeV1 API
         api={_scope.connectors.nodeV1.api}
         apiOptions={{
           ..._scope.connectors.nodeV1.apiOptions,
-          apiRoot: `${window.env.SERVER_URL}/api`,
+          apiRoot: `${window.env.SERVER_URL}`,
           locale: 'en' // 'en' / 'de'
         }}
         capabilities={_scope.connectors.nodeV1.capabilities}

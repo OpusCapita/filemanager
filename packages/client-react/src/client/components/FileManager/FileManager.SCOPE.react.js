@@ -74,7 +74,7 @@ class FileManagerScope extends Component {
     });
 
     let apiOptions = {
-      apiRoot: `${window.env.SERVER_URL}/api`
+      apiRoot: `${window.env.SERVER_URL}`
     };
 
     let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');

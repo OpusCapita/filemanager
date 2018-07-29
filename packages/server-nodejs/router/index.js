@@ -51,22 +51,22 @@ module.exports = options => {
     return next();
   });
 
-  router.route('/api/files/:id/children').
+  router.route('/files/:id/children').
     get(connect('./listChildren', _ => ({ path: reqPath })));
 
-  router.route('/api/files/:id/search').
+  router.route('/files/:id/search').
     get(connect('./search', _ => ({ path: reqPath })));
 
-  router.route('/api/files/:id').
+  router.route('/files/:id').
     get(connect('./statResource', _ => ({ path: reqPath }))).
     patch(connect('./renameCopyMove', _ => ({ path: reqPath }))).
     delete(connect('./remove', _ => ({ path: reqPath })));
 
-  router.route('/api/files').
+  router.route('/files').
     get(connect('./statResource', _ => ({ path: path.sep }))).
     post(connect('./uploadOrCreate'));
 
-  router.route('/api/download').
+  router.route('/download').
     get(connect('./download'));
 
   router.use((err, req, res, next) => handleError({ options, req, res })(err));
