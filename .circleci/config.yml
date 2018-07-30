@@ -12,15 +12,15 @@ jobs:
           name: Environment inject
           command: /bin/env_inject.sh
       - checkout
-      - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
+      # - run:
+      #     name: save-cache-checksum
+      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
 
-      - restore_cache:
-          keys:
-            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-            - v1-filemanager-{{ .Branch }}
-            - v1-filemanager-
+      # - restore_cache:
+      #     keys:
+      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+      #       - v1-filemanager-{{ .Branch }}
+      #       - v1-filemanager-
 
       - run:
           name: bootstrap-packages
@@ -35,17 +35,17 @@ jobs:
           command: (cd demo && yarn install)
 
 
-      - save_cache:
-          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-          paths:
-            - ./yarn.lock
-            - ./node_modules
-            - ./packages/connector-node-v1/node_modules
-            - ./packages/server-nodejs/node_modules
-            - ./packages/connector-google-drive-v2/node_modules
-            - ./packages/client-react/node_modules
-            - ./demo/yarn.lock
-            - ./demo/node_modules
+      # - save_cache:
+      #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+      #     paths:
+      #       - ./yarn.lock
+      #       - ./node_modules
+      #       - ./packages/connector-node-v1/node_modules
+      #       - ./packages/server-nodejs/node_modules
+      #       - ./packages/connector-google-drive-v2/node_modules
+      #       - ./packages/client-react/node_modules
+      #       - ./demo/yarn.lock
+      #       - ./demo/node_modules
 
       - run:
           name: test-restapi
@@ -72,31 +72,31 @@ jobs:
 
       - checkout
 
-      - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
+      # - run:
+      #     name: save-cache-checksum
+      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
 
-      - restore_cache:
-          keys:
-            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-            - v1-filemanager-{{ .Branch }}
-            - v1-filemanager-
+      # - restore_cache:
+      #     keys:
+      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+      #       - v1-filemanager-{{ .Branch }}
+      #       - v1-filemanager-
 
       - run:
           name: bootstrap-packages
           command: yarn install
 
-      - save_cache:
-          key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-          paths:
-            - ./yarn.lock
-            - ./node_modules
-            - ./packages/connector-node-v1/node_modules
-            - ./packages/server-nodejs/node_modules
-            - ./packages/connector-google-drive-v2/node_modules
-            - ./packages/client-react/node_modules
-            - ./demo/yarn.lock
-            - ./demo/node_modules
+      # - save_cache:
+      #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+      #     paths:
+      #       - ./yarn.lock
+      #       - ./node_modules
+      #       - ./packages/connector-node-v1/node_modules
+      #       - ./packages/server-nodejs/node_modules
+      #       - ./packages/connector-google-drive-v2/node_modules
+      #       - ./packages/client-react/node_modules
+      #       - ./demo/yarn.lock
+      #       - ./demo/node_modules
 
       - run:
           name: publish-to-npm
@@ -112,15 +112,15 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - run:
-          name: save-cache-checksum
-          command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
+      # - run:
+      #     name: save-cache-checksum
+      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
 
-      - restore_cache:
-          keys:
-            - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-            - v1-filemanager-{{ .Branch }}
-            - v1-filemanager-
+      # - restore_cache:
+      #     keys:
+      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
+      #       - v1-filemanager-{{ .Branch }}
+      #       - v1-filemanager-
 
       - run:
           name: bootstrap-packages
