@@ -155,10 +155,10 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
         ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
       }
       onResourceItemDoubleClick={
-        ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
+        ({ event, number, rowData }) => console.log('onResourceItemDoubleClick', event, number, rowData)
       }
       onResourceItemRightClick={
-        ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
+        ({ event, number, rowData }) => console.log('onResourceItemRightClick', event, number, rowData)
       }
     />
   </div>
