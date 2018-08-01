@@ -29,6 +29,7 @@ const propTypes = {
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func,
+  resourceItemDoubleClick: PropTypes.func,
   onResourceLocationChange: PropTypes.func,
   onSelectionChange: PropTypes.func,
   onResourceChange: PropTypes.func,
@@ -293,6 +294,10 @@ class FileNavigator extends Component {
     }
 
     this.focusView();
+
+    if (this.props.resourceItemDoubleClick) {
+      this.props.resourceItemDoubleClick();
+    }
   };
 
   handleViewKeyDown = async (e) => {
