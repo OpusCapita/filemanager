@@ -35,9 +35,6 @@ See [FileNavigator documentation and example](http://opuscapita-filemanager-demo
           </div>
         )}
         onLocationChange={_scope.handleNodejsLocationChange}
-        onResourceItemClick={({ event, number, rowData }) => {console.log('onResourceItemClick', event, number, rowData}}
-        onResourceItemDoubleClick={({ event, number, rowData }) => {console.log('onResourceItemDoubleClick', event, number, rowData}}
-        onResourceItemRightClick={({ event, number, rowData }) => {console.log('onResourceItemRightClick', event, number, rowData}}
       />
       
       {/* Use Google Drive API v2 connector */}

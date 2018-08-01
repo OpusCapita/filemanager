@@ -16,7 +16,10 @@ FileNavigator is
 | onResourceChange               | func                    | `resource => ...`                                                                              |
 | onResourceChildrenChange       | func                    | `resourceChildren => ...`                                                                      |
 | onResourceLocationChange       | func                    | `resourceLocation => ...`                                                                      |
-| onSelectionChange              | func                    | `selection` => ...` You can use `onSelectionChange` it in pair with `onResourceChildrenChange`        |
+| onSelectionChange              | func                    | `selection` => ...` You can use `onSelectionChange` it in pair with `onResourceChildrenChange` |
+| onResourceItemClick            | func                    |  `({ event, number, rowData }) => ...`                                                         |
+| onResourceItemDoubleClick      | func                    |  `({ event, number, rowData }) => ...`                                                         |
+| onResourceItemRightClick       | func                    |  `({ event, number, rowData }) => ...`                                                         |
 
 ### Connectors
 
@@ -147,6 +150,15 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
       }
       onSelectionChange={
         selection => console.log('onSelectionChange', selection)
+      }
+      onResourceItemClick={
+        ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
+      }
+      onResourceItemDoubleClick={
+        ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
+      }
+      onResourceItemRightClick={
+        ({ event, number, rowData }) => console.log('onResourceItemClick', event, number, rowData)
       }
     />
   </div>
