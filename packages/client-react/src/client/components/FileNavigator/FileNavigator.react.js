@@ -29,6 +29,9 @@ const propTypes = {
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func,
+  onResourceItemClick: PropTypes.func,
+  onResourceItemRightClick: PropTypes.func,
+  onResourceItemDoubleClick: PropTypes.func,
   onResourceLocationChange: PropTypes.func,
   onSelectionChange: PropTypes.func,
   onResourceChange: PropTypes.func,
@@ -46,6 +49,9 @@ const defaultProps = {
   listViewLayout: () => {},
   viewLayoutOptions: {},
   signInRenderer: null,
+  onResourceItemClick: () => {},
+  onResourceItemRightClick: () => {},
+  onResourceItemDoubleClick: () => {},
   onResourceLocationChange: () => {},
   onSelectionChange: () => {},
   onResourceChange: () => {},
@@ -272,11 +278,11 @@ class FileNavigator extends Component {
   };
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
-
+    this.props.onResourceItemClick({ event, number, rowData });
   };
 
   handleResourceItemRightClick = async ({ event, number, rowData }) => {
-
+    this.props.onResourceItemRightClick({ event, number, rowData });
   };
 
   handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
@@ -293,6 +299,8 @@ class FileNavigator extends Component {
     }
 
     this.focusView();
+
+    this.props.onResourceItemDoubleClick({ event, number, rowData });
   };
 
   handleViewKeyDown = async (e) => {

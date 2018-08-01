@@ -23,6 +23,7 @@ export default class WithSelection extends PureComponent {
     onSelection: PropTypes.func,
     onRowClick: PropTypes.func,
     onRowRightClick: PropTypes.func,
+    onRowDoubleClick: PropTypes.func,
     onRef: PropTypes.func,
     onKeyDown: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
@@ -34,6 +35,7 @@ export default class WithSelection extends PureComponent {
     onSelection: noop,
     onRowClick: noop,
     onRowRightClick: noop,
+    onRowDoubleClick: noop,
     onRef: noop,
     items: [],
     idPropName: 'id',
@@ -92,6 +94,10 @@ export default class WithSelection extends PureComponent {
     }
 
     this.props.onRowRightClick({ rowData, ...args });
+  }
+
+  handleRowDoubleClick = ({ rowData, ...args }) => {
+    this.props.onRowDoubleClick({ rowData, ...args });
   }
 
   handleKeyDown = e => {
@@ -222,6 +228,7 @@ export default class WithSelection extends PureComponent {
           selection,
           onRowClick: this.handleRowClick,
           onRowRightClick: this.handleRowRightClick,
+          onRowDoubleClick: this.handleRowDoubleClick,
           lastSelected: this.lastSelected
         })}
       </div>

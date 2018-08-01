@@ -146,13 +146,21 @@ class ListView extends Component {
     this.props.onSort({ sortBy, sortDirection });
   }
 
+  handleRowClick = ({ event, index, rowData }) => {
+    this.props.onRowClick({ event, index, rowData });
+  }
+
+  handleRowRightClick = ({ event, index, rowData }) => {
+    this.props.onRowRightClick({ event, index, rowData });
+  }
+
   handleRowDoubleClick = ({ event, index, rowData }) => {
     this.props.onRowDoubleClick({ event, index, rowData });
   }
 
   handleSelection = ({ selection, scrollToIndex }) => {
     this.props.onSelection(selection);
-    this.scrollToIndex(scrollToIndex)
+    this.scrollToIndex(scrollToIndex);
   }
 
   render() {
@@ -192,6 +200,9 @@ class ListView extends Component {
             items={itemsToRender}
             onKeyDown={this.handleKeyDown}
             onSelection={this.handleSelection}
+            onRowClick={this.handleRowClick}
+            onRowRightClick={this.handleRowRightClick}
+            onRowDoubleClick={this.handleRowDoubleClick}
             selection={this.props.selection}
             onRef={onRef}
           >
@@ -199,6 +210,7 @@ class ListView extends Component {
               ({
                 onRowClick,
                 onRowRightClick,
+                onRowDoubleClick,
                 selection,
                 lastSelected
               }) => (
@@ -241,7 +253,7 @@ class ListView extends Component {
                         noRowsRenderer={NoFilesFoundStub}
                         onRowClick={onRowClick}
                         onRowRightClick={onRowRightClick}
-                        onRowDoubleClick={this.handleRowDoubleClick}
+                        onRowDoubleClick={onRowDoubleClick}
                       >
                         {layout({ ...layoutOptions, loading, width, height }).map(
                           (rawLayoutChild, i) => rawToReactElement(rawLayoutChild, i)
