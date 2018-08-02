@@ -1,4 +1,11 @@
 
+[Release 1.1.0-beta.1](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.1) Thu Aug 02 2018 10:28:14 GMT+0300 (MSK)
+=======================================================
+
+- Add ability to call own methods on resource item events ([#210](https://github.com/OpusCapita/filemanager/issues/210)) (Kirill Volkovich jakub.szewczykk@gmail.com, 2018-08-01 21:14:49 +0200)
+- Temporary disable CircleCI cache (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-30 10:58:28 +0300)
+- Resolve case-insensitive fs issues (git) (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-30 10:35:24 +0300)
+
 [Release 1.1.0-beta.0](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.0) Sun Jul 29 2018 19:58:27 GMT+0300 (MSK)
 =======================================================
 
