@@ -58,5 +58,5 @@ Notifications
 
 ### License
 
-Licensed by © 2017 OpusCapita
+Apache License Version 2.0
 
