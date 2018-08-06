@@ -54,7 +54,7 @@ let config = {
 };
 
 let filemanager = require('@opuscapita/filemanager-server');
-filemanager.run(config);
+filemanager.server.run(config);
 ```
 
 * [Use as middleware](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js)
