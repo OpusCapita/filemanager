@@ -77,7 +77,7 @@ import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 
 const apiOptions = {
   ...connectorNodeV1.apiOptions,
-  apiRoot: `http://opuscapita-filemanager-demo.azurewebsites.net/api` // Or you local Server Node V1 installation.
+  apiRoot: `http://opuscapita-filemanager-demo-master.azurewebsites.net/` // Or you local Server Node V1 installation.
 }
 
 const fileManager = (
