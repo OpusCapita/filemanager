@@ -61,29 +61,27 @@ const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
 @clickOutside
 export default
 class FileNavigator extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      apiInitialized: false,
-      apiSignedIn: false,
-      config: {},
-      dialogElement: null,
-      error: null,
-      loadingResourceLocation: false,
-      loadingView: false,
-      notifications: [],
-      resource: {},
-      resourceChildren: [],
-      resourceLocation: [],
-      history: createHistory(),
-      selection: [],
-      sortBy: 'title',
-      sortDirection: SortDirection.ASC,
-      initializedCapabilities: []
-    };
-  }
+  state = {
+    apiInitialized: false,
+    apiSignedIn: false,
+    config: {},
+    dialogElement: null,
+    error: null,
+    loadingResourceLocation: false,
+    loadingView: false,
+    notifications: [],
+    resource: {},
+    resourceChildren: [],
+    resourceLocation: [],
+    history: createHistory(),
+    selection: [],
+    sortBy: 'title',
+    sortDirection: SortDirection.ASC,
+    initializedCapabilities: []
+  };
 
   componentDidMount() {
+    this._isMounted = true;
     this.initialize();
   }
 
@@ -104,6 +102,16 @@ class FileNavigator extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+  setStateAsync = (...args) => {
+    if (this._isMounted) {
+      this.setState(...args)
+    }
+  }
+
   initialize = async () => {
     const { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
 
@@ -112,7 +120,7 @@ class FileNavigator extends Component {
 
     const { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
-    this.setState({
+    this.setStateAsync({
       apiInitialized,
       apiSignedIn,
       initializedCapabilities,
@@ -134,11 +142,11 @@ class FileNavigator extends Component {
   }
 
   startViewLoading = () => {
-    this.setState({ loadingView: true, loadingResourceLocation: true });
+    this.setStateAsync({ loadingView: true, loadingResourceLocation: true });
   };
 
   stopViewLoading = () => {
-    this.setState({ loadingView: false });
+    this.setStateAsync({ loadingView: false });
   };
 
   focusView = () => {
@@ -157,7 +165,7 @@ class FileNavigator extends Component {
 
     this.apiAvailabilityTimeout = setTimeout(() => {
       if (api.hasSignedIn()) {
-        this.setState({ apiInitialized: true, apiSignedIn: true });
+        this.setStateAsync({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
         this.monitorApiAvailability();
@@ -181,7 +189,7 @@ class FileNavigator extends Component {
   };
 
   handleHistoryChange = (history) => {
-    this.setState({ history });
+    this.setStateAsync({ history });
 
     const navigateToId = history.stack[history.currentPointer];
     this.navigateToDir(navigateToId, null, true, false);
@@ -202,7 +210,7 @@ class FileNavigator extends Component {
     const newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
     if (changeHistory) {
-      this.setState({ history: pushToHistory(history, toId) });
+      this.setStateAsync({ history: pushToHistory(history, toId) });
     }
 
     this.handleSelectionChange(newSelection);
@@ -216,7 +224,7 @@ class FileNavigator extends Component {
     const resourceParents = await this.getParentsForId(resource.id);
     const resourceLocation = resourceParents.concat(resource);
     this.handleResourceLocationChange(resourceLocation);
-    this.setState({ loadingResourceLocation: false });
+    this.setStateAsync({ loadingResourceLocation: false });
   }
 
   async getParentsForId(id) {
@@ -246,22 +254,22 @@ class FileNavigator extends Component {
   };
 
   handleResourceLocationChange = (resourceLocation) => {
-    this.setState({ resourceLocation });
+    this.setStateAsync({ resourceLocation });
     this.props.onResourceLocationChange(resourceLocation);
   };
 
   handleSelectionChange = (selection) => {
-    this.setState({ selection });
+    this.setStateAsync({ selection });
     this.props.onSelectionChange(selection);
   };
 
   handleResourceChildrenChange = (resourceChildren) => {
-    this.setState({ resourceChildren });
+    this.setStateAsync({ resourceChildren });
     this.props.onResourceChildrenChange(resourceChildren);
   };
 
   handleResourceChange = (resource) => {
-    this.setState({ resource });
+    this.setStateAsync({ resource });
     this.props.onResourceChange(resource);
   };
 
@@ -273,10 +281,10 @@ class FileNavigator extends Component {
     }
 
     const sort = sortCapability.handler;
-    this.setState({ loadingView: true });
+    this.setStateAsync({ loadingView: true });
     const newResourceChildren = await sort({ sortBy, sortDirection });
     this.handleResourceChildrenChange(newResourceChildren);
-    this.setState({ sortBy, sortDirection, loadingView: false });
+    this.setStateAsync({ sortBy, sortDirection, loadingView: false });
   };
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
@@ -349,15 +357,15 @@ class FileNavigator extends Component {
   showDialog = (rawDialogElement) => {
     const dialogElement = rawToReactElement(rawDialogElement);
 
-    this.setState({ dialogElement });
+    this.setStateAsync({ dialogElement });
   };
 
   hideDialog = () => {
-    this.setState({ dialogElement: null });
+    this.setStateAsync({ dialogElement: null });
   };
 
   updateNotifications = (notifications) => {
-    this.setState({ notifications });
+    this.setStateAsync({ notifications });
   };
 
   getCapabilitiesProps = () => ({
