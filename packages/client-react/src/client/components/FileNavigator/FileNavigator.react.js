@@ -10,7 +10,7 @@ import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
-import { createHistory, pushToHistory, } from '../history';
+import { createHistory, pushToHistory } from '../history';
 
 function hasContext(capability, context) {
   return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
@@ -84,7 +84,6 @@ class FileNavigator extends Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
     this.initialize();
   }
 
@@ -105,17 +104,7 @@ class FileNavigator extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  setStateAsync = (...args) => {
-    if (this._isMounted) {
-      this.setState(...args)
-    }
-  }
-
-  initialize = async _ => {
+  initialize = async () => {
     const { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
 
     const capabilitiesProps = this.getCapabilitiesProps();
@@ -123,24 +112,24 @@ class FileNavigator extends Component {
 
     const { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
-    if (apiSignedIn) {
-      this.handleApiReady();
-    } else {
-      if (apiInitialized) {
-        this.handleApiSignInFail();
-      } else {
-        this.handleApiInitFail();
-      }
-
-      this.monitorApiAvailability();
-    }
-
-    this.setStateAsync({
+    this.setState({
       apiInitialized,
       apiSignedIn,
       initializedCapabilities,
       sortBy: viewLayoutOptions.initialSortBy || 'title',
       sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
+    }, _ => {
+      if (apiSignedIn) {
+        this.handleApiReady();
+      } else {
+        if (apiInitialized) {
+          this.handleApiSignInFail();
+        } else {
+          this.handleApiInitFail();
+        }
+
+        this.monitorApiAvailability();
+      }
     });
   }
 
@@ -213,7 +202,7 @@ class FileNavigator extends Component {
     const newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
     if (changeHistory) {
-      this.setStateAsync({ history: pushToHistory(history, toId) });
+      this.setState({ history: pushToHistory(history, toId) });
     }
 
     this.handleSelectionChange(newSelection);
@@ -227,7 +216,7 @@ class FileNavigator extends Component {
     const resourceParents = await this.getParentsForId(resource.id);
     const resourceLocation = resourceParents.concat(resource);
     this.handleResourceLocationChange(resourceLocation);
-    this.setStateAsync({ loadingResourceLocation: false });
+    this.setState({ loadingResourceLocation: false });
   }
 
   async getParentsForId(id) {
@@ -257,22 +246,22 @@ class FileNavigator extends Component {
   };
 
   handleResourceLocationChange = (resourceLocation) => {
-    this.setStateAsync({ resourceLocation });
+    this.setState({ resourceLocation });
     this.props.onResourceLocationChange(resourceLocation);
   };
 
   handleSelectionChange = (selection) => {
-    this.setStateAsync({ selection });
+    this.setState({ selection });
     this.props.onSelectionChange(selection);
   };
 
   handleResourceChildrenChange = (resourceChildren) => {
-    this.setStateAsync({ resourceChildren });
+    this.setState({ resourceChildren });
     this.props.onResourceChildrenChange(resourceChildren);
   };
 
   handleResourceChange = (resource) => {
-    this.setStateAsync({ resource });
+    this.setState({ resource });
     this.props.onResourceChange(resource);
   };
 
@@ -287,7 +276,7 @@ class FileNavigator extends Component {
     this.setState({ loadingView: true });
     const newResourceChildren = await sort({ sortBy, sortDirection });
     this.handleResourceChildrenChange(newResourceChildren);
-    this.setStateAsync({ sortBy, sortDirection, loadingView: false });
+    this.setState({ sortBy, sortDirection, loadingView: false });
   };
 
   handleResourceItemClick = async ({ event, number, rowData }) => {

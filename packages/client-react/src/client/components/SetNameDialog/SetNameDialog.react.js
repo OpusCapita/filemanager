@@ -39,6 +39,14 @@ class SetNameDialog extends Component {
     };
   }
 
+  componentDidMount() {
+    this._isMounted = true
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   handleChange = async (e) => {
     this.setState({ value: e.target.value });
     const validationError = await this.props.onValidate(e.target.value);
