@@ -5,7 +5,7 @@ import sharedComponents from './shared-components';
    arguments: <ReactElement> or <{ elementType: <string>, elementProps: <object>, callArguments: <array>}>
    return: <ReactElement>
 */
-let rawToReactElement = (rawElement, key) => {
+const rawToReactElement = (rawElement, key) => {
   if (React.isValidElement(rawElement)) {
     return typeof key === 'undefined' ? { ...rawElement } : { ...rawElement, key };
   }
@@ -19,12 +19,12 @@ let rawToReactElement = (rawElement, key) => {
   }
 
   if (rawElement.elementType === 'Column') {
-    let rawCellRenderer = rawElement.elementProps.cellRenderer;
-    let rawHeaderRenderer = rawElement.elementProps.headerRenderer;
+    const rawCellRenderer = rawElement.elementProps.cellRenderer;
+    const rawHeaderRenderer = rawElement.elementProps.headerRenderer;
 
-    let cellRenderer = rawToReactElement(rawCellRenderer);
-    let headerRenderer = rawToReactElement(rawHeaderRenderer);
-    let columnProps = {
+    const cellRenderer = rawToReactElement(rawCellRenderer);
+    const headerRenderer = rawToReactElement(rawHeaderRenderer);
+    const columnProps = {
       ...rawElement.elementProps,
       cellRenderer,
       headerRenderer

@@ -14,7 +14,7 @@ function pushToHistory({ stack, currentPointer }, item) {
 }
 
 function getHistoryIndex({ stack, currentPointer }, step) {
-  let newCurrentPointerCandidate = currentPointer + step;
+  const newCurrentPointerCandidate = currentPointer + step;
 
   let newCurrentPointer;
   if (newCurrentPointerCandidate < 0) {
@@ -29,13 +29,13 @@ function getHistoryIndex({ stack, currentPointer }, step) {
 }
 
 function isHistoryStepPossible({ stack, currentPointer }, step) {
-  let newCurrentPointerCandidate = currentPointer + step;
+  const newCurrentPointerCandidate = currentPointer + step;
   return !((newCurrentPointerCandidate < 0) || (newCurrentPointerCandidate > stack.length - 1));
 }
 
 function doHistoryStep({ stack, currentPointer }, step) {
   if (isHistoryStepPossible({ stack, currentPointer }, step)) {
-    let newCurrentPointer = getHistoryIndex({ stack, currentPointer }, step);
+    const newCurrentPointer = getHistoryIndex({ stack, currentPointer }, step);
     // let newCurrentComponentId = stack[newCurrentPointer];
 
     return ({

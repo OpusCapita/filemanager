@@ -47,7 +47,7 @@ class ConfirmDialog extends Component {
   };
 
   render() {
-    let { onHide, headerText, messageText, submitButtonText, cancelButtonText } = this.props;
+    const { onHide, headerText, messageText, submitButtonText, cancelButtonText } = this.props;
 
     return (
       <Dialog onHide={onHide}>

@@ -20,10 +20,10 @@ class Notifications extends Component {
   }
 
   render() {
-    let { notifications, className } = this.props;
+    const { notifications, className } = this.props;
 
-    let notificationsElement = notifications.map((notification, i) => {
-      let props = {
+    const notificationsElement = notifications.map((notification, i) => {
+      const props = {
         ...notification,
         children: (notification.children || []).map(o => ({ ...o.element, key: o.element.id }))
       };

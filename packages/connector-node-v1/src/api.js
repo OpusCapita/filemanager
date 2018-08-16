@@ -45,19 +45,19 @@ async function getParentsForId(options, id, result = []) {
     return result;
   }
 
-  let resource = await getResourceById(options, id);
+  const resource = await getResourceById(options, id);
 
   if (!resource) {
     return result;
   }
 
-  let parentId = resource.parentId;
+  const parentId = resource.parentId;
 
   if (!parentId) {
     return result;
   }
 
-  let parent = await getResourceById(options, parentId);
+  const parent = await getResourceById(options, parentId);
   return getParentsForId(options, resource.parentId, [parent, ...result]);
 }
 
@@ -103,7 +103,7 @@ async function getParentIdForResource(options, resource) {
 }
 
 async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
-  let route = `${apiOptions.apiRoot}/files`;
+  const route = `${apiOptions.apiRoot}/files`;
   return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
@@ -119,7 +119,7 @@ async function downloadResources({ apiOptions, resources, onProgress }) {
     `${apiOptions.apiRoot}/download?`
   );
 
-  let res = await request.get(downloadUrl).
+  const res = await request.get(downloadUrl).
     responseType('blob').
     on('progress', event => {
       onProgress(event.percent);

@@ -2,7 +2,7 @@
 // https://github.com/OpusCapita/react-svg or
 // https://github.com/OpusCapita/svg-icons
 
-/* eslint-disable */
+/* eslint-disable max-len */
 export default {
   fileDownload: `<svg  xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" focusable="false"><path d="M38 18h-8V6H18v12h-8l14 14 14-14zM10 36v4h28v-4H10z"/></svg>`,
   fileUpload: `<svg  xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" focusable="false"><path d="M18 32h12V20h8L24 6 10 20h8zm-8 4h28v4H10z"/></svg>`,

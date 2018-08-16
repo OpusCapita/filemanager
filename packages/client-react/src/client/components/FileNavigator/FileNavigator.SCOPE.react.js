@@ -9,7 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 
-let connectors = {
+const connectors = {
   nodeV1: connectorNodeV1
 };
 
@@ -32,7 +32,7 @@ class FileNavigatorScope extends Component {
   }
 
   handleNodejsLocationChange = (resourceLocation) => {
-    let resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
+    const resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
     this.setState({
       nodejsInitPath: resourceLocationString,
       nodejsInitId: resourceLocation[resourceLocation.length - 1].id
@@ -44,11 +44,11 @@ class FileNavigatorScope extends Component {
       nodejsInitPath: path || '/'
     });
 
-    let apiOptions = {
+    const apiOptions = {
       apiRoot: `${window.env.SERVER_URL}`
     };
 
-    let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
+    const nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
 
     if (nodejsInitId) {
       this.setState({ nodejsInitId });

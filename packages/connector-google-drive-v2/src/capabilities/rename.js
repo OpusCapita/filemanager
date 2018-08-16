@@ -3,10 +3,10 @@ import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-let label = 'rename';
+const label = 'rename';
 
 function handler(apiOptions, actions) {
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
   const {
     showDialog,
@@ -16,21 +16,21 @@ function handler(apiOptions, actions) {
     getResource,
   } = actions;
 
-  let rawDialogElement = {
+  const rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
       initialValue: getSelectedResources()[0].title,
       onHide: hideDialog,
       onSubmit: async (name) => {
-        let selectedResources = getSelectedResources();
-        let resourceChildren = await api.getChildrenForId(apiOptions, { id: selectedResources[0].parents[0].id });
-        let alreadyExists = resourceChildren.some((o) => o.title === name);
+        const selectedResources = getSelectedResources();
+        const resourceChildren = await api.getChildrenForId(apiOptions, { id: selectedResources[0].parents[0].id });
+        const alreadyExists = resourceChildren.some((o) => o.title === name);
         if (alreadyExists) {
           return getMessage('fileExist', { name });
         } else {
           hideDialog();
-          let result = await api.renameResource(apiOptions, selectedResources[0].id, name);
-          let resource = getResource();
+          const result = await api.renameResource(apiOptions, selectedResources[0].id, name);
+          const resource = getResource();
           navigateToDir(resource.id, result.body.id, false);
         }
         return null;
@@ -61,7 +61,7 @@ export default (apiOptions, actions) => {
     icon: { svg: icons.rename },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let selectedResources = getSelectedResources();
+      const selectedResources = getSelectedResources();
       return (
         selectedResources.length === 1 &&
         selectedResources[0].id !== 'root' // root is not mutable

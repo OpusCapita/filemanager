@@ -19,15 +19,15 @@ function formatDate(
   viewLayoutOptions, { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
 ) {
   if (cellData) {
-    let { dateTimePattern } = viewLayoutOptions;
+    const { dateTimePattern } = viewLayoutOptions;
     return fecha.format(new Date().setTime(cellData), dateTimePattern);
   }
 
   return '';
 }
 
-let listViewLayout = (viewLayoutOptions) => {
-  let getMessage = getMess.bind(null, viewLayoutOptions.locale);
+const listViewLayout = (viewLayoutOptions) => {
+  const getMessage = getMess.bind(null, viewLayoutOptions.locale);
   return [
     ({
       elementType: 'Column',

@@ -91,8 +91,8 @@ async function handler(apiOptions, actions) {
 
   try {
     let result;
-    let resources = getSelectedResources();
-    let quantity = resources.length;
+    const resources = getSelectedResources();
+    const quantity = resources.length;
 
     if (quantity === 1) {
       const resource = resources[0];
@@ -105,7 +105,7 @@ async function handler(apiOptions, actions) {
       result = await api.downloadResources({ resources, apiOptions, onProgress });
     }
 
-    let { direct, downloadUrl, file, fileName, mimeType } = result;
+    const { direct, downloadUrl, file, fileName, mimeType } = result;
 
     if (direct) {
       triggerHiddenForm({

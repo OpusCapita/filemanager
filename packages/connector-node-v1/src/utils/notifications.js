@@ -1,7 +1,7 @@
 import { find, findIndex, extend } from 'lodash';
 
 function addNotification(notifications, id, props) {
-  let index = findIndex(notifications, (o) => o.id === id);
+  const index = findIndex(notifications, (o) => o.id === id);
   if (index !== -1) {
     console.error(`Can't add notification: ${id} already exists`);
     return notifications;

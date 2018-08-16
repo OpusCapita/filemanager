@@ -19,14 +19,14 @@ function formatDate(
   viewLayoutOptions, { cellData, columnData, columnIndex, dataKey, isScrolling, rowData, rowIndex }
 ) {
   if (cellData) {
-    let { dateTimePattern } = viewLayoutOptions;
+    const { dateTimePattern } = viewLayoutOptions;
     return fecha.format(new Date().setTime(cellData), dateTimePattern);
   }
 
   return '';
 }
 
-let listViewLayout = (viewLayoutOptions) => {
+const listViewLayout = (viewLayoutOptions) => {
   const getMessage = getMess.bind(null, viewLayoutOptions.locale);
   return [
     ({

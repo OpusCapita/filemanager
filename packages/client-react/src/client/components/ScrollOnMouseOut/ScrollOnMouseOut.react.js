@@ -89,9 +89,9 @@ class ScrollOnMouseOut extends Component {
   }
 
   handleCursorAbove = () => {
-    let { scrollTop } = this.props;
+    const { scrollTop } = this.props;
 
-    let newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
+    const newScrollTop = scrollTop - SCROLL_STRENGTH < 0 ? 0 : scrollTop - SCROLL_STRENGTH;
 
     this.timeout = window.setTimeout(() => {
       this.clearTimeout();
@@ -106,11 +106,11 @@ class ScrollOnMouseOut extends Component {
   }
 
   handleCursorBellow = () => {
-    let { clientHeight, scrollHeight, scrollTop } = this.props;
+    const { clientHeight, scrollHeight, scrollTop } = this.props;
 
-    let newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
-        scrollHeight - clientHeight :
-        scrollTop + SCROLL_STRENGTH;
+    const newScrollTop = scrollTop + SCROLL_STRENGTH > scrollHeight - clientHeight ?
+      scrollHeight - clientHeight :
+      scrollTop + SCROLL_STRENGTH;
 
     this.timeout = window.setTimeout(() => {
       this.clearTimeout();
@@ -129,14 +129,14 @@ class ScrollOnMouseOut extends Component {
   }
 
   handleMouseMove(e) {
-    let {
+    const {
       topCaptureOffset,
       bottomCaptureOffset,
     } = this.props;
 
-    let rect = this.containerRef.getBoundingClientRect();
-    let isCursorAbove = e.clientY < rect.top + topCaptureOffset;
-    let isCursorBellow = e.clientY > rect.bottom - bottomCaptureOffset;
+    const rect = this.containerRef.getBoundingClientRect();
+    const isCursorAbove = e.clientY < rect.top + topCaptureOffset;
+    const isCursorBellow = e.clientY > rect.bottom - bottomCaptureOffset;
 
     if (isCursorAbove) {
       this.setState({ isCursorAbove: true, isCursorBellow: false });
@@ -148,8 +148,8 @@ class ScrollOnMouseOut extends Component {
   }
 
   render() {
-    let {
-      /* eslint-disable */
+    const {
+      /* eslint-disable no-unused-vars */
       onCursorAbove,
       onCursorBellow,
       topCaptureOffset,
@@ -157,7 +157,7 @@ class ScrollOnMouseOut extends Component {
       scrollHeight,
       clientHeight,
       scrollTop,
-      /* eslint-enable */
+      /* eslint-enable no-unused-vars */
       ...restProps
     } = this.props;
 

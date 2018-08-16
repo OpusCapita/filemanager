@@ -1,6 +1,6 @@
 // Copied from https://github.com/bvaughn/react-virtualized/blob/04d1221133a1c59be24c8af90ae09e46000372b5/source/Table/defaultRowRenderer.js#L1
 
-// TODO Sure this component can be optimised using "shouldComponentUpdate"
+// TODO Make sure this component can be optimised using "shouldComponentUpdate"
 
 import React, { Component } from 'react';
 import { DragSource } from 'react-dnd';
@@ -29,8 +29,8 @@ const RowDragSource = {
       return;
     }
 
-    const item = monitor.getItem(); // eslint-disable-line
-    const dropResult = monitor.getDropResult(); // eslint-disable-line
+    // const item = monitor.getItem();
+    // const dropResult = monitor.getDropResult();
   }
 };
 
@@ -45,9 +45,9 @@ function collect(connect, monitor) {
 @DragSource('filemanager-resource', RowDragSource, collect)
 class Row extends Component {
   render() {
-    /* eslint-disable */
-    let {
-      className,
+    /* eslint-disable  react/prop-types */
+    const {
+      className, // eslint-disable-line no-unused-vars
       columns,
       index,
       onRowClick,
@@ -66,7 +66,7 @@ class Row extends Component {
       contextMenuId,
       hasTouch
     } = this.props;
-    /* eslint-enable */
+    /* eslint-enable react/prop-types */
 
     const a11yProps = {};
 
@@ -99,8 +99,8 @@ class Row extends Component {
       }
     }
 
-    let isSelected = selection.indexOf(rowData.id) !== -1;
-    let isLastSelected = lastSelected === rowData.id;
+    const isSelected = selection.indexOf(rowData.id) !== -1;
+    const isLastSelected = lastSelected === rowData.id;
 
     return (
       <ContextMenuTrigger id={contextMenuId} holdToDisplay={hasTouch ? 1000 : -1}>

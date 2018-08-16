@@ -20,8 +20,8 @@ export const
     const toIdIndex = findIndex(items, ({ id }) => id === toId);
     const selectionDirection = toIdIndex > fromIdIndex ? 1 : -1;
     const itemsSlice = selectionDirection === 1 ?
-        items.slice(fromIdIndex, toIdIndex + 1) :
-        items.slice(toIdIndex, fromIdIndex + 1);
+      items.slice(fromIdIndex, toIdIndex + 1) :
+      items.slice(toIdIndex, fromIdIndex + 1);
 
     const selection = itemsSlice.map(({ id }) => id)
 
@@ -44,7 +44,6 @@ export const
     if (currentIndex <= -1) {
       // Fix for fast selection updates
       return {
-        selection,
         scrollToIndex: 0
       }
     }

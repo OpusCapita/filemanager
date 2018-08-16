@@ -4,7 +4,7 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-let label = 'createFolder';
+const label = 'createFolder';
 
 function handler(apiOptions, actions) {
   const {

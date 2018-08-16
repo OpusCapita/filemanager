@@ -14,8 +14,8 @@ const app = express();
 
 let serverOptions = {
   watchOptions: {
-    aggregateTimeout: 300,
-    poll: true
+    aggregateTimeout: 2000,
+    poll: 2000
   },
   headers: {'Access-Control-Allow-Origin': '*'},
   noInfo: true,
