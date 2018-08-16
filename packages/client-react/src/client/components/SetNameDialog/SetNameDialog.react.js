@@ -50,7 +50,9 @@ class SetNameDialog extends Component {
   handleChange = async (e) => {
     this.setState({ value: e.target.value });
     const validationError = await this.props.onValidate(e.target.value);
-    this.setState({ validationError, valid: !validationError });
+    if (this._isMounted) {
+      this.setState({ validationError, valid: !validationError });
+    }
   }
 
   handleKeyDown = async (e) => {
@@ -70,7 +72,7 @@ class SetNameDialog extends Component {
   handleSubmit = async () => {
     const validationError = await this.props.onSubmit(this.state.value);
 
-    if (validationError) {
+    if (validationError && this._isMounted) {
       this.setState({ validationError });
     }
   }
