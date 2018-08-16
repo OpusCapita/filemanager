@@ -4,7 +4,7 @@
 // import SearchDialog from '.';
 
 // describe('<SearchDialog />', () => {
-  /* Recommended test-cases
+/* Recommended test-cases
 
   it('should have default props', () => {
     let component = <SearchDialog />;

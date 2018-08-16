@@ -1,10 +1,10 @@
 async function readLocalFile() {
   return new Promise((resolve, reject) => {
-    let uploadInput = document.createElement("input");
-    let reader = new FileReader();
+    const uploadInput = document.createElement("input");
+    const reader = new FileReader();
 
     uploadInput.addEventListener('change', (e) => {
-      let file = uploadInput.files[0];
+      const file = uploadInput.files[0];
       reader.addEventListener('load', (e) => {
         resolve({
           content: e.target.result,

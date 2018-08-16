@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ProgressIcon.less';
 import Svg from '@opuscapita/react-svg/lib/SVG';
-let completeIcon = require('@opuscapita/svg-icons/lib/done.svg');
+const completeIcon = require('@opuscapita/svg-icons/lib/done.svg');
 
 const propTypes = {
   progress: PropTypes.number,
@@ -22,9 +22,9 @@ const circlePos = viewportSize / 2;
 export default
 class ProgressIcon extends Component {
   render() {
-    let { progress, radius } = this.props;
+    const { progress, radius } = this.props;
 
-    let size = `${radius * 2}px`;
+    const size = `${radius * 2}px`;
 
     if (progress === 100) {
       return (
@@ -41,10 +41,10 @@ class ProgressIcon extends Component {
       );
     }
 
-    let strokeWidth = Math.log(radius) * 5;
-    let circleRadius = 60 - strokeWidth / 2;
-    let circumference = 2 * Math.PI * circleRadius;
-    let dashOffset = circumference * (1 - progress / 100);
+    const strokeWidth = Math.log(radius) * 5;
+    const circleRadius = 60 - strokeWidth / 2;
+    const circumference = 2 * Math.PI * circleRadius;
+    const dashOffset = circumference * (1 - progress / 100);
 
     return (
       <div

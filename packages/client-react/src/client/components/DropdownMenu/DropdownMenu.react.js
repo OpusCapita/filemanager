@@ -32,7 +32,7 @@ class DropdownMenu extends Component {
   }
 
   handleKeyDown = (e) => {
-    let shouldHide = (e.which === 27 || e.which === 9); // Hide on "Esc" or "Tab" key
+    const shouldHide = (e.which === 27 || e.which === 9); // Hide on "Esc" or "Tab" key
     if (this.props.show && shouldHide) {
       this.props.onHide();
     }
@@ -45,7 +45,7 @@ class DropdownMenu extends Component {
   }
 
   render() {
-    let { show, showToTop, onHide, children } = this.props;
+    const { show, showToTop, onHide, children } = this.props;
 
     if (!show) {
       return null;
@@ -54,7 +54,7 @@ class DropdownMenu extends Component {
     return (
       <div className={`oc-fm--dropdown-menu ${showToTop ? 'oc-fm--dropdown-menu--to-top' : ''}`}>
         {Children.toArray(children).map(child => {
-          let childProps = {
+          const childProps = {
             ...child.props,
             onClick: (e) => {
               if (child.props.onClick) {

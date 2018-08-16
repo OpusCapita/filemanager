@@ -3,10 +3,10 @@ import sanitizeFilename from 'sanitize-filename';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-let label = 'createFolder';
+const label = 'createFolder';
 
 function handler(apiOptions, actions) {
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
   const {
     showDialog,
@@ -15,20 +15,20 @@ function handler(apiOptions, actions) {
     getResource
   } = actions;
 
-  let rawDialogElement = {
+  const rawDialogElement = {
     elementType: 'SetNameDialog',
     elementProps: {
       onHide: hideDialog,
       onSubmit: async (folderName) => {
-        let resource = getResource();
-        let resourceChildren = await api.getChildrenForId(apiOptions, { id: resource.id });
+        const resource = getResource();
+        const resourceChildren = await api.getChildrenForId(apiOptions, { id: resource.id });
 
-        let alreadyExists = resourceChildren.some((o) => o.title === folderName);
+        const alreadyExists = resourceChildren.some((o) => o.title === folderName);
         if (alreadyExists) {
           return getMessage('fileExist', { name: folderName });
         } else {
           hideDialog();
-          let result = await api.createFolder(apiOptions, resource.id, folderName);
+          const result = await api.createFolder(apiOptions, resource.id, folderName);
           navigateToDir(resource.id, result.id, false);
         }
         return null;
@@ -54,7 +54,7 @@ function handler(apiOptions, actions) {
 }
 
 export default (apiOptions, actions) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   return {
     id: label,
     icon: { svg: icons.createNewFolder },

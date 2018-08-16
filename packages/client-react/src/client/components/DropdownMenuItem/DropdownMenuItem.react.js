@@ -16,9 +16,9 @@ const defaultProps = {
 export default
 class DropdownMenuItem extends Component {
   render() {
-    let { icon, children, ...restProps } = this.props;
+    const { icon, children, ...restProps } = this.props;
 
-    let iconElement = icon ? (
+    const iconElement = icon ? (
       <Svg
         className="oc-fm--dropdown-menu-item__icon"
         svg={icon.svg}

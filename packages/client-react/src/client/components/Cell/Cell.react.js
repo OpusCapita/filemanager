@@ -7,7 +7,7 @@ export default (viewLayoutOptions) => (cellProps) => {
     return (<LoadingCell />);
   }
 
-  let data = viewLayoutOptions.getData ?
+  const data = viewLayoutOptions.getData ?
     viewLayoutOptions.getData(viewLayoutOptions, cellProps) :
     cellProps.cellData;
 

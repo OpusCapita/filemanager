@@ -4,9 +4,9 @@ import './Notification.less';
 import Svg from '@opuscapita/react-svg/lib/SVG';
 import rawToReactElement from '../raw-to-react-element';
 
-let minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
-let maximizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
-let closeIcon = require('@opuscapita/svg-icons/lib/close.svg');
+const minimizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_down.svg');
+const maximizeIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_up.svg');
+const closeIcon = require('@opuscapita/svg-icons/lib/close.svg');
 
 const propTypes = {
   closable: PropTypes.bool,
@@ -53,10 +53,10 @@ class Notification extends Component {
   }
 
   render() {
-    let { title, onHide, minimizable, closable, progressText, cancelButtonText, children } = this.props;
-    let { minimized } = this.state;
+    const { title, onHide, minimizable, closable, progressText, cancelButtonText, children } = this.props;
+    const { minimized } = this.state;
 
-    let toggleElement = (minimizable && (progressText || children)) ? (
+    const toggleElement = (minimizable && (progressText || children)) ? (
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={this.handleToggleClick}>
         <Svg
           svg={minimized ? maximizeIcon : minimizeIcon}
@@ -65,7 +65,7 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let closeElement = closable ? (
+    const closeElement = closable ? (
       <div tabIndex="0" className="oc-fm--notification__header-icon" onClick={onHide}>
         <Svg
           svg={closeIcon}
@@ -74,7 +74,7 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let progressMessageElement = (progressText) ? (
+    const progressMessageElement = (progressText) ? (
       <div className="oc-fm--notification__progress">
         <div className="oc-fm--notification__progress-text">
           {progressText}
@@ -85,7 +85,7 @@ class Notification extends Component {
       </div>
     ) : null;
 
-    let itemsElement = (
+    const itemsElement = (
       <div className={`oc-fm--notification__items`}>
         {children.map((rawChild, i) => {
           if (React.isValidElement(rawChild)) {

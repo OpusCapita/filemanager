@@ -42,7 +42,7 @@ class SearchDialog extends Component {
   };
 
   render() {
-    let { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
+    const { onHide, headerText, submitButtonText, cancelButtonText } = this.props;
 
     return (
       <div className="oc-fm--search-dialog">

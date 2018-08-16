@@ -41,7 +41,7 @@ class SetNameDialog extends Component {
 
   handleChange = async (e) => {
     this.setState({ value: e.target.value });
-    let validationError = await this.props.onValidate(e.target.value);
+    const validationError = await this.props.onValidate(e.target.value);
     this.setState({ validationError, valid: !validationError });
   }
 
@@ -60,7 +60,7 @@ class SetNameDialog extends Component {
   }
 
   handleSubmit = async () => {
-    let validationError = await this.props.onSubmit(this.state.value);
+    const validationError = await this.props.onSubmit(this.state.value);
 
     if (validationError) {
       this.setState({ validationError });
@@ -68,18 +68,18 @@ class SetNameDialog extends Component {
   }
 
   handleFocus = (e) => {
-    // Move caret at end
-    let tmpValue = e.target.value;
-    e.target.value = ''; // eslint-disable-line
-    e.target.value = tmpValue; // eslint-disable-line
+    // Move caret to the end
+    const tmpValue = e.target.value;
+    e.target.value = ''; // eslint-disable-line no-param-reassign
+    e.target.value = tmpValue; // eslint-disable-line no-param-reassign
   }
 
   render() {
-    let { onHide, headerText, inputLabelText, messageText, submitButtonText, cancelButtonText } = this.props;
-    let { value, validationError, valid } = this.state;
+    const { onHide, headerText, inputLabelText, messageText, submitButtonText, cancelButtonText } = this.props;
+    const { value, validationError, valid } = this.state;
 
-    let showValidationErrorElement = typeof validationError === 'string' && validationError;
-    let validationErrorElement = (
+    const showValidationErrorElement = typeof validationError === 'string' && validationError;
+    const validationErrorElement = (
       <div
         className={`
           oc-fm--dialog__validation-error

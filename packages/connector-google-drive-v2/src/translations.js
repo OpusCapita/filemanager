@@ -69,15 +69,15 @@ const translations = {
 };
 
 export default function getMessage(locale, key, params) {
-  let translationExists = (translations[locale] && translations[locale][key]);
-  let translation = translationExists ? translations[locale][key] : translations['en'][key];
+  const translationExists = (translations[locale] && translations[locale][key]);
+  const translation = translationExists ? translations[locale][key] : translations['en'][key];
   if (!params) {
     return translation;
   }
 
-  let re = /{\w+}/g;
+  const re = /{\w+}/g;
   function replace(match) {
-    let replacement = match.slice(1, -1);
+    const replacement = match.slice(1, -1);
     return params[replacement] ? params[replacement] : '';
   }
 

@@ -6,7 +6,7 @@ export default (apiOptions, actions) => {
     updateNotifications,
     getResource,
     getNotifications,
-    getSortState // eslint-disable-line
+    getSortState // eslint-disable-line no-unused-vars
   } = actions;
   return ({
     id: 'sort',

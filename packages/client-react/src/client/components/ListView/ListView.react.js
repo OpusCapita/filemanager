@@ -244,7 +244,7 @@ class ListView extends Component {
                         onScroll={this.handleScroll}
                         scrollToIndex={scrollToIndex}
                         scrollTop={scrollTop}
-                        sort={this.handleSort} // eslint-disable-line
+                        sort={this.handleSort} // eslint-disable-line react/jsx-handler-names
                         sortBy={sortBy}
                         sortDirection={sortDirection}
                         rowRenderer={Row({

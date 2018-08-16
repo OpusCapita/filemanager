@@ -17,7 +17,7 @@ class FileManagerOne extends Component {
   }
 
   render() {
-    let { children, className } = this.props;
+    const { children, className } = this.props;
 
     return (
       <div className={`oc-fm--file-manager ${className || ''}`}>

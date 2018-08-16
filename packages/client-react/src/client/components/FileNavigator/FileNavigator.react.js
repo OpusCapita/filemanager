@@ -10,10 +10,7 @@ import { find, isEqual } from 'lodash';
 import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
-import {
-  createHistory,
-  pushToHistory,
-} from '../history';
+import { createHistory, pushToHistory, } from '../history';
 
 function hasContext(capability, context) {
   return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
@@ -37,6 +34,7 @@ const propTypes = {
   onResourceChange: PropTypes.func,
   onResourceChildrenChange: PropTypes.func
 };
+
 const defaultProps = {
   id: '',
   api: 'nodeV1',
@@ -85,21 +83,45 @@ class FileNavigator extends Component {
     };
   }
 
-  async componentDidMount() {
-    let { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
+  componentDidMount() {
+    this._isMounted = true;
+    this.initialize();
+  }
 
-    let capabilitiesProps = this.getCapabilitiesProps();
-    let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+  componentWillReceiveProps(nextProps) {
+    const needToNavigate =
+      (this.props.initialResourceId !== nextProps.initialResourceId) &&
+      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
 
-    let { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
+    if (needToNavigate) {
+      this.navigateToDir(nextProps.initialResourceId);
+    }
 
-    this.setState({ // eslint-disable-line
-      apiInitialized,
-      apiSignedIn,
-      initializedCapabilities,
-      sortBy: viewLayoutOptions.initialSortBy || 'title',
-      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
-    });
+    if (!isEqual(this.props.apiOptions, nextProps.apiOptions)) {
+      const { apiOptions, capabilities } = nextProps;
+      const capabilitiesProps = this.getCapabilitiesProps();
+      const initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+      this.setState({ initializedCapabilities });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  setStateAsync = (...args) => {
+    if (this._isMounted) {
+      this.setState(...args)
+    }
+  }
+
+  initialize = async _ => {
+    const { apiOptions, api, capabilities, viewLayoutOptions } = this.props;
+
+    const capabilitiesProps = this.getCapabilitiesProps();
+    const initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
+
+    const { apiInitialized, apiSignedIn } = await api.init({ ...apiOptions });
 
     if (apiSignedIn) {
       this.handleApiReady();
@@ -112,23 +134,14 @@ class FileNavigator extends Component {
 
       this.monitorApiAvailability();
     }
-  }
 
-  componentWillReceiveProps(nextProps) {
-    let needToNavigate =
-      (this.props.initialResourceId !== nextProps.initialResourceId) &&
-      ((this.state.resource && this.state.resource.id) !== nextProps.initialResourceId);
-
-    if (needToNavigate) {
-      this.navigateToDir(nextProps.initialResourceId);
-    }
-
-    if (!isEqual(this.props.apiOptions, nextProps.apiOptions)) {
-      let { apiOptions, capabilities } = nextProps;
-      let capabilitiesProps = this.getCapabilitiesProps();
-      let initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
-      this.setState({ initializedCapabilities });
-    }
+    this.setStateAsync({
+      apiInitialized,
+      apiSignedIn,
+      initializedCapabilities,
+      sortBy: viewLayoutOptions.initialSortBy || 'title',
+      sortDirection: viewLayoutOptions.initialSortDirection || 'ASC'
+    });
   }
 
   startViewLoading = () => {
@@ -144,14 +157,14 @@ class FileNavigator extends Component {
   };
 
   handleApiReady = () => {
-    let { initialResourceId } = this.props;
-    let resourceId = this.state.resource.id;
-    let idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
+    const { initialResourceId } = this.props;
+    const resourceId = this.state.resource.id;
+    const idToNavigate = typeof resourceId === 'undefined' ? initialResourceId : resourceId;
     this.navigateToDir(idToNavigate);
   };
 
   monitorApiAvailability = () => {
-    let { api } = this.props;
+    const { api } = this.props;
 
     this.apiAvailabilityTimeout = setTimeout(() => {
       if (api.hasSignedIn()) {
@@ -174,33 +187,33 @@ class FileNavigator extends Component {
   };
 
   handleLocationBarChange = (id) => {
-    let { resource } = this.state;
+    const { resource } = this.state;
     this.navigateToDir(id, resource.id);
   };
 
   handleHistoryChange = (history) => {
     this.setState({ history });
 
-    let navigateToId = history.stack[history.currentPointer];
+    const navigateToId = history.stack[history.currentPointer];
     this.navigateToDir(navigateToId, null, true, false);
   };
 
   navigateToDir = async (toId, idToSelect, startLoading = true, changeHistory = true) => {
-    let { history, sortBy, sortDirection } = this.state;
+    const { history, sortBy, sortDirection } = this.state;
 
     if (startLoading) {
       this.startViewLoading();
     }
 
-    let resource = await this.getResourceById(toId);
+    const resource = await this.getResourceById(toId);
     this.handleResourceChange(resource);
 
-    let resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
+    const resourceChildren = await this.getChildrenForId(resource.id, sortBy, sortDirection);
 
-    let newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
+    const newSelection = (typeof idToSelect === 'undefined' || idToSelect === null) ? [] : [idToSelect];
 
     if (changeHistory) {
-      this.setState({ history: pushToHistory(history, toId) });
+      this.setStateAsync({ history: pushToHistory(history, toId) });
     }
 
     this.handleSelectionChange(newSelection);
@@ -211,20 +224,20 @@ class FileNavigator extends Component {
   };
 
   async setParentsForResource(resource) {
-    let resourceParents = await this.getParentsForId(resource.id);
-    let resourceLocation = resourceParents.concat(resource);
+    const resourceParents = await this.getParentsForId(resource.id);
+    const resourceLocation = resourceParents.concat(resource);
     this.handleResourceLocationChange(resourceLocation);
-    this.setState({ loadingResourceLocation: false });
+    this.setStateAsync({ loadingResourceLocation: false });
   }
 
   async getParentsForId(id) {
-    let { api, apiOptions } = this.props;
+    const { api, apiOptions } = this.props;
     return await api.getParentsForId(apiOptions, id);
   }
 
   async getResourceById(id) {
-    let { api, apiOptions } = this.props;
-    let result = await api.getResourceById(apiOptions, id);
+    const { api, apiOptions } = this.props;
+    const result = await api.getResourceById(apiOptions, id);
     return result;
   }
 
@@ -234,8 +247,8 @@ class FileNavigator extends Component {
   }
 
   getResourceChildrenBySelection(selection) {
-    let { resourceChildren } = this.state;
-    let filteredResourceItems = resourceChildren.filter((o) => selection.indexOf(o.id) !== -1);
+    const { resourceChildren } = this.state;
+    const filteredResourceItems = resourceChildren.filter((o) => selection.indexOf(o.id) !== -1);
     return filteredResourceItems;
   }
 
@@ -244,37 +257,37 @@ class FileNavigator extends Component {
   };
 
   handleResourceLocationChange = (resourceLocation) => {
-    this.setState({ resourceLocation });
+    this.setStateAsync({ resourceLocation });
     this.props.onResourceLocationChange(resourceLocation);
   };
 
   handleSelectionChange = (selection) => {
-    this.setState({ selection });
+    this.setStateAsync({ selection });
     this.props.onSelectionChange(selection);
   };
 
   handleResourceChildrenChange = (resourceChildren) => {
-    this.setState({ resourceChildren });
+    this.setStateAsync({ resourceChildren });
     this.props.onResourceChildrenChange(resourceChildren);
   };
 
   handleResourceChange = (resource) => {
-    this.setState({ resource });
+    this.setStateAsync({ resource });
     this.props.onResourceChange(resource);
   };
 
   handleSort = async ({ sortBy, sortDirection }) => {
-    let { initializedCapabilities } = this.state;
-    let sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
+    const { initializedCapabilities } = this.state;
+    const sortCapability = find(initializedCapabilities, (o) => o.id === 'sort');
     if (!sortCapability) {
       return;
     }
 
-    let sort = sortCapability.handler;
+    const sort = sortCapability.handler;
     this.setState({ loadingView: true });
-    let newResourceChildren = await sort({ sortBy, sortDirection });
+    const newResourceChildren = await sort({ sortBy, sortDirection });
     this.handleResourceChildrenChange(newResourceChildren);
-    this.setState({ sortBy, sortDirection, loadingView: false });
+    this.setStateAsync({ sortBy, sortDirection, loadingView: false });
   };
 
   handleResourceItemClick = async ({ event, number, rowData }) => {
@@ -286,14 +299,14 @@ class FileNavigator extends Component {
   };
 
   handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
-    let { loadingView } = this.state;
-    let { id } = rowData;
+    const { loadingView } = this.state;
+    const { id } = rowData;
 
     if (loadingView) {
       return;
     }
 
-    let isDirectory = rowData.type === 'dir';
+    const isDirectory = rowData.type === 'dir';
     if (isDirectory) {
       this.navigateToDir(id);
     }
@@ -304,21 +317,21 @@ class FileNavigator extends Component {
   };
 
   handleViewKeyDown = async (e) => {
-    let { api, apiOptions } = this.props;
-    let { loadingView } = this.state;
+    const { api, apiOptions } = this.props;
+    const { loadingView } = this.state;
 
     if ((e.which === 13 || e.which === 39) && !loadingView) { // Enter key or Right Arrow
-      let { selection } = this.state;
+      const { selection } = this.state;
       if (selection.length === 1) {
         // Navigate to selected resource if selected resource is single and is directory
-        let selectedResourceChildren = this.getResourceChildrenBySelection(selection);
+        const selectedResourceChildren = this.getResourceChildrenBySelection(selection);
 
         if (!selectedResourceChildren[0]) {
           // Fix for fast selection updates
           return;
         }
 
-        let isDirectory = selectedResourceChildren[0].type === 'dir';
+        const isDirectory = selectedResourceChildren[0].type === 'dir';
 
         if (isDirectory) {
           this.navigateToDir(selectedResourceChildren[0].id);
@@ -328,8 +341,8 @@ class FileNavigator extends Component {
 
     if ((e.which === 8 || e.which === 37) && !loadingView) { // Backspace or Left Arrow
       // Navigate to parent directory
-      let { resource } = this.state;
-      let parentId = await api.getParentIdForResource(apiOptions, resource);
+      const { resource } = this.state;
+      const parentId = await api.getParentIdForResource(apiOptions, resource);
       if (parentId) {
         this.navigateToDir(parentId, resource.id);
       }
@@ -345,7 +358,7 @@ class FileNavigator extends Component {
   };
 
   showDialog = (rawDialogElement) => {
-    let dialogElement = rawToReactElement(rawDialogElement);
+    const dialogElement = rawToReactElement(rawDialogElement);
 
     this.setState({ dialogElement });
   };
@@ -373,14 +386,14 @@ class FileNavigator extends Component {
   });
 
   getCapability = ({ context, isDataView = false }) => {
-    let { apiOptions } = this.props;
-    let { initializedCapabilities } = this.state;
+    const { apiOptions } = this.props;
+    const { initializedCapabilities } = this.state;
     return initializedCapabilities.
       filter(capability => (
         (isDataView ? capability.shouldBeAvailable(apiOptions) : true) && hasContext(capability, context)
       )).
       map(capability => {
-        let res = ({
+        const res = ({
           icon: capability.icon,
           label: capability.label || '',
           onClick: capability.handler || (() => {}),
@@ -394,7 +407,7 @@ class FileNavigator extends Component {
   };
 
   render() {
-    let {
+    const {
       id,
       apiOptions,
       className,
@@ -403,7 +416,7 @@ class FileNavigator extends Component {
       viewLayoutOptions
     } = this.props;
 
-    let {
+    const {
       apiInitialized,
       apiSignedIn,
       dialogElement,
@@ -432,24 +445,24 @@ class FileNavigator extends Component {
       viewLoadingElement = dialogElement;
     }
 
-    let viewLoadingOverlay = (viewLoadingElement) ? (
+    const viewLoadingOverlay = (viewLoadingElement) ? (
       <div className="oc-fm--file-navigator__view-loading-overlay">
         {viewLoadingElement}
       </div>
     ) : null;
 
-    let locationItems = resourceLocation.map((o) => ({
+    const locationItems = resourceLocation.map((o) => ({
       name: this.props.api.getResourceName(this.props.apiOptions, o),
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
-    let rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
-    let filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
-    let toolbarItems = this.getCapability({ context: 'toolbar' });
-    let newButtonItems = this.getCapability({ context: 'new-button' });
+    const rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
+    const filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
+    const toolbarItems = this.getCapability({ context: 'toolbar' });
+    const newButtonItems = this.getCapability({ context: 'new-button' });
 
-    let rowContextMenuId = `row-context-menu-${id}`;
-    let filesViewContextMenuId = `files-view-context-menu-${id}`;
+    const rowContextMenuId = `row-context-menu-${id}`;
+    const filesViewContextMenuId = `files-view-context-menu-${id}`;
 
     return (
       <div

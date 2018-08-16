@@ -13,7 +13,7 @@ function requireAll(requireContext) {
   }));
 }
 
-let icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.svg$/));
+const icons = requireAll(require.context('@opuscapita/svg-icons/lib', true, /.*\.svg$/));
 
 @showroomScopeDecorator
 export default

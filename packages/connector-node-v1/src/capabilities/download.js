@@ -6,7 +6,7 @@ import nanoid from 'nanoid';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-let label = 'download';
+const label = 'download';
 
 async function handler(apiOptions, actions) {
   const {
@@ -15,7 +15,7 @@ async function handler(apiOptions, actions) {
     getNotifications
   } = actions;
 
-  let getMessage = getMess.bind(null, apiOptions.locale);
+  const getMessage = getMess.bind(null, apiOptions.locale);
 
   const notificationId = label;
   const notificationChildId = nanoid();
@@ -116,14 +116,14 @@ async function handler(apiOptions, actions) {
 }
 
 export default (apiOptions, actions) => {
-  let localeLabel = getMess(apiOptions.locale, label);
+  const localeLabel = getMess(apiOptions.locale, label);
   const { getSelectedResources } = actions;
   return {
     id: label,
     icon: { svg: icons.fileDownload },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
-      let selectedResources = getSelectedResources();
+      const selectedResources = getSelectedResources();
 
       return (
         selectedResources.length > 0 &&

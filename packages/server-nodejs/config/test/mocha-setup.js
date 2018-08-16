@@ -12,4 +12,4 @@ require('babel-register')({
   ]
 });
 
-var chai = require('chai'); // eslint-disable-line
+require('chai');

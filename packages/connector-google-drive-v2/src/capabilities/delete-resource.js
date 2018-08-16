@@ -1,24 +1,10 @@
 import icons from '../icons-svg';
 import getMessage from '../translations';
 
-let label = 'remove';
+const label = 'remove';
 
 function handler(apiOptions, actions) {
-  /* eslint-disable */
-  const {
-    id,
-    showDialog,
-    hideDialog,
-    navigateToDir,
-    updateNotifications,
-    getSelection,
-    getSelectedResources,
-    getResource,
-    getResourceChildren,
-    getResourceLocation,
-    getNotifications
-  } = actions;
-  /* eslint-enable */
+  //
 }
 
 export default (apiOptions, actions) => {

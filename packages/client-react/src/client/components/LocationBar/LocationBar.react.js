@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './LocationBar.less';
 import Svg from '@opuscapita/react-svg/lib/SVG';
-let arrowIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
+const arrowIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
 
 const propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -24,7 +24,7 @@ class LocationBar extends Component {
   }
 
   render() {
-    let { items, loading } = this.props;
+    const { items, loading } = this.props;
 
     if (!items.length) {
       return (
@@ -36,8 +36,8 @@ class LocationBar extends Component {
       );
     }
 
-    let itemsElement = items.map((item, i) => {
-      let arrow = i < items.length - 1 ? (
+    const itemsElement = items.map((item, i) => {
+      const arrow = i < items.length - 1 ? (
         <Svg className="oc-fm--location-bar__item-arrow" svg={arrowIcon} />
       ) : null;
 
@@ -45,7 +45,7 @@ class LocationBar extends Component {
         <div
           key={i}
           tabIndex="0"
-          onClick={item.onClick} // eslint-disable-line
+          onClick={item.onClick} // eslint-disable-line react/jsx-handler-names
           className={`
             oc-fm--location-bar__item
             ${i === items.length - 1 ? 'oc-fm--location-bar__item--last' : ''}
