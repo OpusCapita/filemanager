@@ -30,9 +30,9 @@ const baseUrl = process.env.BASE_URL;
 
 console.log({ baseUrl });
 
-app.route(baseUrl).use(filemanagerMiddleware(config));
+app.use(baseUrl, filemanagerMiddleware(config));
 
-app.route(baseUrl).use(express.static(path.resolve(__dirname, './static')));
+app.use(baseUrl, express.static(path.resolve(__dirname, './static')));
 app.listen(port, host, function(err) {
   if (err) {
     logger.error(err);
