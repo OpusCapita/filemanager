@@ -3,8 +3,7 @@
 FROM node:6.9.3
 MAINTAINER OpusCapita
 
-ARG PORT
-ENV PORT $PORT
+ENV PORT 3020
 
 COPY ./packages/server-nodejs /server-nodejs
 COPY ./demo /demo
