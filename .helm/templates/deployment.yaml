@@ -37,7 +37,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         ports:
-        - containerPort: "{{ .Values.deployment.port }}"
+        - containerPort: {{ .Values.deployment.port | atoi }}
           name: app
         resources:
           requests:
