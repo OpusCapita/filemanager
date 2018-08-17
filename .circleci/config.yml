@@ -147,7 +147,7 @@ jobs:
 
       - run:
           name: deploy-docker-demo-image
-          command: bash .circleci/scripts/deploy-docker-image.sh
+          command: .circleci/scripts/deploy-docker-image.sh
 
       - run:
           name: Deploy demo installation
