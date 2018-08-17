@@ -3,6 +3,7 @@
 FROM node:6.9.3
 MAINTAINER OpusCapita
 
+ENV HOST 0.0.0.0
 ENV PORT 3020
 
 COPY ./packages/server-nodejs /server-nodejs
