@@ -200,8 +200,8 @@ workflows:
         #         ignore:
         #           - release
         - deploy-demo:
-            requires:
-              - build
+            # requires:
+            #   - build
         - release:
             filters:
               branches:
