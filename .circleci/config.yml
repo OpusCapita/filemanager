@@ -194,14 +194,14 @@ workflows:
   version: 2
   commit:
       jobs:
-        # - build:
-        #     filters:
-        #       branches:
-        #         ignore:
-        #           - release
+        - build:
+            filters:
+              branches:
+                ignore:
+                  - release
         - deploy-demo:
-            # requires:
-            #   - build
+            requires:
+              - build
         - release:
             filters:
               branches:
