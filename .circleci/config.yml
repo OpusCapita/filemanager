@@ -147,7 +147,7 @@ jobs:
 
       - run:
           name: deploy-docker-demo-image
-          command: bash .circleci/deploy-docker-image.sh
+          command: bash .circleci/scripts/deploy-docker-image.sh
 
       - run:
           name: Deploy demo installation
@@ -194,11 +194,11 @@ workflows:
   version: 2
   commit:
       jobs:
-        - build:
-            filters:
-              branches:
-                ignore:
-                  - release
+        # - build:
+        #     filters:
+        #       branches:
+        #         ignore:
+        #           - release
         - deploy-demo:
             requires:
               - build
