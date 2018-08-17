@@ -1,0 +1,33 @@
+{{- $baseUrl := .Values.ingress.baseUrl -}}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ randAlphaNum 63 | lower }}
+  labels:
+    phase: {{.Values.phase}}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  backoffLimit: 4
+  activeDeadlineSeconds: 20
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        phase: {{.Values.phase}}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: github-status-deployment-link
+        image: "alpine/httpie:3.5-0.9.9"
+        command: ["/bin/sh"]
+        args: ["-c", 'http --ignore-stdin --auth {{ .Values.github.user }}:{{ .Values.github.password }} POST https://api.github.com/repos/{{ .Values.github.project }}/statuses/{{ .Values.vcs.ref }} state="success" target_url="http://{{ .Values.ingress.host }}{{ $baseUrl }}" description="Click Details link to open" context="deployment"']

@@ -1,0 +1,14 @@
+phase: "qa"
+image:
+  repository: ""
+  tag: "master"
+ingress:
+  host: "opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com"
+  baseUrl: ""
+github:
+  project: ""
+deployment:
+  port: ""
+vcs:
+  ref: ""
+dockerSecret: "dockerhub"

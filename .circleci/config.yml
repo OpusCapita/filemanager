@@ -147,17 +147,20 @@ jobs:
 
       - run:
           name: deploy-docker-demo-image
-          command: |
-            ./.circleci/scripts/deploy-docker-demo-image.js
+          command: bash .circleci/deploy-docker-image.sh
 
       - run:
-          name: azure-create-web-app
+          name: Deploy demo installation
+          working_directory: ~/build/.helm
           command: |
-            ./.circleci/scripts/azure-create-webapp.js
+            az login -u ${AZURE_USER} -p ${AZURE_PASS}
+            az aks get-credentials -g mk8s-cluster-1 -n mk8s-cluster-1
+            helm init --client-only
+            ./install.sh
 
-      - run:
-          name: update-github-commit-status
-          command: ./.circleci/scripts/update-github-commit-status.js
+      # - run:
+      #     name: update-github-commit-status
+      #     command: ./.circleci/scripts/update-github-commit-status.js
 
   release:
     <<: *defaults
