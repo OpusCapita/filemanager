@@ -36,6 +36,9 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
+        env:
+        - name: BASE_URL
+          value: "{{ .Values.ingress.baseUrl }}"
         ports:
         - containerPort: 3020
           name: app

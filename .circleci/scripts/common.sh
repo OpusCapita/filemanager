@@ -6,3 +6,5 @@ slugify() {
 
 DOCKER_REPO="opuscapita/filemanager-demo"
 DOCKER_TAG=$(slugify "${CIRCLE_BRANCH}")
+
+BASE_URL=`echo "/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}" | cut -c1-53`

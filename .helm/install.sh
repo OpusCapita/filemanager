@@ -4,8 +4,6 @@
 
 RELEASE_NAME=$(slugify "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}")
 
-BASE_URL=`echo "/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}" | cut -c1-53`
-
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 helm upgrade \
