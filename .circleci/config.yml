@@ -8,10 +8,10 @@ jobs:
   build:
     <<: *defaults
     steps:
-    #   - run:
-    #       name: Environment inject
-    #       command: /bin/env_inject.sh
-    #   - checkout
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
+      - checkout
       # - run:
       #     name: save-cache-checksum
       #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
