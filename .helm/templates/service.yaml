@@ -12,7 +12,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: 3000
+      targetPort: 3020
   selector:
     app: {{ template "filemanager.name" . }}
     phase: {{.Values.phase}}

@@ -153,7 +153,7 @@ jobs:
           name: Deploy demo installation
           command: |
             az login -u ${AZURE_USER} -p ${AZURE_PASS}
-            az aks get-credentials -g mk8s-cluster-1 -n mk8s-cluster-1
+            az aks get-credentials -g ${MINSK_CORE_K8S_AZURE_RG} -n ${MINSK_CORE_K8S_AZURE_NAME}
             helm init --client-only
             .helm/install.sh
 

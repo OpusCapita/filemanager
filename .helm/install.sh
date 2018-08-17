@@ -11,6 +11,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 helm upgrade \
      --install \
      --force \
+     --set ingress.host="${MINSK_CORE_K8S_HOST}" \
      --set image.repository="${DOCKER_REPO}" \
      --set image.tag="${DOCKER_TAG}" \
      --set ingress.baseUrl="${BASE_URL}" \
