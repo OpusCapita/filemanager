@@ -3,7 +3,13 @@
 const HOST = process.env.HOST ? process.env.HOST : 'localhost';
 const PORT = process.env.PORT ? process.env.PORT : 3000;
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '';
-const SERVER_URL = process.env.SERVER_URL ? process.env.SERVER_URL : `http://${HOST}:${PORT}${BASE_URL}`;
+const SERVER_HOST = process.env.SERVER_HOST ? process.env.SERVER_HOST : 'localhost';
+const SERVER_URL = process.env.SERVER_URL ?
+  process.env.SERVER_URL :
+  process.env.SERVER_HOST ?
+    `https://${SERVER_HOST}:${PORT}${BASE_URL}` :
+    `http://${HOST}:${PORT}${BASE_URL}`;
+
 
 module.exports = {
   HOST,

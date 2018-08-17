@@ -39,6 +39,8 @@ spec:
         env:
         - name: BASE_URL
           value: "{{ .Values.ingress.baseUrl }}"
+        - name: SERVER_HOST
+          value: "{{ .Values.ingress.host }}"
         ports:
         - containerPort: 3020
           name: app
