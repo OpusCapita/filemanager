@@ -151,12 +151,11 @@ jobs:
 
       - run:
           name: Deploy demo installation
-          working_directory: ~/build/.helm
           command: |
             az login -u ${AZURE_USER} -p ${AZURE_PASS}
             az aks get-credentials -g mk8s-cluster-1 -n mk8s-cluster-1
             helm init --client-only
-            ./install.sh
+            .helm/install.sh
 
       # - run:
       #     name: update-github-commit-status
