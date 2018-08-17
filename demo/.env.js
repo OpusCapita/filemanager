@@ -1,10 +1,15 @@
 'use strict';
 
+const HOST = process.env.HOST ? process.env.HOST : 'localhost';
+const PORT = process.env.PORT ? process.env.PORT : 3000;
+const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '';
+const SERVER_URL = process.env.SERVER_URL ? process.env.SERVER_URL : `http://${HOST}:${PORT}${BASE_URL}`;
+
 module.exports = {
-  HOST: process.env.HOST ? process.env.HOST : 'localhost',
-  PORT: process.env.PORT ? process.env.PORT : 3000,
-  BASE_URL: process.env.BASE_URL ? process.env.BASE_URL : '',
-  SERVER_URL: process.env.SERVER_URL ? process.env.SERVER_URL : `http://${HOST}:${PORT}${BASE_URL}`,
+  HOST,
+  PORT,
+  BASE_URL,
+  SERVER_URL,
 
   CLIENT_ID: process.env.CLIENT_ID,
   API_SECRET: process.env.API_SECRET,
