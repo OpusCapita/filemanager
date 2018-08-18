@@ -3,7 +3,7 @@
 let run = require('./run');
 let env = require('./env');
 
-run(`az login -u "${AZURE_USER}" -p "${AZURE_PASS}" &> /tmp/az-login.log
+run(`az login -u "${AZURE_USER}" -p "${AZURE_PASS}" &> /tmp/az-login.log`);
 
 // Remove Azure App Services built on already unexisting branches
 
