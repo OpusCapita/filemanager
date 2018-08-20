@@ -7,8 +7,6 @@ ingress:
   baseUrl: ""
 github:
   project: ""
-deployment:
-  port: ""
 google:
   apiKey: ""
   clientId: ""
