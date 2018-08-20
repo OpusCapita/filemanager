@@ -41,6 +41,10 @@ spec:
           value: "{{ .Values.ingress.baseUrl }}"
         - name: SERVER_HOST
           value: "{{ .Values.ingress.host }}"
+        - name: API_KEY
+          value: "{{ .Values.google.apiKey }}"
+        - name: CLIENT_ID
+          value: "{{ .Values.google.clientId }}"
         ports:
         - containerPort: 3020
           name: app

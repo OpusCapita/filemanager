@@ -9,6 +9,9 @@ github:
   project: ""
 deployment:
   port: ""
+google:
+  apiKey: ""
+  clientId: ""
 vcs:
   ref: ""
 dockerSecret: "dockerhub"

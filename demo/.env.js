@@ -18,6 +18,5 @@ module.exports = {
   SERVER_URL,
 
   CLIENT_ID: process.env.CLIENT_ID,
-  API_SECRET: process.env.API_SECRET,
   API_KEY: process.env.API_KEY
 };
