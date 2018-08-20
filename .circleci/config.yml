@@ -22,17 +22,17 @@ jobs:
       #       - v1-filemanager-{{ .Branch }}
       #       - v1-filemanager-
 
-    #   - run:
-    #       name: bootstrap-packages
-    #       command: yarn install
+      - run:
+          name: bootstrap-packages
+          command: yarn install
 
-    #   - run:
-    #       name: lint
-    #       command: npm run lint
+      - run:
+          name: lint
+          command: npm run lint
 
-    #   - run:
-    #       name: install-demo-dependencies
-    #       command: (cd demo && yarn install)
+      - run:
+          name: install-demo-dependencies
+          command: (cd demo && yarn install)
 
 
       # - save_cache:
@@ -47,21 +47,21 @@ jobs:
       #       - ./demo/yarn.lock
       #       - ./demo/node_modules
 
-    #   - run:
-    #       name: test-restapi
-    #       command: |
-    #         cd packages/server-nodejs
-    #         mkdir junit
-    #         npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
+      - run:
+          name: test-restapi
+          command: |
+            cd packages/server-nodejs
+            mkdir junit
+            npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
 
-    #       environment:
-    #         MOCHA_FILE: junit/test-results.xml
+          environment:
+            MOCHA_FILE: junit/test-results.xml
 
-    #   - store_test_results:
-    #       path: ~/repo/packages/server-nodejs/junit
+      - store_test_results:
+          path: ~/repo/packages/server-nodejs/junit
 
-    #   - store_artifacts:
-    #       path: ~/repo/packages/server-nodejs/junit
+      - store_artifacts:
+          path: ~/repo/packages/server-nodejs/junit
 
   build_release:
     <<: *defaults

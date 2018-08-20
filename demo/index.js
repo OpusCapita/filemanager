@@ -26,9 +26,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-const baseUrl = process.env.BASE_URL;
-
-console.log({ baseUrl });
+const baseUrl = process.env.BASE_URL || '/';
 
 app.use(baseUrl, filemanagerMiddleware(config));
 
