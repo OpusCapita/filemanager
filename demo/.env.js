@@ -7,7 +7,7 @@ const SERVER_HOST = process.env.SERVER_HOST ? process.env.SERVER_HOST : 'localho
 const SERVER_URL = process.env.SERVER_URL ?
   process.env.SERVER_URL :
   process.env.SERVER_HOST ?
-    `https://${SERVER_HOST}:${PORT}${BASE_URL}` :
+    `https://${SERVER_HOST}${BASE_URL}` :
     `http://${HOST}:${PORT}${BASE_URL}`;
 
 
