@@ -96,7 +96,14 @@
     "@opuscapita/svg-icons": "1.1.1",
     "core-js": "2.5.0",
     "detect-it": "3.0.3",
+<<<<<<< HEAD
     "lodash": "4.17.10",
+=======
+    "file-saver": "1.3.3",
+    "filesize": "3.5.11",
+    "immutability-helper": "^2.7.1",
+    "lodash": "4.17.4",
+>>>>>>> add drag and drop basic feature
     "nanoid": "1.0.0",
     "prop-types": "15.6.0",
     "range-parser": "1.2.0",

@@ -37,6 +37,7 @@ const propTypes = {
   loading: PropTypes.bool,
   sortBy: PropTypes.string,
   sortDirection: PropTypes.string,
+  onRowMove: PropTypes.func,
   onRowClick: PropTypes.func,
   onRowRightClick: PropTypes.func,
   onRowDoubleClick: PropTypes.func,
@@ -56,6 +57,7 @@ const defaultProps = {
   loading: false,
   sortBy: 'title',
   sortDirection: SortDirection.ASC,
+  onRowMove: () => {},
   onRowClick: () => {},
   onRowRightClick: () => {},
   onRowDoubleClick: () => {},
@@ -173,7 +175,8 @@ class ListView extends Component {
       loading,
       onRef,
       sortBy,
-      sortDirection
+      sortDirection,
+      onRowMove
     } = this.props;
 
     const {
@@ -248,7 +251,7 @@ class ListView extends Component {
                         sortBy={sortBy}
                         sortDirection={sortDirection}
                         rowRenderer={Row({
-                          selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
+                          selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH, moveRow: onRowMove
                         })}
                         noRowsRenderer={NoFilesFoundStub}
                         onRowClick={onRowClick}

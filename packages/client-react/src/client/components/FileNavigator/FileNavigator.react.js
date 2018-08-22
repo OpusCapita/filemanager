@@ -11,6 +11,7 @@ import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
 import { createHistory, pushToHistory } from '../history';
+import update from 'immutability-helper';
 
 function hasContext(capability, context) {
   return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
@@ -346,6 +347,21 @@ class FileNavigator extends Component {
     }
   };
 
+  handleonRowMove = (dragRowId, hoverRowId) => {
+    const { resourceChildren } = this.state;
+    const dragRowIndex = resourceChildren.findIndex(i => i.id === dragRowId);
+    const dragRow = resourceChildren[dragRowIndex];
+    let hoverRowIndex = resourceChildren.findIndex(i => i.id === hoverRowId);
+    this.setState(
+      update(this.state, {
+				resourceChildren: {
+					$splice: [[dragRowIndex, 1], [hoverRowIndex, 0, dragRow]],
+				},
+			}
+    ));
+    
+  }
+
   handleKeyDown = async (e) => {
 
   };
@@ -482,6 +498,7 @@ class FileNavigator extends Component {
           <ListView
             rowContextMenuId={rowContextMenuId}
             filesViewContextMenuId={filesViewContextMenuId}
+            onRowMove={this.handleonRowMove}
             onKeyDown={this.handleViewKeyDown}
             onRowClick={this.handleResourceItemClick}
             onRowRightClick={this.handleResourceItemRightClick}

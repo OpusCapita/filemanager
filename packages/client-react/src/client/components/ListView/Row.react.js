@@ -3,7 +3,7 @@
 // TODO Make sure this component can be optimised using "shouldComponentUpdate"
 
 import React, { Component } from 'react';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget, DropTargetMonitor } from 'react-dnd';
 import { ContextMenuTrigger } from "react-contextmenu";
 
 const RowDragSource = {
@@ -34,7 +34,7 @@ const RowDragSource = {
   }
 };
 
-function collect(connect, monitor) {
+function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
@@ -42,7 +42,29 @@ function collect(connect, monitor) {
   };
 }
 
-@DragSource('filemanager-resource', RowDragSource, collect)
+const RowDropTarget = {
+  hover(props, monitor, component) {
+    const dragRowId = monitor.getItem().id;
+    const hoverRowId = props.rowData.id;
+    if (dragRowId === hoverRowId) return;
+    console.log(`dragRowId: ${dragRowId}`);
+    console.log(`hoverRowID: ${hoverRowId}`);
+    props.moveRow(dragRowId, hoverRowId);
+    // drag multiple itesms ???
+  },
+  drop(props, monitor, component) {
+    
+  }
+}
+function dropCollect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  }
+}
+
+@DragSource('filemanager-resource', RowDragSource, dragCollect)
+@DropTarget('filemanager-resource', RowDropTarget, dropCollect)
 class Row extends Component {
   render() {
     /* eslint-disable  react/prop-types */
@@ -63,6 +85,7 @@ class Row extends Component {
       isDragging,
       connectDragSource,
       connectDragPreview,
+      connectDropTarget,
       contextMenuId,
       hasTouch
     } = this.props;
@@ -104,7 +127,7 @@ class Row extends Component {
 
     return (
       <ContextMenuTrigger id={contextMenuId} holdToDisplay={hasTouch ? 1000 : -1}>
-        {connectDragPreview(connectDragSource((
+        {connectDragPreview(connectDragSource(connectDropTarget(
           <div
             {...a11yProps}
             className={`
@@ -127,12 +150,14 @@ class Row extends Component {
   }
 }
 
-export default ({ selection, lastSelected, loading, contextMenuId }) => (props) => (
+export default ({ selection, lastSelected, loading, contextMenuId, hasTouch, moveRow }) => (props) => (
   <Row
     {...props}
     selection={selection}
     lastSelected={lastSelected}
     loading={loading}
     contextMenuId={contextMenuId}
+    hasTouch={hasTouch}
+    moveRow={moveRow}
   />
 );
