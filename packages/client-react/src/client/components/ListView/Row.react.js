@@ -20,8 +20,14 @@ const RowDragSource = {
   },
 
   beginDrag(props, monitor, component) {
-    const item = { id: props.rowData.id };
-    return item;
+    const draggedItem = { id: props.rowData.id };
+    let items = []; 
+    if (props.selection.find(id => id === draggedItem.id)) {
+      items = props.selection.map(id => ({ id }));
+    } else {
+      items = [draggedItem];
+    }
+    return { draggedItem, items };
   },
 
   endDrag(props, monitor, component) {
@@ -44,16 +50,13 @@ function dragCollect(connect, monitor) {
 
 const RowDropTarget = {
   hover(props, monitor, component) {
-    const dragRowId = monitor.getItem().id;
+    const dragRowId = monitor.getItem().draggedItem.id;
     const hoverRowId = props.rowData.id;
     if (dragRowId === hoverRowId) return;
-    console.log(`dragRowId: ${dragRowId}`);
-    console.log(`hoverRowID: ${hoverRowId}`);
-    props.moveRow(dragRowId, hoverRowId);
-    // drag multiple itesms ???
+    props.moveRow(hoverRowId, monitor.getItem().items);
   },
   drop(props, monitor, component) {
-    
+    // make api call if necessary
   }
 }
 function dropCollect(connect, monitor) {

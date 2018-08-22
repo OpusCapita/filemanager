@@ -1,7 +1,7 @@
 {
-  "name": "@meng/react-filemanager-connector-node-v1",
-  "version": "1.1.0-beta.2",
-  "description": "@meng/filemanager connector for NodeJS API v1",
+  "name": "@opuscapita/react-filemanager-connector-node-v1",
+  "version": "1.1.0-beta.3",
+  "description": "@opuscapita/filemanager connector for NodeJS API v1",
   "main": "lib/index.js",
   "scripts": {
     "start": "babel --watch --copy-files src --out-dir lib",

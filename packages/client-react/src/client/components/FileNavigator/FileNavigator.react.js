@@ -11,7 +11,6 @@ import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
 import { createHistory, pushToHistory } from '../history';
-import update from 'immutability-helper';
 
 function hasContext(capability, context) {
   return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
@@ -347,19 +346,14 @@ class FileNavigator extends Component {
     }
   };
 
-  handleonRowMove = (dragRowId, hoverRowId) => {
-    const { resourceChildren } = this.state;
-    const dragRowIndex = resourceChildren.findIndex(i => i.id === dragRowId);
-    const dragRow = resourceChildren[dragRowIndex];
-    let hoverRowIndex = resourceChildren.findIndex(i => i.id === hoverRowId);
-    this.setState(
-      update(this.state, {
-				resourceChildren: {
-					$splice: [[dragRowIndex, 1], [hoverRowIndex, 0, dragRow]],
-				},
-			}
-    ));
-    
+  handleonRowMove = (hoverRowId, draggedItems) => {
+    const resourceChildren = this.state.resourceChildren.slice();
+    const hoverRowIndex = resourceChildren.findIndex(r => r.id === hoverRowId);
+    const draggedResource = resourceChildren.filter(r => draggedItems.find(i => i.id === r.id));
+    const remainingResource = resourceChildren.filter(r => !draggedItems.find(i => i.id === r.id)); 
+    if (draggedItems.length === resourceChildren.length) return;
+    remainingResource.splice(hoverRowIndex, 0, ...draggedResource);
+    this.setState({ resourceChildren: remainingResource });
   }
 
   handleKeyDown = async (e) => {
