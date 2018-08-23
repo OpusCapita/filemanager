@@ -26,7 +26,6 @@ let plugins = [
     'PORT',
     'SERVER_URL',
     'CLIENT_ID',
-    'API_SECRET',
     'API_KEY',
   ]),
   new LodashModuleReplacementPlugin()

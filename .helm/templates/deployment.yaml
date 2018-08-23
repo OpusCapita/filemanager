@@ -1,0 +1,57 @@
+{{- $serviceName := include "filemanager.fullname" . -}}
+{{- $baseUrl := .Values.ingress.baseUrl -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "filemanager.fullname" . }}
+  labels:
+    app: {{ template "filemanager.name" . }}
+    phase: {{.Values.phase}}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "filemanager.name" . }}
+      phase: {{.Values.phase}}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "filemanager.name" . }}
+        phase: {{.Values.phase}}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      annotations:
+        date: {{ now }} # RollingRestart workaround. https://github.com/kubernetes/kubernetes/issues/13488
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        env:
+        - name: BASE_URL
+          value: "{{ .Values.ingress.baseUrl }}"
+        - name: SERVER_HOST
+          value: "{{ .Values.ingress.host }}"
+        - name: API_KEY
+          value: "{{ .Values.google.apiKey }}"
+        - name: CLIENT_ID
+          value: "{{ .Values.google.clientId }}"
+        ports:
+        - containerPort: 3020
+          name: app
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "256Mi"
+      imagePullSecrets:
+        - name: {{.Values.dockerSecret}}

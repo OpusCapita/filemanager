@@ -23,15 +23,15 @@ jobs:
       #       - v1-filemanager-
 
       - run:
-          name: bootstrap-packages
+          name: Bootstrap packages
           command: yarn install
 
       - run:
-          name: lint
+          name: Lint
           command: npm run lint
 
       - run:
-          name: install-demo-dependencies
+          name: Install demo dependencies
           command: (cd demo && yarn install)
 
 
@@ -48,7 +48,7 @@ jobs:
       #       - ./demo/node_modules
 
       - run:
-          name: test-restapi
+          name: Test REST API
           command: |
             cd packages/server-nodejs
             mkdir junit
@@ -83,7 +83,7 @@ jobs:
       #       - v1-filemanager-
 
       - run:
-          name: bootstrap-packages
+          name: Bootstrap packages
           command: yarn install
 
       # - save_cache:
@@ -99,7 +99,7 @@ jobs:
       #       - ./demo/node_modules
 
       - run:
-          name: publish-to-npm
+          name: Publish to npm
           command: npm run publish
 
   deploy-demo:
@@ -123,22 +123,22 @@ jobs:
       #       - v1-filemanager-
 
       - run:
-          name: bootstrap-packages
+          name: Bootstrap packages
           command: yarn
 
       - run:
-          name: install-demo-dependencies
+          name: Install demo dependencies
           command: (cd demo && yarn install)
 
       - run:
-          name: build-client-static
+          name: Build client static
           command: |
             cd packages/client-react
             npm run gh-pages:build
             mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
 
       - run:
-          name: build-server-api-docs
+          name: Build server API docs
           command: |
             cd packages/server-nodejs
             npm run build-api-docs
@@ -146,18 +146,16 @@ jobs:
             cp -r api-docs.tmp/docs ../../demo/static/api
 
       - run:
-          name: deploy-docker-demo-image
-          command: |
-            ./.circleci/scripts/deploy-docker-demo-image.js
+          name: Deploy docker demo image
+          command: .circleci/scripts/deploy-docker-image.sh
 
       - run:
-          name: azure-create-web-app
+          name: Deploy demo installation
           command: |
-            ./.circleci/scripts/azure-create-webapp.js
-
-      - run:
-          name: update-github-commit-status
-          command: ./.circleci/scripts/update-github-commit-status.js
+            az login -u "${AZURE_USER}" -p "${AZURE_PASS}" &> /tmp/az-login.log
+            az aks get-credentials -g ${MINSK_CORE_K8S_AZURE_RG} -n ${MINSK_CORE_K8S_AZURE_NAME}
+            helm init --client-only
+            .helm/install.sh
 
   release:
     <<: *defaults
@@ -173,19 +171,6 @@ jobs:
           name: Executing release scrtipt.
           command: .circleci/release.sh
 
-
-  azure-maintenance:
-    <<: *defaults
-    steps:
-      - run:
-          name: Environment inject
-          command: /bin/env_inject.sh
-
-      - checkout
-
-      - run:
-          name: azure-cleanup
-          command: ./.circleci/scripts/azure-cleanup.js
 
 workflows:
   version: 2
@@ -209,13 +194,4 @@ workflows:
                 only: /.*/
               branches:
                 ignore: /.*/
-  nightly:
-      triggers:
-        - schedule:
-            cron: "0 0 * * *"
-            filters:
-              branches:
-                only:
-                  - master
-      jobs:
-        - azure-maintenance
+

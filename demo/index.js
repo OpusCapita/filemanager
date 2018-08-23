@@ -26,9 +26,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(filemanagerMiddleware(config));
+const baseUrl = process.env.BASE_URL || '/';
 
-app.use(express.static(path.resolve(__dirname, './static')));
+app.use(baseUrl, filemanagerMiddleware(config));
+
+app.use(baseUrl, express.static(path.resolve(__dirname, './static')));
 app.listen(port, host, function(err) {
   if (err) {
     logger.error(err);

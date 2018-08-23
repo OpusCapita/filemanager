@@ -1,0 +1,31 @@
+{{- $serviceName := include "filemanager.fullname" . -}}
+{{- $baseUrl := .Values.ingress.baseUrl -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "filemanager.fullname" . }}
+  labels:
+    app: {{ template "filemanager.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: {{ $baseUrl }}
+    nginx.ingress.kubernetes.io/auth-signin: https://{{ .Values.ingress.host }}/oauth2/start?rd=$request_uri
+    nginx.ingress.kubernetes.io/auth-url: https://{{ .Values.ingress.host }}/oauth2/auth
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+spec:
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: {{ $baseUrl }}
+        backend:
+          serviceName: {{ $serviceName }}
+          servicePort: 80
+  tls:
+    - hosts:
+      - {{ .Values.ingress.host }}

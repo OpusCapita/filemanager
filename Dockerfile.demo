@@ -3,7 +3,8 @@
 FROM node:6.9.3
 MAINTAINER OpusCapita
 
-RUN mkdir /demo && mkdir /server-nodejs
+ENV HOST 0.0.0.0
+ENV PORT 3020
 
 COPY ./packages/server-nodejs /server-nodejs
 COPY ./demo /demo
@@ -12,6 +13,6 @@ RUN cd demo && ./populate-demo-fs.sh
 
 WORKDIR /demo
 
-EXPOSE 3020
+EXPOSE $PORT
 
 CMD ["./start.sh"]
