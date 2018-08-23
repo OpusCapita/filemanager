@@ -6,7 +6,7 @@
 
 ## [Demo](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
-## [React Documentation](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
+## [React Documentation](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
