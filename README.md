@@ -6,7 +6,7 @@
 
 ## [Demo](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
-> Sorry for missing :earth_americas: SSL cert. We'll fix it :soon:
+> Sorry for missing :earth_americas: SSL cert at demo site. We'll fix it :soon:
  
 ## [React Documentation](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
 
