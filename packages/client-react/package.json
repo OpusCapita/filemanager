@@ -1,10 +1,11 @@
 {
   "name": "@opuscapita/react-filemanager",
-  "version": "1.1.0-beta.1",
+  "version": "1.1.0-beta.3",
   "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
     "lint": "eslint src/client",
+    "lint-fix": "eslint src/client --fix",
     "upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "rimraf ./.nyc_output ./coverage && cross-env nyc --reporter=lcov --reporter=text mocha --require config/test/mocha-setup.js --recursive src/**/*.spec.js --require ignore-styles",
     "test-all": "npm run test && npm run size",
@@ -32,14 +33,14 @@
   "devDependencies": {
     "@opuscapita/npm-scripts": "2.0.0",
     "@opuscapita/opuscapita-ui": "1.0.2-beta.4",
-    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.1.0-beta.1",
-    "@opuscapita/react-filemanager-connector-node-v1": "1.1.0-beta.1",
+    "@opuscapita/react-filemanager-connector-google-drive-v2": "1.1.0-beta.3",
+    "@opuscapita/react-filemanager-connector-node-v1": "1.1.0-beta.3",
     "@opuscapita/react-showroom-client": "1.3.0-beta.6",
     "@opuscapita/react-showroom-server": "1.3.1",
     "autoprefixer": "6.7.6",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-eslint": "7.1.1",
+    "babel-eslint": "8.2.3",
     "babel-loader": "6.4.1",
     "babel-plugin-lodash": "3.2.11",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
@@ -57,9 +58,9 @@
     "cross-env": "5.0.1",
     "css-loader": "0.26.2",
     "enzyme": "2.9.1",
-    "eslint": "3.17.0",
-    "eslint-config-opuscapita": "1.0.7",
-    "eslint-plugin-react": "6.10.0",
+    "eslint": "4.17.0",
+    "eslint-config-opuscapita": "2.0.1",
+    "eslint-plugin-react": "7.7.0",
     "express": "4.16.2",
     "file-loader": "0.10.1",
     "ignore-styles": "5.0.1",
@@ -95,9 +96,7 @@
     "@opuscapita/svg-icons": "1.1.1",
     "core-js": "2.5.0",
     "detect-it": "3.0.3",
-    "file-saver": "1.3.3",
-    "filesize": "3.5.11",
-    "lodash": "4.17.4",
+    "lodash": "4.17.10",
     "nanoid": "1.0.0",
     "prop-types": "15.6.0",
     "range-parser": "1.2.0",
@@ -110,7 +109,7 @@
     "react-sortable-hoc": "0.6.8",
     "react-virtualized": "9.12.0",
     "sanitize-filename": "1.6.1",
-    "superagent": "3.6.3"
+    "superagent": "3.8.3"
   },
   "size-limit": [
     {

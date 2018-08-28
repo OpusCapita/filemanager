@@ -10,7 +10,7 @@ async function appendGoogleApiScript() {
   }
 
   return new Promise((resolve, reject) => {
-    let script = document.createElement('script');
+    const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://apis.google.com/js/api.js';
     script.async = true;
@@ -71,7 +71,7 @@ async function initClient(options) {
     };
   }
 
-  let isSignedIn = hasSignedIn();
+  const isSignedIn = hasSignedIn();
 
   if (isSignedIn) {
     console.log('Google Drive sign-in Success');
@@ -121,11 +121,11 @@ function normalizeResource(resource) {
 }
 
 async function getResourceById(options, id) {
-  let response = await window.gapi.client.drive.files.get({
+  const response = await window.gapi.client.drive.files.get({
     fileId: id
     // fields: 'createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl'
   });
-  let resource = normalizeResource({ ...response.result });
+  const resource = normalizeResource({ ...response.result });
   return resource;
 }
 
@@ -134,17 +134,17 @@ async function getParentsForId(options, id, result = []) {
     return result;
   }
 
-  let response = await window.gapi.client.drive.parents.list({
+  const response = await window.gapi.client.drive.parents.list({
     fileId: id
     // fields: 'items(id)'
   });
-  let parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
+  const parentId = typeof response.result.items[0] === 'undefined' ? 'root' : response.result.items[0].id;
 
   if (parentId === 'root') {
     return result;
   }
 
-  let parent = await getResourceById(options, parentId);
+  const parent = await getResourceById(options, parentId);
   return await getParentsForId(options, parentId, [parent].concat(result));
 }
 
@@ -157,7 +157,7 @@ async function getParentIdForResource(options, resource) {
 }
 
 async function getChildrenForId(options, { id, sortBy = 'title', sortDirection = 'ASC' }) {
-  let response = await window.gapi.client.drive.files.list({
+  const response = await window.gapi.client.drive.files.list({
     q: `'${id}' in parents and trashed = false`,
     orderBy: `folder,${sortBy} ${sortDirection === 'ASC' ? '' : 'desc'}`
     // fields: 'items(createdDate,id,modifiedDate,title,mimeType,fileSize,parents,capabilities,downloadUrl)'
@@ -170,7 +170,7 @@ async function getCapabilitiesForResource(options, resource) {
 }
 
 async function downloadResource({ resource, params, onProgress, i = 0, l = 1 }) {
-  let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+  const accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 
   const { downloadUrl, direct, mimeType, fileName } = params;
 
@@ -234,10 +234,10 @@ async function downloadResources({ resources, apiOptions, onProgress }) {
 }
 
 async function initResumableUploadSession({ name, size, parentId }) {
-  let accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-  let uploadUrl = `https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable`;
+  const accessToken = window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+  const uploadUrl = `https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable`;
 
-  let res = await agent.post(uploadUrl).
+  const res = await agent.post(uploadUrl).
     set('Authorization', `Bearer ${accessToken}`).
     set('X-Upload-Content-Length', size).
     send({ title: name, parents: [{ id: parentId }] });
@@ -247,8 +247,8 @@ async function initResumableUploadSession({ name, size, parentId }) {
 
 async function uploadChunk({ sessionUrl, size, startByte, content }) {
   return new Promise((resolve, reject) => {
-    let chunkSize = 256 * 1024 * 2;
-    let endByte = startByte + chunkSize < size ? startByte + chunkSize : size;
+    const chunkSize = 256 * 1024 * 2;
+    const endByte = startByte + chunkSize < size ? startByte + chunkSize : size;
 
     agent.put(sessionUrl).
       set('Content-Range', `bytes ${startByte}-${endByte - 1}/${size}`).
@@ -266,12 +266,12 @@ async function getRootId() {
 }
 
 async function uploadFileToId(parentId, file, onProgress) {
-  let size = file.content.length;
-  let sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
+  const size = file.content.length;
+  const sessionUrl = await initResumableUploadSession({ name: file.name, size, parentId });
   let startByte = 0;
 
   while (startByte < size) {
-    let res = await uploadChunk({
+    const res = await uploadChunk({
       sessionUrl,
       size,
       startByte,
@@ -279,10 +279,10 @@ async function uploadFileToId(parentId, file, onProgress) {
     });
 
     if (res.status === 308) {
-      let range = parseRange(size, res.headers['range']);
+      const range = parseRange(size, res.headers['range']);
       startByte = range[0].end + 1;
 
-      let progress = startByte / (size / 100);
+      const progress = startByte / (size / 100);
       onProgress(progress);
     }
 

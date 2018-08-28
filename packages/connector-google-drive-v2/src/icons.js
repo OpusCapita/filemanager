@@ -1,22 +1,22 @@
 import icons from './icons-svg';
 
-let dirIcon = icons.folder;
-let soundFileIcon = icons.volumeUp;
-let pictureFileIcon = icons.image;
-let videoFileIcon = icons.ondemandVideo;
-let archiveFileIcon = icons.archive;
-let booksFileIcon = icons.book;
-let unknownFileIcon = icons.insertDriveFile;
+const dirIcon = icons.folder;
+const soundFileIcon = icons.volumeUp;
+const pictureFileIcon = icons.image;
+const videoFileIcon = icons.ondemandVideo;
+const archiveFileIcon = icons.archive;
+const booksFileIcon = icons.book;
+const unknownFileIcon = icons.insertDriveFile;
 
-let defaultFillColor = '#424242';
-let soundFilesExtensions = ['aac', 'aiff', 'flac', 'm4a', 'ogg', 'mp3', 'wav', 'wma'];
-let pictureFilesExtensions = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'svg'];
-let videoFilesExtensions = ['avi', 'flv', 'wmv', 'mov', 'mp4'];
-let archiveFilesExtensions = ['tar', 'zip', 'gz', 'bz2', 'rar'];
-let booksFilesExtensions = ['pdf', 'epub', 'fb2'];
+const defaultFillColor = '#424242';
+const soundFilesExtensions = ['aac', 'aiff', 'flac', 'm4a', 'ogg', 'mp3', 'wav', 'wma'];
+const pictureFilesExtensions = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'svg'];
+const videoFilesExtensions = ['avi', 'flv', 'wmv', 'mov', 'mp4'];
+const archiveFilesExtensions = ['tar', 'zip', 'gz', 'bz2', 'rar'];
+const booksFilesExtensions = ['pdf', 'epub', 'fb2'];
 
 function matchFileExtensions(filename, extensions) {
-  let extensionsRegExp = `(${extensions.join('|')})`;
+  const extensionsRegExp = `(${extensions.join('|')})`;
   return extensions.some((o) => new RegExp(`^.*\.${extensionsRegExp}$`).test(filename.toLowerCase()));
 }
 

@@ -8,7 +8,7 @@ import icons from '../icons-svg';
 import getMess from '../translations';
 import { normalizeResource } from '../utils/common';
 
-let label = 'upload';
+const label = 'upload';
 
 async function handler(apiOptions, actions) {
   const {
@@ -73,7 +73,7 @@ async function handler(apiOptions, actions) {
 
   const resource = getResource();
   try {
-    let file = await readLocalFile(true);
+    const file = await readLocalFile(true);
     onStart({ name: file.name, size: file.file.size });
     const response = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress });
     const newResource = normalizeResource(response.body[0]);

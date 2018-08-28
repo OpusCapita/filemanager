@@ -2,13 +2,12 @@
   "devDependencies": {
     "babel-eslint": "8.2.1",
     "eslint": "4.17.0",
-    "eslint-config-opuscapita": "2.0.0",
-    "eslint-plugin-react": "7.6.1",
-    "lerna": "2.6.0"
+    "eslint-config-opuscapita": "2.0.1",
+    "eslint-plugin-react": "7.7.0",
+    "lerna": "2.8.0"
   },
   "name": "@opuscapita/filemanager-packages",
   "private": true,
-  "npmClient": "yarn",
   "npmClientArgs": [
     "--no-lockfile"
   ],
@@ -19,13 +18,10 @@
     "diff": "lerna diff",
     "distclean": "lerna clean --yes && rm -rf node_modules",
     "lint": "lerna run lint",
+    "lint-fix": "lerna run lint-fix",
     "postinstall": "npm run bootstrap",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
     "publish": "lerna publish --exact --skip-git --force-publish=* --repo-version $(jq -r '.version' lerna.json) --yes"
-  },
-  "useWorkspaces": true,
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }

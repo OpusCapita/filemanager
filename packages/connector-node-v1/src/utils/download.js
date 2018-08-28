@@ -23,7 +23,7 @@ function promptToSaveBlob({ content, name, downloadUrl }) {
 // a case when we trigger a direct download in browser
 // used in google drive' connector
 function triggerHiddenForm({ downloadUrl, target = '_self' }) {
-  let form = document.createElement("form");
+  const form = document.createElement("form");
   form.action = downloadUrl;
   form.target = target;
   form.method = 'GET';

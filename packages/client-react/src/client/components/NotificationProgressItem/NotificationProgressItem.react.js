@@ -22,19 +22,19 @@ const defaultProps = {
 export default
 class NotificationProgressItem extends Component {
   render() {
-    let {
+    const {
       icon,
       title,
       progress,
     } = this.props;
 
-    let iconElement = icon ? (
+    const iconElement = icon ? (
       <div className="oc-fm--notification-progress-item__icon">
         <Svg svg={icon.svg} style={{ fill: icon.fill || 'rgba(0, 0, 0, 0.72)' }} />
       </div>
     ) : null;
 
-    let titleElement = title ? (
+    const titleElement = title ? (
       <div className="oc-fm--notification-progress-item__title" title={title}>
         {title}
       </div>

@@ -21,7 +21,7 @@ class Dialog extends Component {
   };
 
   render() {
-    let { autofocus } = this.props;
+    const { autofocus } = this.props;
 
     return (
       <div

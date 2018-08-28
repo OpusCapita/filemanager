@@ -1,0 +1,15 @@
+phase: "qa"
+image:
+  repository: ""
+  tag: "master"
+ingress:
+  host: ""
+  baseUrl: ""
+github:
+  project: ""
+google:
+  apiKey: ""
+  clientId: ""
+vcs:
+  ref: ""
+dockerSecret: "dockerhub"

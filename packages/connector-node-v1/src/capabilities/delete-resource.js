@@ -3,7 +3,7 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-let label = 'remove';
+const label = 'remove';
 
 function handler(apiOptions, actions) {
   const {

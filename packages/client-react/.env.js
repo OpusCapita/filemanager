@@ -6,6 +6,5 @@ module.exports = {
   SERVER_URL: process.env.SERVER_URL ? process.env.SERVER_URL : 'http://localhost:3020',
 
   CLIENT_ID: process.env.CLIENT_ID,
-  API_SECRET: process.env.API_SECRET,
   API_KEY: process.env.API_KEY
 };

@@ -1,11 +1,12 @@
 {
   "name": "@opuscapita/react-filemanager-connector-node-v1",
-  "version": "1.1.0-beta.1",
+  "version": "1.1.0-beta.3",
   "description": "@opuscapita/filemanager connector for NodeJS API v1",
   "main": "lib/index.js",
   "scripts": {
     "start": "babel --watch --copy-files src --out-dir lib",
     "lint": "eslint src",
+    "lint-fix": "eslint src --fix",
     "build": "rimraf lib && babel --copy-files src --out-dir lib",
     "prepublish": "npm run build"
   },
@@ -21,15 +22,17 @@
   ],
   "dependencies": {
     "fecha": "2.3.1",
+    "file-saver": "1.3.3",
+    "filesize": "3.5.11",
     "nanoid": "1.0.0",
     "range-parser": "1.2.0",
     "sanitize-filename": "1.6.1",
-    "superagent": "3.6.3"
+    "superagent": "3.8.3"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-eslint": "8.2.1",
+    "babel-eslint": "8.2.3",
     "babel-plugin-lodash": "3.2.11",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
     "babel-plugin-transform-runtime": "6.23.0",
@@ -37,8 +40,8 @@
     "babel-preset-es2017": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "eslint": "4.17.0",
-    "eslint-config-opuscapita": "2.0.0",
-    "eslint-plugin-react": "7.6.1",
+    "eslint-config-opuscapita": "2.0.1",
+    "eslint-plugin-react": "7.7.0",
     "rimraf": "2.6.1"
   }
 }

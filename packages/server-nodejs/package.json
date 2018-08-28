@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/filemanager-server",
-  "version": "1.1.0-beta.1",
+  "version": "1.1.0-beta.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "start-hide": "node -e \"require('./index').server.run()\" &",
     "start-with-demo": "npm run prepare-demo && npm start",
     "debug": "npm start -- --inspect",
-    "lint": "eslint --env node,es6 .",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
     "prepare-demo": "cd ../.. && rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh && cd ../packages/server-nodejs",
@@ -32,16 +33,27 @@
     "winston": "3.0.0-rc0"
   },
   "devDependencies": {
-    "babel-eslint": "8.2.1",
+    "babel-cli": "6.26.0",
+    "babel-core": "6.26.0",
+    "babel-eslint": "8.2.3",
+    "babel-plugin-lodash": "3.2.11",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-es2017": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-0": "6.24.1",
+    "babel-register": "6.26.0",
+    "chai": "3.5.0",
     "cross-env": "5.0.1",
     "eslint": "4.17.0",
-    "eslint-config-opuscapita": "2.0.0",
-    "eslint-plugin-react": "7.6.1",
+    "eslint-config-opuscapita": "2.0.1",
+    "eslint-plugin-react": "7.7.0",
     "ignore-styles": "5.0.1",
     "mocha": "3.4.2",
     "mocha-junit-reporter": "1.13.0",
     "raml-js-validator": "0.6.1",
     "raml2html": "6.4.1",
-    "superagent": "3.6.3"
+    "superagent": "3.8.3"
   }
 }

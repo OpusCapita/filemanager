@@ -16,7 +16,7 @@ class ProgressIconScope extends Component {
     };
 
     this.progressInterval = setInterval(() => {
-      let newProgress = this.state.progress < 100 ? this.state.progress + 1 : 0;
+      const newProgress = this.state.progress < 100 ? this.state.progress + 1 : 0;
       this.setState({ progress: newProgress });
     }, 16);
   }

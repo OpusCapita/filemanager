@@ -22,7 +22,7 @@ class ContextMenuItem extends Component {
   }
 
   render() {
-    let { icon, children, ...restProps } = this.props;
+    const { icon, children, ...restProps } = this.props;
 
     return (
       <MenuItem>

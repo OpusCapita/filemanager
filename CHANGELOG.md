@@ -1,4 +1,22 @@
 
+[Release 1.1.0-beta.2](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.2) Fri Aug 17 2018 19:04:25 GMT+0300 (MSK)
+=======================================================
+
+- Updated "lodash" dependency to fix potential vulnerability. [#217](https://github.com/OpusCapita/filemanager/issues/217) (Sergey Tamkov tamkov@scand.com, 2018-08-16 19:25:40 +0300)
+- Updated "superagent" dependency to fix potential vulnerability. [#217](https://github.com/OpusCapita/filemanager/issues/217) (Sergey Tamkov tamkov@scand.com, 2018-08-16 19:12:20 +0300)
+- Up-to-date eslint config, better eslint excludes, lerna works with npm ([#219](https://github.com/OpusCapita/filemanager/issues/219)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2018-08-16 15:58:18 +0300)
+- Fix wrong API example link in readme ([#216](https://github.com/OpusCapita/filemanager/issues/216)) (Kirill Volkovich worldbeater-dev@yandex.ru, 2018-08-14 19:38:51 +0300)
+- Merge branch 'master' of github.com:OpusCapita/filemanager (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-08-06 15:01:54 +0300)
+- Fix wrong license info in documentation (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-08-06 15:01:30 +0300)
+- Update README.md ([#212](https://github.com/OpusCapita/filemanager/issues/212)) (Kirill Volkovich blake.regalia@gmail.com, 2018-08-06 01:02:18 -0700)
+
+[Release 1.1.0-beta.1](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.1) Thu Aug 02 2018 10:28:14 GMT+0300 (MSK)
+=======================================================
+
+- Add ability to call own methods on resource item events ([#210](https://github.com/OpusCapita/filemanager/issues/210)) (Kirill Volkovich jakub.szewczykk@gmail.com, 2018-08-01 21:14:49 +0200)
+- Temporary disable CircleCI cache (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-30 10:58:28 +0300)
+- Resolve case-insensitive fs issues (git) (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-07-30 10:35:24 +0300)
+
 [Release 1.1.0-beta.0](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.0) Sun Jul 29 2018 19:58:27 GMT+0300 (MSK)
 =======================================================
 

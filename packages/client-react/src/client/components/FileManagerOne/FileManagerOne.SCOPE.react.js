@@ -11,7 +11,7 @@ import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
 
-let connectors = {
+const connectors = {
   nodeV1: connectorNodeV1,
   googleDriveV2: connectorGoogleDriveV2
 };
@@ -23,7 +23,7 @@ function requireAll(requireContext) {
   }));
 }
 
-let themes = requireAll(require.context('../themes', true, /.*\.less$/));
+const themes = requireAll(require.context('../themes', true, /.*\.less$/));
 
 @showroomScopeDecorator
 export default
@@ -55,13 +55,13 @@ class FileManagerOneScope extends Component {
   }
 
   handleThemeChange = (e) => {
-    let themeName = e.target.value;
-    let themeClassName = `oc-fm--file-manager--${themeName}-theme`;
+    const themeName = e.target.value;
+    const themeClassName = `oc-fm--file-manager--${themeName}-theme`;
     this.setState({ themeClassName });
   }
 
   handleNodejsLocationChange = (resourceLocation) => {
-    let resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
+    const resourceLocationString = '/' + resourceLocation.slice(1, resourceLocation.length).map(o => o.name).join('/');
     this.setState({
       nodejsInitPath: resourceLocationString,
       nodejsInitId: resourceLocation[resourceLocation.length - 1].id
@@ -73,11 +73,11 @@ class FileManagerOneScope extends Component {
       nodejsInitPath: path || '/'
     });
 
-    let apiOptions = {
+    const apiOptions = {
       apiRoot: `${window.env.SERVER_URL}`
     };
 
-    let nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
+    const nodejsInitId = await connectors.nodeV1.api.getIdForPath(apiOptions, path || '/');
 
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
@@ -85,8 +85,8 @@ class FileManagerOneScope extends Component {
   }
 
   render() {
-    let { nodejsInitPath } = this.state;
-    let nodejsPathChooserElement = (
+    const { nodejsInitPath } = this.state;
+    const nodejsPathChooserElement = (
       <select onChange={this.handleThemeChange} style={{ marginLeft: '12px' }}>
         {themes.map((theme) => (
           <option key={theme.name}>{theme.name}</option>

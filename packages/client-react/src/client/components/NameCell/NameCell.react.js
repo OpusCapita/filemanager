@@ -8,7 +8,7 @@ export default ({ loading, getIcon }) => (cellProps) => {
     return (<LoadingCell />);
   }
 
-  let { svg, fill } = getIcon(cellProps.rowData);
+  const { svg, fill } = getIcon(cellProps.rowData);
 
   return (
     <div className="oc-fm--name-cell">
