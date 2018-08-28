@@ -35,7 +35,7 @@ You can write you own custom connectors (documentation on how to do it will appe
 
 #### How to use Server Node
 
-[**Server Node API v1 Documentation**](http://opuscapita-filemanager-demo-master.azurewebsites.net/api/docs/)
+[**Server Node API v1 Documentation**](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/api/docs/)
 
 Install package
 
