@@ -292,6 +292,10 @@ class FileNavigator extends Component {
   };
 
   handleResourceItemRightClick = async ({ event, number, rowData }) => {
+    this.props.onResourceItemClick({ event, number, rowData });
+  };
+
+  handleResourceItemRightClick = async ({ event, number, rowData }) => {
     this.props.onResourceItemRightClick({ event, number, rowData });
   };
 
