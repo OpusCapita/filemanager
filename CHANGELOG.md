@@ -1,4 +1,22 @@
 
+[Release 1.1.0-beta.3](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.3) Wed Aug 29 2018 17:25:47 GMT+0300 (MSK)
+=======================================================
+
+- (Issue [#228](https://github.com/OpusCapita/filemanager/issues/228)) Fix recursive queries to the API (PR [#229](https://github.com/OpusCapita/filemanager/issues/229)) (Kirill Volkovich worldbeater-dev@yandex.ru, 2018-08-29 17:23:21 +0300)
+- Update ingress.yaml (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-29 16:08:07 +0300)
+- Remove auth requirement for demo installation (Egor Stambakio stambakio@scand.com, 2018-08-29 12:42:28 +0300)
+- Update RAML docs (Andrei Mourzenkov mourzenkov@scand.com, 2018-08-29 11:54:58 +0300)
+- Update raml documentation (Andrei Mourzenkov mourzenkov@scand.com, 2018-08-29 11:31:06 +0300)
+- Update api-overview.md (GitHub amourzenkov-sc@users.noreply.github.com, 2018-08-29 10:49:54 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-29 01:01:53 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-24 19:49:28 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-24 19:49:10 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-23 17:55:00 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-08-23 17:54:47 +0300)
+- Deploy demo to Azure (PR [#221](https://github.com/OpusCapita/filemanager/issues/221), ISSUE [#220](https://github.com/OpusCapita/filemanager/issues/220)) (Kirill Volkovich 31243790+estambakio-sc@users.noreply.github.com, 2018-08-23 16:11:02 +0300)
+- Suppress az login output (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-08-19 00:05:27 +0300)
+- Suppress az login output (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-08-18 23:53:42 +0300)
+
 [Release 1.1.0-beta.2](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.2) Fri Aug 17 2018 19:04:25 GMT+0300 (MSK)
 =======================================================
 
