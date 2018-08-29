@@ -9,11 +9,12 @@ protocols:
   - HTTP
   - HTTPS
 types:
-  FileStatsResource: !include FileStatsResource.raml
   FileList:
     type: array
     items: file
     uniqueItems: false
+uses:
+  lib: FileStatsResource.raml
 
 /:
   description:
@@ -49,7 +50,7 @@ types:
             the server returns an empty array.
           body:
             application/json:
-              type: FileStatsResource | FileStatsResource[]
+              type: lib.FileStatsResource | lib.FileStatsResource[]
         400:
           description: |
             BAD REQUEST.
@@ -79,7 +80,7 @@ types:
           description:
           body:
             application/json:
-              type: FileStatsResource
+              type: lib.FileStatsResource
 
     /{id}:
       get:
@@ -92,7 +93,7 @@ types:
             description:
             body:
               application/json:
-                type: FileStatsResource
+                type: lib.FileStatsResource
           410:
             description: |
               GONE.
@@ -145,7 +146,7 @@ types:
             description:
             body:
               application/json:
-                type: FileStatsResource
+                type: lib.FileStatsResource
           410:
             description: |
               GONE
@@ -188,7 +189,7 @@ types:
                 application/json:
                   type: object
                   properties:
-                    items: FileStatsResource[]
+                    items: lib.FileStatsResource[]
                     # will develop in v2
                     # nextPageToken:
             400:
@@ -235,7 +236,7 @@ types:
                 application/json:
                   type: object
                   properties:
-                    items: FileStatsResource[]
+                    items: lib.FileStatsResource[]
                     nextPage:
                       description: |
                         url path part, i.e. everything after host/port,
