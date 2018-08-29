@@ -24,8 +24,6 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
 
 ## File stats resource
 
-### Standard resource structure
-
 ```javascript
 {
   id: <string>,
@@ -35,6 +33,7 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
   modifiedTime: <string>,
   ?size: <string>, // for files only
   ?parentId: <string>, // for non-root only
+  ancestors: [<file stats resource>, ...], // list of ancestors starting with user root dir, empty for the root
   md5Checksum: <string>, // TODO in v2
   capabilities: {
     canListChildren: <boolean>,
@@ -46,14 +45,6 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
     canEdit: <boolean>,
     canDownload: <boolean>
   }
-}
-```
-
-### Optional custom properties
-
-```javascript
-{
-  ancestors: [<file stats resource>, ...] // list of ancestors starting with user root dir, empty for the root
 }
 ```
 
