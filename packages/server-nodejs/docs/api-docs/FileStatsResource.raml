@@ -20,7 +20,10 @@ types:
         description: for non-root only
         type: string
         required: false
-      ancestors: FileStatsResource[]
+      ancestors:
+        description: starting with the root and ending with the parent, empty for root.
+        type: FileStatsResource[]
+        required: true
       md5Checksum: string
       capabilities:
         type: object
