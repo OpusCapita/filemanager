@@ -36,7 +36,8 @@ This module was created for testing in IE11 FileNavigator for nodeV1 API
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           </div>
         )}
-        onLocationChange={_scope.handleNodejsLocationChange}
+        onResourceLocationChange={_scope.handleNodejsLocationChange}
+        onResourceItemDoubleClick={_scope.handleResourceItemDoubleClick}
       />
 
     </FileManagerOne>

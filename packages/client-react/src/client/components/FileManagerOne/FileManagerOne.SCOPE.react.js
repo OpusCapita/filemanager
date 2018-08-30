@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
 import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 import connectorGoogleDriveV2 from '@opuscapita/react-filemanager-connector-google-drive-v2';
+import { isHistoryStepPossible, doHistoryStep } from '../history';
 import FileNavigator from '../FileNavigator';
 
 window.FileNavigator = FileNavigator;
@@ -43,7 +44,7 @@ class FileManagerOneScope extends Component {
   }
 
   componentDidMount() {
-    this.handleNodejsInitPathChange('')
+    this.handleNodejsInitPathChange('');
   }
 
   googleDriveSignIn() {
@@ -81,6 +82,13 @@ class FileManagerOneScope extends Component {
 
     if (nodejsInitId) {
       this.setState({ nodejsInitId });
+    }
+  }
+
+
+  handleResourceItemDoubleClick = ({ rowData }) => {
+    if (rowData.href) {
+      open(rowData.href);
     }
   }
 

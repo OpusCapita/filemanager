@@ -6,10 +6,10 @@ import rename from './rename';
 import sort from './sort';
 
 const capabilities = [
-  createFolder,
-  rename,
-  download,
-  upload,
+  // createFolder,
+  // rename,
+  // download,
+  // upload,
   deleteResource,
   sort
 ];

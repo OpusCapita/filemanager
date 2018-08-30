@@ -3,8 +3,8 @@
 const path = require('path');
 
 module.exports = {
-  fsRoot: path.resolve('../../demo/demo-fs'),
-  rootName: 'Customization area',
+  fsRoot: '/home/volkovich/k8s-fs/helm',
+  rootName: 'Helm releases',
   readOnly: false,
   port: process.env.PORT || '3020',
   host: process.env.HOST || 'localhost'
