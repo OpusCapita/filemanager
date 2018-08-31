@@ -21,19 +21,21 @@ jobs:
       #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
       #       - v1-filemanager-{{ .Branch }}
       #       - v1-filemanager-
-
       - run:
-          name: Bootstrap packages
-          command: yarn install
-
-      - run:
-          name: Lint
-          command: npm run lint
+          name: Update npm
+          command: npm i -g npm@6.2.0
 
       - run:
           name: Install demo dependencies
           command: (cd demo && yarn install)
 
+      - run:
+          name: Bootstrap packages
+          command: npm i
+
+      - run:
+          name: Lint
+          command: npm run lint
 
       # - save_cache:
       #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
@@ -84,7 +86,7 @@ jobs:
 
       - run:
           name: Bootstrap packages
-          command: yarn install
+          command: npm i
 
       # - save_cache:
       #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
@@ -123,12 +125,14 @@ jobs:
       #       - v1-filemanager-
 
       - run:
-          name: Bootstrap packages
-          command: yarn
+          name: Install demo dependencies
+          command: (cd demo && npm i)
 
       - run:
-          name: Install demo dependencies
-          command: (cd demo && yarn install)
+          name: Bootstrap packages
+          command: npm i
+
+
 
       - run:
           name: Build client static
@@ -156,21 +160,6 @@ jobs:
             az aks get-credentials -g ${MINSK_CORE_K8S_AZURE_RG} -n ${MINSK_CORE_K8S_AZURE_NAME}
             helm init --client-only
             .helm/install.sh
-
-  release:
-    <<: *defaults
-    steps:
-
-      - run:
-          name: Environment inject
-          command: env_inject.sh
-
-      - checkout
-
-      - run:
-          name: Executing release scrtipt.
-          command: .circleci/release.sh
-
 
 workflows:
   version: 2
