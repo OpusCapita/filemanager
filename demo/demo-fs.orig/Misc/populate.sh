@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Created by Ben Okopnik on Wed Jul 16 18:04:33 EDT 2008
 
 ########    User settings     ############
