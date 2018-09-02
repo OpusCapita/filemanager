@@ -10,7 +10,7 @@
     "lint-fix": "eslint . --fix",
     "build-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
-    "test-restapi": "npm run prepare-demo && pm2 start server.js --name 'fmServer' && mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js && pm2 delete 'fmServer'",
+    "test-restapi": "npm run prepare-demo && pm2 start server.js --name 'fmServer' && mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js --reporter mocha-multi-reporters --reporter-options configFile=./config/test/reporters.json && pm2 delete 'fmServer'",
     "build": "node -e \"console.log('Building \"$npm_package_name\" version \"$npm_package_version\"! ')\""
   },
   "publishConfig": {
@@ -50,6 +50,8 @@
     "mkdirp": "0.5.1",
     "mocha": "3.4.2",
     "mocha-junit-reporter": "1.13.0",
+    "mocha-multi-reporters": "1.1.7",
+    "pm2": "3.0.4",
     "raml-js-validator": "0.6.1",
     "raml2html": "6.4.1",
     "rimraf": "2.6.2",

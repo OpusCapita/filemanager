@@ -54,16 +54,13 @@ jobs:
           command: |
             cd packages/server-nodejs
             mkdir junit
-            npm run test-restapi -- --reporter mocha-junit-reporter
-
-          environment:
-            MOCHA_FILE: junit/test-results.xml
+            npm run test-restapi
 
       - store_test_results:
-          path: ~/repo/packages/server-nodejs/junit
+          path: ~/repo/packages/server-nodejs/test-results/junit.xml
 
       - store_artifacts:
-          path: ~/repo/packages/server-nodejs/junit
+          path: ~/repo/packages/server-nodejs/test-results/junit.xml
 
   build_release:
     <<: *defaults
