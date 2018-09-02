@@ -51,10 +51,8 @@ jobs:
 
       - run:
           name: Test REST API
-          command: |
-            cd packages/server-nodejs
-            mkdir junit
-            npm run test-restapi
+          working_directory: ./packages/server-nodejs
+          command: npm run test-restapi
 
       - store_test_results:
           path: ~/repo/packages/server-nodejs/test-results/junit.xml
