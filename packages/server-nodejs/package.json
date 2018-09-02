@@ -4,17 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node -e \"require('./index').server.run()\"",
-    "start-hide": "node -e \"require('./index').server.run()\" &",
-    "start-with-demo": "npm run prepare-demo && npm start",
-    "debug": "npm start -- --inspect",
+    "prepare-demo": "sh ../../demo/populate-demo-fs.sh",
+    "start": "npm run prepare-demo && cross-env NODE_ENV=development node server.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "build-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
-    "validate-api-docs": "rm -rf api-docs.tmp && mkdir -p api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
-    "prepare-demo": "cd ../.. && rm -rf demo/demo-fs && cd demo && sh ./populate-demo-fs.sh && cd ../packages/server-nodejs",
-    "test-restapi": "mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js",
-    "test-rest": "npm run prepare-demo && npm run test-restapi"
+    "build-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
+    "validate-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
+    "test-restapi": "npm run prepare-demo && pm2 start server.js --name 'fmServer' && mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js && pm2 delete 'fmServer'",
+    "build": "node -e \"console.log('Building \"$npm_package_name\" version \"$npm_package_version\"! ')\""
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -30,7 +27,7 @@
     "fs-extra": "4.0.2",
     "helmet": "3.9.0",
     "multer": "1.3.0",
-    "winston": "3.0.0-rc0"
+    "winston": "3.0.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -50,10 +47,12 @@
     "eslint-config-opuscapita": "2.0.1",
     "eslint-plugin-react": "7.7.0",
     "ignore-styles": "5.0.1",
+    "mkdirp": "0.5.1",
     "mocha": "3.4.2",
     "mocha-junit-reporter": "1.13.0",
     "raml-js-validator": "0.6.1",
     "raml2html": "6.4.1",
+    "rimraf": "2.6.2",
     "superagent": "3.8.3"
   }
 }

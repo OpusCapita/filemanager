@@ -21,13 +21,13 @@ jobs:
       #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
       #       - v1-filemanager-{{ .Branch }}
       #       - v1-filemanager-
-      - run:
-          name: Update npm
-          command: npm i -g npm@6.2.0
+      # - run:
+      #     name: Update npm
+      #     command: npm i -g npm@6.2.0
 
-      - run:
-          name: Install demo dependencies
-          command: (cd demo && yarn install)
+      # - run:
+      #     name: Install demo dependencies
+      #     command: (cd demo && yarn install)
 
       - run:
           name: Bootstrap packages
@@ -54,7 +54,7 @@ jobs:
           command: |
             cd packages/server-nodejs
             mkdir junit
-            npm run start-hide && npm run test-restapi -- --reporter mocha-junit-reporter
+            npm run test-restapi -- --reporter mocha-junit-reporter
 
           environment:
             MOCHA_FILE: junit/test-results.xml
@@ -183,4 +183,3 @@ workflows:
                 only: /.*/
               branches:
                 ignore: /.*/
-
