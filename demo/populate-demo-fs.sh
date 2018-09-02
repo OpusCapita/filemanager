@@ -41,11 +41,16 @@ populate() {
 	done
 
   echo "CURDIR $CURDIR"
-  for dir in `find "$CURDIR" -maxdepth 1 -type d`
-  do
+  for dir in $CURDIR/*/ ; do
     echo "dir $dir"
     populate $dir
   done
+
+  # for dir in `find "$CURDIR" -maxdepth 1 -type d`
+  # do
+  #   echo "dir $dir"
+  #   populate $dir
+  # done
 }
 
 populate $SCRIPT_DIR/demo-fs/Misc
