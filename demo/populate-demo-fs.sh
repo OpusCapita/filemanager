@@ -4,6 +4,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 rm -rf $SCRIPT_DIR/demo-fs
 cp -r $SCRIPT_DIR/demo-fs.orig $SCRIPT_DIR/demo-fs
+mkdir -p $SCRIPT_DIR/demo-fs/Misc
 
 ########    User settings     ############
 MAXDIRS=5

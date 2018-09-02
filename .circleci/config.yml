@@ -168,10 +168,6 @@ workflows:
         - deploy-demo:
             requires:
               - build
-        - release:
-            filters:
-              branches:
-                only: release
         - build_release:
             filters:
               tags:
