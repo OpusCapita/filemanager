@@ -41,7 +41,7 @@ populate() {
 	done
 
   echo "CURDIR $CURDIR"
-  for dir in $CURDIR/*/ ; do
+  for dir in `find $CURDIR -maxdepth 1 -mindepth 1 -type d` ; do
     echo "dir $dir"
     populate $dir
   done
