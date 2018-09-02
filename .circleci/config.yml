@@ -30,11 +30,11 @@ jobs:
       #     command: (cd demo && yarn install)
 
       - run:
-          name: Bootstrap packages
+          name: Install depenencies
           command: npm i
 
       - run:
-          name: Lint
+          name: Linting sources
           command: npm run lint
 
       # - save_cache:
@@ -50,7 +50,7 @@ jobs:
       #       - ./demo/node_modules
 
       - run:
-          name: Test REST API
+          name: Run REST API tests
           working_directory: ./packages/server-nodejs
           command: npm run test-restapi
 

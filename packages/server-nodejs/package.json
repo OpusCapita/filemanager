@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare-demo": "sh ../../demo/populate-demo-fs.sh",
+    "prepare-demo": "../../demo/populate-demo-fs.sh",
     "start": "npm run prepare-demo && cross-env NODE_ENV=development node server.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
