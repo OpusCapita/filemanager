@@ -31,8 +31,8 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm i
-
+          # we use --unsafe-perm as current build using root user which fails
+          command: npm install --unsafe-perm
       - run:
           name: Linting sources
           command: npm run lint
@@ -78,7 +78,8 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm i
+          # we use --unsafe-perm as current build using root user which fails
+          command: npm install --unsafe-perm
 
       # - save_cache:
       #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
@@ -121,7 +122,8 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm i
+          # we use --unsafe-perm as current build using root user which fails
+          command: npm install --unsafe-perm
       - run:
           name: Build client static
           command: |
