@@ -9,7 +9,7 @@ jobs:
     <<: *defaults
     steps:
       - run:
-          name: Environment inject
+          name: Inject environment
           command: /bin/env_inject.sh
       - checkout
       # - run:
@@ -62,7 +62,7 @@ jobs:
     <<: *defaults
     steps:
       - run:
-          name: Environment inject
+          name: Inject environment
           command: /bin/env_inject.sh
       - checkout
 
@@ -100,7 +100,7 @@ jobs:
     <<: *defaults
     steps:
       - run:
-          name: Environment inject
+          name: Inject environment
           command: /bin/env_inject.sh
       - checkout
       - setup_remote_docker
