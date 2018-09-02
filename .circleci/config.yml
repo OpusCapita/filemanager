@@ -158,7 +158,7 @@ workflows:
         - deploy-demo:
             requires:
               - build
-              - build_release:
+        - build_release:
             filters:
               tags:
                 only: /.*/
