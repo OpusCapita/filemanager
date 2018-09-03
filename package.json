@@ -12,7 +12,7 @@
     "--no-lockfile"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap && cd demo && sh ./populate-demo-fs.sh",
+    "bootstrap": "lerna bootstrap",
     "changelog": "docker run -it --rm -v \"$(pwd)\":/usr/local/src/your-app ockvolkovich/github-changelog-generator -u OpusCapita -p filemanager --token $GITHUB_TOKEN && git add ./CHANGELOG.md && git commit -m \"Update CHANGELOG.md [ci skip]\"",
     "clean": "lerna clean",
     "diff": "lerna diff",
@@ -20,6 +20,7 @@
     "lint": "lerna run lint",
     "lint-fix": "lerna run lint-fix",
     "postinstall": "npm run bootstrap",
+    "build": "lerna run build",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
     "publish": "lerna publish --exact --skip-git --force-publish=* --repo-version $(jq -r '.version' lerna.json) --yes"

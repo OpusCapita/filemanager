@@ -1,18 +1,15 @@
 # Docker context should be "<repo-root>"
 
-FROM node:6.9.3
+FROM node:8.11.4
 MAINTAINER OpusCapita
 
 ENV HOST 0.0.0.0
 ENV PORT 3020
 
-COPY ./packages/server-nodejs /server-nodejs
-COPY ./demo /demo
+COPY ./ /build
 
-RUN cd demo && ./populate-demo-fs.sh
-
-WORKDIR /demo
+WORKDIR /build/packages/demoapp
 
 EXPOSE $PORT
 
-CMD ["./start.sh"]
+CMD ["npm", "start"]

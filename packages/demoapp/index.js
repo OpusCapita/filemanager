@@ -7,7 +7,7 @@ const logger = require('@opuscapita/filemanager-server').logger;
 const env = require('./.env');
 
 const config = {
-  fsRoot: path.resolve(__dirname, './demo-fs'),
+  fsRoot: path.resolve(__dirname, './demo-files'),
   rootName: 'Customization area'
 };
 

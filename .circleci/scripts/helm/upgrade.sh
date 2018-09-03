@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-. .circleci/scripts/common.sh
+. ../common.sh
 
 RELEASE_NAME=$(slugify "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}")
 
-SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+/bin/scripts/login/aks-login.sh ${MINSK_CORE_K8S_AZURE_RG} ${MINSK_CORE_K8S_AZURE_NAME}
 
+helm init --client-only && \
 helm upgrade \
   --install \
   --force \
@@ -19,5 +20,5 @@ helm upgrade \
   --set vcs.ref="${CIRCLE_SHA1}" \
   --set google.apiKey="${MINSK_CORE_DEMO_GOOGLE_DRIVE_API_KEY}" \
   --set google.clientId="${MINSK_CORE_DEMO_GOOGLE_DRIVE_CLIENT_ID}" \
-  --namespace minsk-sandbox \
-  ${RELEASE_NAME} ${SCRIPT_DIR}
+  --namespace "${MINSK_CORE_K8S_NAMESPACE_DEVELOPMENT}" \
+  ${RELEASE_NAME} .
