@@ -44,7 +44,7 @@ jobs:
       - run: *install-dependencies
       - save_cache: *save-cache
       - run:
-          name: Linting sources
+          name: Lint sources
           command: npm run lint
       - run:
           name: Run REST API tests
