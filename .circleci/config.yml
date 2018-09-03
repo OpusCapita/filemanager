@@ -19,7 +19,7 @@ jobs:
           keys:
             - dependencies-{{ checksum "/tmp/cache-checksum" }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            # - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
@@ -65,7 +65,7 @@ jobs:
           keys:
             - dependencies-{{ checksum "/tmp/cache-checksum" }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            # - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
@@ -104,7 +104,7 @@ jobs:
           keys:
             - dependencies-{{ checksum "/tmp/cache-checksum" }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            # - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
