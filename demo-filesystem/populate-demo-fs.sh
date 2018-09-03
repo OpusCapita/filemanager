@@ -38,9 +38,9 @@ populate() {
 		d=`mktemp -d $CURDIR/XXXXXX`
 	done
 
-  # echo "CURDIR $CURDIR"
+  echo "CURDIR $CURDIR"
   for dir in `find $CURDIR -maxdepth 1 -mindepth 1 -type d` ; do
-    # echo "dir $dir"
+    echo "dir $dir"
     populate $dir
   done
 }
