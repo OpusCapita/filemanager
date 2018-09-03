@@ -54,21 +54,16 @@ jobs:
           path: ./packages/server-nodejs/test-results
       - store_artifacts:
           path: ./packages/server-nodejs/test-results
-
-  build_release:
-    <<: *defaults
-    steps:
-      - run: *inject-environment
-      - checkout
-      - run: *save-cache-checksum
-      - restore_cache: *restore-cache
-      - run: *install-dependencies
-      - save_cache: *save-cache
       - run:
           name: Publish to npm
-          command: npm run publish
+          command: |
+            if [ ! -z "${CIRCLE_TAG}" ]; then
+              npm run publish
+            else
+              echo "This step is skipped as this is not a release build"
+            fi
 
-  deploy-demo:
+  deploy-to-cloud:
     <<: *defaults
     steps:
       - run: *inject-environment
@@ -108,19 +103,12 @@ jobs:
 
 workflows:
   version: 2
-  commit:
-      jobs:
-        - build:
-            filters:
-              branches:
-                ignore:
-                  - release
-        - deploy-demo:
-            requires:
-              - build
-        - build_release:
-            filters:
-              tags:
-                only: /.*/
-              branches:
-                ignore: /.*/
+  build-and-deploy-to-cloud:
+    jobs:
+      - build:
+      - deploy-to-cloud:
+          requires:
+            - build
+          filters:
+            tags:
+              ignore: /.*/
