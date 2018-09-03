@@ -96,7 +96,7 @@ jobs:
       - run:
           name: Deploy docker demo image
           working_directory: .circleci/scripts
-          command: deploy-docker-image.sh
+          command: ./deploy-docker-image.sh
       - run:
           name: Deploy demo installation
           working_directory: .circleci/scripts/helm
