@@ -1,3 +1,32 @@
+aliases:
+  - &inject-environment
+    name: Inject environment
+    command: /bin/env_inject.sh
+  - &save-cache-checksum
+    name: Save cache checksum
+    command: find . -name "package.json" | sort | xargs cat >> /tmp/cache-checksum
+  - &restore-cache
+    keys:
+      - dependencies-{{ checksum "/tmp/cache-checksum" }}
+  - &save-cache
+    key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+    paths:
+      - ./package-lock.json
+      - ./node_modules
+      - ./packages/client-react/package-lock.json
+      - ./packages/client-react/node_modules
+      - ./packages/connector-google-drive-v2/package-lock.json
+      - ./packages/connector-google-drive-v2/node_modules
+      - ./packages/connector-node-v1/package-lock.json
+      - ./packages/connector-node-v1/node_modules
+      - ./packages/server-nodejs/package-lock.json
+      - ./packages/server-nodejs/node_modules
+      - ./packages/demoapp/package-lock.json
+      - ./packages/demoapp/node_modules
+  - &install-dependencies
+    name: Install dependencies
+    # we use --unsafe-perm as current build using root user which fails
+    command: npm install --unsafe-perm
 defaults: &defaults
   docker:
     - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
@@ -8,37 +37,12 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - run: *inject-environment
+      - checkout: *save-cache-checksum
       - run:
-          name: Inject environment
-          command: /bin/env_inject.sh
-      - checkout
-      - run:
-          name: Save cache checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-      - restore_cache:
-          keys:
-            - dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            # - dependencies-
-      - run:
-          name: Install dependencies
-          # we use --unsafe-perm as current build using root user which fails
-          command: npm install --unsafe-perm
-      - save_cache:
-          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
-          paths:
-            - ./package-lock.json
-            - ./node_modules
-            - ./packages/client-react/package-lock.json
-            - ./packages/client-react/node_modules
-            - ./packages/connector-google-drive-v2/package-lock.json
-            - ./packages/connector-google-drive-v2/node_modules
-            - ./packages/connector-node-v1/package-lock.json
-            - ./packages/connector-node-v1/node_modules
-            - ./packages/server-nodejs/package-lock.json
-            - ./packages/server-nodejs/node_modules
-            - ./packages/demoapp/package-lock.json
-            - ./packages/demoapp/node_modules
+      - restore_cache: *restore-cache
+      - run: *install-dependencies
+      - save_cache: *save-cache
       - run:
           name: Linting sources
           command: npm run lint
@@ -54,22 +58,12 @@ jobs:
   build_release:
     <<: *defaults
     steps:
+      - run: *inject-environment
+      - checkout: *save-cache-checksum
       - run:
-          name: Inject environment
-          command: /bin/env_inject.sh
-      - checkout
-      - run:
-          name: Save cache checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-      - restore_cache:
-          keys:
-            - dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            # - dependencies-
-      - run:
-          name: Install dependencies
-          # we use --unsafe-perm as current build using root user which fails
-          command: npm install --unsafe-perm
+      - restore_cache: *restore-cache
+      - run: *install-dependencies
+      - save_cache: *save-cache
       - save_cache:
           key: dependencies-{{ checksum "/tmp/cache-checksum" }}
           paths:
@@ -92,38 +86,13 @@ jobs:
   deploy-demo:
     <<: *defaults
     steps:
+      - run: *inject-environment
+      - checkout: *save-cache-checksum
       - run:
-          name: Inject environment
-          command: /bin/env_inject.sh
-      - checkout
+      - restore_cache: *restore-cache
+      - run: *install-dependencies
+      - save_cache: *save-cache
       - setup_remote_docker
-      - run:
-          name: Save cache checksum
-          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
-      - restore_cache:
-          keys:
-            - dependencies-{{ checksum "/tmp/cache-checksum" }}
-            # fallback to using the latest cache if no exact match is found
-            # - dependencies-
-      - run:
-          name: Install dependencies
-          # we use --unsafe-perm as current build using root user which fails
-          command: npm install --unsafe-perm
-      - save_cache:
-          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
-          paths:
-            - ./package-lock.json
-            - ./node_modules
-            - ./packages/client-react/package-lock.json
-            - ./packages/client-react/node_modules
-            - ./packages/connector-google-drive-v2/package-lock.json
-            - ./packages/connector-google-drive-v2/node_modules
-            - ./packages/connector-node-v1/package-lock.json
-            - ./packages/connector-node-v1/node_modules
-            - ./packages/server-nodejs/package-lock.json
-            - ./packages/server-nodejs/node_modules
-            - ./packages/demoapp/package-lock.json
-            - ./packages/demoapp/node_modules
       - run:
           name: Build client static files
           command: |
