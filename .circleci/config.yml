@@ -12,43 +12,36 @@ jobs:
           name: Inject environment
           command: /bin/env_inject.sh
       - checkout
-      # - run:
-      #     name: save-cache-checksum
-      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
-
-      # - restore_cache:
-      #     keys:
-      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-      #       - v1-filemanager-{{ .Branch }}
-      #       - v1-filemanager-
-      # - run:
-      #     name: Update npm
-      #     command: npm i -g npm@6.2.0
-
-      # - run:
-      #     name: Install demo dependencies
-      #     command: (cd demo && yarn install)
-
+      - run:
+          name: Save cache checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
           command: npm install --unsafe-perm
+      - save_cache:
+          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+          paths:
+            - ./package-lock.json
+            - ./node_modules
+            - ./packages/client-react/package-lock.json
+            - ./packages/client-react/node_modules
+            - ./packages/connector-google-drive-v2/package-lock.json
+            - ./packages/connector-google-drive-v2/node_modules
+            - ./packages/connector-node-v1/package-lock.json
+            - ./packages/connector-node-v1/node_modules
+            - ./packages/server-nodejs/package-lock.json
+            - ./packages/server-nodejs/node_modules
+            - ./packages/demoapp/package-lock.json
+            - ./packages/demoapp/node_modules
       - run:
           name: Linting sources
           command: npm run lint
-
-      # - save_cache:
-      #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-      #     paths:
-      #       - ./yarn.lock
-      #       - ./node_modules
-      #       - ./packages/connector-node-v1/node_modules
-      #       - ./packages/server-nodejs/node_modules
-      #       - ./packages/connector-google-drive-v2/node_modules
-      #       - ./packages/client-react/node_modules
-      #       - ./demo/yarn.lock
-      #       - ./demo/node_modules
-
       - run:
           name: Run REST API tests
           working_directory: ./packages/server-nodejs
@@ -65,34 +58,33 @@ jobs:
           name: Inject environment
           command: /bin/env_inject.sh
       - checkout
-
-      # - run:
-      #     name: save-cache-checksum
-      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
-
-      # - restore_cache:
-      #     keys:
-      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-      #       - v1-filemanager-{{ .Branch }}
-      #       - v1-filemanager-
-
+      - run:
+          name: Save cache checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
           command: npm install --unsafe-perm
-
-      # - save_cache:
-      #     key: v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-      #     paths:
-      #       - ./yarn.lock
-      #       - ./node_modules
-      #       - ./packages/connector-node-v1/node_modules
-      #       - ./packages/server-nodejs/node_modules
-      #       - ./packages/connector-google-drive-v2/node_modules
-      #       - ./packages/client-react/node_modules
-      #       - ./demo/yarn.lock
-      #       - ./demo/node_modules
-
+      - save_cache:
+          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+          paths:
+            - ./package-lock.json
+            - ./node_modules
+            - ./packages/client-react/package-lock.json
+            - ./packages/client-react/node_modules
+            - ./packages/connector-google-drive-v2/package-lock.json
+            - ./packages/connector-google-drive-v2/node_modules
+            - ./packages/connector-node-v1/package-lock.json
+            - ./packages/connector-node-v1/node_modules
+            - ./packages/server-nodejs/package-lock.json
+            - ./packages/server-nodejs/node_modules
+            - ./packages/demoapp/package-lock.json
+            - ./packages/demoapp/node_modules
       - run:
           name: Publish to npm
           command: npm run publish
@@ -105,38 +97,53 @@ jobs:
           command: /bin/env_inject.sh
       - checkout
       - setup_remote_docker
-
-      # - run:
-      #     name: save-cache-checksum
-      #     command: find -name "package.json" | xargs cat >> /tmp/cache-checksum
-
-      # - restore_cache:
-      #     keys:
-      #       - v1-filemanager-{{ .Branch }}-{{ checksum "/tmp/cache-checksum" }}
-      #       - v1-filemanager-{{ .Branch }}
-      #       - v1-filemanager-
-
-      # - run:
-      #     name: Install demo dependencies
-      #     command: (cd demo && npm i)
-
+      - run:
+          name: Save cache checksum
+          command: find -name "package.json" | xargs cat > /tmp/cache-checksum
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "/tmp/cache-checksum" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
       - run:
           name: Install dependencies
           # we use --unsafe-perm as current build using root user which fails
           command: npm install --unsafe-perm
+      - save_cache:
+          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
+          paths:
+            - ./package-lock.json
+            - ./node_modules
+            - ./packages/client-react/package-lock.json
+            - ./packages/client-react/node_modules
+            - ./packages/connector-google-drive-v2/package-lock.json
+            - ./packages/connector-google-drive-v2/node_modules
+            - ./packages/connector-node-v1/package-lock.json
+            - ./packages/connector-node-v1/node_modules
+            - ./packages/server-nodejs/package-lock.json
+            - ./packages/server-nodejs/node_modules
+            - ./packages/demoapp/package-lock.json
+            - ./packages/demoapp/node_modules
       - run:
-          name: Build client static
+          name: Build client static files
           command: |
             cd packages/client-react
             npm run gh-pages:build
-            mv ./.gh-pages-tmp ../../demo && mv ../../demo/.gh-pages-tmp ../../demo/static
+            rm -rf ../demoapp/static
+            mkdir -p ../demoapp/static
+            mv .gh-pages-tmp/* ../demoapp/static/
       - run:
           name: Build server API docs
           command: |
             cd packages/server-nodejs
             npm run build-api-docs
-            mkdir -p ../../demo/static/api
-            cp -r api-docs.tmp/docs ../../demo/static/api
+            mkdir -p ../demoapp/static/api
+            cp -r api-docs.tmp/docs ../demoapp/static/api
+      - run:
+          name: Generate demo files
+          command: |
+            mkdir -p packages/demoapp/demoapp/demo-files
+            ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
       - run:
           name: Deploy docker demo image
           command: .circleci/scripts/deploy-docker-image.sh
@@ -157,9 +164,9 @@ workflows:
               branches:
                 ignore:
                   - release
-        - deploy-demo:
-            requires:
-              - build
+        # - deploy-demo:
+        #     requires:
+        #       - build
         - build_release:
             filters:
               tags:

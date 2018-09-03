@@ -918,7 +918,7 @@ describe('Create dirs', () => {
   });
 
   it('Create dir and attach file', done => {
-    let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
+    let workDirPath = `./test-files/${workChildDirName}`;
     let fileName = fs.readdirSync(workDirPath)[0];
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
     let route = `${baseUrl}/files`;
@@ -1370,7 +1370,7 @@ describe('Download', () => {
 
 describe('Upload file', () => {
   it('Upload file with incorrect id', (done) => {
-    let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
+    let workDirPath = `./test-files/${workChildDirName}`;
     let fileName = fs.readdirSync(workDirPath)[0];
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
     let route = `${baseUrl}/files`;
@@ -1394,7 +1394,7 @@ describe('Upload file', () => {
   });
 
   it('Upload file', done => {
-    let workDirPath = `../../demo/demo-fs/${workChildDirName}`;
+    let workDirPath = `./test-files/${workChildDirName}`;
     let fileName = fs.readdirSync(workDirPath)[0];
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
     let route = `${baseUrl}/files`;
