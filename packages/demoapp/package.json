@@ -1,0 +1,16 @@
+{
+  "name": "@opuscapita/filemanger-demoapp",
+  "version": "1.1.0-beta.5",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "private": true,
+  "author": "Alexey Sergeev <sab@scand.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@opuscapita/filemanager-server": "1.1.0-beta.5",
+    "compression": "1.7.1",
+    "express": "4.16.2"
+  }
+}
