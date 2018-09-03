@@ -118,11 +118,8 @@ jobs:
           command: .circleci/scripts/deploy-docker-image.sh
       - run:
           name: Deploy demo installation
-          command: |
-            az login -u "${AZURE_USER}" -p "${AZURE_PASS}" &> /tmp/az-login.log
-            az aks get-credentials -g ${MINSK_CORE_K8S_AZURE_RG} -n ${MINSK_CORE_K8S_AZURE_NAME}
-            helm init --client-only
-            .helm/install.sh
+          working_directory: ~/build/.helm
+          command: ./upgrade.sh
 
 workflows:
   version: 2
