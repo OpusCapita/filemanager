@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. .circleci/scripts/common.sh
+. ../common.sh
 
 RELEASE_NAME=$(slugify "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}")
 

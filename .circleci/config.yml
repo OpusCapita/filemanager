@@ -95,10 +95,11 @@ jobs:
             ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
       - run:
           name: Deploy docker demo image
-          command: .circleci/scripts/deploy-docker-image.sh
+          working_directory: .circleci/scripts
+          command: deploy-docker-image.sh
       - run:
           name: Deploy demo installation
-          working_directory: ~/build/.helm
+          working_directory: .circleci/scripts/helm
           command: ./upgrade.sh
 
 workflows:
