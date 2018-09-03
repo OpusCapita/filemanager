@@ -38,8 +38,8 @@ jobs:
     <<: *defaults
     steps:
       - run: *inject-environment
-      - checkout: *save-cache-checksum
-      - run:
+      - checkout
+      - run: *save-cache-checksum
       - restore_cache: *restore-cache
       - run: *install-dependencies
       - save_cache: *save-cache
@@ -59,8 +59,8 @@ jobs:
     <<: *defaults
     steps:
       - run: *inject-environment
-      - checkout: *save-cache-checksum
-      - run:
+      - checkout
+      - run: *save-cache-checksum
       - restore_cache: *restore-cache
       - run: *install-dependencies
       - save_cache: *save-cache
@@ -87,8 +87,8 @@ jobs:
     <<: *defaults
     steps:
       - run: *inject-environment
-      - checkout: *save-cache-checksum
-      - run:
+      - checkout
+      - run: *save-cache-checksum
       - restore_cache: *restore-cache
       - run: *install-dependencies
       - save_cache: *save-cache
