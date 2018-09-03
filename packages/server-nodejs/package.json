@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare-demo": "../../demo-filesystem/populate-demo-fs.sh",
+    "prepare-demo": "rimraf test-files && mkdirp test-files && ../../demo-filesystem/populate-demo-fs.sh ./test-files",
     "start": "npm run prepare-demo && cross-env NODE_ENV=development node start.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "build-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml2html api-docs.tmp/source/api-docs/main.raml > api-docs.tmp/docs/index.html",
     "validate-api-docs": "rimraf -rf api-docs.tmp && mkdirp api-docs.tmp/source api-docs.tmp/docs && cp -r docs/api-docs api-docs.tmp/source && sed -i s@__env__baseURI__@$SERVER_URL@g api-docs.tmp/source/api-docs/main.raml && raml-validate api-docs.tmp/source/api-docs/main.raml",
-    "pretest-restapi": "rimraf test-files && mkdirp test-files && ../../demo-filesystem/populate-demo-fs.sh ./test-files",
+    "pretest-restapi": "npm run prepare-demo",
     "test-restapi": "pm2 start start.js --name 'fmServer' && mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js --reporter mocha-multi-reporters --reporter-options configFile=./config/test/reporters.json && pm2 delete 'fmServer'",
     "posttest-restapi": "rimraf test-files",
     "build": "node -e \"console.log('Building \"$npm_package_name\" version \"$npm_package_version\"! ')\""
