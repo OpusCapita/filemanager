@@ -64,21 +64,6 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install-dependencies
       - save_cache: *save-cache
-      - save_cache:
-          key: dependencies-{{ checksum "/tmp/cache-checksum" }}
-          paths:
-            - ./package-lock.json
-            - ./node_modules
-            - ./packages/client-react/package-lock.json
-            - ./packages/client-react/node_modules
-            - ./packages/connector-google-drive-v2/package-lock.json
-            - ./packages/connector-google-drive-v2/node_modules
-            - ./packages/connector-node-v1/package-lock.json
-            - ./packages/connector-node-v1/node_modules
-            - ./packages/server-nodejs/package-lock.json
-            - ./packages/server-nodejs/node_modules
-            - ./packages/demoapp/package-lock.json
-            - ./packages/demoapp/node_modules
       - run:
           name: Publish to npm
           command: npm run publish
