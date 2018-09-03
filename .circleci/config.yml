@@ -164,9 +164,9 @@ workflows:
               branches:
                 ignore:
                   - release
-        # - deploy-demo:
-        #     requires:
-        #       - build
+        - deploy-demo:
+            requires:
+              - build
         - build_release:
             filters:
               tags:
