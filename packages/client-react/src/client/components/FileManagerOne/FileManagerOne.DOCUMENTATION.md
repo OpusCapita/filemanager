@@ -1,6 +1,8 @@
-See [FileNavigator documentation and example](http://opuscapita-filemanager-demo-master.azurewebsites.net/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
+See [FileNavigator documentation and example](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
 
-This module was created for testing in IE11 FileNavigator for nodeV1 API
+This module was created for testing in IE11 FileNavigator for nodeV1 API.
+
+**TODO - fix IE11 issues, then delete it**
 
 ### Code Example
 
