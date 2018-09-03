@@ -54,9 +54,9 @@ jobs:
           working_directory: ./packages/server-nodejs
           command: npm run test-restapi
       - store_test_results:
-          path: ~/repo/packages/server-nodejs/test-results/junit.xml
+          path: ./packages/server-nodejs/test-results/junit.xml
       - store_artifacts:
-          path: ~/repo/packages/server-nodejs/test-results/junit.xml
+          path: ./packages/server-nodejs/test-results/junit.xml
 
   build_release:
     <<: *defaults
