@@ -95,8 +95,7 @@ jobs:
             ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
       - run:
           name: Deploy docker demo image
-          working_directory: .circleci/scripts
-          command: ./deploy-docker-image.sh
+          command: .circleci/scripts/deploy-docker-image.sh
       - run:
           name: Deploy demo installation
           working_directory: .circleci/scripts/helm
