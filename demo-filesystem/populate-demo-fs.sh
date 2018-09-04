@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-cp -r $SCRIPT_DIR/files/* $1/
+for FILE in ${SCRIPT_DIR}/files; do cp -R $FILE $1; done;
 mkdir -p $1/Misc
 
 ########    User settings     ############
