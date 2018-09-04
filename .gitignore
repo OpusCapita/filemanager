@@ -22,8 +22,7 @@ coverage
 .nyc_output
 
 /server-nodejs/api-docs.tmp
-/demo/demo-fs
-/demo/static
+packages/demoapp/demo-files
 packages/client-react/.gh-pages-tmp
 packages/client-react/www/static
 packages/server-nodejs/api-tests.tmp
