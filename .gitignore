@@ -27,4 +27,5 @@ packages/client-react/.gh-pages-tmp
 packages/client-react/www/static
 packages/server-nodejs/api-tests.tmp
 packages/server-nodejs/test-results
+packages/server-nodejs/test-files
 packages/server-nodejs/api-docs.tmp
