@@ -382,7 +382,7 @@ class FileNavigator extends Component {
     getSortState: () => ({ sortBy: this.state.sortBy, sortDirection: this.state.sortDirection })
   });
 
-  getCapability = ({ context, isDataView = false }) => {
+  getContextCapabilities = ({ context, isDataView = false }) => {
     const { apiOptions } = this.props;
     const { initializedCapabilities } = this.state;
     return initializedCapabilities.
@@ -453,10 +453,10 @@ class FileNavigator extends Component {
       onClick: () => this.handleLocationBarChange(o.id)
     }));
 
-    const rowContextMenuItems = this.getCapability({ context: 'row', isDataView: true });
-    const filesViewContextMenuItems = this.getCapability({ context: 'files-view', isDataView: true });
-    const toolbarItems = this.getCapability({ context: 'toolbar' });
-    const newButtonItems = this.getCapability({ context: 'new-button' });
+    const rowContextMenuItems = this.getContextCapabilities({ context: 'row', isDataView: true });
+    const filesViewContextMenuItems = this.getContextCapabilities({ context: 'files-view', isDataView: true });
+    const toolbarItems = this.getContextCapabilities({ context: 'toolbar' });
+    const newButtonItems = this.getContextCapabilities({ context: 'new-button' });
 
     const rowContextMenuId = `row-context-menu-${id}`;
     const filesViewContextMenuId = `files-view-context-menu-${id}`;
