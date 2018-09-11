@@ -12,4 +12,4 @@ WORKDIR /build/packages/demoapp
 
 EXPOSE $PORT
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

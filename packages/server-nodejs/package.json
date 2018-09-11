@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare-demo": "rimraf test-files && mkdirp test-files && ../../demo-filesystem/populate-demo-fs.sh ./test-files",
+    "prepare-demo": "rimraf test-files && mkdirp test-files && cross-env ../../demo-filesystem/populate-demo-fs.sh ./test-files",
     "start": "npm run prepare-demo && cross-env NODE_ENV=development node start.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
