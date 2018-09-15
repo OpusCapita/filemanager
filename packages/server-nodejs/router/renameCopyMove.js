@@ -15,13 +15,13 @@ const MAX_RETRIES = 3;
 const ERROR_TARGET_EXISTS = 'EEXIST';
 
 module.exports = ({
-  options,
+  config,
   req,
   res,
   handleError,
   path: relativeItemPath
 }) => {
-  if (options.readOnly) {
+  if (config.readOnly) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
@@ -49,13 +49,13 @@ module.exports = ({
     ));
   }
 
-  const absItemPath = path.join(options.fsRoot, relativeItemPath);
+  const absItemPath = path.join(config.fsRoot, relativeItemPath);
   const relativeParentPaths = parentIds.map(id => id2path(id));
-  const absParentPaths = relativeParentPaths.map(relativeParentPath => path.join(options.fsRoot, relativeParentPath));
+  const absParentPaths = relativeParentPaths.map(relativeParentPath => path.join(config.fsRoot, relativeParentPath));
   let targetAbsPath, operation, targetRelativePath;
 
   if (parentIds.length === 0) {
-    options.logger.info(`Rename ${absItemPath} requested by ${getClientIp(req)}`);
+    config.logger.info(`Rename ${absItemPath} requested by ${getClientIp(req)}`);
 
     try {
       checkName(basename);
@@ -70,7 +70,7 @@ module.exports = ({
     targetAbsPath = path.dirname(absItemPath);
     operation = fs.move;
   } else {
-    options.logger.info(`Copy/move ${absItemPath} requested by ${getClientIp(req)}`);
+    config.logger.info(`Copy/move ${absItemPath} requested by ${getClientIp(req)}`);
 
     if (basename) {
       try {
@@ -142,7 +142,7 @@ module.exports = ({
     );
   }(MAX_RETRIES)).
     then(_ => getResource({
-      options,
+      config,
       parent: targetRelativePath,
       basename
     })).

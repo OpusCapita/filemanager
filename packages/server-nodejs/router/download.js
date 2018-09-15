@@ -19,7 +19,7 @@ const encodeRFC5987ValueChars = str => encodeURIComponent(str).
   // so we can allow for a little better readability over the wire: |`^
   replace(/%(7C|60|5E)/g, (str, hex) => String.fromCharCode(parseInt(hex, 16)));
 
-module.exports = ({ options, req, res, handleError }) => {
+module.exports = ({ config, req, res, handleError }) => {
   const ids = Array.isArray(req.query.items) ? req.query.items : [req.query.items];
   const preview = req.query.preview === 'true';
   let reqPaths;
@@ -33,19 +33,19 @@ module.exports = ({ options, req, res, handleError }) => {
     ));
   }
 
-  const absPaths = reqPaths.map(reqPath => path.join(options.fsRoot, reqPath));
-  options.logger.info(`Download ${absPaths} requested by ${getClientIp(req)}`);
+  const absPaths = reqPaths.map(reqPath => path.join(config.fsRoot, reqPath));
+  config.logger.info(`Download ${absPaths} requested by ${getClientIp(req)}`);
 
   if (absPaths.length === 1) {
     return fs.stat(absPaths[0]).
-      then(stat => {
-        if (stat.isDirectory()) {
+      then(stats => {
+        if (stats.isDirectory()) {
           res.zip({
             files: [{
               path: absPaths[0],
-              name: absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])
+              name: absPaths[0] === config.fsRoot ? config.rootName : path.basename(absPaths[0])
             }],
-            filename: (absPaths[0] === options.fsRoot ? options.rootName : path.basename(absPaths[0])) + '.zip'
+            filename: (absPaths[0] === config.fsRoot ? config.rootName : path.basename(absPaths[0])) + '.zip'
           });
         } else if (preview) {
           // Sets the Content-Type response HTTP header field based on the filename’s extension.
@@ -82,7 +82,7 @@ module.exports = ({ options, req, res, handleError }) => {
       path: absPath,
       name: path.basename(absPath)
     })),
-    filename: (parentPath === options.fsRoot ? options.rootName : path.basename(parentPath)) + '.zip'
+    filename: (parentPath === config.fsRoot ? config.rootName : path.basename(parentPath)) + '.zip'
   }).
     catch(handleError);
 };

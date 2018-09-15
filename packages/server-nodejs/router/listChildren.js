@@ -11,7 +11,7 @@ const {
 } = require('./lib');
 
 module.exports = ({
-  options,
+  config,
   req,
   res,
   handleError,
@@ -20,20 +20,24 @@ module.exports = ({
   let sorter;
 
   try {
-    sorter = getSorter(req.query);
+    sorter = getSorter({
+      caseSensitive: false,
+      orderBy: req.query.orderBy,
+      orderDirection: req.query.orderDirection
+    });
   } catch (err) {
     return handleError(err);
   }
 
-  const absPath = path.join(options.fsRoot, userPath);
-  options.logger.info(`Children for ${absPath} requested by ${getClientIp(req)}`);
+  const absPath = path.join(config.fsRoot, userPath);
+  config.logger.info(`Children for ${absPath} requested by ${getClientIp(req)}`);
 
   return fs.readdir(absPath).
     then(basenames => Promise.all(
       basenames.
         map(
           basename => getResource({
-            options,
+            config,
             parent: userPath,
             basename
           }).
@@ -47,8 +51,8 @@ module.exports = ({
         ).
         filter(resource => resource)
     )).
-    then(items => res.json({
-      items: items.sort(sorter)
+    then(resources => res.json({
+      items: resources.sort(sorter)
     })).
     catch(handleError);
 };

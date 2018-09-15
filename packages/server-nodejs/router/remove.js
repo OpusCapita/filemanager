@@ -5,13 +5,13 @@ const fs = require('fs-extra');
 const getClientIp = require('../utils/get-client-ip');
 
 module.exports = ({
-  options,
+  config,
   req,
   res,
   handleError,
   path: userPath
 }) => {
-  if (options.readOnly) {
+  if (config.readOnly) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
@@ -25,8 +25,8 @@ module.exports = ({
     ));
   }
 
-  const absPath = path.join(options.fsRoot, userPath);
-  options.logger.info(`Delete ${absPath} requested by ${getClientIp(req)}`);
+  const absPath = path.join(config.fsRoot, userPath);
+  config.logger.info(`Delete ${absPath} requested by ${getClientIp(req)}`);
 
   return fs.remove(absPath).
     then(_ => res.status(200).end()).

@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const filemanagerMiddleware = require('./middleware');
 const logger = require('./logger');

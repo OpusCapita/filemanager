@@ -1,15 +1,15 @@
 # Summary
 
-| Method                                                      | REST   | URL                    | Request                             | Response                              |
-|-------------------------------------------------------------|--------|------------------------|-------------------------------------|---------------------------------------|
-| [Create new file/dir](#create-new-file-or-directory)        | POST   | api/files              | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?name,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource<br />or<br />[... :file-stats-resource]                  |
-| [Get dir stats](#get-file-or-directory-statistics) for root | GET    | api/files              | -                                   | :file-stats-resource                  |
-| [Get file/dir stats](#get-file-or-directory-statistics)     | GET    | api/files/:id          | -                                   | :file-stats-resource                  |
-| [Delete file/dir](#delete-file-or-directory)                | DELETE | api/files/:id          | -                                   | -                                     |
-| [Get dir children list](#get-directory-children-list)       | GET    | api/files/:id/children | orderBy=...<br />&orderDirection=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource]<br />} |
-| [Search for files/dirs](#search-for-filesdirs)              | GET    | api/files/:id/search | itemNameSubstring=...<br />&itemNameCaseSensitive=...<br />&itemType=...<br />&recursive=...    | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPage<br />} |
-| [Rename/copy/move](#rename-andor-copymove-filedir-to-destination) | PATCH   | api/files/:id    | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource |
-| [Get file(s)/compressed dir](#get-filescompressed-dir) | GET    | api/download           | <span style="word-wrap: break-word; white-space: pre;">preview=...<br />&items=:id<br />&items=:id...</span>                          | :binary-data                          |
+Method | REST | URL | Request | Response
+-------|------|-----|---------|---------
+[Create new file/dir](#create-new-file-or-directory) | POST | api/files | {<br />&nbsp;&nbsp;parentId,<br />&nbsp;&nbsp;type,<br />&nbsp;&nbsp;?name,<br />&nbsp;&nbsp;?files<br />} | :file-stats-resource<br />or<br />[... :file-stats-resource]
+[Get dir stats](#get-file-or-directory-statistics) for root | GET | api/files | - | :file-stats-resource
+[Get file/dir stats](#get-file-or-directory-statistics) | GET | api/files/:id | - | :file-stats-resource
+[Delete file/dir](#delete-file-or-directory) | DELETE | api/files/:id | - | -
+[Get dir children list](#get-directory-children-list) | GET | api/files/:id/children | orderBy=...<br />&orderDirection=... | {<br />&nbsp;&nbsp;items: [... :file-stats-resource]<br />}
+[Search for files/dirs](#search-for-filesdirs) | GET | api/files/:id/search | itemNameSubstring=...<br />&itemNameCaseSensitive=...<br />&itemType=...<br />&recursive=...<br />&fileContentSubstring=...<br />&fileContentCaseSensitive=... | {<br />&nbsp;&nbsp;items: [... :file-stats-resource],<br />&nbsp;&nbsp;nextPage<br />}
+[Rename/copy/move](#rename-andor-copymove-filedir-to-destination) | PATCH | api/files/:id | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource
+[Get file(s)/compressed dir](#get-filescompressed-dir) | GET | api/download | <span style="word-wrap: break-word; white-space: pre;">preview=...<br />&items=:id<br />&items=:id...</span> | :binary-data
 
 File/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/package/base64url)-variation).  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
@@ -58,12 +58,12 @@ To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/)
 
 FormData instance with the following field name/value pairs.
 
-| Field Name | Field Value  | Comments               |
-|------------|--------------|------------------------|
-|  parentId  | \<string\>   |                        |
-|  type      | \<string\>   |                        |
-| ?name      | \<string\>   | for type 'dir' only    |
-| ?files     | \<FileList\> | for type 'file' only   |
+Field Name | Field Value       | Comments
+-----------|-------------------|---
+ parentId  | \<string\>        |
+ type      | `file` or `dir`   |
+?name      | \<string\>        | for type `dir` only
+?files     | \<FileList\>      | for type `file` only
 
 ### Response
 
@@ -103,10 +103,10 @@ If successful, this method returns an empty response body.
 
 All query paramaters are optional
 
-| Name           | Possible Values        | Default |
-|----------------|------------------------|---------|
-| orderBy        | name<br />modifiedTime | name    |
-| orderDirection | ASC<br />DESC          | ASC     |
+Name           | Possible Values          | Default
+---------------|--------------------------|---
+orderBy        | `name` or `modifiedTime` | `name`
+orderDirection | `ASC` or `DESC`          | `ASC`
 
 TODO in v2:
 
@@ -129,12 +129,14 @@ TODO in v2:
 
 All query paramaters are optional
 
-| Name                     | Possible Values | Default           |
-|--------------------------|-----------------|-------------------|
-| itemNameSubstring        | any string      | -                 |
-| itemNameCaseSensitive    | true<br />false | false             |
-| itemType                 | file<br />dir   | both file and dir |
-| recursive                | true<br />false | true              |
+Name                     | Possible Values   | Default               | Comments
+-------------------------|-------------------|-----------------------|---
+itemNameSubstring        | <string>          | -                     |
+itemNameCaseSensitive    | `true` or `false` | `false`               | Ignored in Windows server OS and if `itemNameSubstring` is not set.
+itemType                 | `file` or `dir`   | both `file` and `dir` | Must be `file` if `fileContentSubstring` is set.
+recursive                | `true` or `false` | `true`                |
+fileContentSubstring     | <string>          | -                     | `itemType` must be `file`
+fileContentCaseSensitive | `true` or `false` | `false`               | Ignored if `fileContentSubstring` is not set.
 
 TODO in v2:
 
@@ -145,7 +147,7 @@ TODO in v2:
 ```javascript
 {
   items: [<file stats resource>, ...],
-  ?nextPage: <string, url path part, i.e. everything after host/port, starting with slash>
+  ?nextPage: <string, part of URL with parameters without leading question mark, e.g. "cacheId=21900207136127001">
 }
 ```
 
@@ -171,12 +173,12 @@ None.
 
 ### Request Query Parameters
 
-| Name           | Value         | Default | Comments                                                    |
-|----------------|---------------|---------|-------------------------------------------------------------|
-| preview        | true or false | false   | Applicable only when single **items** parameter is file ID  |
-| items          | dir/file id   | -       | Both folder and file IDs are allowed as **items**           |
-| items          | dir/file id   | -       | When multiple **items**, all _must_ be from the same folder |
-| ...            | ...           | ...     |                                                             |
+Name           | Value             | Default   | Comments
+---------------|-------------------|-----------|---
+preview        | `true` or `false` | `false`   | Applicable only when single **items** parameter is file ID
+items          | dir/file id       | -         | Both folder and file IDs are allowed as **items**
+items          | dir/file id       | -         | When multiple **items**, all _must_ be from the same folder
+...            | ...               | ...       |
 
 ### Response
 

@@ -6,16 +6,16 @@ const getClientIp = require('../utils/get-client-ip');
 const { getResource } = require('./lib');
 
 module.exports = ({
-  options,
+  config,
   req,
   res,
   handleError,
   path: userPath
 }) => {
-  options.logger.info(`Stat for ${path.join(options.fsRoot, userPath)} requested by ${getClientIp(req)}`);
+  config.logger.info(`Stat for ${path.join(config.fsRoot, userPath)} requested by ${getClientIp(req)}`);
 
   getResource({
-    options,
+    config,
     path: userPath
   }).
     then(resource => res.json(resource)).

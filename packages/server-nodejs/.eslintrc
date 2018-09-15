@@ -1,0 +1,15 @@
+{
+  "extends": "opuscapita",
+  "env": {
+    "mocha": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "script",
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "strict": [2, "global"]
+  }
+}

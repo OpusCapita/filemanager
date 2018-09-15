@@ -97,15 +97,15 @@ const upload = multer({
 }).
   array('files');
 
-module.exports = ({ options, req, res, handleError }) => {
-  if (options.readOnly) {
+module.exports = ({ config, req, res, handleError }) => {
+  if (config.readOnly) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
     ));
   }
 
-  fsRoot = options.fsRoot;
+  fsRoot = config.fsRoot;
 
   return upload(req, res, err => {
     if (err) {
@@ -134,14 +134,14 @@ module.exports = ({ options, req, res, handleError }) => {
         ));
       }
 
-      const parentPath = path.join(options.fsRoot, reqParentPath);
+      const parentPath = path.join(config.fsRoot, reqParentPath);
       const dirPath = path.join(parentPath, name);
-      options.logger.info(`Create dir ${dirPath} requested by ${getClientIp(req)}`);
+      config.logger.info(`Create dir ${dirPath} requested by ${getClientIp(req)}`);
 
       return fs.access(parentPath). // Check whether parent exists.
         then(_ => fs.ensureDir(dirPath)).
         then(_ => getResource({
-          options,
+          config,
           parent: reqParentPath,
           basename: name
         })).
@@ -155,16 +155,16 @@ module.exports = ({ options, req, res, handleError }) => {
         ));
       }
 
-      options.logger.info(`Upload ${req.files.map(({ path }) => path)} requested by ${getClientIp(req)}`);
+      config.logger.info(`Upload ${req.files.map(({ path }) => path)} requested by ${getClientIp(req)}`);
 
       return Promise.all(
         req.files.map(({ filename }) => getResource({
-          options,
+          config,
           parent: reqParentPath,
           basename: filename
         }))
       ).
-        then(items => res.json(items)).
+        then(resources => res.json(resources)).
         catch(handleError);
     } else {
       return handleError(Object.assign(

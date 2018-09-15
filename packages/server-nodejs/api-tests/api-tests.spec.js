@@ -245,7 +245,7 @@ describe('Get resources metadata', () => {
 });
 
 describe('Search for files/dirs', () => {
-  it('Search in root directory (default params)', (done) => {
+  it('Search in root directory by its first child name substring', (done) => {
     let nameSubstring = workChildDirName.slice(1, -1);
 
     request.
@@ -272,45 +272,36 @@ describe('Search for files/dirs', () => {
       });
   });
 
-  it('Search with incorrect id', (done) => {
+  it('Search with invalid id', done => {
     request.
       get(`${baseUrl}/files/${createIncorrectId(workChildDirId, 'incorrect_dir_name')}/search`).
       query({
         itemNameSubstring: 'name'
       }).
+      then(res => done(new Error(`Searching with invalid ID must fail`))).
       catch(err => {
-        if (err && err.response && err.response.request.res) {
+        if (err && err.response && err.response.request && err.response.request.res) {
           expect(err.response.request.res.statusCode).to.equal(410);
           done();
         } else {
           done(err);
         }
-      }).
-      catch(err => {
-        done(err);
       });
-  });
+  }).timeout(3000);
 
-  it('Search in root directory (default params)', (done) => {
-    let nameSubstring = 'c';
-
+  it('Search in root directory for files with letter "c"', done => {
     request.
       get(`${baseUrl}/files/${rootId}/search`).
       query({
-        itemNameSubstring: nameSubstring
+        itemNameSubstring: 'c'
       }).
-      then(res => {
-        let jsonData = res.body;
-
-        expect(res.status).to.equal(200);
+      then(({ status, body: jsonData }) => {
+        expect(status).to.equal(200);
         expect(jsonData.items.length > 1).to.be.true; // eslint-disable-line
-
         done();
       }).
-      catch(err => {
-        done(err);
-      });
-  });
+      catch(done);
+  }).timeout(5000);
 
   describe('Various itemNameCaseSensitive', () => {
     it('Default params', (done) => {
@@ -517,6 +508,133 @@ describe('Search for files/dirs', () => {
         }).
         catch(err => {
           done(err);
+        });
+    });
+  });
+
+  describe('Various fileContentSubstring', () => {
+    it('Case-insensitive content search by default', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          fileContentSubstring: 'log'
+        }).
+        then(res => {
+          let jsonData = res.body;
+          expect(res.status).to.equal(200);
+          expect(jsonData.items).to.be.an('array');
+
+          expect(jsonData.items.map(({ name }) => name)).to.have.members([
+            'gpl.pdf',
+            'hello-world.js'
+          ]);
+
+          done();
+        }).
+        catch(err => {
+          done(err);
+        });
+    });
+
+    it('Case-insensitive content search', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          fileContentSubstring: 'log',
+          fileContentCaseSensitive: 'false'
+        }).
+        then(res => {
+          let jsonData = res.body;
+          expect(res.status).to.equal(200);
+          expect(jsonData.items).to.be.an('array');
+
+          expect(jsonData.items.map(({ name }) => name)).to.have.members([
+            'gpl.pdf',
+            'hello-world.js'
+          ]);
+
+          done();
+        }).
+        catch(err => {
+          done(err);
+        });
+    });
+
+    it('Case-insensitive content + filename search', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          itemNameSubstring: 'hello',
+          itemNameCaseSensitive: 'true',
+          fileContentSubstring: 'log',
+          fileContentCaseSensitive: 'false'
+        }).
+        then(res => {
+          let jsonData = res.body;
+          expect(res.status).to.equal(200);
+          expect(jsonData.items).to.be.an('array');
+          expect(jsonData.items.map(({ name }) => name)).to.have.members(['hello-world.js']);
+          done();
+        }).
+        catch(err => {
+          done(err);
+        });
+    });
+
+    it('Case-sensitive content search', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          fileContentSubstring: 'log',
+          fileContentCaseSensitive: 'true'
+        }).
+        then(res => {
+          let jsonData = res.body;
+          expect(res.status).to.equal(200);
+          expect(jsonData.items).to.be.an('array');
+          expect(jsonData.items.map(({ name }) => name)).to.have.members(['gpl.pdf']);
+          done();
+        }).
+        catch(err => {
+          done(err);
+        });
+    });
+
+    it('Invalid content search for a dirs', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          fileContentSubstring: 'log',
+          fileContentCaseSensitive: 'true',
+          itemType: 'dir'
+        }).
+        then(res => done(new Error(`Searching with invalid "itemType" must fail`))).
+        catch(err => {
+          if (err && err.response && err.response.request && err.response.request.res) {
+            expect(err.response.request.res.statusCode).to.equal(400);
+            done();
+          } else {
+            done(err);
+          }
+        });
+    });
+
+    it('Invalid content search for a dirs/files', (done) => {
+      request.
+        get(`${baseUrl}/files/${workChildDirId}/search`).
+        query({
+          fileContentSubstring: 'log',
+          fileContentCaseSensitive: 'true',
+          itemType: ['dir', 'file']
+        }).
+        then(res => done(new Error(`Searching with invalid "itemType" must fail`))).
+        catch(err => {
+          if (err && err.response && err.response.request && err.response.request.res) {
+            expect(err.response.request.res.statusCode).to.equal(400);
+            done();
+          } else {
+            done(err);
+          }
         });
     });
   });

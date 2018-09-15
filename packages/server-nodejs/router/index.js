@@ -11,7 +11,7 @@ const {
   handleError
 } = require('./lib');
 
-module.exports = options => {
+module.exports = config => {
   const router = express.Router();
 
   router.use(function(req, res, next) {
@@ -28,11 +28,11 @@ module.exports = options => {
   const connect = (moduleLocation, getArgs) => (req, res, next) => {
     require(moduleLocation)(Object.assign(
       {
-        options,
+        config,
         req,
         res,
         next,
-        handleError: handleError({ options, req, res })
+        handleError: handleError({ config, req, res })
       },
       getArgs ? getArgs() : {}
     ));
@@ -42,7 +42,7 @@ module.exports = options => {
     try {
       reqPath = id2path(id);
     } catch (err) {
-      return handleError({ options, req, res })(Object.assign(
+      return handleError({ config, req, res })(Object.assign(
         err,
         { httpCode: 400 }
       ));
@@ -69,6 +69,6 @@ module.exports = options => {
   router.route('/download').
     get(connect('./download'));
 
-  router.use((err, req, res, next) => handleError({ options, req, res })(err));
+  router.use((err, req, res, next) => handleError({ config, req, res })(err));
   return router;
 };
