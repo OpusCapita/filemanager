@@ -1,0 +1,10 @@
+dependencies:
+  - name: selfkiller
+    version: 0.0.1
+    repository: file://../dependencies/charts/selfkiller
+  - name: slack-notifications
+    version: 0.0.1
+    repository: file://../dependencies/charts/slack-notifications
+  - name: github-status-deployment-link
+    version: 0.0.1
+    repository: file://../dependencies/charts/github-status-deployment-link

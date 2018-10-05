@@ -63,7 +63,7 @@ jobs:
               echo "This step is skipped as this is not a release build"
             fi
 
-  deploy-to-cloud:
+  build-demo:
     <<: *defaults
     steps:
       - run: *inject-environment
@@ -96,9 +96,18 @@ jobs:
       - run:
           name: Deploy docker demo image
           command: .circleci/scripts/deploy-docker-image.sh
+  deploy-to-cloud:
+    <<: *defaults
+    steps:
+      - run: *inject-environment
+      - checkout
       - run:
-          name: Deploy demo installation
-          working_directory: .circleci/scripts/helm
+          name: Prepare helm chart dependencies
+          working_directory: ~/build/.circleci/helm
+          command: git submodule update --init ./dependencies
+      - run:
+          name: (Re)deploy application to azure
+          working_directory: ~/build/.circleci/helm/chart
           command: ./upgrade.sh
 
 workflows:
@@ -106,9 +115,13 @@ workflows:
   build-and-deploy-to-cloud:
     jobs:
       - build
-      - deploy-to-cloud:
+      - build-demo:
           requires:
             - build
           filters:
             tags:
               ignore: /.*/
+      - deploy-to-cloud:
+          requires:
+            - build-demo
+

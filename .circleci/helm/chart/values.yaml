@@ -5,11 +5,7 @@ image:
 ingress:
   host: ""
   baseUrl: ""
-github:
-  project: ""
 google:
   apiKey: ""
   clientId: ""
-vcs:
-  ref: ""
 dockerSecret: "dockerhub"
