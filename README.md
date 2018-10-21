@@ -59,7 +59,7 @@ let filemanager = require('@opuscapita/filemanager-server');
 filemanager.server.run(config);
 ```
 
-* [Use as middleware](https://github.com/OpusCapita/filemanager/blob/master/demo/index.js)
+* [Use as middleware](https://github.com/OpusCapita/filemanager/blob/abbe7b00f57f86c25ed5eae2673920c02ec1859f/packages/demoapp/index.js#L5)
 
 #### How to use Client React
 
