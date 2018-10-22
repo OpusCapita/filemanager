@@ -8,7 +8,9 @@ RELEASE_NAME=$(slugify "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}")
 PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
 DEPLOYMENT_URL="http://${MINSK_CORE_K8S_HOST}${BASE_URL}"
 
-/bin/scripts/login/aks-login.sh ${MINSK_CORE_K8S_AZURE_RG} ${MINSK_CORE_K8S_AZURE_NAME}
+az login -u "$AZURE_USER" -p "$AZURE_PASS" &> /tmp/az-login.log
+az account set -s "$MINSK_CORE_AZURE_SUBSCRIPTION_ID"
+az aks get-credentials -n "$MINSK_CORE_K8S_AZURE_NAME" -g "$MINSK_CORE_K8S_AZURE_RG"
 
 helm init --client-only
 
