@@ -4,14 +4,13 @@
 [![badge-npm](https://img.shields.io/npm/v/@opuscapita/react-filemanager.svg)](https://www.npmjs.com/package/@opuscapita/react-filemanager)
 [![badge-license](https://img.shields.io/github/license/OpusCapita/filemanager.svg)](./LICENSE)
 
-## [Demo](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
+## [Demo](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Sorry for missing :earth_americas: SSL cert at demo site. We'll fix it :soon:
  
-## [React Documentation](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=false)
+## [React Documentation](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
 
 > Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
-
 
 ### Packages
 
@@ -35,7 +34,7 @@ You can write you own custom connectors (documentation on how to do it will appe
 
 #### How to use Server Node
 
-[**Server Node API v1 Documentation**](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/api/docs/)
+[**Server Node API v1 Documentation**](https://demo.core.dev.opuscapita.com/filemanager/master/api/docs)
 
 Install package
 
