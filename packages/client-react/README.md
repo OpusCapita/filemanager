@@ -6,7 +6,7 @@ Install npm package:
 
 `npm install -E @opuscapita/react-filemanager`
 
-See interactive example for more details: [demo](http://opuscapita-filemanager.azurewebsites.net/?currentComponentId=%40opuscapita%2Freact-filemanager%2F0.0.1%2FFileNavigator&maxContainerWidth=100%25&showSidebar=true)
+See interactive example for more details: [demo](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
 > Demo powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
 
