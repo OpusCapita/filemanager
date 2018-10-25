@@ -6,8 +6,6 @@
 
 ## [Demo](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileManager&maxContainerWidth=100%25&showSidebar=false)
 
-> Sorry for missing :earth_americas: SSL cert at demo site. We'll fix it :soon:
- 
 ## [React Documentation](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
 
 > Demo and react documentation are powered by [React Showroom](https://github.com/OpusCapita/react-showroom-client)
