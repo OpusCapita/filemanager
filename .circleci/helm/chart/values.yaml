@@ -1,4 +1,3 @@
-phase: "qa"
 image:
   repository: ""
   tag: "master"

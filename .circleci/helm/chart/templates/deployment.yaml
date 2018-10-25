@@ -6,7 +6,6 @@ metadata:
   name: {{ template "filemanager.fullname" . }}
   labels:
     app: {{ template "filemanager.name" . }}
-    phase: {{.Values.phase}}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -14,7 +13,6 @@ spec:
   selector:
     matchLabels:
       app: {{ template "filemanager.name" . }}
-      phase: {{.Values.phase}}
       chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
@@ -25,7 +23,6 @@ spec:
     metadata:
       labels:
         app: {{ template "filemanager.name" . }}
-        phase: {{.Values.phase}}
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}

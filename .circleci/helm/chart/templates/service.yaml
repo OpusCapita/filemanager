@@ -7,7 +7,6 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    phase: {{.Values.phase}}
 spec:
   type: ClusterIP
   ports:
@@ -15,7 +14,6 @@ spec:
       targetPort: 3020
   selector:
     app: {{ template "filemanager.name" . }}
-    phase: {{.Values.phase}}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

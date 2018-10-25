@@ -6,7 +6,7 @@ set -e
 
 RELEASE_NAME=$(slugify "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}")
 PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-DEPLOYMENT_URL="http://${MINSK_CORE_K8S_HOST}${BASE_URL}"
+DEPLOYMENT_URL="http://${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}${BASE_URL}"
 
 az login -u "$AZURE_USER" -p "$AZURE_PASS" &> /tmp/az-login.log
 az account set -s "$MINSK_CORE_AZURE_SUBSCRIPTION_ID"
@@ -19,7 +19,7 @@ helm dependency build
 helm upgrade \
   --install \
   --force \
-  --set ingress.host="${MINSK_CORE_K8S_HOST}" \
+  --set ingress.host="${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}" \
   --set image.repository="${IMAGE_REPOSITORY}" \
   --set image.tag="${IMAGE_TAG}" \
   --set ingress.baseUrl="${BASE_URL}" \
