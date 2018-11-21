@@ -1,0 +1,76 @@
+{{- $id := printf "%s-%s" "syncer" .Release.Name  | trunc 45 | lower -}}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $id }}-cfgmap
+  annotations:
+    "description": "Sync secrets"
+data:
+  syncer.sh: |-
+    #!/usr/bin/env bash
+    set -euo pipefail
+    . /machineuser-vault/shell-env
+    az login -u "$AZURE_USER" -p "$AZURE_PASS" &> /tmp/az-login.log
+    az account set -s "$MINSK_CORE_AZURE_SUBSCRIPTION_ID"
+    az aks get-credentials -n "$MINSK_CORE_K8S_AZURE_NAME" -g "$MINSK_CORE_K8S_AZURE_RG"
+    for arg
+    do
+      echo $arg
+      cert_secret_name="${arg}-tls"
+      kubectl get secret $cert_secret_name --namespace=lunar-system --export -o yaml | kubectl apply --namespace=$(</var/run/secrets/kubernetes.io/serviceaccount/namespace) -f -
+    done
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $id }}-job
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "description": "Sync secrets"
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      labels:
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          containers:
+          - name: {{ $id }}-job
+            imagePullPolicy: Always
+            image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+            command: ["/bin/syncer.sh"]
+            args: {{ .Values.ingress.hosts }}
+            volumeMounts:
+            - name: machineuser-vault
+              mountPath: /machineuser-vault
+              readOnly: true
+            - name: {{ $id }}-v
+              mountPath: /bin/syncer.sh
+              readOnly: true
+              subPath: syncer.sh
+
+          restartPolicy: Never
+
+          volumes:
+          - name: machineuser-vault
+            secret:
+              secretName: machineuser-vault-master-secret
+          - name: {{ $id }}-v
+            configMap:
+              defaultMode: 0700
+              name: {{ $id }}-cfgmap
+
+          imagePullSecrets:
+            - name: {{ .Values.dockerSecret }}

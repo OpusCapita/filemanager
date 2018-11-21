@@ -1,0 +1,1 @@
+{{ template "filemanager.notification-deployment-success" . }}

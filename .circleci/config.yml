@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: bash:4.4.19
+    steps:
+    - run:
+        name: Say Hi
+        command: echo "Hi!"
+workflows:
+  version: 2
+  build:
+    jobs:
+    - build:
+        filters:
+          branches:
+            ignore: /.*/

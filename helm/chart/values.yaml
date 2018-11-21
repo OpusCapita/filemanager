@@ -1,0 +1,10 @@
+image:
+  repository: ""
+  tag: ""
+ingress:
+  host: ""
+  baseUrl: ""
+google:
+  apiKey: ""
+  clientId: ""
+dockerSecret: ""
