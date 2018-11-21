@@ -1,6 +1,5 @@
 ingress:
-  hosts:
-  - "${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}"
+  hosts: "${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}"
   path: "${APPLICATION_URL_PATH}"
 image:
   repository: "${DOCKER_IMAGE_REPOSITORY}"
