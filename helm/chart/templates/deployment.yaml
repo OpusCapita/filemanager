@@ -1,5 +1,4 @@
 {{- $serviceName := include "filemanager.fullname" . -}}
-{{- $baseUrl := .Values.ingress.baseUrl -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +34,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: BASE_URL
-          value: "{{ .Values.ingress.baseUrl }}"
+          value: "{{ .Values.ingress.path }}"
         - name: SERVER_HOST
           value: "{{ .Values.ingress.host }}"
         - name: API_KEY

@@ -1,5 +1,5 @@
 {{- $serviceName := include "filemanager.fullname" . -}}
-{{- $baseUrl := .Values.ingress.baseUrl -}}
+{{- $path := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -12,7 +12,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ $baseUrl }}
+    nginx.ingress.kubernetes.io/rewrite-target: {{ $path }}
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
 spec:
@@ -20,7 +20,7 @@ spec:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - path: {{ $baseUrl }}
+      - path: {{ $path }}
         backend:
           serviceName: {{ $serviceName }}
           servicePort: 80

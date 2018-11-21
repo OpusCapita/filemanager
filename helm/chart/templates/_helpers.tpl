@@ -20,5 +20,5 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create success deployment notification
 */}}
 {{- define "filemanager.notification-deployment-success" -}}
-{{- print "Deployment is available at https://" .Values.ingress.host .Values.ingress.baseUrl | trimSuffix "-" -}}
+{{- print "Deployment is available at https://" .Values.ingress.host .Values.ingress.path | trimSuffix "-" -}}
 {{- end -}}

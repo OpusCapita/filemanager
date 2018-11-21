@@ -3,7 +3,7 @@ image:
   tag: ""
 ingress:
   host: ""
-  baseUrl: ""
+  path: ""
 google:
   apiKey: ""
   clientId: ""
