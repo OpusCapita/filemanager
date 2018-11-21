@@ -1,3 +1,0 @@
-[submodule ".circleci/helm/dependencies"]
-	path = .circleci/helm/dependencies
-	url = git@github.com:OpusCapita/minsk-core-helm-charts.git
