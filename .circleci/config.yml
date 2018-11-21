@@ -1,3 +1,8 @@
+version: 2.1
+
+orbs:
+  kubernetes: opuscapita/kubernetes@volatile
+
 aliases:
   - &inject-environment
     name: Inject environment
@@ -32,7 +37,6 @@ defaults: &defaults
     - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
   working_directory: ~/build
 
-version: 2
 jobs:
   build:
     <<: *defaults
@@ -95,20 +99,7 @@ jobs:
             ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
       - run:
           name: Deploy docker demo image
-          command: .circleci/scripts/deploy-docker-image.sh
-  deploy-to-cloud:
-    <<: *defaults
-    steps:
-      - run: *inject-environment
-      - checkout
-      - run:
-          name: Prepare helm chart dependencies
-          working_directory: ~/build/.circleci/helm
-          command: git submodule update --init ./dependencies
-      - run:
-          name: (Re)deploy application to azure
-          working_directory: ~/build/.circleci/helm/chart
-          command: ./upgrade.sh
+          command: .docker/build-and-push.sh
 
 workflows:
   version: 2
@@ -121,7 +112,7 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - deploy-to-cloud:
+      - kubernetes/deploy-demo:
           requires:
             - build-demo
 
