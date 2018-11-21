@@ -1,10 +1,8 @@
-{{- $id := printf "%s-%s" "syncer" .Release.Name  | trunc 45 | lower -}}
-
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $id }}-cfgmap
+  name: syncer-cfgmap
   annotations:
     "description": "Sync secrets"
 data:
@@ -25,7 +23,7 @@ data:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ $id }}-job
+  name: syncer-job
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
@@ -47,7 +45,7 @@ spec:
       template:
         spec:
           containers:
-          - name: {{ $id }}-job
+          - name: syncer-job
             imagePullPolicy: Always
             image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
             command: ["/bin/syncer.sh"]
@@ -56,7 +54,7 @@ spec:
             - name: machineuser-vault
               mountPath: /machineuser-vault
               readOnly: true
-            - name: {{ $id }}-v
+            - name: syncer-v
               mountPath: /bin/syncer.sh
               readOnly: true
               subPath: syncer.sh
@@ -67,10 +65,10 @@ spec:
           - name: machineuser-vault
             secret:
               secretName: machineuser-vault-master-secret
-          - name: {{ $id }}-v
+          - name: syncer-v
             configMap:
               defaultMode: 0700
-              name: {{ $id }}-cfgmap
+              name: syncer-cfgmap
 
           imagePullSecrets:
             - name: {{ .Values.dockerSecret }}
