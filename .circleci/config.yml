@@ -65,8 +65,6 @@ jobs:
           name: Install/upgrade helm release
           command: |
             export GITHUB_PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            export DOCKER_IMAGE_REPOSITORY="${DOCKER_IMAGE_REPOSITORY}"
-            export DOCKER_IMAGE_TAG="${DOCKER_IMAGE_TAG}"
             export APPLICATION_URL_PATH="/${CIRCLE_PROJECT_REPONAME}/${SAFE_BRANCH}"
             export APPLICATION_URL="http://${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}${APPLICATION_URL_PATH}"
             ./bin/helm-upgrade.sh \

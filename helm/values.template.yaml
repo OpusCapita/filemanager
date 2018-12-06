@@ -12,7 +12,7 @@ github-status-deployment-link:
     user: "${GH_NAME}"
     password: "${GH_PASS}"
     project: "${GITHUB_PROJECT}"
-    ref: "${CIRCLE_SHA1}"
+    ref: "${COMMIT}"
   url: "${APPLICATION_URL}"
 selfkiller:
   azureAks:
@@ -23,14 +23,14 @@ selfkiller:
     tag: "${DOCKER_IMAGE_TAG}"
   github:
     project: "${GITHUB_PROJECT}"
-    branch: "${CIRCLE_BRANCH}"
+    branch: "${BRANCH}"
 slack-notifications:
   webhook: "${MINSK_CORE_SLACK_CI_WEBHOOK_URL}"
   github:
     user: "${CIRCLE_USERNAME}"
     project: "${GITHUB_PROJECT}"
-    branch: "${CIRCLE_BRANCH}"
-    ref: "${CIRCLE_SHA1}"
+    branch: "${BRANCH}"
+    ref: "${COMMIT}"
   ci:
     jobUrl: "${CIRCLE_BUILD_URL}"
   link:
