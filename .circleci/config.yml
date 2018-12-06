@@ -1,7 +1,4 @@
-version: 2.1
-
-orbs:
-  kubernetes: opuscapita/kubernetes@volatile
+version: 2
 
 aliases:
   - &inject-environment
@@ -32,6 +29,17 @@ aliases:
     name: Install dependencies
     # we use --unsafe-perm as current build using root user which fails
     command: npm install --unsafe-perm
+
+  - &calculate-docker-variables
+    name: Calculate docker repository and tag names
+    command: |
+      slugify() { echo $1 | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9]+/-/g | sed -E s/^-+\|-+$//g | tr A-Z a-z | cut -c1-53; }
+      GITHUB_PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+      DOCKER_IMAGE_REPOSITORY="$(echo ${GITHUB_PROJECT} | tr '[:upper:]' '[:lower:]')"
+      DOCKER_IMAGE_TAG="$(slugify ${CIRCLE_BRANCH})"
+      echo "export DOCKER_IMAGE_REPOSITORY=${DOCKER_IMAGE_REPOSITORY}" >> ${BASH_ENV}
+      echo "export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> ${BASH_ENV}
+
 defaults: &defaults
   docker:
     - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
@@ -76,7 +84,6 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install-dependencies
       - save_cache: *save-cache
-      - setup_remote_docker
       - run:
           name: Build client static files
           command: |
@@ -97,9 +104,40 @@ jobs:
           command: |
             mkdir -p packages/demoapp/demoapp/demo-files
             ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
+      - run: *calculate-docker-variables
+      - setup_remote_docker
       - run:
-          name: Deploy docker demo image
-          command: .docker/build-and-push.sh
+          name: Build application Docker image and push it into Docker repository
+          command: |
+            docker build -t ${DOCKER_IMAGE_REPOSITORY}:${DOCKER_IMAGE_TAG} .
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ${DOCKER_IMAGE_REPOSITORY}:${DOCKER_IMAGE_TAG}
+
+  deploy-demo:
+    docker:
+      - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+    working_directory: ~/build
+    steps:
+      - run: *inject-environment
+      - checkout
+      - run: *calculate-docker-variables
+      - run:
+          name: Commit to continuous-deployment branch
+          command: |
+            git config --global user.email "${GH_MAIL}"
+            git config --global user.name "${GH_NAME}"
+            git checkout continuous-deployment
+
+            git commit --allow-empty -F- <<EOF
+            Deploy ${CIRCLE_BRANCH} at ${CIRCLE_SHA1}
+
+            [branch:${CIRCLE_BRANCH}]
+            [commit:${CIRCLE_SHA1}]
+            [docker_image_repository:${DOCKER_IMAGE_REPOSITORY}]
+            [docker_image_tag:${DOCKER_IMAGE_TAG}]
+            EOF
+
+            git push
 
 workflows:
   version: 2
@@ -112,7 +150,7 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - kubernetes/deploy-demo:
+      - deploy-demo:
           requires:
             - build-demo
 
