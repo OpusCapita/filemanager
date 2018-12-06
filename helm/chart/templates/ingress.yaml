@@ -1,11 +1,10 @@
-{{- $serviceName := include "filemanager.fullname" . -}}
 {{- $path := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "filemanager.fullname" . }}
+  name: filemanager
   labels:
-    app: {{ template "filemanager.name" . }}
+    app: filemanager
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -22,7 +21,7 @@ spec:
       paths:
       - path: {{ $path }}
         backend:
-          serviceName: {{ $serviceName }}
+          serviceName: filemanager
           servicePort: 80
   tls:
     - hosts:

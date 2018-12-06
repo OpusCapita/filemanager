@@ -1,17 +1,16 @@
-{{- $serviceName := include "filemanager.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "filemanager.fullname" . }}
+  name: filemanager
   labels:
-    app: {{ template "filemanager.name" . }}
+    app: filemanager
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "filemanager.name" . }}
+      app: filemanager
       chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
@@ -21,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "filemanager.name" . }}
+        app: filemanager
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
@@ -29,7 +28,7 @@ spec:
         date: {{ now }} # RollingRestart workaround. https://github.com/kubernetes/kubernetes/issues/13488
     spec:
       containers:
-      - name: {{ .Chart.Name }}
+      - name: filemanager
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         env:

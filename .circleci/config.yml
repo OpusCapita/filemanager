@@ -1,17 +1,84 @@
-version: 2
+version: 2.1
+
+orbs:
+  git: opuscapita/git@volatile
+
+aliases:
+  - &inject-environment
+    name: Inject environment
+    command: /bin/env_inject.sh
+
+docker_and_working_directory: &docker_and_working_directory
+  docker:
+    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+  working_directory: ~/build
+
 jobs:
   build:
-    docker:
-    - image: bash:4.4.19
+    <<: *docker_and_working_directory
     steps:
-    - run:
-        name: Say Hi
-        command: echo "Hi!"
+      - run: *inject-environment
+      - git/checkout-with-submodules
+      - run:
+          name: Extract params from commit message to environment
+          command: |
+            ./bin/parse-commit.sh "$(git show -s --format=%b ${CIRCLE_SHA1})"
+      - run:
+          name: Set required environment variables
+          command: |
+            slugify() { echo $1 | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9]+/-/g | sed -E s/^-+\|-+$//g | tr A-Z a-z | cut -c1-53; }
+            NAMESPACE=$( slugify "dev-${CIRCLE_PROJECT_REPONAME}-${BRANCH}" )
+            SAFE_BRANCH=$( slugify "${BRANCH}" )
+            echo "export NAMESPACE=${NAMESPACE}" >> ${BASH_ENV}
+            echo "export SAFE_BRANCH=${SAFE_BRANCH}" >> ${BASH_ENV}
+            echo "export IMAGE_PULL_SECRET_NAME=dockerhub" >> ${BASH_ENV}
+      - run:
+          name: Login to cluster
+          command: |
+            ./bin/cluster-login.sh \
+              --azure-user="${AZURE_USER}" \
+              --azure-pass="${AZURE_PASS}" \
+              --subscription="${MINSK_CORE_AZURE_SUBSCRIPTION_ID}" \
+              --azure-rg="${MINSK_CORE_K8S_AZURE_RG}" \
+              --cluster-name="${MINSK_CORE_K8S_AZURE_NAME}"
+      - run:
+          name: Prepare namespace
+          # setup a separate namespace in k8s for development installation,
+          # and make sure imagePullSecret is present in this namespace before trying to deploy anything
+          command: |
+            ./bin/setup-dev-namespace.sh \
+              --name="${NAMESPACE}" \
+              --gh-repo-link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" \
+              --gh-branch="${BRANCH}" \
+              --gh-commit="${COMMIT}" \
+              --ci-build-url="${CIRCLE_BUILD_URL}"
+      - run:
+          name: Copy over required secrets
+          command: |
+            ./bin/copy-secrets.sh \
+              --from-namespace=lunar-system \
+              --to-namespace=${NAMESPACE} \
+              --secret="${IMAGE_PULL_SECRET_NAME}" \
+              --secret="machineuser-vault-master-secret" \
+              --secret="${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}"-tls
+      - run:
+          name: Install/upgrade helm release
+          command: |
+            export GITHUB_PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            export DOCKER_IMAGE_REPOSITORY="${DOCKER_IMAGE_REPOSITORY}"
+            export DOCKER_IMAGE_TAG="${DOCKER_IMAGE_TAG}"
+            export APPLICATION_URL_PATH="/${CIRCLE_PROJECT_REPONAME}/${SAFE_BRANCH}"
+            export APPLICATION_URL="http://${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}${APPLICATION_URL_PATH}"
+            ./bin/helm-upgrade.sh \
+              --chart-path=./helm/chart \
+              --values-template=./helm/values.template.yaml \
+              --namespace=${NAMESPACE} \
+              --release-name=${NAMESPACE}
 workflows:
   version: 2
-  build:
+  build-deployment-to-cloud:
     jobs:
-    - build:
-        filters:
-          branches:
-            ignore: /.*/
+      - build:
+          filters:
+            tags:
+              ignore: /.*/

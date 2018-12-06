@@ -1,1 +1,1 @@
-{{ template "filemanager.notification-deployment-success" . }}
+{{- print "Deployment is available at https://" .Values.ingress.host .Values.ingress.path | trimSuffix "-" -}}

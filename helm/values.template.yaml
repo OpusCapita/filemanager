@@ -35,4 +35,9 @@ slack-notifications:
     jobUrl: "${CIRCLE_BUILD_URL}"
   link:
     url: "${APPLICATION_URL}"
+sync-secrets:
+  secrets:
+  - ${MINSK_CORE_K8S_DEMO_DEPLOYMENTS_HOST}-tls
+  - dockerhub
+  - machineuser-vault-master-secret
 dockerSecret: "${IMAGE_PULL_SECRET_NAME}"
