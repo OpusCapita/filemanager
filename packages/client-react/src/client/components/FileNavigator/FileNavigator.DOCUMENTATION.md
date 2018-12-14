@@ -67,7 +67,7 @@ Resource example for **connector-node-v1**:
 
 #### Resource children
 
-`resourceChildren` is an array of `resource`s. 
+`resourceChildren` is an array of `resource`s.
 
 In **FileNavigator** its a files and folders list of current `resource`.
 
@@ -126,19 +126,31 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
 ```
 <div>
   {/*NODE_JS_EXAMPLE*/}
-  
+
   <div style={{ height: '70vh', minWidth: '320px', flex: '1', marginBottom: '15px' }}>
     <FileNavigator
-      api={_scope.connectors.nodeV1.api}
+      api={window.connectors.nodeV1.api}
       apiOptions={{
-        ..._scope.connectors.nodeV1.apiOptions,
+        ...window.connectors.nodeV1.apiOptions,
         apiRoot: `${window.env.SERVER_URL}`,
         locale: 'en'
       }}
-      capabilities={_scope.connectors.nodeV1.capabilities}
+      capabilities={(apiOptions, actions) => ([
+        ...(window.connectors.nodeV1.capabilities(apiOptions, actions)),
+        ({
+          id: 'custom-button',
+          icon: {
+            svg: '<svg viewBox="0 0 120 120" version="1.1"><circle cx="60" cy="60" r="50"></circle></svg>'
+          },
+          label: 'Custom Button',
+          shouldBeAvailable: () => true,
+          availableInContexts: ['toolbar'],
+          handler: () => alert('Custom button click')
+        })
+      ])}
       initialResourceId={_scope.state.nodeInitId}
-      listViewLayout={_scope.connectors.nodeV1.listViewLayout}
-      viewLayoutOptions={_scope.connectors.nodeV1.viewLayoutOptions}
+      listViewLayout={window.connectors.nodeV1.listViewLayout}
+      viewLayoutOptions={window.connectors.nodeV1.viewLayoutOptions}
       onResourceChange={
         resource => console.log('onResourceChange', resource)
       }
