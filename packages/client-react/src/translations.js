@@ -12,6 +12,10 @@ const translations = {
     moveForward: 'Siirrä eteenpäin',
     moveBack: 'Siirrä taaksepäin',
   },
+  hu: {
+    moveForward: 'Előre lépés',
+    moveBack: 'Vissza lépés',
+  },
   ru: {
     moveForward: 'Переместить вперед',
     moveBack: 'Переместить назад',
