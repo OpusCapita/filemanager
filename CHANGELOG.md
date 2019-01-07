@@ -1,4 +1,32 @@
 
+[Release 1.1.0-beta.5](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.5) Mon Jan 07 2019 18:51:45 GMT+0300 (MSK)
+=======================================================
+
+- Add hungarian locale ([#249](https://github.com/OpusCapita/filemanager/issues/249)) (Kirill Volkovich andras.vagner@gmail.com, 2019-01-07 16:38:26 +0100)
+-  [#244](https://github.com/OpusCapita/filemanager/issues/244) Add custom button example to "FileNavigator" (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-12-14 12:38:59 +0300)
+- Cleanup [ci skip] (Egor Stambakio stambakio@scand.com, 2018-12-06 10:43:00 +0300)
+- Set up new deploy job (Egor Stambakio stambakio@scand.com, 2018-12-06 10:42:31 +0300)
+- Build (Egor Stambakio stambakio@scand.com, 2018-11-21 15:32:06 +0300)
+- Refactor build process ([#242](https://github.com/OpusCapita/filemanager/issues/242)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2018-11-21 15:11:26 +0300)
+- Fixing link to demo application [skip ci] (GitHub asergeev-sc@users.noreply.github.com, 2018-10-25 23:04:01 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-10-25 19:24:39 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-10-25 19:23:26 +0300)
+-  [#241](https://github.com/OpusCapita/filemanager/issues/241) Fix demo (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-10-25 19:12:17 +0300)
+- Update upgrade.sh (GitHub asergeev-sc@users.noreply.github.com, 2018-10-22 08:11:52 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2018-10-22 00:28:32 +0300)
+- chmod +x (Egor Stambakio stambakio@scand.com, 2018-10-05 16:49:41 +0300)
+- Refactor helm config (Egor Stambakio stambakio@scand.com, 2018-10-05 16:48:48 +0300)
+- Add files content search for server-side (Andrei Mourzenkov mourzenkov@scand.com, 2018-09-15 16:29:21 +0300)
+- Fixed start on Windows system. (Sergey Tamkov tamkov@scand.com, 2018-09-11 12:16:11 +0300)
+- Rename `getCapability` => `getContextCapabilities` [#223](https://github.com/OpusCapita/filemanager/issues/223) (Sergey Tamkov tamkov@scand.com, 2018-09-06 20:02:39 +0300)
+- Fix demo files population (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-09-04 13:33:32 +0300)
+- Fix demo files population (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-09-04 12:25:23 +0300)
+- Fix demo files population (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-09-04 12:21:04 +0300)
+- Build with npm ([#235](https://github.com/OpusCapita/filemanager/issues/235)) (GitHub asergeev-sc@users.noreply.github.com, 2018-09-03 23:56:03 +0300)
+- Fix big files upload for demo installation (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-09-03 21:15:41 +0300)
+- Fix broken links in docs (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-09-02 15:47:42 +0300)
+- Fix shebang (Kirill Volkovich kirill.volkovich@opuscapita.com, 2018-08-31 14:46:16 +0300)
+
 [Release 1.1.0-beta.4](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.4) Wed Aug 29 2018 19:47:34 GMT+0300 (MSK)
 =======================================================
 
