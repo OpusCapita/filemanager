@@ -11,6 +11,8 @@ Method | REST | URL | Request | Response
 [Rename/copy/move](#rename-andor-copymove-filedir-to-destination) | PATCH | api/files/:id | {<br />&nbsp;&nbsp;?parents: [:id, ...],<br />&nbsp;&nbsp;?name<br />} |  :file-stats-resource
 [Get file(s)/compressed dir](#get-filescompressed-dir) | GET | api/download | <span style="word-wrap: break-word; white-space: pre;">preview=...<br />&items=:id<br />&items=:id...</span> | :binary-data
 
+# General Considerations
+
 File/dir ID is its path+name in base64 ([base64url](https://www.npmjs.com/package/base64url)-variation).  There is no trailing slash for dirs. Path starts with slash and relative to a user root dir.
 
 To prevent caching, [helmet.noCache()](https://helmetjs.github.io/docs/nocache/) is used to add the following HTTP headers to all responses:
