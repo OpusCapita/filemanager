@@ -1,4 +1,11 @@
 
+[Release 1.1.0-beta.6](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.6) Fri Jan 11 2019 15:28:12 GMT+0300 (MSK)
+=======================================================
+
+- Fix build (Kirill Volkovich kirill.volkovich@opuscapita.com, 2019-01-11 15:19:02 +0300)
+- Fix release process (Kirill Volkovich kirill.volkovich@opuscapita.com, 2019-01-11 15:11:13 +0300)
+- Update api-overview.md (GitHub amourzenkov-sc@users.noreply.github.com, 2019-01-10 19:37:41 +0300)
+
 [Release 1.1.0-beta.5](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.5) Mon Jan 07 2019 18:51:45 GMT+0300 (MSK)
 =======================================================
 
