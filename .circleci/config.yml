@@ -143,7 +143,10 @@ workflows:
   version: 2
   build-and-deploy-to-cloud:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /.*/
       - build-demo:
           requires:
             - build
