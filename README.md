@@ -87,7 +87,6 @@ const fileManager = (
         api={connectorNodeV1.api}
         apiOptions={apiOptions}
         capabilities={connectorNodeV1.capabilities}
-        initialResourceId={'Lw'}
         listViewLayout={connectorNodeV1.listViewLayout}
         viewLayoutOptions={connectorNodeV1.viewLayoutOptions}
       />
