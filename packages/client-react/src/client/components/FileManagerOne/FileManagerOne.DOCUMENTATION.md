@@ -1,4 +1,4 @@
-See [FileNavigator documentation and example](https://opuscapita-mk8s-cluster-1.westeurope.cloudapp.azure.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
+See [FileNavigator documentation and example](https://demo.core.dev.opuscapita.com/filemanager/master/?currentComponentName=FileNavigator&maxContainerWidth=100%25&showSidebar=true)
 
 This module was created for testing in IE11 FileNavigator for nodeV1 API.
 
