@@ -1,26 +1,29 @@
-defaults: &defaults
-  docker:
-    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
-  working_directory: ~/build
-
 version: 2
 jobs:
-  release:
-    <<: *defaults
+  inject-environment:
+    docker:
+      - image: opuscapita/minsk-core-machineuser-env:1
     steps:
       - run:
-          name: Inject environment 
-          command: env_inject.sh
+          name: Inject secrets from vault to CircleCI project's environment
+          command: |
+            circle_ci_add_env.sh DOCKER_USER DOCKER_PASS GH_NAME GH_TOKEN MAVEN_REPO JFROG_USER JFROG_PASSWD
+  release:
+    docker:
+      - image: opuscapita/minsk-core-release-manager:1
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
       - checkout
       - run:
-          name: Execute release scrtipt
+          name: Executing release script
           command: release.sh node
-
 workflows:
   version: 2
-  commit:
-      jobs:
-        - release:
-            filters:
-              branches:
-                only: release
+  release-and-build:
+    jobs:
+      - inject-environment
+      - release:
+          requires:
+            - inject-environment
