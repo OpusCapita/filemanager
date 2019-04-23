@@ -25,6 +25,7 @@
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
     "publish": "lerna publish --exact --skip-git --force-publish=* --repo-version $(jq -r '.version' lerna.json) --yes",
-    "cypress-open": "npm start & cypress open --project . && kill %1"
+    "cypress-open": "npm start & sleep 30 && cypress open --project .",
+    "cypress-run": "npm start & sleep 30 && cypress run"
   }
 }

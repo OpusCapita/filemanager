@@ -1,3 +1,4 @@
+.DS_Store
 .*.swp
 *.log
 *.iml
@@ -31,5 +32,5 @@ packages/server-nodejs/test-files
 packages/server-nodejs/api-docs.tmp
 
 # cypress.io
-screenshotsFolder
+cypress/videos/
 videosFolder
