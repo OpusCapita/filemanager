@@ -54,6 +54,7 @@ class ConfirmDialog extends Component {
         <div
           tabIndex="0"
           ref={ref => (this.ref = ref)}
+          data-test-id="confirm-dialog"
           className="oc-fm--dialog__content" onKeyDown={this.handleKeyDown}
         >
           <div className="oc-fm--dialog__header">

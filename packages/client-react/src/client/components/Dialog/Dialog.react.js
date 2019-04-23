@@ -26,6 +26,7 @@ class Dialog extends Component {
     return (
       <div
         ref={ref => (autofocus && ref && ref.focus())}
+        data-test-id="modal-dialog"
         className="oc-fm--dialog"
         onKeyDown={this.handleKeyDown}
         onClick={e => e.stopPropagation()}

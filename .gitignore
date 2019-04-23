@@ -33,4 +33,4 @@ packages/server-nodejs/api-docs.tmp
 
 # cypress.io
 cypress/videos/
-videosFolder
+cypress/screenshots/
