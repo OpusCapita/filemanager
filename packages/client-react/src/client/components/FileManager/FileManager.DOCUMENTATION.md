@@ -16,7 +16,7 @@ See [FileNavigator documentation and example](https://demo.core.dev.opuscapita.c
     
       {/* Use NodeJS API v1 connector */}
       <FileNavigator
-        id="cusomization-area"
+        id="filemanager-cusomization-area"
         api={_scope.connectors.nodeV1.api}
         apiOptions={{
           ..._scope.connectors.nodeV1.apiOptions,

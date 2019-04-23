@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "babel-eslint": "8.2.1",
+    "cypress": "3.2.0",
     "eslint": "4.17.0",
     "eslint-config-opuscapita": "2.0.1",
     "eslint-plugin-react": "7.7.0",
@@ -23,6 +24,7 @@
     "build": "lerna run build",
     "start": "lerna run start --parallel",
     "updated": "lerna updated || exit 0",
-    "publish": "lerna publish --exact --skip-git --force-publish=* --repo-version $(jq -r '.version' lerna.json) --yes"
+    "publish": "lerna publish --exact --skip-git --force-publish=* --repo-version $(jq -r '.version' lerna.json) --yes",
+    "cypress-open": "npm start & cypress open --project . && kill %1"
   }
 }

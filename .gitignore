@@ -29,3 +29,7 @@ packages/server-nodejs/api-tests.tmp
 packages/server-nodejs/test-results
 packages/server-nodejs/test-files
 packages/server-nodejs/api-docs.tmp
+
+# cypress.io
+screenshotsFolder
+videosFolder

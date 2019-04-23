@@ -17,10 +17,10 @@ class FileManager extends Component {
   }
 
   render() {
-    const { children, className } = this.props;
+    const { children, className, ...restProps } = this.props;
 
     return (
-      <div className={`oc-fm--file-manager ${className || ''}`}>
+      <div data-test-id="filemanager" className={`oc-fm--file-manager ${className || ''}`} {...restProps}>
         <DragDropContextProvider backend={HTML5Backend}>
           <div className="oc-fm--file-manager__navigators">
             {Children.toArray(children).map((child, i) => (

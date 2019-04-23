@@ -391,6 +391,7 @@ class FileNavigator extends Component {
       )).
       map(capability => {
         const res = ({
+          id: capability.id,
           icon: capability.icon,
           label: capability.label || '',
           onClick: capability.handler || (() => {}),
@@ -463,6 +464,8 @@ class FileNavigator extends Component {
 
     return (
       <div
+        id={id}
+        data-test-id="filenavigator"
         className={`oc-fm--file-navigator ${className}`}
         onKeyDown={this.handleKeyDown}
         ref={(ref) => (this.containerRef = ref)}

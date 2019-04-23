@@ -77,10 +77,11 @@ class Toolbar extends Component {
     const { showDropdownMenu } = this.state;
 
     const itemsElement = items.length ? (
-      <div className="oc-fm--toolbar__items">
+      <div data-test-id="toolbar" className="oc-fm--toolbar__items">
         {items.map((item, i) => (
           <button
             key={i}
+            data-test-id={`toolbar-item--${item.id}`}
             disabled={item.disabled}
             className={`oc-fm--toolbar__item`}
             title={item.label || ''}
@@ -107,6 +108,7 @@ class Toolbar extends Component {
     ) : newButtonItems.map((item, i) => (
       <button
         key={i}
+        data-test-id={`toolbar-item--${item.id}`}
         disabled={item.disabled}
         className={`oc-fm--toolbar__item`}
         title={item.label || ''}
@@ -141,7 +143,7 @@ class Toolbar extends Component {
         {dropdownMenuElement}
       </div>
     ) : (
-      <div className="oc-fm--toolbar__items">
+      <div data-test-id="toolbar" className="oc-fm--toolbar__items">
         {newButtonElement}
       </div>
     );
