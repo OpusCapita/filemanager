@@ -42,16 +42,17 @@ if [ -z "$NAME" ] || [ -z "$GH_REPO_LINK" ] || [ -z "$GH_BRANCH" ] || [ -z "$GH_
 	exit 1
 fi
 
-# setup a namespace and label namespace to allow synchronizing common secrets by Kubed service
-if kubectl get namespace ${NAME}; then
-  echo "Namespace ${NAME} already exists."
-  # kubectl label namespace ${NAME} opuscapita.com/require-common-secrets=true --overwrite
-else
-  kubectl create namespace ${NAME}
-  # kubectl label namespace ${NAME} opuscapita.com/require-common-secrets=true
-fi
-
-# add metadata as annotations. It's consumed by external tools like k8s dashboard tool
-kubectl annotate namespace ${NAME} opuscapita.com/github-source-url=${GH_REPO_LINK}/tree/${GH_BRANCH} --overwrite
-kubectl annotate namespace ${NAME} opuscapita.com/github-commit-url=${GH_REPO_LINK}/commit/${GH_COMMIT} --overwrite
-kubectl annotate namespace ${NAME} opuscapita.com/ci-url=${CI_BUILD_URL} --overwrite
+# setup a namespace and add meta data
+cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${NAME}
+  labels:
+    opuscapita.com/buhtig-s8k: "true"
+  annotations:
+    opuscapita.com/github-source-url: ${GH_REPO_LINK}/tree/${GH_BRANCH}
+    opuscapita.com/github-commit-url: ${GH_REPO_LINK}/commit/${GH_COMMIT}
+    opuscapita.com/ci-url: ${CI_BUILD_URL}
+    opuscapita.com/helm-release: ${NAME}
+EOF
