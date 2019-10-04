@@ -1,0 +1,82 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: filemanager
+  labels:
+    app.kubernetes.io/name: filemanager
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 2000m
+spec:
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.path }}
+        backend:
+          serviceName: filemanager
+          servicePort: 80
+  tls:
+    - hosts:
+      - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.host }}-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filemanager
+  labels:
+    app.kubernetes.io/name: filemanager
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3020
+  selector:
+    app.kubernetes.io/name: filemanager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filemanager
+  labels:
+    app.kubernetes.io/name: filemanager
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: filemanager
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: filemanager
+      annotations:
+        date: {{ now }} # RollingRestart workaround. https://github.com/kubernetes/kubernetes/issues/13488
+    spec:
+      containers:
+      - name: filemanager
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        env:
+        - name: BASE_URL
+          value: "{{ .Values.ingress.path }}"
+        - name: SERVER_HOST
+          value: "{{ .Values.ingress.host }}"
+        envFrom:
+        - secretRef:
+            name: filemanager-env
+        ports:
+        - containerPort: 3020
+          name: app
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "256Mi"
+      imagePullSecrets:
+        - name: {{.Values.dockerSecret}}

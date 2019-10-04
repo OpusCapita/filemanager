@@ -1,0 +1,3 @@
+[submodule "build/demo/dependencies"]
+	path = build/demo/dependencies
+	url = git@github.com:OpusCapita/minsk-core-helm-charts.git

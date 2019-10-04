@@ -1,16 +1,18 @@
-version: 2
+version: 2.1
+
+orbs:
+  git: opuscapita/git@volatile
 
 aliases:
-  - &inject-environment
-    name: Inject environment
-    command: /bin/env_inject.sh
   - &save-cache-checksum
     name: Save cache checksum
     command: find . -name "package.json" | sort | xargs cat >> /tmp/cache-checksum
-  - &restore-cache
+
+  - &restore_cache
     keys:
       - dependencies-{{ checksum "/tmp/cache-checksum" }}
-  - &save-cache
+
+  - &save_cache
     key: dependencies-{{ checksum "/tmp/cache-checksum" }}
     paths:
       - ./package-lock.json
@@ -25,135 +27,75 @@ aliases:
       - ./packages/server-nodejs/node_modules
       - ./packages/demoapp/package-lock.json
       - ./packages/demoapp/node_modules
-  - &install-dependencies
-    name: Install dependencies
-    # we use --unsafe-perm as current build using root user which fails
-    command: npm install --unsafe-perm
-
-  - &calculate-docker-variables
-    name: Calculate docker repository and tag names
-    command: |
-      slugify() { echo $1 | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9]+/-/g | sed -E s/^-+\|-+$//g | tr A-Z a-z | cut -c1-53; }
-      GITHUB_PROJECT="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-      DOCKER_IMAGE_REPOSITORY="$(echo ${GITHUB_PROJECT} | tr '[:upper:]' '[:lower:]')"
-      DOCKER_IMAGE_TAG="$(slugify ${CIRCLE_BRANCH})"
-      echo "export DOCKER_IMAGE_REPOSITORY=${DOCKER_IMAGE_REPOSITORY}" >> ${BASH_ENV}
-      echo "export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> ${BASH_ENV}
-
-defaults: &defaults
-  docker:
-    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
-  working_directory: ~/build
 
 jobs:
-  build:
-    <<: *defaults
+  init:
+    docker:
+      - image: opuscapita/minsk-core-machineuser-env:2
     steps:
-      - run: *inject-environment
+      - run: circle_ci_add_env.sh
+
+  build-docker-ci:
+    docker:
+    - image: docker
+    steps:
+      - run: apk add --no-cache bash make git openssh
       - checkout
+      - run: wget -O /vault.zip https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip; unzip /vault.zip -d /usr/bin/
+      - setup_remote_docker
+      - run:
+          name: Check if image build is required
+          command: |
+            make docker-auth
+            if [ -z "$(git show --name-only | grep build/docker/ci)" ]; then
+              DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect opuscapita/filemanager:ci && \
+                circleci step halt || echo "Image doesn't exist, proceed"
+            fi
+      - run: make build-docker-ci && make publish-docker-ci
+
+  build:
+    docker:
+      - image: opuscapita/filemanager:ci
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - git/checkout-with-submodules
       - run: *save-cache-checksum
       - restore_cache: *restore-cache
-      - run: *install-dependencies
+      - run: make refresh-dependencies
       - save_cache: *save-cache
-      - run:
-          name: Lint sources
-          command: npm run lint
-      - run:
-          name: Run REST API tests
-          working_directory: ./packages/server-nodejs
-          command: npm run test-restapi
+      - run: make lint
+      - run: make test-restapi
       - store_test_results:
           path: ./packages/server-nodejs/test-results
       - store_artifacts:
           path: ./packages/server-nodejs/test-results
-      - run:
-          name: Publish to npm
-          command: |
-            if [ ! -z "${CIRCLE_TAG}" ]; then
-              npm run publish
-            else
-              echo "This step is skipped as this is not a release build"
-            fi
-
-  build-demo:
-    <<: *defaults
-    steps:
-      - run: *inject-environment
-      - checkout
-      - run: *save-cache-checksum
-      - restore_cache: *restore-cache
-      - run: *install-dependencies
-      - save_cache: *save-cache
-      - run:
-          name: Build client static files
-          command: |
-            cd packages/client-react
-            npm run gh-pages:build
-            rm -rf ../demoapp/static
-            mkdir -p ../demoapp/static
-            mv .gh-pages-tmp/* ../demoapp/static/
-      - run:
-          name: Build server API docs
-          command: |
-            cd packages/server-nodejs
-            npm run build-api-docs
-            mkdir -p ../demoapp/static/api
-            cp -r api-docs.tmp/docs ../demoapp/static/api
-      - run:
-          name: Generate demo files
-          command: |
-            mkdir -p packages/demoapp/demoapp/demo-files
-            ./demo-filesystem/populate-demo-fs.sh ./packages/demoapp/demo-files
-      - run: *calculate-docker-variables
+      - run: if [ ! -z "${CIRCLE_TAG}" ]; then make publish; else echo "This step is skipped as this is not a release build"; fi
+      - run: if [ -z "${CIRCLE_TAG}" ]; then make build; fi
       - setup_remote_docker
-      - run:
-          name: Build application Docker image and push it into Docker repository
-          command: |
-            docker build -t ${DOCKER_IMAGE_REPOSITORY}:${DOCKER_IMAGE_TAG} .
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ${DOCKER_IMAGE_REPOSITORY}:${DOCKER_IMAGE_TAG}
-
-  deploy-demo:
-    docker:
-      - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
-    working_directory: ~/build
-    steps:
-      - run: *inject-environment
-      - checkout
-      - run: *calculate-docker-variables
-      - run:
-          name: Commit to continuous-deployment branch
-          command: |
-            git config --global user.email "${GH_MAIL}"
-            git config --global user.name "${GH_NAME}"
-            git checkout continuous-deployment
-
-            git commit --allow-empty -F- <<EOF
-            Deploy ${CIRCLE_BRANCH} at ${CIRCLE_SHA1}
-
-            [branch:${CIRCLE_BRANCH}]
-            [commit:${CIRCLE_SHA1}]
-            [docker_image_repository:${DOCKER_IMAGE_REPOSITORY}]
-            [docker_image_tag:${DOCKER_IMAGE_TAG}]
-            EOF
-
-            git push
+      - run: if [ -z "${CIRCLE_TAG}" ]; then make build-docker; fi
+      - run: if [ -z "${CIRCLE_TAG}" ]; then make publish-docker; fi
+      - run: if [ -z "${CIRCLE_TAG}" ]; then make deploy; fi
 
 workflows:
   version: 2
-  build-and-deploy-to-cloud:
+  commit:
     jobs:
-      - build:
+      - init
           filters:
             tags:
               only: /.*/
-      - build-demo:
+      - build-docker-ci:
           requires:
-            - build
+            - init
           filters:
             tags:
-              ignore: /.*/
-      - deploy-demo:
+              only: /.*/
+      - build:
           requires:
-            - build-demo
-
+            - init
+            - build-docker-ci
+          filters:
+            tags:
+              only: /.*/
