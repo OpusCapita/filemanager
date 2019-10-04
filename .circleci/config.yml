@@ -82,7 +82,7 @@ workflows:
   version: 2
   commit:
     jobs:
-      - init
+      - init:
           filters:
             tags:
               only: /.*/
