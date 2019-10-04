@@ -8,11 +8,11 @@ aliases:
     name: Save cache checksum
     command: find . -name "package.json" | sort | xargs cat >> /tmp/cache-checksum
 
-  - &restore_cache
+  - &restore-cache
     keys:
       - dependencies-{{ checksum "/tmp/cache-checksum" }}
 
-  - &save_cache
+  - &save-cache
     key: dependencies-{{ checksum "/tmp/cache-checksum" }}
     paths:
       - ./package-lock.json
