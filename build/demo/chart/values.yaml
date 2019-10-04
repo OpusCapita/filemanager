@@ -1,0 +1,7 @@
+image:
+  repository: ""
+  tag: ""
+ingress:
+  host: ""
+  path: ""
+dockerSecret: ""
