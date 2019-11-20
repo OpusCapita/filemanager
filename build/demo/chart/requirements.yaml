@@ -5,6 +5,3 @@ dependencies:
   - name: github-status-deployment-link
     version: 0.0.1
     repository: file://../dependencies/charts/github-status-deployment-link
-  - name: sync-secrets
-    version: 0.0.1
-    repository: file://../dependencies/charts/sync-secrets

@@ -64,13 +64,13 @@ metadata:
 EOF
 
 #==============================
-echo "[INFO] Copy secrets"
+echo "[INFO] Create dockerhub secret"
 
-kubectl get secret "dockerhub" \
-  --namespace="lunar-system" --export -o yaml | kubectl apply --namespace="$deployment_namespace" -f -
-
-kubectl get secret "${deployment_host}-tls" \
-  --namespace="lunar-system" --export -o yaml | kubectl apply --namespace="$deployment_namespace" -f -
+kubectl -n ${deployment_namespace} create secret docker-registry dockerhub \
+  --docker-server="https://index.docker.io/v1/" \
+  --docker-username=$( vault kv get -field=value machineuser/DOCKER_USER ) \
+  --docker-password=$( vault kv get -field=value machineuser/DOCKER_PASS ) \
+  --dry-run -o yaml | kubectl apply -f -
 
 #==============================
 echo "[INFO] Create secret with required environment variables"
@@ -112,8 +112,6 @@ helm upgrade \
   --set slack-notifications.github.ref="$git_revision" \
   --set slack-notifications.ci.jobUrl="$ci_url" \
   --set slack-notifications.link.url="https://${deployment_host}${deployment_path}" \
-  --set sync-secrets.secrets[0]="${deployment_host}-tls" \
-  --set sync-secrets.secrets[1]="dockerhub" \
   --set github-status-deployment-link.github.user="$github_user" \
   --set github-status-deployment-link.github.password="$github_pass" \
   --set github-status-deployment-link.github.project="$github_project" \
