@@ -7,7 +7,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}$1
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
     cert-manager.io/cluster-issuer: "default"
@@ -16,7 +16,7 @@ spec:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.ingress.path }}
+      - path: {{ .Values.ingress.path }}(/?.*)
         backend:
           serviceName: filemanager
           servicePort: 80
