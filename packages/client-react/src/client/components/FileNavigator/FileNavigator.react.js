@@ -26,6 +26,7 @@ const propTypes = {
   listViewLayout: PropTypes.func,
   viewLayoutOptions: PropTypes.object,
   signInRenderer: PropTypes.func,
+  onClickOutside: PropTypes.func,
   onResourceItemClick: PropTypes.func,
   onResourceItemRightClick: PropTypes.func,
   onResourceItemDoubleClick: PropTypes.func,
@@ -47,6 +48,7 @@ const defaultProps = {
   listViewLayout: () => {},
   viewLayoutOptions: {},
   signInRenderer: null,
+  onClickOutside: ({ fileNavigator }) => fileNavigator.handleSelectionChange([]),
   onResourceItemClick: () => {},
   onResourceItemRightClick: () => {},
   onResourceItemDoubleClick: () => {},
@@ -250,7 +252,7 @@ class FileNavigator extends Component {
   }
 
   handleClickOutside = () => {
-    this.handleSelectionChange([]);
+    this.props.onClickOutside({ fileNavigator: this });
   };
 
   handleResourceLocationChange = (resourceLocation) => {
