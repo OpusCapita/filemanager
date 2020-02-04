@@ -1,4 +1,18 @@
 
+[Release 1.1.0-beta.7](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.7) Tue Feb 04 2020 19:42:35 GMT+0300 (MSK)
+=======================================================
+
+- Add 'onClickOutside' property to FileNavigator. (kvolkovich-sc volkovich@scand.com, 2020-02-04 19:39:58 +0300)
+- Fix ingress configuration (Egor Stambakio egor.stambakio@opuscapita.com, 2019-11-22 14:49:32 +0300)
+- Prepare deployment for new Kubernetes setup ([#263](https://github.com/OpusCapita/filemanager/issues/263)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2019-11-21 08:34:27 +0300)
+- Refactor CI process ([#259](https://github.com/OpusCapita/filemanager/issues/259)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2019-10-04 13:01:44 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2019-06-24 17:37:31 +0300)
+- Fix .gitignore, etc. (kvolkovich-sc kirill.volkovich@opuscapita.com, 2019-04-23 23:05:25 +0300)
+- Add very basic Cypress tests (kvolkovich-sc kirill.volkovich@opuscapita.com, 2019-04-23 22:44:07 +0300)
+- Update FileManagerOne.DOCUMENTATION.md (GitHub kvolkovich-sc@users.noreply.github.com, 2019-01-20 19:57:30 +0300)
+- Update FileManager.DOCUMENTATION.md (GitHub kvolkovich-sc@users.noreply.github.com, 2019-01-20 19:57:04 +0300)
+- Update README.md (GitHub kvolkovich-sc@users.noreply.github.com, 2019-01-13 12:21:53 +0300)
+
 [Release 1.1.0-beta.6](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.6) Fri Jan 11 2019 15:28:12 GMT+0300 (MSK)
 =======================================================
 
