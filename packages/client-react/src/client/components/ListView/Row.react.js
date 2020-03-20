@@ -3,46 +3,8 @@
 // TODO Make sure this component can be optimised using "shouldComponentUpdate"
 
 import React, { Component } from 'react';
-import { DragSource } from 'react-dnd';
 import { ContextMenuTrigger } from "react-contextmenu";
 
-const RowDragSource = {
-  canDrag(props) {
-    // You can disallow drag based on props
-    return true;
-    // return props.isReady;
-  },
-
-  isDragging(props, monitor) {
-    // console.log('is dragging');
-    // console.log('item', monitor.getItem());
-    return monitor.getItem().id === props.rowData.id;
-  },
-
-  beginDrag(props, monitor, component) {
-    const item = { id: props.rowData.id };
-    return item;
-  },
-
-  endDrag(props, monitor, component) {
-    if (!monitor.didDrop()) {
-      return;
-    }
-
-    // const item = monitor.getItem();
-    // const dropResult = monitor.getDropResult();
-  }
-};
-
-function collect(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
-    isDragging: monitor.isDragging()
-  };
-}
-
-@DragSource('filemanager-resource', RowDragSource, collect)
 class Row extends Component {
   render() {
     /* eslint-disable  react/prop-types */
@@ -60,9 +22,6 @@ class Row extends Component {
       selection,
       lastSelected,
       loading,
-      isDragging,
-      connectDragSource,
-      connectDragPreview,
       contextMenuId,
       hasTouch
     } = this.props;
@@ -104,24 +63,21 @@ class Row extends Component {
 
     return (
       <ContextMenuTrigger id={contextMenuId} holdToDisplay={hasTouch ? 1000 : -1}>
-        {connectDragPreview(connectDragSource((
-          <div
-            {...a11yProps}
-            className={`
+        <div
+          {...a11yProps}
+          className={`
               ReactVirtualized__Table__row
               oc-fm--list-view__row
               ${(! loading && isSelected) ? 'oc-fm--list-view__row--selected' : ''}
               ${(!loading && isLastSelected) ? 'oc-fm--list-view__row--last-selected' : ''}
-              ${(!loading && isDragging) ? 'oc-fm--list-view__row--dragging' : ''}
               ${loading ? 'oc-fm--list-view__row--loading' : ''}
             `}
-            key={rowData.id}
-            role="row"
-            style={style}
-          >
-            {columns}
-          </div>
-        )))}
+          key={rowData.id}
+          role="row"
+          style={style}
+        >
+          {columns}
+        </div>
       </ContextMenuTrigger>
     );
   }

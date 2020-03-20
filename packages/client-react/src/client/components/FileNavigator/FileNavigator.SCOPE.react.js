@@ -5,8 +5,6 @@
 
 import React, { Component } from 'react';
 import { showroomScopeDecorator } from '@opuscapita/react-showroom-client';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContextProvider } from 'react-dnd';
 import connectorNodeV1 from '@opuscapita/react-filemanager-connector-node-v1';
 
 window.connectors = {
@@ -56,9 +54,7 @@ class FileNavigatorScope extends Component {
   render() {
     return (
       <div>
-        <DragDropContextProvider backend={HTML5Backend}>
-          {this._renderChildren()}
-        </DragDropContextProvider>
+        {this._renderChildren()}
       </div>
     );
   }
