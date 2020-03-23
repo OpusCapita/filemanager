@@ -1,4 +1,9 @@
 
+[Release 1.1.1](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.1) Mon Mar 23 2020 11:57:20 GMT+0300 (MSK)
+=======================================================
+
+- Get rid of dead code. Remove drag'n'drop related dependencies. ([#275](https://github.com/OpusCapita/filemanager/issues/275)) (GitHub visortelle@gmail.com, 2020-03-23 11:53:22 +0300)
+
 [Release 1.1.0-beta.7](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.0-beta.7) Tue Feb 04 2020 19:42:35 GMT+0300 (MSK)
 =======================================================
 
