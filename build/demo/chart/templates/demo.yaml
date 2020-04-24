@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: filemanager
@@ -7,15 +7,16 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}$1
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
+    cert-manager.io/cluster-issuer: "default"
 spec:
   rules:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.ingress.path }}
+      - path: {{ .Values.ingress.path }}(/?.*)
         backend:
           serviceName: filemanager
           servicePort: 80

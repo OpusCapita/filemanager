@@ -13,13 +13,14 @@ FileNavigator is
 | initialResourceId              | string                  |                                                                                                |
 | listViewLayout                 | func                    |                                                                                                |
 | viewLayoutOptions              |                         |                                                                                                |
+| onClickOutside                 | func                    | `({ fileNavigator }) => ...`                                                                   |
 | onResourceChange               | func                    | `resource => ...`                                                                              |
 | onResourceChildrenChange       | func                    | `resourceChildren => ...`                                                                      |
 | onResourceLocationChange       | func                    | `resourceLocation => ...`                                                                      |
 | onSelectionChange              | func                    | `selection` => ...` You can use `onSelectionChange` it in pair with `onResourceChildrenChange` |
-| onResourceItemClick            | func                    |  `({ event, number, rowData }) => ...`                                                         |
-| onResourceItemDoubleClick      | func                    |  `({ event, number, rowData }) => ...`                                                         |
-| onResourceItemRightClick       | func                    |  `({ event, number, rowData }) => ...`                                                         |
+| onResourceItemClick            | func                    | `({ event, number, rowData }) => ...`                                                          |
+| onResourceItemDoubleClick      | func                    | `({ event, number, rowData }) => ...`                                                          |
+| onResourceItemRightClick       | func                    | `({ event, number, rowData }) => ...`                                                          |
 
 ### Connectors
 
