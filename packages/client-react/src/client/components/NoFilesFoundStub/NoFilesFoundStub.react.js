@@ -14,7 +14,7 @@ export default () => (
       Nothing to show
     </div>
     <div className="oc-fm--no-files-found-stub__sub-title">
-      Use toolbar or context menu to preform available actions
+      Use toolbar or context menu to perform available actions
     </div>
     {/*
     <div className="oc-fm--no-files-found-stub__sub-title">
