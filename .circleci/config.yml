@@ -42,7 +42,7 @@ aliases:
 
 defaults: &defaults
   docker:
-    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u192-nodejs-8.17.0-maven-3.3.9
   working_directory: ~/build
 
 jobs:
@@ -115,7 +115,7 @@ jobs:
 
   deploy-demo:
     docker:
-      - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+      - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u192-nodejs-8.17.0-maven-3.3.9
     working_directory: ~/build
     steps:
       - run: *inject-environment
