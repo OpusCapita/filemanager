@@ -80,6 +80,7 @@ class Toolbar extends Component {
       <div data-test-id="toolbar" className="oc-fm--toolbar__items">
         {items.map((item, i) => (
           <button
+            type="button"
             key={i}
             data-test-id={`toolbar-item--${item.id}`}
             disabled={item.disabled}
@@ -100,6 +101,7 @@ class Toolbar extends Component {
 
     const newButtonElement = newButtonText ? (
       <button
+        type="button"
         onClick={this.handleShowDropdownMenu}
         className="oc-fm--toolbar__new-button"
       >
@@ -153,6 +155,7 @@ class Toolbar extends Component {
     const navButtons = (
       <div className="oc-fm--toolbar__nav-buttons">
         <button
+          type="button"
           disabled={!isHistoryStepPossible(history, -1)}
           className={`oc-fm--toolbar__item`}
           title={getMessage('moveBack')}
@@ -166,6 +169,7 @@ class Toolbar extends Component {
         </button>
 
         <button
+          type="button"
           disabled={!isHistoryStepPossible(history, 1)}
           className={`oc-fm--toolbar__item`}
           title={getMessage('moveForward')}
