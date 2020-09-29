@@ -1,4 +1,12 @@
 
+[Release 1.1.2](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.2) Tue Sep 29 2020 12:14:35 GMT+0300 (MSK)
+=======================================================
+
+- Use `type="button"` for Toolbar Buttons ([#292](https://github.com/OpusCapita/filemanager/issues/292)) (GitHub guy.paddock@gmail.com, 2020-09-29 04:51:34 -0400)
+- (Issue [#83](https://github.com/OpusCapita/filemanager/issues/83)) Made "LocationBar" scrollable for long locations ([#277](https://github.com/OpusCapita/filemanager/issues/277)) (GitHub Stupakov08@gmail.com, 2020-06-18 09:02:21 +0300)
+- Fix perform spelling ([#260](https://github.com/OpusCapita/filemanager/issues/260)) (GitHub chrisdwheatley@users.noreply.github.com, 2020-04-24 07:07:59 +0100)
+- Update ingress version for k8s 1.16.x (Egor Stambakio egor.stambakio@opuscapita.com, 2020-04-08 16:59:46 +0300)
+
 [Release 1.1.1](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.1) Mon Mar 23 2020 11:57:20 GMT+0300 (MSK)
 =======================================================
 
