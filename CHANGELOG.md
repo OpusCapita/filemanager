@@ -1,4 +1,9 @@
 
+[Release 1.1.3](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.3) Thu Nov 19 2020 09:19:30 GMT+0300 (MSK)
+=======================================================
+
+- Add Chinese translations ([#294](https://github.com/OpusCapita/filemanager/issues/294)) (GitHub greyyang@outlook.com, 2020-11-19 14:07:26 +0800)
+
 [Release 1.1.2](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.2) Tue Sep 29 2020 12:14:35 GMT+0300 (MSK)
 =======================================================
 
