@@ -1,4 +1,9 @@
 
+[Release 1.1.4](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.4) Wed Nov 25 2020 16:45:47 GMT+0300 (MSK)
+=======================================================
+
+- Add the french translation ([#296](https://github.com/OpusCapita/filemanager/issues/296)) (GitHub 45885981+MaximeMazet@users.noreply.github.com, 2020-11-25 14:35:14 +0100)
+
 [Release 1.1.3](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.3) Thu Nov 19 2020 09:19:30 GMT+0300 (MSK)
 =======================================================
 
