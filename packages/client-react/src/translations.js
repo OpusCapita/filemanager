@@ -3,6 +3,10 @@ const translations = {
     moveForward: 'Move forward',
     moveBack: 'Move back',
   },
+  fr: {
+    moveForward: 'Avancer',
+    moveBack: 'Revenir en arrière',
+  },
   zh: {
     moveForward: '向前',
     moveBack: '后退',
