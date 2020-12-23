@@ -80,7 +80,7 @@ class ListView extends Component {
       // Force recalculate scrollHeight for appropriate handle "PageUp, PageDown, Home, End", etc. keys
       this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
       if (nextProps.selection.length !== 0) {
-        let firstSelected = nextProps.selection[0];
+        const firstSelected = nextProps.selection[0];
         let index = 0;
         for (let i = 0; i < nextProps.items.length; i++){
           if (nextProps.items[i].id === firstSelected) {
