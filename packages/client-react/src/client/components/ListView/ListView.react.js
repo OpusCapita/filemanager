@@ -81,20 +81,14 @@ class ListView extends Component {
       this.setState({ scrollHeight: nextProps.items.length * ROW_HEIGHT });
       if (nextProps.selection.length !== 0) {
         let firstSelected = nextProps.selection[0];
-        console.log('The selected item:');
-        console.log(firstSelected);
         let index = 0;
-        console.log('Next props in ListView:')
-        console.log(nextProps.items);
         for (let i = 0; i < nextProps.items.length; i++){
-          console.log('Current item name:' + nextProps.items[i].name);
           if (nextProps.items[i].id === firstSelected) {
             index = i;
             break;
           }
         }
         this.scrollToIndex(index);
-        console.log('ScrollToIndex set to:' + index);
       }
     }
   }
