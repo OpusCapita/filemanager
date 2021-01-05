@@ -1,7 +1,7 @@
 {
-  "name": "@opuscapita/react-filemanager_custom",
+  "name": "@opuscapita/react-filemanager",
   "version": "1.1.5",
-  "description": "React file manager, with custom changes",
+  "description": "React file manager",
   "scripts": {
     "link-mode": "cross-env NODE_ENV=link webpack --config ./config/webpack.config.js",
     "lint": "eslint src/client",

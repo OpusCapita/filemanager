@@ -208,8 +208,7 @@ class ListView extends Component {
         {({ width, height }) => (this.containerHeight = height) && (
 
           <WithSelection
-            itemsToRender={itemsToRender}
-            items={items}
+            items={itemsToRender}
             onKeyDown={this.handleKeyDown}
             onSelection={this.handleSelection}
             onRowClick={this.handleRowClick}
