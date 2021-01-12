@@ -254,6 +254,7 @@ class ListView extends Component {
                         overscanRowCount={10}
                         onScroll={this.handleScroll}
                         scrollToIndex={scrollToIndex}
+                        scrollToAlignment="center"
                         scrollTop={scrollTop}
                         sort={this.handleSort} // eslint-disable-line react/jsx-handler-names
                         sortBy={sortBy}
