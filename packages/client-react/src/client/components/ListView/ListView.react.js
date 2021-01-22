@@ -44,7 +44,8 @@ const propTypes = {
   onSelection: PropTypes.func,
   onSort: PropTypes.func,
   onKeyDown: PropTypes.func,
-  onRef: PropTypes.func
+  onRef: PropTypes.func,
+  locale: PropTypes.string
 };
 const defaultProps = {
   rowContextMenuId: nanoid(),
@@ -63,7 +64,8 @@ const defaultProps = {
   onSelection: () => {},
   onSort: () => {},
   onKeyDown: () => {},
-  onRef: () => {}
+  onRef: () => {},
+  locale: 'fr'
 };
 
 export default
@@ -250,7 +252,7 @@ class ListView extends Component {
                         rowRenderer={Row({
                           selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
                         })}
-                        noRowsRenderer={NoFilesFoundStub}
+                        noRowsRenderer={() => NoFilesFoundStub(this.props.locale)}
                         onRowClick={onRowClick}
                         onRowRightClick={onRowRightClick}
                         onRowDoubleClick={onRowDoubleClick}
