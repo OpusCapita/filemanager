@@ -33,7 +33,9 @@ const propTypes = {
   onResourceLocationChange: PropTypes.func,
   onSelectionChange: PropTypes.func,
   onResourceChange: PropTypes.func,
-  onResourceChildrenChange: PropTypes.func
+  onResourceChildrenChange: PropTypes.func,
+  rootUrl: PropTypes.string,
+  toolTipStyle: PropTypes.object,
 };
 
 const defaultProps = {
@@ -55,7 +57,9 @@ const defaultProps = {
   onResourceLocationChange: () => {},
   onSelectionChange: () => {},
   onResourceChange: () => {},
-  onResourceChildrenChange: () => {}
+  onResourceChildrenChange: () => {},
+  rootUrl: '',
+  toolTipStyle: null,
 };
 
 const MONITOR_API_AVAILABILITY_TIMEOUT = 16;
@@ -413,7 +417,9 @@ class FileNavigator extends Component {
       className,
       listViewLayout,
       signInRenderer,
-      viewLayoutOptions
+      viewLayoutOptions,
+      rootUrl,
+      toolTipStyle,
     } = this.props;
 
     const {
@@ -512,6 +518,8 @@ class FileNavigator extends Component {
           <LocationBar
             items={locationItems}
             loading={loadingResourceLocation}
+            rootUrl={rootUrl}
+            toolTipStyle={toolTipStyle}
           />
         </div>
         <ContextMenu

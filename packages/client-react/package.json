@@ -1,5 +1,5 @@
 {
-  "name": "@opuscapita/react-filemanager",
+  "name": "@opuscapita/react-filemanager_custom",
   "version": "1.1.5",
   "description": "React file manager",
   "scripts": {
@@ -109,6 +109,7 @@
     "react-sortable-hoc": "0.6.8",
     "react-virtualized": "9.12.0",
     "sanitize-filename": "1.6.1",
+    "semantic-ui-react": "^0.88.2",
     "superagent": "3.8.3"
   },
   "size-limit": [
