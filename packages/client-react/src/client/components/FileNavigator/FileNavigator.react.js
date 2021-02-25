@@ -34,7 +34,7 @@ const propTypes = {
   onSelectionChange: PropTypes.func,
   onResourceChange: PropTypes.func,
   onResourceChildrenChange: PropTypes.func,
-  rootUrl: PropTypes.string,
+  rootTooltipContent: PropTypes.func,
   toolTipStyle: PropTypes.object,
 };
 
@@ -58,7 +58,7 @@ const defaultProps = {
   onSelectionChange: () => {},
   onResourceChange: () => {},
   onResourceChildrenChange: () => {},
-  rootUrl: '',
+  rootTooltipContent: () => '',
   toolTipStyle: null,
 };
 
@@ -418,10 +418,9 @@ class FileNavigator extends Component {
       listViewLayout,
       signInRenderer,
       viewLayoutOptions,
-      rootUrl,
+      rootTooltipContent,
       toolTipStyle,
     } = this.props;
-
     const {
       apiInitialized,
       apiSignedIn,
@@ -518,7 +517,7 @@ class FileNavigator extends Component {
           <LocationBar
             items={locationItems}
             loading={loadingResourceLocation}
-            rootUrl={rootUrl}
+            rootTooltipContent={rootTooltipContent}
             toolTipStyle={toolTipStyle}
           />
         </div>

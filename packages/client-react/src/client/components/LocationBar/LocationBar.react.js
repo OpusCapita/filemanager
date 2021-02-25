@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './LocationBar.less';
 import Svg from '@opuscapita/react-svg/lib/SVG';
-import {Popup} from 'semantic-ui-react';
+import { Popup } from 'semantic-ui-react';
 const arrowIcon = require('@opuscapita/svg-icons/lib/keyboard_arrow_right.svg');
 
 const propTypes = {
@@ -11,13 +11,13 @@ const propTypes = {
     onClick: PropTypes.func
   })),
   loading: PropTypes.bool,
-  rootUrl: PropTypes.string,
+  rootTooltipContent: PropTypes.func,
   toolTipStyle: PropTypes.object,
 };
 const defaultProps = {
   items: [],
   loading: false,
-  rootUrl: '',
+  rootTooltipContent: () => '',
   toolTipStyle: PropTypes.object,
 };
 
@@ -29,8 +29,7 @@ class LocationBar extends Component {
   }
 
   render() {
-    const { items, loading, rootUrl, toolTipStyle } = this.props;
-
+    const { items, loading, rootTooltipContent, toolTipStyle } = this.props;
     if (!items.length) {
       return (
         <div className="oc-fm--location-bar__item oc-fm--location-bar__item--disabled">
@@ -47,37 +46,36 @@ class LocationBar extends Component {
       ) : null;
 
       const contentDiv = (<div
-                               className={`
-                                 oc-fm--location-bar__item-name
-                                 ${loading ? 'oc-fm--location-bar__item-name--loading' : ''}
-                               `}
-                               name={item.name}
-                             >
-                               {item.name}
-                             </div>
-                         )
+        className={`oc-fm--location-bar__item-name
+                    ${loading ? 'oc-fm--location-bar__item-name--loading' : ''}
+                    `}
+        name={item.name}
+      >
+        {item.name}
+      </div>
+      )
       // Add popup for first element to show rootUrl.
-      const centerComp = (i==0 && rootUrl!=='') ?
-                         (
-                            <Popup content={rootUrl} position='bottom left' style={toolTipStyle} trigger={contentDiv} />
-                         )
-                         :
-                         (contentDiv);
+      const rootTooltipContentStr = rootTooltipContent === null ? '' : rootTooltipContent();
+      const centerComp = (i === 0 && this.state.toolTipStr !== '') ?
+        (
+          <Popup content={rootTooltipContentStr} position='bottom left' style={toolTipStyle} trigger={contentDiv} />
+        ) :
+        (contentDiv);
 
       return (
-                <div
-                  key={i}
-                  tabIndex="0"
-                  onClick={item.onClick} // eslint-disable-line react/jsx-handler-names
-                  className={`
+        <div
+          key={i}
+          tabIndex="0"
+          onClick={item.onClick} // eslint-disable-line react/jsx-handler-names
+          className={`
                     oc-fm--location-bar__item
                     ${i === items.length - 1 ? 'oc-fm--location-bar__item--last' : ''}
                   `}
-                >
-                  {centerComp}
-                  {arrow}
-                </div>
-                );
+        >
+          {centerComp}
+          {arrow}
+        </div>
+      );
     });
 
     return (
