@@ -11,13 +11,13 @@ const propTypes = {
     onClick: PropTypes.func
   })),
   loading: PropTypes.bool,
-  rootTooltipContent: PropTypes.func,
+  rootTooltipContent: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   toolTipStyle: PropTypes.object,
 };
 const defaultProps = {
   items: [],
   loading: false,
-  rootTooltipContent: () => '',
+  rootTooltipContent: '',
   toolTipStyle: PropTypes.object,
 };
 
@@ -25,7 +25,18 @@ export default
 class LocationBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = { tooltipContent: this._retrieveStr(props.rootTooltipContent) };
+  }
+
+  // To retrieve string value from props.rootTooltipContent.
+  _retrieveStr = rootTooltipContent => {
+    return rootTooltipContent === null ? '' :
+      typeof rootTooltipContent === "string" ? rootTooltipContent : rootTooltipContent();
+  }
+
+  _mouseOverHandler = (e, rootTooltipContent) => {
+    const rootTooltipContentStr = this._retrieveStr(rootTooltipContent);
+    this.setState({ tooltipContent: rootTooltipContentStr });
   }
 
   render() {
@@ -49,16 +60,16 @@ class LocationBar extends Component {
         className={`oc-fm--location-bar__item-name
                     ${loading ? 'oc-fm--location-bar__item-name--loading' : ''}
                     `}
+        onMouseOver={i === 0 ? e => this._mouseOverHandler(e, rootTooltipContent) : null}
         name={item.name}
       >
         {item.name}
       </div>
       )
       // Add popup for first element to show rootUrl.
-      const rootTooltipContentStr = rootTooltipContent === null ? '' : rootTooltipContent();
-      const centerComp = (i === 0 && this.state.toolTipStr !== '') ?
+      const centerComp = (i === 0 && this.state.tooltipContent !== '') ?
         (
-          <Popup content={rootTooltipContentStr} position='bottom left' style={toolTipStyle} trigger={contentDiv} />
+          <Popup content={this.state.tooltipContent} position='bottom left' style={toolTipStyle} trigger={contentDiv} />
         ) :
         (contentDiv);
 

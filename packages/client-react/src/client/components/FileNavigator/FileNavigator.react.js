@@ -34,7 +34,7 @@ const propTypes = {
   onSelectionChange: PropTypes.func,
   onResourceChange: PropTypes.func,
   onResourceChildrenChange: PropTypes.func,
-  rootTooltipContent: PropTypes.func,
+  rootTooltipContent: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   toolTipStyle: PropTypes.object,
 };
 
@@ -58,7 +58,7 @@ const defaultProps = {
   onSelectionChange: () => {},
   onResourceChange: () => {},
   onResourceChildrenChange: () => {},
-  rootTooltipContent: () => '',
+  rootTooltipContent: '',
   toolTipStyle: null,
 };
 
