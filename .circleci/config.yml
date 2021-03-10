@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   git: opuscapita/git@volatile
+  jira: circleci/jira@1.2.2
 
 aliases:
   - &save-cache-checksum
@@ -99,3 +100,5 @@ workflows:
           filters:
             tags:
               only: /.*/
+          post-steps:
+            - jira/notify
