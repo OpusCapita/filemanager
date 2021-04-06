@@ -32,7 +32,7 @@ aliases:
 jobs:
   init:
     docker:
-      - image: opuscapita/minsk-core-machineuser-env:2
+      - image: opuscapita/minsk-core-machineuser-env:4
     steps:
       - run: circle_ci_add_env.sh
 
