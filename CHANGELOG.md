@@ -1,4 +1,9 @@
 
+[Release 1.1.7](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.7) Tue Apr 27 2021 09:43:33 GMT+0300 (MSK)
+=======================================================
+
+- [#283](https://github.com/OpusCapita/filemanager/issues/283) Update lodash to 4.17.19 ([#311](https://github.com/OpusCapita/filemanager/issues/311)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2021-04-27 09:42:29 +0300)
+
 [Release 1.1.6](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.6) Tue Apr 27 2021 09:17:06 GMT+0300 (MSK)
 =======================================================
 
