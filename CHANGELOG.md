@@ -1,4 +1,13 @@
 
+[Release 1.1.5](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.5) Tue Apr 27 2021 09:09:23 GMT+0300 (MSK)
+=======================================================
+
+- Added Arabic Translation ([#310](https://github.com/OpusCapita/filemanager/issues/310)) (GitHub 46839821+imdkbj@users.noreply.github.com, 2021-04-27 11:36:34 +0530)
+- Update config.yml (GitHub ashestak-sc@users.noreply.github.com, 2021-04-06 13:21:21 +0300)
+- (EPROC-20383) Used jdk zulu (GitHub ashestak-sc@users.noreply.github.com, 2021-04-06 13:04:39 +0300)
+- (EPROC-20252) Fixed build process (Artsiom Osipenko artem.osipenko@opuscapita.com, 2021-03-26 12:19:30 +0300)
+- (EPROC-20252) Added circleci builds jira integration (GitHub ashestak-sc@users.noreply.github.com, 2021-03-10 16:01:59 +0300)
+
 [Release 1.1.4](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.4) Wed Nov 25 2020 16:45:47 GMT+0300 (MSK)
 =======================================================
 
