@@ -291,6 +291,38 @@ const translations = {
     lastModified: 'Senast ändrad',
     reallyRemove: '{files} kommer att tas bort. Vill du verkligen fortsätta?',
     unableReadDir: 'Det gick inte att läsa en katalog.'
+  },
+   ar: {
+    uploading: 'تحميل',
+    uploadingItem: 'تحميل عنصر واحد',
+    uploadingItems: 'تحميل {quantity} العناصر',
+    upload: 'تحميل',
+    remove: 'إزالة',
+    download: 'تحميل',
+    rename: 'إعادة تسمية',
+    creating: 'خلق',
+    creatingName: 'إنشاء {name} ...',
+    create: 'يخلق',
+    createFolder: 'أنشئ مجلد',
+    zipping: 'ضغط',
+    zippingItem: 'ضغط 1 عنصر',
+    zippingItems: 'ضغط {الكمية} من العناصر',
+    items: 'العناصر',
+    item: 'العنصر',
+    cancel: 'يلغي',
+    confirm: 'يتأكد',
+    folderName: 'إسم الملف',
+    files: 'الملفات',
+    fileExist: 'الملف أو المجلد الذي يحمل الاسم {name} موجود بالفعل',
+    newName: 'اسم جديد',
+    emptyName: 'لا يمكن أن يكون الاسم فارغًا',
+    tooLongFolderName: 'لا يمكن أن يحتوي اسم المجلد على أكثر من 255 حرفًا',
+    folderNameNotAllowedCharacters: 'يحتوي اسم المجلد على أحرف غير مسموح بها',
+    title: 'لقب',
+    fileSize: 'حجم الملف',
+    lastModified: 'آخر تعديل',
+    reallyRemove: 'سيتم حذف {files}. هل تريد حقًا المتابعة؟',
+    unableReadDir: 'غير قادر على قراءة دليل.'
   }
 };
 
