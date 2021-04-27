@@ -292,7 +292,7 @@ const translations = {
     reallyRemove: '{files} kommer att tas bort. Vill du verkligen fortsätta?',
     unableReadDir: 'Det gick inte att läsa en katalog.'
   },
-   ar: {
+  ar: {
     uploading: 'تحميل',
     uploadingItem: 'تحميل عنصر واحد',
     uploadingItems: 'تحميل {quantity} العناصر',
