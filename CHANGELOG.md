@@ -1,4 +1,9 @@
 
+[Release 1.1.6](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.6) Tue Apr 27 2021 09:17:06 GMT+0300 (MSK)
+=======================================================
+
+- Fix indentation [ci skip] (Egor Stambakio egor.stambakio@opuscapita.com, 2021-04-27 09:16:00 +0300)
+
 [Release 1.1.5](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.5) Tue Apr 27 2021 09:09:23 GMT+0300 (MSK)
 =======================================================
 
