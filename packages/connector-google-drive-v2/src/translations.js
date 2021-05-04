@@ -148,11 +148,5 @@ export default function getMessage(locale, key, params) {
     return translation;
   }
 
-  const PARAM_REGEX = /{\w+}/g;
-  function replace(match) {
-    const replacement = match.slice(1, -1);
-    return params[replacement] ? params[replacement] : '';
-  }
-
-  return translation.replace(PARAM_REGEX, replace);
+  return translation.replace(/\{(\w+)\}/g, (_,name) => params[name] || '');
 }
