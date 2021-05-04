@@ -43,8 +43,7 @@ export default function getMessage(locale, key, params) {
 
   if (locale && typeof locale === 'object') {
     translation = locale[key] ? locale[key] : translations['en'][key];
-  }
-  else {
+  } else {
     const translationExists = translations[locale] && translations[locale][key];
     translation = translationExists ? translations[locale][key] : translations['en'][key];
   }
