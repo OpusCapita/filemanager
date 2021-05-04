@@ -501,6 +501,7 @@ class FileNavigator extends Component {
             items={resourceChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
+            locale={apiOptions.locale}
           >
             <Notifications
               className="oc-fm--file-navigator__notifications"

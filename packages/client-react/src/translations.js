@@ -2,10 +2,14 @@ const translations = {
   en: {
     moveForward: 'Move forward',
     moveBack: 'Move back',
+    nothingToShow: 'Nothing to show',
+    useContextMenu: 'Use toolbar or context menu to perform available actions'
   },
   fr: {
     moveForward: 'Avancer',
     moveBack: 'Revenir en arrière',
+    nothingToShow: 'Aucun élément à afficher',
+    useContextMenu: 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
   },
   zh: {
     moveForward: '向前',
