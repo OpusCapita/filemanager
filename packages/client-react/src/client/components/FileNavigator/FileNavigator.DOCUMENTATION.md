@@ -134,7 +134,12 @@ For **Massive Attack** folder in **Customization area => Music => Massive Attack
       apiOptions={{
         ...window.connectors.nodeV1.apiOptions,
         apiRoot: `${window.env.SERVER_URL}`,
-        locale: 'en'
+        locale: 'en',
+        // Or, for example:
+        // locale: {
+        //   moveForward: 'Avancer',
+        //   moveBack: 'Revenir en arrière',
+        // }
       }}
       capabilities={(apiOptions, actions) => ([
         ...(window.connectors.nodeV1.capabilities(apiOptions, actions)),

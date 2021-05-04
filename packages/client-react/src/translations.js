@@ -39,17 +39,25 @@ const translations = {
 };
 
 export default function getMessage(locale, key, params) {
-  let translationExists = (translations[locale] && translations[locale][key]);
-  let translation = translationExists ? translations[locale][key] : translations['en'][key];
+  let translation;
+
+  if (locale && typeof locale === 'object') {
+    translation = locale[key] ? locale[key] : translations['en'][key];
+  }
+  else {
+    const translationExists = translations[locale] && translations[locale][key];
+    translation = translationExists ? translations[locale][key] : translations['en'][key];
+  }
+
   if (!params) {
     return translation;
   }
 
-  let re = /{\w+}/g;
+  const PARAM_REGEX = /{\w+}/g;
   function replace(match) {
-    let replacement = match.slice(1, -1);
+    const replacement = match.slice(1, -1);
     return params[replacement] ? params[replacement] : '';
   }
 
-  return translation.replace(re, replace);
+  return translation.replace(PARAM_REGEX, replace);
 }
