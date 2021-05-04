@@ -340,5 +340,5 @@ export default function getMessage(locale, key, params) {
     return translation;
   }
 
-  return translation.replace(/\{(\w+)\}/g, (_,name) => params[name] || '');
+  return translation.replace(/\{(\w+)\}/g, (_, name) => params[name] || '');
 }
