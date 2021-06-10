@@ -158,7 +158,7 @@ class Toolbar extends Component {
           type="button"
           disabled={!isHistoryStepPossible(history, -1)}
           className={`oc-fm--toolbar__item`}
-          title={getMessage('moveBack')}
+          title={getMessage('common.Toolbar.moveBack')}
           onClick={() => this.handleMoveBackward()}
         >
           <Svg
@@ -172,7 +172,7 @@ class Toolbar extends Component {
           type="button"
           disabled={!isHistoryStepPossible(history, 1)}
           className={`oc-fm--toolbar__item`}
-          title={getMessage('moveForward')}
+          title={getMessage('common.Toolbar.moveForward')}
           onClick={() => this.handleMoveForward()}
         >
           <Svg
