@@ -1,4 +1,10 @@
 
+[Release 1.1.8](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.8) Fri Jun 25 2021 11:55:25 GMT+0300 (MSK)
+=======================================================
+
+- (EPROC-20549) Make translation keys unique ([#314](https://github.com/OpusCapita/filemanager/issues/314)) (GitHub dsanko-sc@users.noreply.github.com, 2021-06-24 12:55:17 +0300)
+- Issue template update to new dfault Project ID (GitHub achernyakevich-sc@users.noreply.github.com, 2021-04-28 19:07:37 +0300)
+
 [Release 1.1.7](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.7) Tue Apr 27 2021 09:43:33 GMT+0300 (MSK)
 =======================================================
 
