@@ -96,7 +96,7 @@
     "@opuscapita/svg-icons": "1.1.1",
     "core-js": "2.5.0",
     "detect-it": "3.0.3",
-    "lodash": "4.17.19",
+    "lodash": "^4.17.21",
     "nanoid": "1.0.0",
     "prop-types": "15.6.0",
     "range-parser": "1.2.0",
