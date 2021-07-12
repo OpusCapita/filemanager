@@ -1,44 +1,44 @@
 const translations = {
   en: {
-    moveForward: 'Move forward',
-    moveBack: 'Move back',
+    'common.Toolbar.moveForward': 'Move forward',
+    'common.Toolbar.moveBack': 'Move back',
     nothingToShow: 'Nothing to show',
     useContextMenu: 'Use toolbar or context menu to perform available actions'
   },
   fr: {
-    moveForward: 'Avancer',
-    moveBack: 'Revenir en arrière',
+    'common.Toolbar.moveForward': 'Avancer',
+    'common.Toolbar.moveBack': 'Revenir en arrière',
     nothingToShow: 'Aucun élément à afficher',
     useContextMenu: 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
   },
   zh: {
-    moveForward: '向前',
-    moveBack: '后退',
+    'common.Toolbar.moveForward': '向前',
+    'common.Toolbar.moveBack': '后退',
   },
 
   de: {
-    moveForward: 'Vorwärts',
-    moveBack: 'Zurück',
+    'common.Toolbar.moveForward': 'Vorwärts',
+    'common.Toolbar.moveBack': 'Zurück',
   },
   fi: {
-    moveForward: 'Siirrä eteenpäin',
-    moveBack: 'Siirrä taaksepäin',
+    'common.Toolbar.moveForward': 'Siirrä eteenpäin',
+    'common.Toolbar.moveBack': 'Siirrä taaksepäin',
   },
   hu: {
-    moveForward: 'Előre lépés',
-    moveBack: 'Vissza lépés',
+    'common.Toolbar.moveForward': 'Előre lépés',
+    'common.Toolbar.moveBack': 'Vissza lépés',
   },
   ru: {
-    moveForward: 'Переместить вперед',
-    moveBack: 'Переместить назад',
+    'common.Toolbar.moveForward': 'Переместить вперед',
+    'common.Toolbar.moveBack': 'Переместить назад',
   },
   no: {
-    moveForward: 'Flytt fremover',
-    moveBack: 'Flytt bakover',
+    'common.Toolbar.moveForward': 'Flytt fremover',
+    'common.Toolbar.moveBack': 'Flytt bakover',
   },
   sv: {
-    moveForward: 'Flytta framåt',
-    moveBack: 'Flytta bakåt',
+    'common.Toolbar.moveForward': 'Flytta framåt',
+    'common.Toolbar.moveBack': 'Flytta bakåt',
   }
 };
 
