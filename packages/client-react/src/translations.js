@@ -2,14 +2,14 @@ const translations = {
   en: {
     'common.Toolbar.moveForward': 'Move forward',
     'common.Toolbar.moveBack': 'Move back',
-    nothingToShow: 'Nothing to show',
-    useContextMenu: 'Use toolbar or context menu to perform available actions'
+    'nothingToShow': 'Nothing to show',
+    'useContextMenu': 'Use toolbar or context menu to perform available actions'
   },
   fr: {
     'common.Toolbar.moveForward': 'Avancer',
     'common.Toolbar.moveBack': 'Revenir en arrière',
-    nothingToShow: 'Aucun élément à afficher',
-    useContextMenu: 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
+    'nothingToShow': 'Aucun élément à afficher',
+    'useContextMenu': 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
   },
   zh: {
     'common.Toolbar.moveForward': '向前',
@@ -43,6 +43,7 @@ const translations = {
 };
 
 export default function getMessage(locale, key, params) {
+  console.log(locale, key, params);
   let translationExists = (translations[locale] && translations[locale][key]);
   let translation = translationExists ? translations[locale][key] : translations['en'][key];
   if (!params) {

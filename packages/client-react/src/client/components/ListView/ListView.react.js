@@ -252,7 +252,7 @@ class ListView extends Component {
                         rowRenderer={Row({
                           selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
                         })}
-                        noRowsRenderer={() => NoFilesFoundStub(this.props.locale)}
+                        noRowsRenderer={() => <NoFilesFoundStub locale={this.props.locale}/>}
                         onRowClick={onRowClick}
                         onRowRightClick={onRowRightClick}
                         onRowDoubleClick={onRowDoubleClick}
