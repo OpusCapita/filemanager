@@ -7,7 +7,7 @@ import getMessage from '../../../translations'
 
 import './NoFilesFoundStub.less';
 
-const NoFilesFoundStub = ({locale}) => (
+const NoFilesFoundStub = ({ locale }) => (
   <div className="oc-fm--no-files-found-stub">
     <Svg
       className="oc-fm--no-files-found-stub__icon"
