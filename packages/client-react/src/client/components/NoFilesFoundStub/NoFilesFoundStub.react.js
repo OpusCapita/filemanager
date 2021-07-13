@@ -14,10 +14,10 @@ const NoFilesFoundStub = ({ locale }) => (
       svg={nothingToShowIcon}
     />
     <div className="oc-fm--no-files-found-stub__title">
-      {getMessage(locale, "nothingToShow")}
+      {getMessage(locale, "common.NoFilesFoundStub.nothingToShow")}
     </div>
     <div className="oc-fm--no-files-found-stub__sub-title">
-      {getMessage(locale, "useContextMenu")}
+      {getMessage(locale, "common.NoFilesFoundStub.useContextMenu")}
     </div>
     {/*
     <div className="oc-fm--no-files-found-stub__sub-title">

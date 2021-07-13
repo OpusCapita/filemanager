@@ -2,14 +2,14 @@ const translations = {
   en: {
     'common.Toolbar.moveForward': 'Move forward',
     'common.Toolbar.moveBack': 'Move back',
-    'nothingToShow': 'Nothing to show',
-    'useContextMenu': 'Use toolbar or context menu to perform available actions'
+    'common.NoFilesFoundStub.nothingToShow': 'Nothing to show',
+    'common.NoFilesFoundStub.useContextMenu': 'Use toolbar or context menu to perform available actions'
   },
   fr: {
     'common.Toolbar.moveForward': 'Avancer',
     'common.Toolbar.moveBack': 'Revenir en arrière',
-    'nothingToShow': 'Aucun élément à afficher',
-    'useContextMenu': 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
+    'common.NoFilesFoundStub.nothingToShow': 'Aucun élément à afficher',
+    'common.NoFilesFoundStub.useContextMenu': 'Utilisez la barre d\'outil ou le menu contextuel pour faire une action'
   },
   zh: {
     'common.Toolbar.moveForward': '向前',
