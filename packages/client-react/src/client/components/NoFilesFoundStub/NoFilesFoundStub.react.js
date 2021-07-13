@@ -1,6 +1,6 @@
 import React from 'react';
-import Svg from '@opuscapita/react-svg/lib/SVG';
 import PropTypes from "prop-types";
+import Svg from '@opuscapita/react-svg/lib/SVG';
 const nothingToShowIcon = require('@opuscapita/svg-icons/lib/add_to_photos.svg');
 
 import getMessage from '../../../translations'
