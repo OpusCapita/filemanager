@@ -43,7 +43,6 @@ const translations = {
 };
 
 export default function getMessage(locale, key, params) {
-  console.log(locale, key, params);
   let translationExists = (translations[locale] && translations[locale][key]);
   let translation = translationExists ? translations[locale][key] : translations['en'][key];
   if (!params) {
