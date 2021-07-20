@@ -1,20 +1,23 @@
 import React from 'react';
-import './NoFilesFoundStub.less';
+import PropTypes from "prop-types";
 import Svg from '@opuscapita/react-svg/lib/SVG';
 const nothingToShowIcon = require('@opuscapita/svg-icons/lib/add_to_photos.svg');
 
-// TODO Add localization
-export default () => (
+import getMessage from '../../../translations'
+
+import './NoFilesFoundStub.less';
+
+const NoFilesFoundStub = ({ locale }) => (
   <div className="oc-fm--no-files-found-stub">
     <Svg
       className="oc-fm--no-files-found-stub__icon"
       svg={nothingToShowIcon}
     />
     <div className="oc-fm--no-files-found-stub__title">
-      Nothing to show
+      {getMessage(locale, "common.NoFilesFoundStub.nothingToShow")}
     </div>
     <div className="oc-fm--no-files-found-stub__sub-title">
-      Use toolbar or context menu to perform available actions
+      {getMessage(locale, "common.NoFilesFoundStub.useContextMenu")}
     </div>
     {/*
     <div className="oc-fm--no-files-found-stub__sub-title">
@@ -23,3 +26,13 @@ export default () => (
     */}
   </div>
 );
+
+NoFilesFoundStub.propTypes = {
+  locale: PropTypes.string
+};
+
+NoFilesFoundStub.defaultProps = {
+  locale: 'en',
+};
+
+export default NoFilesFoundStub;

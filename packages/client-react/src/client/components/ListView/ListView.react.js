@@ -1,20 +1,23 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import './ListView.less';
-import 'react-virtualized/styles.css';
-// TBD individual imports from 'react-virtualized' to decrease bundle size?
-// ex. import Table from 'react-virtualized/dist/commonjs/Table'
-import { Table, AutoSizer, SortDirection } from 'react-virtualized';
-import { ContextMenuTrigger } from "react-contextmenu";
-import NoFilesFoundStub from '../NoFilesFoundStub';
-import Row from './Row.react';
-import ScrollOnMouseOut from '../ScrollOnMouseOut';
+import PropTypes from 'prop-types';
 import { range } from 'lodash';
 import nanoid from 'nanoid';
 import detectIt from 'detect-it';
+// TBD individual imports from 'react-virtualized' to decrease bundle size?
+// ex. import Table from 'react-virtualized/dist/commonjs/Table'
+import { Table, AutoSizer, SortDirection } from 'react-virtualized';
+import 'react-virtualized/styles.css';
+import { ContextMenuTrigger } from "react-contextmenu";
+
+import NoFilesFoundStub from '../NoFilesFoundStub';
+import Row from './Row.react';
+import ScrollOnMouseOut from '../ScrollOnMouseOut';
 import rawToReactElement from '../raw-to-react-element';
 import WithSelection from './withSelectionHOC';
 import { isDef } from './utils';
+
+import './ListView.less';
+
 
 const ROW_HEIGHT = 38;
 const HEADER_HEIGHT = 38;
@@ -44,7 +47,8 @@ const propTypes = {
   onSelection: PropTypes.func,
   onSort: PropTypes.func,
   onKeyDown: PropTypes.func,
-  onRef: PropTypes.func
+  onRef: PropTypes.func,
+  locale: PropTypes.string
 };
 const defaultProps = {
   rowContextMenuId: nanoid(),
@@ -63,7 +67,8 @@ const defaultProps = {
   onSelection: () => {},
   onSort: () => {},
   onKeyDown: () => {},
-  onRef: () => {}
+  onRef: () => {},
+  locale: 'en'
 };
 
 export default
@@ -250,7 +255,7 @@ class ListView extends Component {
                         rowRenderer={Row({
                           selection, lastSelected, loading, contextMenuId: rowContextMenuId, hasTouch: HAS_TOUCH
                         })}
-                        noRowsRenderer={NoFilesFoundStub}
+                        noRowsRenderer={() => <NoFilesFoundStub locale={this.props.locale}/>}
                         onRowClick={onRowClick}
                         onRowRightClick={onRowRightClick}
                         onRowDoubleClick={onRowDoubleClick}

@@ -1,16 +1,18 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import './FileNavigator.less';
+import PropTypes from 'prop-types';
+import { SortDirection } from 'react-virtualized';
+import clickOutside from 'react-click-outside';
+import { find, isEqual } from 'lodash';
+
 import ListView from '../ListView';
 import LocationBar from '../LocationBar';
 import Notifications from '../Notifications';
 import Toolbar from '../Toolbar';
-import { SortDirection } from 'react-virtualized';
-import { find, isEqual } from 'lodash';
-import clickOutside from 'react-click-outside';
 import ContextMenu from '../ContextMenu';
 import rawToReactElement from '../raw-to-react-element';
 import { createHistory, pushToHistory } from '../history';
+
+import './FileNavigator.less';
 
 function hasContext(capability, context) {
   return capability.availableInContexts && capability.availableInContexts.indexOf(context) !== -1;
@@ -501,6 +503,7 @@ class FileNavigator extends Component {
             items={resourceChildren}
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
+            locale={apiOptions.locale}
           >
             <Notifications
               className="oc-fm--file-navigator__notifications"
