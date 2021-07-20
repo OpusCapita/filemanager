@@ -1,4 +1,9 @@
 
+[Release 1.1.10](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.10) Tue Jul 20 2021 11:23:33 GMT+0300 (MSK)
+=======================================================
+
+- Translate message "Nothing to show" ([#319](https://github.com/OpusCapita/filemanager/issues/319)) (GitHub abaliunov-sc@users.noreply.github.com, 2021-07-20 11:14:02 +0300)
+
 [Release 1.1.9](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.9) Wed Jul 07 2021 18:22:02 GMT+0300 (MSK)
 =======================================================
 
