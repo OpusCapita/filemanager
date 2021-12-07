@@ -109,6 +109,9 @@ async function handler(apiOptions, actions) {
 export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
   const { getResource } = actions;
+  const handleClick = (evt) => {
+    handler(apiOptions, actions)
+  }
   return {
     id: label,
     icon: { svg: icons.fileUpload },
@@ -121,6 +124,7 @@ export default (apiOptions, actions) => {
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: () => handler(apiOptions, actions)
+    handler: handleClick,
+    // handler: () => handler(apiOptions, actions)
   };
 }

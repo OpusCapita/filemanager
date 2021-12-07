@@ -60,9 +60,9 @@ Resource example for **connector-node-v1**:
     "createdTime": 1515854279676,
     "id": "Lw",
     "modifiedTime": 1515854279660,
-    "name": "Customization area",
+    "name*": "Customization area",
     "type": "dir",
-    "parentId": null
+    "parentId": null*
 }
 ```
 

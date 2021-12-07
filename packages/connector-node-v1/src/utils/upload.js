@@ -1,9 +1,16 @@
 async function readLocalFile() {
   return new Promise((resolve, reject) => {
+    let isDrag = false;
+
     const uploadInput = document.createElement("input");
+
+    const dragArea = document.createElement('div');
+    const navigator = document.querySelector('.oc-fm--file-navigator');
+    navigator.appendChild(dragArea);
 
     uploadInput.addEventListener('change', _ => {
       const file = uploadInput.files[0];
+      navigator.removeChild(dragArea);
       resolve({
         type: file.type,
         name: file.name,
@@ -15,10 +22,48 @@ async function readLocalFile() {
     // Hide an input element
     uploadInput.style.visibility = 'hidden';
 
-    uploadInput.type = "file";
-    document.body.appendChild(uploadInput);
-    uploadInput.click();
-    document.body.removeChild(uploadInput);
+    dragArea.style.position = 'absolute';
+    dragArea.style.width = '100%';
+    dragArea.style.height = '100%';
+    dragArea.style.top = '0';
+
+    dragArea.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      isDrag = true;
+    })
+
+    dragArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const dt = e.dataTransfer
+      const files = dt.files
+
+      const file = files[0];
+      navigator.removeChild(dragArea)
+      resolve({
+        type: file.type,
+        name: file.name,
+        file
+      });
+    });
+
+    dragArea.addEventListener('dragover', e => {
+      e.preventDefault()
+    });
+
+    navigator.addEventListener('click', () => {
+      if (navigator.contains(dragArea)) {
+        navigator.removeChild(dragArea);
+      }
+    });
+
+    setTimeout(() => {
+      if (!isDrag) {
+        uploadInput.type = "file";
+        document.body.appendChild(uploadInput);
+        uploadInput.click();
+        document.body.removeChild(uploadInput);
+      }
+    }, 10)
   });
 }
 

@@ -400,7 +400,6 @@ class FileNavigator extends Component {
           label: capability.label || '',
           onClick: capability.handler || (() => {}),
         });
-
         if (!isDataView) {
           res.disabled = !capability.shouldBeAvailable(apiOptions);
         }
@@ -462,6 +461,7 @@ class FileNavigator extends Component {
     const filesViewContextMenuItems = this.getContextCapabilities({ context: 'files-view', isDataView: true });
     const toolbarItems = this.getContextCapabilities({ context: 'toolbar' });
     const newButtonItems = this.getContextCapabilities({ context: 'new-button' });
+    const uploadItem = newButtonItems.filter(el => el.id === 'upload');
 
     const rowContextMenuId = `row-context-menu-${id}`;
     const filesViewContextMenuId = `files-view-context-menu-${id}`;
@@ -504,6 +504,7 @@ class FileNavigator extends Component {
             layout={listViewLayout}
             layoutOptions={viewLayoutOptions}
             locale={apiOptions.locale}
+            dragUpload={uploadItem.length ? uploadItem[0].onClick : () => {}}
           >
             <Notifications
               className="oc-fm--file-navigator__notifications"
