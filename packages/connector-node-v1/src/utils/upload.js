@@ -8,6 +8,15 @@ async function readLocalFile() {
     const navigator = document.querySelector('.oc-fm--file-navigator');
     navigator.appendChild(dragArea);
 
+    const handleRemoveDragArea = () => {
+      if (navigator.contains(dragArea)) {
+        navigator.removeChild(dragArea);
+      }
+      navigator.removeEventListener('click', handleRemoveDragArea);
+    };
+
+    navigator.addEventListener('click', handleRemoveDragArea);
+
     uploadInput.addEventListener('change', _ => {
       const file = uploadInput.files[0];
       navigator.removeChild(dragArea);
@@ -34,15 +43,21 @@ async function readLocalFile() {
 
     dragArea.addEventListener('drop', (e) => {
       e.preventDefault();
-      const dt = e.dataTransfer
-      const files = dt.files
-
+      const dt = e.dataTransfer;
+      const files = dt.files;
       const file = files[0];
-      navigator.removeChild(dragArea)
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          console.log(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+      navigator.removeChild(dragArea);
       resolve({
         type: file.type,
         name: file.name,
-        file
+        file,
       });
     });
 
@@ -50,10 +65,8 @@ async function readLocalFile() {
       e.preventDefault()
     });
 
-    navigator.addEventListener('click', () => {
-      if (navigator.contains(dragArea)) {
-        navigator.removeChild(dragArea);
-      }
+    dragArea.addEventListener('dragleave', () => {
+      navigator.removeChild(dragArea);
     });
 
     setTimeout(() => {

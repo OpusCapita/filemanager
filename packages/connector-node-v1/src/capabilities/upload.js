@@ -74,6 +74,7 @@ async function handler(apiOptions, actions) {
   const resource = getResource();
   try {
     const file = await readLocalFile(true);
+    console.log(file.img)
     onStart({ name: file.name, size: file.file.size });
     const response = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress });
     const newResource = normalizeResource(response.body[0]);
@@ -109,9 +110,6 @@ async function handler(apiOptions, actions) {
 export default (apiOptions, actions) => {
   const localeLabel = getMess(apiOptions.locale, label);
   const { getResource } = actions;
-  const handleClick = (evt) => {
-    handler(apiOptions, actions)
-  }
   return {
     id: label,
     icon: { svg: icons.fileUpload },
@@ -124,7 +122,6 @@ export default (apiOptions, actions) => {
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: handleClick,
-    // handler: () => handler(apiOptions, actions)
+    handler: () => handler(apiOptions, actions)
   };
 }
