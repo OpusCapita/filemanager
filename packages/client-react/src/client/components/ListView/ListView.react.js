@@ -172,15 +172,11 @@ class ListView extends Component {
   handleHighlight = (event) => {
     event.preventDefault()
     event.stopPropagation()
-
-    // setDropAreaHighlighted(true)
   }
 
   handleUnhighlight = (event) => {
     event.preventDefault()
     event.stopPropagation()
-
-    // setDropAreaHighlighted(false)
   }
 
   handleDropFile = (event, callback) => {
