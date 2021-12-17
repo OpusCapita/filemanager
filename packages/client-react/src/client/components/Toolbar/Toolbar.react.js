@@ -114,7 +114,11 @@ class Toolbar extends Component {
         disabled={item.disabled}
         className={`oc-fm--toolbar__item`}
         title={item.label || ''}
-        onClick={(!item.disabled && item.onClick) || (() => {})}
+        onClick={() => {
+          if (!item.disabled) {
+            item.onClick({ action: 'click' })
+          }
+        }}
       >
         <Svg
           className="oc-fm--toolbar__item-icon"

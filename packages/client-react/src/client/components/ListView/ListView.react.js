@@ -182,7 +182,7 @@ class ListView extends Component {
   handleDropFile = (event, callback) => {
     event.preventDefault()
     event.stopPropagation()
-    callback();
+    callback({ action: 'drag' });
   }
 
   render() {
