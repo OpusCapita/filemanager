@@ -90,8 +90,6 @@ EOF
 #==============================
 echo "[INFO] Upgrade Helm release"
 
-helm init --client-only
-
 helm dependency update "$deployment_helm_chart_path"
 
 github_user=$( vault kv get -field=value "machineuser/GH_NAME" )
@@ -99,7 +97,6 @@ github_pass=$( vault kv get -field=value "machineuser/GH_PASS" )
 
 helm upgrade \
   --install \
-  --force \
   --namespace "$deployment_namespace" \
   --set ingress.host="$deployment_host" \
   --set ingress.path="$deployment_path" \
