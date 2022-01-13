@@ -12,7 +12,7 @@
   </parent>
 
   <groupId>com.opuscapita.filemanager</groupId>
-  <artifactId>filemanager-spring-boot</artifactId>
+  <artifactId>filemanager-spring-boot-parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -21,5 +21,20 @@
     <module>filemanager-spring-boot-autoconfigure</module>
     <module>demo</module>
   </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.opuscapita.filemanager</groupId>
+        <artifactId>filemanager-spring-boot-starter</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.opuscapita.filemanager</groupId>
+        <artifactId>filemanager-spring-boot-autoconfigure</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>

@@ -5,13 +5,12 @@
 
   <parent>
     <groupId>com.opuscapita.filemanager</groupId>
-    <artifactId>filemanager-spring-boot</artifactId>
+    <artifactId>filemanager-spring-boot-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>filemanager-spring-boot-autoconfigure</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <java.version>11</java.version>

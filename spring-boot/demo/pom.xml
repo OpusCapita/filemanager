@@ -5,13 +5,12 @@
 
   <parent>
     <groupId>com.opuscapita.filemanager</groupId>
-    <artifactId>filemanager-spring-boot</artifactId>
+    <artifactId>filemanager-spring-boot-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>demo</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <description>FileManager Spring Boot Starter Demo</description>
 
@@ -20,7 +19,6 @@
     <dependency>
       <groupId>com.opuscapita.filemanager</groupId>
       <artifactId>filemanager-spring-boot-starter</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
