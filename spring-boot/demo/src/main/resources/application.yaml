@@ -4,3 +4,9 @@ filemanager:
   filesystem:
     rootPath: ./
     rootName: Root directory
+
+logging:
+  level:
+    com:
+      opuscapita:
+        filemanager: DEBUG
