@@ -1,0 +1,6 @@
+filemanager:
+  web:
+    basePath: /myfilemanager
+  filesystem:
+    rootPath: ./
+    rootName: Root directory

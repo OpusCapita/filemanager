@@ -1,0 +1,14 @@
+# MACOS files
+.DS_Store
+
+# Java artifacts
+target
+
+# intellij idea
+.idea
+*.iml
+
+.settings
+.project
+.classpath
+.factorypath
