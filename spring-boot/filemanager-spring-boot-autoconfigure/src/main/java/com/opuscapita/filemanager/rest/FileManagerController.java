@@ -31,9 +31,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -101,46 +106,78 @@ public class FileManagerController {
     @GetMapping("/download")
     public void download(
         @RequestParam String[] items,
-        @RequestParam(required = false) Boolean preview,
+        @RequestParam(defaultValue = "false", required = false) Boolean preview,
         HttpServletResponse response) throws IOException {
 
         if (items.length == 1) {
             Resource resource = fileManagerService.getUnderRootResource(items[0]);
-            if (resource.getType().equals(ResourceService.TYPE_FILE)) {
-                File file = new File(resource.getPath());
+            File file = new File(resource.getPath());
+            if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
+                log.debug("Directory: {}", resource.getName());
+                response.setStatus(HttpServletResponse.SC_OK);
+                String outName = resource.getName() + ".zip";
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.attachment().filename(outName).build().toString());
+                response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(outName));
 
+                Path dirPath = Paths.get(resource.getPath());
+                try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
+                    Files.walkFileTree(dirPath, new SimpleFileVisitor<>() {
+                        public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(filePath).toString()));
+                            try (FileInputStream fileInputStream = new FileInputStream(filePath.toFile())) {
+                                IOUtils.copy(fileInputStream, zipOutputStream);
+                            }
+                            zipOutputStream.closeEntry();
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(dir).toString() + "/"));
+                            zipOutputStream.closeEntry();
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                }
+            } else if (preview == true) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.inline().filename(resource.getName()).build().toString());
+                return;
+            } else if (resource.getType().equals(ResourceService.TYPE_FILE)) {
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment().filename(resource.getName()).build().toString());
-                response.setHeader(HttpHeaders.CONTENT_TYPE, Objects.requireNonNullElse(
-                    URLConnection.guessContentTypeFromName(resource.getName()),
-                    MediaType.APPLICATION_OCTET_STREAM_VALUE));
-
+                response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(resource.getName()));
                 try (FileInputStream fileInputStream = new FileInputStream(file)) {
                     IOUtils.copy(fileInputStream, response.getOutputStream());
                 }
                 return;
-            } else if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
-                log.debug("Directory: {}", resource.getName());
             }
         }
 
         response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"test.zip\"");
+        String outName = "archive.zip";
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            ContentDisposition.attachment().filename(outName).build().toString());
+        response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(outName));
 
-        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-
-        for (String id: items) {
-            Resource resource = fileManagerService.getUnderRootResource(id);
-            String filePath = resource.getPath();
-            log.debug("filePath: {}", filePath);
-            zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
-            FileInputStream fileInputStream = new FileInputStream(new File(filePath));
-            IOUtils.copy(fileInputStream, zipOutputStream);
-            fileInputStream.close();
-            zipOutputStream.closeEntry();
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
+            for (String id: items) {
+                Resource resource = fileManagerService.getUnderRootResource(id);
+                String filePath = resource.getPath();
+                zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
+                try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
+                    IOUtils.copy(fileInputStream, zipOutputStream);
+                }
+                zipOutputStream.closeEntry();
+            }
         }
+    }
 
-        zipOutputStream.close();
+    private String guessMimeType(String name) {
+        return Objects.requireNonNullElse(
+            URLConnection.guessContentTypeFromName(name),
+            MediaType.APPLICATION_OCTET_STREAM_VALUE);
     }
 }
