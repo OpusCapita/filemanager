@@ -109,70 +109,33 @@ public class FileManagerController {
         @RequestParam(defaultValue = "false", required = false) Boolean preview,
         HttpServletResponse response) throws IOException {
 
+        response.setStatus(HttpServletResponse.SC_OK);
+
         if (items.length == 1) {
             Resource resource = fileManagerService.getUnderRootResource(items[0]);
-            File file = new File(resource.getPath());
-            if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
-                log.debug("Directory: {}", resource.getName());
-                response.setStatus(HttpServletResponse.SC_OK);
+            if (preview) {
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.inline().filename(resource.getName()).build().toString());
+                return;
+            } else if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
                 String outName = resource.getName() + ".zip";
                 response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment().filename(outName).build().toString());
                 response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(outName));
-
-                Path dirPath = Paths.get(resource.getPath());
-                try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-                    Files.walkFileTree(dirPath, new SimpleFileVisitor<>() {
-                        public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
-                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(filePath).toString()));
-                            try (FileInputStream fileInputStream = new FileInputStream(filePath.toFile())) {
-                                IOUtils.copy(fileInputStream, zipOutputStream);
-                            }
-                            zipOutputStream.closeEntry();
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(dir).toString() + "/"));
-                            zipOutputStream.closeEntry();
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                }
-            } else if (preview == true) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                    ContentDisposition.inline().filename(resource.getName()).build().toString());
-                return;
             } else if (resource.getType().equals(ResourceService.TYPE_FILE)) {
-                response.setStatus(HttpServletResponse.SC_OK);
                 response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment().filename(resource.getName()).build().toString());
                 response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(resource.getName()));
-                try (FileInputStream fileInputStream = new FileInputStream(file)) {
-                    IOUtils.copy(fileInputStream, response.getOutputStream());
-                }
-                return;
             }
+        } else {
+            response.setStatus(HttpServletResponse.SC_OK);
+            String outName = "archive.zip";
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                ContentDisposition.attachment().filename(outName).build().toString());
+            response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(outName));
         }
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        String outName = "archive.zip";
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename(outName).build().toString());
-        response.setHeader(HttpHeaders.CONTENT_TYPE, guessMimeType(outName));
-
-        try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-            for (String id: items) {
-                Resource resource = fileManagerService.getUnderRootResource(id);
-                String filePath = resource.getPath();
-                zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
-                try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
-                    IOUtils.copy(fileInputStream, zipOutputStream);
-                }
-                zipOutputStream.closeEntry();
-            }
-        }
+        fileManagerService.download(items, response.getOutputStream());
     }
 
     private String guessMimeType(String name) {

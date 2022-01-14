@@ -3,6 +3,7 @@ package com.opuscapita.filemanager.service;
 import com.opuscapita.filemanager.dto.ResourcePostDto;
 import com.opuscapita.filemanager.resource.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-@Slf4j
 @Service
 public class FileManagerService {
 
@@ -62,8 +62,6 @@ public class FileManagerService {
             Resource resource = getUnderRootResource(ids[0]);
             File file = new File(resource.getPath());
             if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
-                log.debug("Directory: {}", resource.getName());
-
                 Path dirPath = Paths.get(resource.getPath());
                 try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
                     Files.walkFileTree(dirPath, new SimpleFileVisitor<>() {
@@ -77,7 +75,7 @@ public class FileManagerService {
                         }
 
                         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(dir).toString() + "/"));
+                            zipOutputStream.putNextEntry(new ZipEntry(FilenameUtils.separatorsToUnix(dirPath.relativize(dir).toString()) + "/"));
                             zipOutputStream.closeEntry();
                             return FileVisitResult.CONTINUE;
                         }
@@ -87,19 +85,18 @@ public class FileManagerService {
                 try (FileInputStream fileInputStream = new FileInputStream(file)) {
                     IOUtils.copy(fileInputStream, outputStream);
                 }
-                return;
             }
-        }
-
-        try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
-            for (String id: ids) {
-                Resource resource = getUnderRootResource(id);
-                String filePath = resource.getPath();
-                zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
-                try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
-                    IOUtils.copy(fileInputStream, zipOutputStream);
+        } else {
+            try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
+                for (String id: ids) {
+                    Resource resource = getUnderRootResource(id);
+                    String filePath = resource.getPath();
+                    zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
+                    try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
+                        IOUtils.copy(fileInputStream, zipOutputStream);
+                    }
+                    zipOutputStream.closeEntry();
                 }
-                zipOutputStream.closeEntry();
             }
         }
     }
