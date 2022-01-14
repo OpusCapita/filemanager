@@ -5,14 +5,21 @@ import com.opuscapita.filemanager.dto.ResourcePostDto;
 import com.opuscapita.filemanager.error.ResourceNotFoundException;
 import com.opuscapita.filemanager.resource.Capabilities;
 import com.opuscapita.filemanager.resource.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,7 +30,10 @@ import java.util.Base64;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+@Slf4j
 @Service
 public class ResourceService {
 
@@ -60,7 +70,7 @@ public class ResourceService {
         File file = new File(resource.getPath());
 
         if (file.isDirectory()) {
-            for (File child: file.listFiles()) {
+            for (File child : file.listFiles()) {
                 children.add(getResource(child));
             }
 
@@ -120,6 +130,78 @@ public class ResourceService {
         return resources;
     }
 
+    public Resource renameResource(String id, String name) throws IOException {
+        Resource resource = getUnderRootResource(id);
+        // attempt to rename root directory should fail
+        if (resource.getParentId() == null) {
+            throw new RuntimeException("Cannot rename root directory");
+        }
+        // trying to rename to the same name should return initial resource
+        if (resource.getName().equals(name)) {
+            return resource;
+        }
+
+        // check if name is sane
+        if (name.contains("/")) {
+            throw new RuntimeException("Name cannot contain forbidden symbols");
+        }
+
+        // check if name is already taken by neighbouring resources
+        if (getChildren(resource.getParentId(), "name", "asc").stream().anyMatch(r -> r.getName().equals(name))) {
+            throw new RuntimeException("Another resource with this name already exists");
+        }
+
+        String parentPath = getUnderRootResource(resource.getParentId()).getPath();
+
+        Path oldPath = Path.of(rootPath).resolve(parentPath).resolve(resource.getName());
+        Path newPath = Path.of(rootPath).resolve(parentPath).resolve(name);
+        Files.move(oldPath, oldPath.resolveSibling(name));
+        return getResource(newPath.toFile());
+    }
+
+    public void download(String[] ids, OutputStream outputStream) throws IOException {
+        if (ids.length == 1) {
+            Resource resource = getUnderRootResource(ids[0]);
+            if (resource.getType().equals(ResourceService.TYPE_DIRECTORY)) {
+                Path dirPath = Paths.get(resource.getPath());
+                try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
+                    Files.walkFileTree(dirPath, new SimpleFileVisitor<>() {
+                        public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+                            zipOutputStream.putNextEntry(new ZipEntry(dirPath.relativize(filePath).toString()));
+                            try (FileInputStream fileInputStream = new FileInputStream(filePath.toFile())) {
+                                IOUtils.copy(fileInputStream, zipOutputStream);
+                            }
+                            zipOutputStream.closeEntry();
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                            zipOutputStream.putNextEntry(new ZipEntry(
+                                FilenameUtils.separatorsToUnix(dirPath.relativize(dir).toString()) + "/"));
+                            zipOutputStream.closeEntry();
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                }
+            } else if (resource.getType().equals(ResourceService.TYPE_FILE)) {
+                try (FileInputStream fileInputStream = new FileInputStream(new File(resource.getPath()))) {
+                    IOUtils.copy(fileInputStream, outputStream);
+                }
+            }
+        } else {
+            try (ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
+                for (String id : ids) {
+                    Resource resource = getUnderRootResource(id);
+                    zipOutputStream.putNextEntry(new ZipEntry(resource.getName()));
+                    try (FileInputStream fileInputStream = new FileInputStream(new File(resource.getPath()))) {
+                        IOUtils.copy(fileInputStream, zipOutputStream);
+                    }
+                    zipOutputStream.closeEntry();
+                }
+            }
+        }
+    }
+
     private Resource getResource(File file) throws IOException {
         BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
@@ -154,7 +236,7 @@ public class ResourceService {
         }
 
         return new Resource(size, parentId, id, name, type,
-                path, createdTime, modifiedTime, capabilities, ancestors);
+            path, createdTime, modifiedTime, capabilities, ancestors);
     }
 
     private String path2id(Path path) {

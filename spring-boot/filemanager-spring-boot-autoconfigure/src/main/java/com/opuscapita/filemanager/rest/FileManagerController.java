@@ -10,15 +10,15 @@ import com.opuscapita.filemanager.service.ResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,20 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
-import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @Slf4j
 @RestController
@@ -82,10 +71,10 @@ public class FileManagerController {
 
     @PostMapping(value = "/files")
     @ApiOperation(value = "Create new file or directory.",
-            notes = "There are two responses for each request with 'application/json' and 'multipart/form-data' content type correspondingly:<ul>" +
-                    "<li>ResourceGetDto schema - for 'application/json' request content type</li>" +
-                    "<li>ResourceListGetDto schema - for 'multipart/form-data' request content type</li></ul>" +
-                    "<p>At the moment swagger 3 doesn't fully support to declare some actions with the same path with different produce types/responses.</p>")
+        notes = "There are two responses for each request with 'application/json' and 'multipart/form-data' content type correspondingly:<ul>" +
+            "<li>ResourceGetDto schema - for 'application/json' request content type</li>" +
+            "<li>ResourceListGetDto schema - for 'multipart/form-data' request content type</li></ul>" +
+            "<p>At the moment swagger 3 doesn't fully support to declare some actions with the same path with different produce types/responses.</p>")
     public ResourceGetDto createDirectory(@RequestBody ResourcePostDto resourcePostDto) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.createDirectory(resourcePostDto));
     }
@@ -103,6 +92,7 @@ public class FileManagerController {
 
     // TODO: add PATCH for /files/*, add /download endpoint
 
+    // TODO: OpenAPI annotations
     @GetMapping("/download")
     public void download(
         @RequestParam String[] items,
@@ -136,6 +126,16 @@ public class FileManagerController {
         }
 
         fileManagerService.download(items, response.getOutputStream());
+    }
+
+    @PatchMapping("/files/{id}")
+    public ResourceGetDto renameResource(@PathVariable String id, @RequestBody RenameRequestBody req) throws IOException {
+        return resourceToGetDtoConverter.convert(fileManagerService.renameResource(id, req.getName()));
+    }
+
+    @Data
+    private static class RenameRequestBody {
+        String name;
     }
 
     private String guessMimeType(String name) {

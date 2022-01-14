@@ -16,9 +16,9 @@ public class ResourceToGetDtoConverter implements Converter<Resource, ResourceGe
     @Override
     public ResourceGetDto convert(Resource resource) {
         return new ResourceGetDto(resource.getSize(), resource.getParentId(),
-                resource.getId(), resource.getName(), resource.getType(),
-                resource.getCreatedTime(), resource.getModifiedTime(), resource.getCapabilities(),
-                resource.getAncestors().stream().map(this::convert).collect(Collectors.toCollection(ArrayDeque::new)));
+            resource.getId(), resource.getName(), resource.getType(),
+            resource.getCreatedTime(), resource.getModifiedTime(), resource.getCapabilities(),
+            resource.getAncestors().stream().map(this::convert).collect(Collectors.toCollection(ArrayDeque::new)));
     }
 
     public ResourceListGetDto convert(List<Resource> resourceList) {

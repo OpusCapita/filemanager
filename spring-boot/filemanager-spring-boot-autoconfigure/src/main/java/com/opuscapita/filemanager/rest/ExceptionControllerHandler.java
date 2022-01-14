@@ -18,8 +18,8 @@ public class ExceptionControllerHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         ApiErrorResponse response = new ApiErrorResponse(HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(), "Resource not found with ID " + ex.getId(),
-                new UrlPathHelper().getPathWithinApplication(request));
+            HttpStatus.NOT_FOUND.getReasonPhrase(), "Resource not found with ID " + ex.getId(),
+            new UrlPathHelper().getPathWithinApplication(request));
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
