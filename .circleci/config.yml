@@ -14,6 +14,7 @@ aliases:
   - &restore-cache
     keys:
       - dependencies-{{ checksum "/tmp/cache-checksum" }}
+      - dependencies
 
   - &save-cache
     key: dependencies-{{ checksum "/tmp/cache-checksum" }}
@@ -71,7 +72,6 @@ jobs:
       - setup_remote_docker
       - run: if [ -z "${CIRCLE_TAG}" ]; then make build-docker; fi
       - run: if [ -z "${CIRCLE_TAG}" ]; then make publish-docker; fi
-      - run: if [ -z "${CIRCLE_TAG}" ]; then make deploy; fi
 
   deploy:
     executor: deployment
