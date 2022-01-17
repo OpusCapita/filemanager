@@ -28,7 +28,7 @@ js-lint: configure ## Lint JS code
 
 .PHONY: js-test
 js-test: configure ## Test JS code
-	npm run test-restapi
+	cd $(git_root)/packages/server-nodejs && npm run test-restapi
 
 .PHONY: js-build
 js-build: configure ## Build JS code
