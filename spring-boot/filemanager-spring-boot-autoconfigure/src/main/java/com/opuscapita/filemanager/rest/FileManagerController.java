@@ -7,9 +7,12 @@ import com.opuscapita.filemanager.dto.ResourcePostDto;
 import com.opuscapita.filemanager.resource.Resource;
 import com.opuscapita.filemanager.service.FileManagerService;
 import com.opuscapita.filemanager.service.ResourceService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ContentDisposition;
@@ -35,7 +38,10 @@ import java.util.Objects;
 @RestController
 @CrossOrigin
 @RequestMapping(value = "${filemanager.web.basePath:/}", produces = "application/json")
-@Api("${filemanager.web.basePath:/")
+@Tag(
+    name = "FileManager API",
+    description = "CRUD operations against file system"
+)
 public class FileManagerController {
 
     private final FileManagerService fileManagerService;
@@ -47,52 +53,67 @@ public class FileManagerController {
         this.resourceToGetDtoConverter = resourceToGetDtoConverter;
     }
 
+    @Operation(
+        summary = "Get the root directory",
+        responses = {@ApiResponse(responseCode = "200")}
+    )
     @GetMapping("/files")
-    @ApiOperation(value = "Get the root directory.")
     public ResourceGetDto getRootResource() throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.getRootResource());
     }
 
+    @Operation(
+        summary = "Get resource by id",
+        responses = {@ApiResponse(responseCode = "200")}
+    )
     @GetMapping("/files/{id}")
-    @ApiOperation(value = "Get resource by id.")
     public ResourceGetDto getResource(@PathVariable String id) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.getUnderRootResource(id));
     }
 
+    @Operation(
+        summary = "Get directory children list",
+        responses = {@ApiResponse(responseCode = "200")}
+    )
     @GetMapping("/files/{id}/children")
-    @ApiOperation(value = "Get directory children list.")
     public ResourceListGetDto getChildren(@PathVariable String id,
-                                          @ApiParam(allowableValues = "name, modifiedTime", value = "Sort by property value.")
+                                          @Parameter(in = ParameterIn.QUERY,
+                                              description = "Sort by property value",
+                                              schema = @Schema(type = "string", allowableValues = {"name", "modifiedTime"})
+                                          )
                                           @RequestParam(required = false, defaultValue = "name") String orderBy,
-                                          @ApiParam(allowableValues = "asc, desc", value = "Sort direction: ascending/descending.")
+                                          @Parameter(in = ParameterIn.QUERY,
+                                              description = "Sort direction: ascending/descending",
+                                              schema = @Schema(type = "string", allowableValues = {"asc", "desc"})
+                                          )
                                           @RequestParam(required = false, defaultValue = "asc") String orderDirection) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.getChildren(id, orderBy, orderDirection));
     }
 
-    @PostMapping(value = "/files")
-    @ApiOperation(value = "Create new file or directory.",
-        notes = "There are two responses for each request with 'application/json' and 'multipart/form-data' content type correspondingly:<ul>" +
-            "<li>ResourceGetDto schema - for 'application/json' request content type</li>" +
-            "<li>ResourceListGetDto schema - for 'multipart/form-data' request content type</li></ul>" +
-            "<p>At the moment swagger 3 doesn't fully support to declare some actions with the same path with different produce types/responses.</p>")
+    @Operation(summary = "Create new file or directory",
+        description = "There are two responses for each request with 'application/json' and 'multipart/form-data' " +
+            "content type correspondingly. At the moment swagger 3 doesn't fully support to declare some actions " +
+            "with the same path with different produce types/responses.")
+    @PostMapping(value = "/files", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResourceGetDto createDirectory(@RequestBody ResourcePostDto resourcePostDto) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.createDirectory(resourcePostDto));
     }
 
-    @PostMapping(value = "/files", consumes = {"multipart/form-data"})
+    @Operation(summary = "Upload a file", description = "There are two responses for each request with 'application/json' and 'multipart/form-data' " +
+        "content type correspondingly. At the moment swagger 3 doesn't fully support to declare some actions " +
+        "with the same path with different produce types/responses.")
+    @PostMapping(value = "/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResourceListGetDto uploadResource(ResourcePostDto resourcePostDto) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.uploadResource(resourcePostDto));
     }
 
+    @Operation(summary = "Delete resource by id")
     @DeleteMapping("/files/{id}")
-    @ApiOperation(value = "Delete resource by id.")
     public void deleteResource(@PathVariable String id) throws IOException {
         fileManagerService.deleteResource(id);
     }
 
-    // TODO: add PATCH for /files/*, add /download endpoint
-
-    // TODO: OpenAPI annotations
+    @Operation(summary = "Download a file or a directory, or multiple files")
     @GetMapping("/download")
     public void download(
         @RequestParam String[] items,
@@ -128,6 +149,7 @@ public class FileManagerController {
         fileManagerService.download(items, response.getOutputStream());
     }
 
+    @Operation(summary = "Rename resource by id")
     @PatchMapping("/files/{id}")
     public ResourceGetDto renameResource(@PathVariable String id, @RequestBody RenameRequestBody req) throws IOException {
         return resourceToGetDtoConverter.convert(fileManagerService.renameResource(id, req.getName()));

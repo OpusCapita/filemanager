@@ -70,3 +70,5 @@ npm start
 
 # open UI in browser: http://localhost:3000
 ```
+
+Visit `/swagger-ui.html` to open Swagger/OpenAPI v3 UI.

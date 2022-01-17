@@ -2,6 +2,8 @@ package com.opuscapita.filemanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.opuscapita.filemanager.resource.Capabilities;
+import com.opuscapita.filemanager.service.ResourceService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public class ResourceGetDto {
 
     private String id;
     private String name;
+    @Schema(type = "string", allowableValues = {ResourceService.TYPE_FILE, ResourceService.TYPE_DIRECTORY})
     private String type;
 
     private ZonedDateTime createdTime;
