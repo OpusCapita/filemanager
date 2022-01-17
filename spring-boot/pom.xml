@@ -37,4 +37,17 @@
     </dependencies>
   </dependencyManagement>
 
+  <distributionManagement>
+    <repository>
+      <id>${maven2ReleasesDeploymentRepositoryId}</id>
+      <name>maven2Releases</name>
+      <url>${maven2ReleasesDeploymentRepositoryUrl}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${maven2SnapshotsDeploymentRepositoryId}</id>
+      <name>maven2Snapshots</name>
+      <url>${maven2SnapshotsDeploymentRepositoryUrl}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>
