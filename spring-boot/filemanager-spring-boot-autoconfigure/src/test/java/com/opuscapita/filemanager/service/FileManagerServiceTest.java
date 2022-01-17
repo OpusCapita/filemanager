@@ -83,10 +83,11 @@ public class FileManagerServiceTest {
         String twoId = service.getChildren(rootId, "name", "asc").get(1).getId();
         String abcId = service.getChildren(twoId, "name", "asc").get(0).getId();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        service.download(new String[]{abcId}, out);
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            service.download(new String[]{abcId}, out);
+            assertEquals(out.toString(), "abc");
+        }
 
-        assertEquals(out.toString(), "abc");
     }
 
     @Test
@@ -94,18 +95,18 @@ public class FileManagerServiceTest {
         String rootId = service.getRootResource().getId();
         String oneId = service.getChildren(rootId, "name", "asc").get(0).getId();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        service.download(new String[]{oneId}, out);
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            service.download(new String[]{oneId}, out);
 
-        ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(out.toByteArray()));
-        ZipEntry zEntry = null;
-        List<String> entries = new ArrayList<>();
-        while ((zEntry = zis.getNextEntry()) != null) {
-            entries.add(zEntry.getName());
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(out.toByteArray()))) {
+                ZipEntry zEntry = null;
+                List<String> entries = new ArrayList<>();
+                while ((zEntry = zis.getNextEntry()) != null) {
+                    entries.add(zEntry.getName());
+                }
+                assertTrue(entries.containsAll(Arrays.asList("1.txt", "2.txt", "/")));
+            }
         }
-        zis.close();
-
-        assertTrue(entries.containsAll(Arrays.asList("1.txt", "2.txt", "/")));
     }
 
     @Test
@@ -114,21 +115,18 @@ public class FileManagerServiceTest {
         String oneId = service.getChildren(rootId, "name", "asc").get(0).getId();
         List<Resource> files = service.getChildren(oneId, "name", "asc");
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        service.download(new String[]{files.get(0).getId(), files.get(1).getId()}, out);
-
-        ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(out.toByteArray()));
-        ZipEntry zEntry = null;
-        List<String> entries = new ArrayList<>();
-        while ((zEntry = zis.getNextEntry()) != null) {
-            entries.add(zEntry.getName());
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            service.download(new String[]{files.get(0).getId(), files.get(1).getId()}, out);
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(out.toByteArray()))) {
+                ZipEntry zEntry = null;
+                List<String> entries = new ArrayList<>();
+                while ((zEntry = zis.getNextEntry()) != null) {
+                    entries.add(zEntry.getName());
+                }
+                assertEquals(2, entries.size());
+                assertTrue(entries.containsAll(Arrays.asList("1.txt", "2.txt")));
+            }
         }
-        zis.close();
-
-        log.debug(entries.toString());
-
-        assertEquals(2, entries.size());
-        assertTrue(entries.containsAll(Arrays.asList("1.txt", "2.txt")));
     }
 
     @Test
