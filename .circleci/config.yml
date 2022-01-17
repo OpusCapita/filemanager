@@ -7,7 +7,9 @@ orbs:
 aliases:
   - &save-cache-checksum
     name: Save cache checksum
-    command: find . -name "package.json" | sort | xargs cat >> /tmp/cache-checksum
+    command: |
+      find . -name "package.json" | sort | xargs cat >> /tmp/cache-checksum
+      find . -name "pom.xml" | sort | xargs cat >> /tmp/cache-checksum
 
   - &restore-cache
     keys:
@@ -28,6 +30,21 @@ aliases:
       - ./packages/server-nodejs/node_modules
       - ./packages/demoapp/package-lock.json
       - ./packages/demoapp/node_modules
+      - ~/.m2/repository
+
+executors:
+  code:
+    docker:
+      - image: opuscapita/minsk-core-ci:5
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+  deployment:
+    docker:
+      - image: opuscapita/minsk-core-ci:deploy
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
 
 jobs:
   init:
@@ -36,48 +53,31 @@ jobs:
     steps:
       - run: circle_ci_add_env.sh
 
-  build-docker-ci:
-    docker:
-    - image: docker
-    steps:
-      - run: apk add --no-cache bash make git openssh
-      - checkout
-      - run: wget -O /vault.zip https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip; unzip /vault.zip -d /usr/bin/
-      - setup_remote_docker
-      - run:
-          name: Check if image build is required
-          command: |
-            make docker-auth
-            if [ -z "$(git show --name-only | grep build/docker/ci)" ]; then
-              DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect opuscapita/filemanager:ci && \
-                circleci step halt || echo "Image doesn't exist, proceed"
-            fi
-      - run: make build-docker-ci && make publish-docker-ci
-
   build:
-    docker:
-      - image: opuscapita/filemanager:ci
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+    executor: code
     steps:
       - git/checkout-with-submodules
       - run: *save-cache-checksum
       - restore_cache: *restore-cache
-      - run: make refresh-dependencies
-      - save_cache: *save-cache
-      - run: make lint
-      - run: make test-restapi
+      - run: make js-install-deps js-lint js-test
       - store_test_results:
           path: ./packages/server-nodejs/test-results
       - store_artifacts:
           path: ./packages/server-nodejs/test-results
-      - run: if [ ! -z "${CIRCLE_TAG}" ]; then make publish; else echo "This step is skipped as this is not a release build"; fi
-      - run: if [ -z "${CIRCLE_TAG}" ]; then make build; fi
+      - run: if [ ! -z "${CIRCLE_TAG}" ]; then make js-publish; else echo "This step is skipped as this is not a release build"; fi
+      - run: if [ -z "${CIRCLE_TAG}" ]; then make js-build; fi
+      - run: make java-build
+      - save_cache: *save-cache
       - setup_remote_docker
       - run: if [ -z "${CIRCLE_TAG}" ]; then make build-docker; fi
       - run: if [ -z "${CIRCLE_TAG}" ]; then make publish-docker; fi
       - run: if [ -z "${CIRCLE_TAG}" ]; then make deploy; fi
+
+  deploy:
+    executor: deployment
+    steps:
+      - checkout
+      - run: make deploy-demo
 
 workflows:
   version: 2
@@ -87,18 +87,18 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-docker-ci:
-          requires:
-            - init
-          filters:
-            tags:
-              only: /.*/
       - build:
           requires:
             - init
-            - build-docker-ci
           filters:
             tags:
               only: /.*/
           post-steps:
             - jira/notify
+      - deploy:
+          requires:
+            - init
+            - build
+          filters:
+            tags:
+              ignore: /.+/
