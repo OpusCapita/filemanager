@@ -153,8 +153,8 @@ public class ResourceService {
 
         String parentPath = getUnderRootResource(resource.getParentId()).getPath();
 
-        Path oldPath = Path.of(rootPath).resolve(parentPath).resolve(resource.getName());
-        Path newPath = Path.of(rootPath).resolve(parentPath).resolve(name);
+        Path oldPath = Path.of(parentPath).resolve(resource.getName());
+        Path newPath = Path.of(parentPath).resolve(name);
         Files.move(oldPath, oldPath.resolveSibling(name));
         return getResource(newPath.toFile());
     }
