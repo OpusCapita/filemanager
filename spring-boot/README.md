@@ -1,6 +1,8 @@
 # FileManager backend for Spring Boot
 
-## Usage
+## Installation
+
+### With access to OpusCapita artifactory:
 
 Add dependency (example for Maven):
 
@@ -11,6 +13,30 @@ Add dependency (example for Maven):
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
+
+### Without access to OpusCapita artifactory
+
+Clone repository, then
+```
+cd spring-boot
+mvn package
+```
+
+Then locate .jar artifacts in `<module>/target` directories and use them locally:
+- https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html
+- https://www.baeldung.com/install-local-jar-with-maven/
+- or include directly into pom.xml:
+```
+<dependency>
+  <groupId>com.opuscapita.filemanager</groupId>
+  <artifactId>filemanager-spring-boot-autoconfigure</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <scope>system</scope>
+  <systemPath>path/to/filemanager/spring-boot/filemanager-spring-boot-autoconfigure/target/filemanager-spring-boot-autoconfigure-0.0.1-SNAPSHOT.jar</systemPath>
+</dependency>
+```
+
+## Configuration
 
 Add configuration properties:
 ```
@@ -26,7 +52,7 @@ filemanager:
 
 ## Development
 
-Start demo app: 
+Start demo app:
 ```
 cd demo
 mvn spring-boot:run
@@ -42,5 +68,5 @@ cd packages/client-react
 
 npm start
 
-# open UI in browser: http://localhost:3000 
+# open UI in browser: http://localhost:3000
 ```
