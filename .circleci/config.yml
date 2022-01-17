@@ -76,7 +76,7 @@ jobs:
   deploy:
     executor: deployment
     steps:
-      - checkout
+      - git/checkout-with-submodules
       - run: make deploy-demo
 
 workflows:
