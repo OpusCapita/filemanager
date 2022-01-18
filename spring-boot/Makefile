@@ -6,7 +6,7 @@ include $(git_root)/tools/makefile/help.mk
 .PHONY: configure
 configure:
 ifneq (,$(wildcard /\.dockerenv))
-	-configure-maven.sh
+	configure-maven.sh
 endif
 
 .PHONY: build

@@ -7,7 +7,7 @@ include $(git_root)/tools/makefile/executors.mk
 .PHONY: configure
 configure:
 ifneq (,$(wildcard /\.dockerenv))
-	-configure-npm.sh
+	configure-npm.sh
 endif
 
 # docker-login.sh script is expected to exist in CI image
@@ -15,7 +15,7 @@ endif
 .PHONY: docker-login
 docker-login:
 ifneq (,$(wildcard /\.dockerenv))
-	-docker-login.sh
+	docker-login.sh
 endif
 
 .PHONY: js-install-deps
