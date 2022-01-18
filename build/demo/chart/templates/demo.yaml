@@ -21,8 +21,15 @@ spec:
         backend:
           service:
             name: filemanager
-            port: 
+            port:
               number: 80
+      - path: {{ .Values.ingress.path }}/spring-boot-backend(/?.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: filemanager
+            port:
+              number: 8080
   tls:
     - hosts:
       - {{ .Values.ingress.host }}
@@ -39,6 +46,8 @@ spec:
   ports:
     - port: 80
       targetPort: 3020
+    - port: 8080
+      targetPort: 8080
   selector:
     app.kubernetes.io/name: filemanager
 ---
@@ -63,7 +72,7 @@ spec:
         date: {{ now }} # RollingRestart workaround. https://github.com/kubernetes/kubernetes/issues/13488
     spec:
       containers:
-      - name: filemanager
+      - name: js-demo
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         env:
@@ -82,5 +91,25 @@ spec:
             memory: "64Mi"
           limits:
             memory: "256Mi"
+      - name: spring-boot-demo
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}-spring-boot"
+        imagePullPolicy: Always
+        args:
+        - --filemanager.web.basePath={{ .Values.ingress.path }}/spring-boot-backend
+        - --filemanager.filesystem.rootPath=/demo-fs
+        ports:
+        - containerPort: 8080
+          name: app
+        resources:
+          requests:
+            memory: "256Mi"
+          limits:
+            memory: "256Mi"
+        volumeMounts:
+        - mountPath: /demo-fs
+          name: spring-boot-demo-fs
+      volumes:
+      - name: spring-boot-demo-fs
+        emptyDir: {}
       imagePullSecrets:
         - name: {{.Values.dockerSecret}}

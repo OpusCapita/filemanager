@@ -1,12 +1,12 @@
 git_root := $(shell git rev-parse --show-toplevel)
 include $(git_root)/tools/makefile/help.mk
 
-# configure-maven.sh script is expected to exist in CI image
+# configure-maven.sh & docker-login.sh scripts are expected to exist in CI image
 # (which could be started via 'make container-for-code' in repo root or which is executor in CI process)
 .PHONY: configure
 configure:
 ifneq (,$(wildcard /\.dockerenv))
-	configure-maven.sh
+	configure-maven.sh && docker-login.sh
 endif
 
 .PHONY: build
