@@ -23,7 +23,30 @@ spec:
             name: filemanager
             port:
               number: 80
-      - path: {{ .Values.ingress.path }}/spring-boot-backend(/?.*)
+  tls:
+    - hosts:
+      - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.host }}-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: filemanager-spring-boot
+  labels:
+    app.kubernetes.io/name: filemanager
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 2000m
+    cert-manager.io/cluster-issuer: "default"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.path }}/spring-boot-backend/(.*)
         pathType: ImplementationSpecific
         backend:
           service:
@@ -45,8 +68,10 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
+      name: js
       targetPort: 3020
     - port: 8080
+      name: spring-boot
       targetPort: 8080
   selector:
     app.kubernetes.io/name: filemanager
@@ -95,7 +120,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}-spring-boot"
         imagePullPolicy: Always
         args:
-        - --filemanager.web.basePath={{ .Values.ingress.path }}/spring-boot-backend
+        - --filemanager.web.basePath=/
         - --filemanager.filesystem.rootPath=/demo-fs
         ports:
         - containerPort: 8080
