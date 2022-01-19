@@ -1,5 +1,14 @@
 # FileManager backend for Spring Boot
 
+## Demo
+
+- open regular demo link for particular branch (e.g. for `master` this is `https://demo.core.dev.opuscapita.com/filemanager/master/`, for different branch replace `master` with branch name)
+- to use Spring boot backend instead of NodeJS backend open browser console and execute there:
+```
+env.SERVER_URL = env.SERVER_URL + "/spring-boot-backend"
+```
+- open `components` menu, select there `FileManagerOne` - it'll be FileManager UI with Spring Boot backend
+
 ## Installation
 
 ### With access to OpusCapita artifactory
