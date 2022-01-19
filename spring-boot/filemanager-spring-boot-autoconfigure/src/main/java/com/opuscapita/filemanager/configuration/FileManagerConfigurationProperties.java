@@ -2,12 +2,12 @@ package com.opuscapita.filemanager.configuration;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @ConfigurationProperties(prefix = "filemanager")
 public class FileManagerConfigurationProperties {
 
@@ -17,7 +17,7 @@ public class FileManagerConfigurationProperties {
 
     @Data
     @AllArgsConstructor
-    @RequiredArgsConstructor
+    @NoArgsConstructor
     public static class FileSystemProperties {
         private String rootPath;
         private String rootName;
@@ -25,7 +25,7 @@ public class FileManagerConfigurationProperties {
 
     @Data
     @AllArgsConstructor
-    @RequiredArgsConstructor
+    @NoArgsConstructor
     public static class WebProperties {
         private String basePath;
     }
