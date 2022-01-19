@@ -19,6 +19,12 @@
 
 Detailed documentation for each package is coming soon.
 
+### Spring Boot Starter
+
+Spring boot applications can benefit from Spring boot starter package found here:
+
+* [Spring Boot](./spring-boot) - includes starter itself and example Spring boot application
+
 ### Basic usage
 
 Client implementation is an npm package which can be embed into your application.

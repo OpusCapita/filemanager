@@ -2,7 +2,7 @@
 
 ## Installation
 
-### With access to OpusCapita artifactory:
+### With access to OpusCapita artifactory
 
 Add dependency (example for Maven):
 
