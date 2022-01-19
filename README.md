@@ -107,6 +107,17 @@ ReactDOM.render(fileManager, document.body);
 #### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/.github/CODE_OF_CONDUCT.md)
 #### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/.github/CONTRIBUTING.md)
 
+## Development
+
+In any directory with `Makefile` (including repo's root) type `make` to see available commands (requires `make` utility to be installed locally, ideally GNU MAKE 4.2.1).
+
+There're prebuilt docker images with tools needed for building code and deploying demo application:
+```
+make container-for-code # starts a container, where one can execute 'make' to test/build/etc code (both for JS and Spring boot parts)
+// or
+make container-for-deployment # starts a container, where one can execute 'make' with goals related to deployment of demo application
+```
+
 ### Main contributors
 
 | [<img src="https://avatars.githubusercontent.com/u/24603787?v=3" width="100px;"/>](https://github.com/asergeev-sc) | [**Alexey Sergeev**](https://github.com/asergeev-sc)     |
