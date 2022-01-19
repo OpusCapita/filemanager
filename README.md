@@ -25,6 +25,14 @@ Spring boot applications can benefit from Spring boot starter package found here
 
 * [Spring Boot](./spring-boot) - includes starter itself and example Spring boot application
 
+Demo with Spring boot backend:
+- open demo link for particular branch (e.g. for `master` this is `https://demo.core.dev.opuscapita.com/filemanager/master/`, for different branch replace `master` with branch name)
+- open browser console and execute there
+```
+env.SERVER_URL = env.SERVER_URL + "/spring-boot-backend"
+```
+- open `components` menu, select there `FileManagerOne` - it'll be FileManager UI with Spring Boot backend
+
 ### Basic usage
 
 Client implementation is an npm package which can be embed into your application.
