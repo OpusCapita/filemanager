@@ -22,9 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(
     classes = FileManagerIntegrationTest.TestConfig.class,
     properties = {
-        "filemanager.web.basePath = /filemanager",
-        "filemanager.filesystem.rootPath = ./test-files",
-        "filemanager.filesystem.rootName = Root directory"
+        "filemanager.web.base-path = /filemanager",
+        "filemanager.filesystem.root-path = ./test-files",
+        "filemanager.filesystem.root-name = Root directory"
     })
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
 public class FileManagerIntegrationTest {
@@ -32,7 +32,7 @@ public class FileManagerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
 
-    // it should be the same as filemanager.web.basePath in configuration properties
+    // it should be the same as filemanager.web.base-path in configuration properties
     private static final String basePath = "/filemanager";
 
     @Test

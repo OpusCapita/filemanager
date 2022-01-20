@@ -37,7 +37,7 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @CrossOrigin
-@RequestMapping(value = "${filemanager.web.basePath:/}", produces = "application/json")
+@RequestMapping(value = "${filemanager.web.base-path:/}", produces = "application/json")
 @Tag(
     name = "FileManager API",
     description = "CRUD operations against file system"

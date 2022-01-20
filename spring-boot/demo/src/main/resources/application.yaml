@@ -1,9 +1,9 @@
 filemanager:
   web:
-    basePath: /myfilemanager
+    base-path: /myfilemanager
   filesystem:
-    rootPath: ./
-    rootName: Root directory
+    root-path: ./
+    root-name: Root directory
 
 logging:
   level:

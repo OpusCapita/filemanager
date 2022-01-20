@@ -53,10 +53,10 @@ Add configuration properties:
 
 filemanager:
   web:
-    basePath: /api # filemanager API is exposed on {basePath}, can also be empty or `/`
+    base-path: /api # filemanager API is exposed on {base-path}, can also be empty or `/`
   filesystem:
-    rootPath: /path/to/mydir # path to root directory exposed via filemanager API
-    rootName: Root directory # how this root directory is named in API responses
+    root-path: /path/to/mydir # path to root directory exposed via filemanager API
+    root-name: Root directory # how this root directory is named in API responses
 ```
 
 ## Development
