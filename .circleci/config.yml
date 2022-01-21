@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run:
           name: Executing release script
-          command: release.sh node
+          command: release.sh node maven
 workflows:
   version: 2
   release-and-build:
