@@ -13,7 +13,7 @@
 
   <groupId>com.opuscapita.filemanager</groupId>
   <artifactId>filemanager-spring-boot-parent</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1.11</version>
   <packaging>pom</packaging>
 
   <modules>

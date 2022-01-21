@@ -1,4 +1,11 @@
 
+[Release 1.1.11](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.11) Fri Jan 21 2022 15:34:54 GMT+0300 (MSK)
+=======================================================
+
+- Implement Filemanager Spring Boot starter ([#328](https://github.com/OpusCapita/filemanager/issues/328)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2022-01-21 15:20:54 +0300)
+- (EPC-21) Update Helm version to 3.7.2 (Vladislav Rachok rachok@scand.com, 2022-01-07 19:55:44 +0300)
+- (EPC-17) Fix Ingress resources according new api version (Vladislav Rachok rachok@scand.com, 2021-11-23 16:58:46 +0300)
+
 [Release 1.1.10](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.10) Tue Jul 20 2021 11:23:33 GMT+0300 (MSK)
 =======================================================
 
