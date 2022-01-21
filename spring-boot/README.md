@@ -59,6 +59,16 @@ filemanager:
     root-name: Root directory # how this root directory is named in API responses
 ```
 
+By default Java has a limit for size of uploads set to 1Mb. If it needs to be changed, use the following properties in application:
+
+```
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+```
+
 ## Development
 
 Start demo app:
