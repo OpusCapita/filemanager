@@ -95,6 +95,9 @@ helm dependency update "$deployment_helm_chart_path"
 github_user=$( vault kv get -field=value "machineuser/GH_NAME" )
 github_pass=$( vault kv get -field=value "machineuser/GH_PASS" )
 
+# fix job in dependent chart
+kubectl -n ${deployment_namespace} delete job github-notify-deploy-job --ignore-not-found
+
 helm upgrade \
   --install \
   --namespace "$deployment_namespace" \

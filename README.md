@@ -19,6 +19,12 @@
 
 Detailed documentation for each package is coming soon.
 
+### Spring Boot Starter
+
+Spring boot applications can benefit from Spring boot starter package found here:
+
+* [Spring Boot](./spring-boot) - see README there for details
+
 ### Basic usage
 
 Client implementation is an npm package which can be embed into your application.
@@ -100,6 +106,17 @@ ReactDOM.render(fileManager, document.body);
 #### [Changelog](https://github.com/OpusCapita/filemanager/blob/master/CHANGELOG.md)
 #### [Code of Conduct](https://github.com/OpusCapita/filemanager/blob/master/.github/CODE_OF_CONDUCT.md)
 #### [Contributing Guide](https://github.com/OpusCapita/filemanager/blob/master/.github/CONTRIBUTING.md)
+
+## Development
+
+In any directory with `Makefile` (including repo's root) type `make` to see available commands (requires `make` utility to be installed locally, ideally GNU MAKE 4.2.1).
+
+There're prebuilt docker images with tools needed for building code and deploying demo application:
+```
+make container-for-code # starts a container, where one can execute 'make' to test/build/etc code (both for JS and Spring boot parts)
+// or
+make container-for-deployment # starts a container, where one can execute 'make' with goals related to deployment of demo application
+```
 
 ### Main contributors
 

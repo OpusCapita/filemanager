@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.opuscapita.filemanager</groupId>
+    <artifactId>filemanager-spring-boot-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>demo</artifactId>
+
+  <description>FileManager Spring Boot Starter Demo</description>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.opuscapita.filemanager</groupId>
+      <artifactId>filemanager-spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>5.0.0</version>
+        <executions>
+          <execution>
+            <id>get-the-git-infos</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <offline>true</offline>
+          <verbose>false</verbose>
+          <injectAllReactorProjects>true</injectAllReactorProjects>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <configuration>
+          <container>
+            <labels>
+              <com.opuscapita.filemanager.git.branch>${git.branch}</com.opuscapita.filemanager.git.branch>
+              <com.opuscapita.filemanager.git.commit>${git.commit.id}</com.opuscapita.filemanager.git.commit>
+              <com.opuscapita.filemanager.git.origin>${git.remote.origin.url}</com.opuscapita.filemanager.git.origin>
+              <com.opuscapita.filemanager.created.at>${git.build.time}</com.opuscapita.filemanager.created.at>
+            </labels>
+          </container>
+          <from>
+            <image>openjdk:11-jre</image>
+          </from>
+          <to>
+            <image>opuscapita/filemanager:${git.branch}-spring-boot</image>
+          </to>
+        </configuration>
+        <executions>
+          <execution>
+            <id>docker-image-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>dockerBuild</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker-image-push</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <executable>true</executable>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

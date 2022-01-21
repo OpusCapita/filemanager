@@ -1,49 +1,81 @@
-.DEFAULT_GOAL := help
+git_root := $(shell git rev-parse --show-toplevel)
+include $(git_root)/tools/makefile/help.mk
+include $(git_root)/tools/makefile/executors.mk
 
-.PHONY: refresh-dependencies
-refresh-dependencies: ## Install dependencies
-	./build/demo/refresh-dependencies.sh
+# configure-npm.sh script is expected to exist in CI image
+# (which could be started via 'make container-for-code' in repo root or which is executor in CI process)
+.PHONY: configure
+configure:
+ifneq (,$(wildcard /\.dockerenv))
+	configure-npm.sh
+endif
 
-.PHONY: lint
-lint: ## Run eslint
-	./build/demo/lint.sh
+# docker-login.sh script is expected to exist in CI image
+# (which could be started via 'make container-for-code' in repo root or which is executor in CI process)
+.PHONY: docker-login
+docker-login:
+ifneq (,$(wildcard /\.dockerenv))
+	docker-login.sh
+endif
 
-.PHONY: test-restapi
-test-restapi: ## Test REST API
-	./build/demo/test-restapi.sh
+.PHONY: js-install-deps
+js-install-deps: configure ## Install JS dependencies
+	npm install --unsafe-perm
 
-.PHONY: build
-build: ## Build npm project
-	./build/demo/build.sh
+.PHONY: js-lint
+js-lint: configure ## Lint JS code
+	npm run lint
 
-.PHONY: publish
-publish: ## Publish to npm
-	./build/demo/publish.sh
+.PHONY: js-test
+js-test: configure ## Test JS code
+	cd $(git_root)/packages/server-nodejs && npm run test-restapi
 
-.PHONY: docker-auth
-docker-auth: ## Login to Dockerhub
-	./build/docker/docker-auth.sh
+.PHONY: js-build
+js-build: configure ## Build JS code
+	cd $(git_root)/packages/client-react && \
+	npm run gh-pages:build && \
+	rm -rf ../demoapp/static && \
+	mkdir -p ../demoapp/static && \
+	mv .gh-pages-tmp/* ../demoapp/static/
 
-.PHONY: build-docker-ci
-build-docker-ci: docker-auth ## Build CI Docker image
-	./build/docker/ci/build.sh
+# Build server API docs
 
-.PHONY: publish-docker-ci
-publish-docker-ci: docker-auth ## Publish CI Docker image
-	./build/docker/ci/push.sh
+	cd $(git_root)/packages/server-nodejs && \
+	npm run build-api-docs && \
+	mkdir -p ../demoapp/static/api && \
+	cp -r api-docs.tmp/docs ../demoapp/static/api
+
+# Generate demo files
+
+	mkdir -p $(git_root)/packages/demoapp/demoapp/demo-files && \
+	$(git_root)/demo-filesystem/populate-demo-fs.sh $(git_root)/packages/demoapp/demo-files
+
+.PHONY: js-publish
+js-publish: configure ## Publish JS code to NPM registry
+	npm run publish
+
+.PHONY: java-build
+java-build: ## Build Java code
+	make -C spring-boot build
 
 .PHONY: build-docker
-build-docker: docker-auth ## Build application Docker image
-	./build/docker/application/build.sh
+build-docker: docker-login ## Build application Docker image
+	$(git_root)/build/docker/application/build.sh
 
 .PHONY: publish-docker
-publish-docker: docker-auth ## Publish application Docker image
-	./build/docker/application/push.sh
+publish-docker: docker-login ## Publish application Docker image
+	$(git_root)/build/docker/application/push.sh
 
-.PHONY: deploy
-deploy: ## Deploy application to Kubernetes cluster
-	./build/demo/deploy.sh
+.PHONY: deploy-demo
+deploy-demo: ## Deploy demo to Kubernetes
+	$(git_root)/build/demo/deploy.sh
 
-.PHONY: help
-help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' && echo "\nNOTE: You can find Makefile goals implementation stored in \"./build\" directory"
+# local ops
+
+.PHONY: container-for-code
+container-for-code: ## Start container for 'code'-related commands
+	@$(CONTAINER_FOR_CODE)
+
+.PHONY: container-for-deployment
+container-for-deployment: ## Start container for 'deployment'-related commands
+	@$(CONTAINER_FOR_DEPLOYMENT)

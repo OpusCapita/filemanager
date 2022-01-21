@@ -1,0 +1,18 @@
+filemanager:
+  web:
+    base-path: /myfilemanager
+  filesystem:
+    root-path: ./
+    root-name: Root directory
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB # By default it's 1MB limit for uploading a file, set to whatever is needed
+      max-request-size: 10MB # By default it's 1MB limit for uploading a file, set to whatever is needed
+
+logging:
+  level:
+    com:
+      opuscapita:
+        filemanager: DEBUG

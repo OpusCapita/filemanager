@@ -21,8 +21,38 @@ spec:
         backend:
           service:
             name: filemanager
-            port: 
+            port:
               number: 80
+  tls:
+    - hosts:
+      - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.host }}-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: filemanager-spring-boot
+  labels:
+    app.kubernetes.io/name: filemanager
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 2000m
+    cert-manager.io/cluster-issuer: "default"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.path }}/spring-boot-backend/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: filemanager
+            port:
+              number: 8080
   tls:
     - hosts:
       - {{ .Values.ingress.host }}
@@ -38,7 +68,11 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
+      name: js
       targetPort: 3020
+    - port: 8080
+      name: spring-boot
+      targetPort: 8080
   selector:
     app.kubernetes.io/name: filemanager
 ---
@@ -63,7 +97,7 @@ spec:
         date: {{ now }} # RollingRestart workaround. https://github.com/kubernetes/kubernetes/issues/13488
     spec:
       containers:
-      - name: filemanager
+      - name: js-demo
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         env:
@@ -82,5 +116,25 @@ spec:
             memory: "64Mi"
           limits:
             memory: "256Mi"
+      - name: spring-boot-demo
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}-spring-boot"
+        imagePullPolicy: Always
+        args:
+        - --filemanager.web.base-path=/
+        - --filemanager.filesystem.root-path=/demo-fs
+        ports:
+        - containerPort: 8080
+          name: app
+        resources:
+          requests:
+            memory: "256Mi"
+          limits:
+            memory: "256Mi"
+        volumeMounts:
+        - mountPath: /demo-fs
+          name: spring-boot-demo-fs
+      volumes:
+      - name: spring-boot-demo-fs
+        emptyDir: {}
       imagePullSecrets:
         - name: {{.Values.dockerSecret}}
