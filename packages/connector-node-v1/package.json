@@ -1,6 +1,6 @@
 {
   "name": "@opuscapita/react-filemanager-connector-node-v1",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "@opuscapita/filemanager connector for NodeJS API v1",
   "main": "lib/index.js",
   "scripts": {
