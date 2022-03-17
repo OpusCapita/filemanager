@@ -17,7 +17,8 @@ const {
 
 const {
   TYPE_FILE,
-  TYPE_DIR
+  TYPE_DIR,
+  TYPE_BROKEN_LINK
 } = require('../constants');
 
 const
@@ -171,7 +172,7 @@ const getResource = async ({
   let parent;
 
   ([stats, parent] = await Promise.all([ // eslint-disable-line no-param-reassign,prefer-const
-    stats || fs.stat(path.join(config.fsRoot, userPath)),
+    stats || fs.stat(path.join(config.fsRoot, userPath)).catch(() => (fs.lstat(path.join(config.fsRoot, userPath)))),
     userParent && getResource({
       config,
       path: userParent
@@ -200,6 +201,8 @@ const getResource = async ({
   } else if (stats.isFile()) {
     resource.type = TYPE_FILE;
     resource.size = stats.size;
+  } else if (stats.isSymbolicLink()) {
+    resource.type = TYPE_BROKEN_LINK;
   } else {
     throw new Error(UNKNOWN_RESOURCE_TYPE_ERROR);
   }
