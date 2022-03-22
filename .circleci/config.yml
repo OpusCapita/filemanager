@@ -62,6 +62,9 @@ jobs:
   build:
     executor: code
     steps:
+      - attach_workspace:
+          at: /workspace
+      - run: cat /workspace/generated_bash_env >> $BASH_ENV
       - setup_remote_docker
       - git/checkout-with-submodules
       - run: *save-cache-checksum
@@ -81,6 +84,9 @@ jobs:
   deploy:
     executor: deployment
     steps:
+      - attach_workspace:
+          at: /workspace
+      - run: cat /workspace/generated_bash_env >> $BASH_ENV
       - git/checkout-with-submodules
       - run: make deploy-demo
 
