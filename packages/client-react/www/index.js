@@ -2,13 +2,17 @@
 
 const compression = require('compression');
 const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const fs = require('fs');
 const path = require('path');
 const host = require('../.env').HOST;
 const port = require('../.env').PORT;
+const fileserverurl = require('../.env').FILE_SERVER_URL;
 const webpack = require('webpack');
 const compiler = webpack(require('../config/webpack.config'));
 const env = require('../.env');
+
+env.SERVER_URL = `http://${host}:${port}`;
 
 const app = express();
 
@@ -39,9 +43,11 @@ app.get('/', function(req, res) {
   res.sendFile(path.normalize(__dirname + '/index.html'));
 });
 
+app.use('/**', createProxyMiddleware({ target: fileserverurl, followRedirects: true, changeOrigin: false}));
+
 app.listen(port, (err) => {
   if (err) {
     console.log(err);
   }
-  console.log(`The server is running at http://${host}:${port}/`);
+  console.log(`The client react server is running at http://${host}:${port}/\nfilemanager server is expecting at ${fileserverurl}`);
 });

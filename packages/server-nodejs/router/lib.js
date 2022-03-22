@@ -18,7 +18,8 @@ const {
 const {
   TYPE_FILE,
   TYPE_DIR,
-  TYPE_BROKEN_LINK
+  TYPE_BROKEN_LINK,
+  TYPE_ENCODING_NAME_ERROR
 } = require('../constants');
 
 const
@@ -172,7 +173,7 @@ const getResource = async ({
   let parent;
 
   ([stats, parent] = await Promise.all([ // eslint-disable-line no-param-reassign,prefer-const
-    stats || fs.stat(path.join(config.fsRoot, userPath)).catch(() => (fs.lstat(path.join(config.fsRoot, userPath)))),
+    stats || fs.stat(path.join(config.fsRoot, userPath)).catch(() => {return fs.lstat(path.join(config.fsRoot, userPath)).catch(() => {return false;})}),
     userParent && getResource({
       config,
       path: userParent
@@ -188,12 +189,14 @@ const getResource = async ({
       canDelete: !!userParent && !config.readOnly,
       canRename: !!userParent && !config.readOnly,
       canCopy: !!userParent && !config.readOnly,
-      canEdit: stats.isFile() && !config.readOnly, // Only files can be edited
-      canDownload: stats.isFile() // Only files can be downloaded
+      canEdit: stats && stats.isFile() && !config.readOnly, // Only files can be edited
+      canDownload: stats && stats.isFile() // Only files can be downloaded
     }
   };
 
-  if (stats.isDirectory()) {
+  if (stats === false) {
+    resource.type = TYPE_ENCODING_NAME_ERROR;
+  } else if (stats.isDirectory()) {
     resource.type = TYPE_DIR;
     resource.capabilities.canListChildren = true;
     resource.capabilities.canAddChildren = !config.readOnly;
