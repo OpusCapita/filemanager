@@ -52,7 +52,12 @@ jobs:
     docker:
       - image: opuscapita/minsk-core-machineuser-env:2
     steps:
-      - run: circle_ci_add_env.sh
+      - run: generate_bash_env_exports.sh CIRCLE_CI_TOKEN > ~/generated_bash_env
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - generated_bash_env
+
 
   build:
     executor: code
@@ -94,7 +99,9 @@ workflows:
             tags:
               only: /.*/
           post-steps:
-            - jira/notify
+            - jira/notify:
+                token_name: "CIRCLE_CI_TOKEN"
+
       - deploy:
           requires:
             - init
