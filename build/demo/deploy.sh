@@ -56,6 +56,7 @@ metadata:
   name: ${deployment_namespace}
   labels:
     opuscapita.com/buhtig-s8k: "true"
+    opuscapita.com/sync-tls-secrets: ${deployment_host}-tls
   annotations:
     opuscapita.com/github-source-url: ${github_project_url}/tree/${git_branch}
     opuscapita.com/github-commit-url: ${github_project_url}/commit/${git_revision}
