@@ -9,7 +9,6 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.path }}$1
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
-    cert-manager.io/cluster-issuer: "default"
 spec:
   ingressClassName: nginx
   rules:
@@ -39,7 +38,6 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 2000m
-    cert-manager.io/cluster-issuer: "default"
 spec:
   ingressClassName: nginx
   rules:
