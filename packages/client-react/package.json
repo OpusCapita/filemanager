@@ -98,7 +98,7 @@
     "detect-it": "3.0.3",
     "lodash": "4.17.21",
     "nanoid": "1.0.0",
-    "prop-types": "15.6.0",
+    "prop-types": "15.8.1",
     "range-parser": "1.2.0",
     "react-click-outside": "3.0.0",
     "react-contextmenu": "2.8.0",
