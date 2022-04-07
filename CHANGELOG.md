@@ -1,4 +1,12 @@
 
+[Release 1.1.12](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.12) Thu Apr 07 2022 11:50:08 GMT+0300 (MSK)
+=======================================================
+
+- Update prop-types to 15.8.1 ([#333](https://github.com/OpusCapita/filemanager/issues/333)) (GitHub 31243790+estambakio-sc@users.noreply.github.com, 2022-04-07 11:40:28 +0300)
+- [epc-49] Implement copying tls secret (Vladislav Rachok rachok@scand.com, 2022-03-28 22:50:14 +0300)
+- (EPROC-21097) Improved env variables setting (ashestak ashestak@scand.com, 2022-03-22 18:20:38 +0300)
+- (EPROC-21097) Improved env variables setting (Alexandr Shestak ashestak-sc@users.noreply.github.com, 2022-03-22 11:51:55 +0300)
+
 [Release 1.1.11](https://github.com/OpusCapita/filemanager/releases/tag/v1.1.11) Fri Jan 21 2022 15:34:54 GMT+0300 (MSK)
 =======================================================
 
