@@ -1654,3 +1654,93 @@ describe('Remove resources', () => {
       });
   });
 });
+
+describe('Authentication tests', () => {
+  it('Wrong authentication request', done => {
+    request.get(`${baseUrl}/authentication/wrongcmd`).
+      // then(res => {
+      //   expect(res.status).to.equal(200);
+      //   done();
+      // }).
+      catch(err => {
+        if (err && err.response && err.response.request && err.response.request.res) {
+          expect(err.response.request.res.statusCode).to.equal(404);
+          done();
+        } else {
+          done(err);
+        }
+      });
+  }).timeout(1000);
+
+  it('Check expired session', done => {
+    request.get(`${baseUrl}/authentication/signout`).
+      then(res => {
+        expect(res.status).to.equal(200);
+
+        request.get(`${baseUrl}/authentication/hassignedin`).
+          then(res => {
+            expect(res.status).to.equal(200);
+            done();
+          }).
+          catch(err => {
+            if (err && err.response && err.response.request && err.response.request.res) {
+              expect(err.response.request.res.statusCode).to.equal(401);
+              done();
+            } else {
+              done(err);
+            }
+          });
+
+      }).
+      catch(err => {
+        done(err);
+      });
+  }).timeout(1000);
+
+  it('Wrong authentication', done => {
+    request.post(`${baseUrl}/authentication/signin`).
+      set('Content-Type', 'application/json').
+      send('{"username":"wrong_user","password":"incorrect_pass"}').
+      then(res => {
+        expect(res.status).to.equal(200);
+        done();
+      }).      
+      catch(err => {
+          if (err && err.response && err.response.request && err.response.request.res) {
+            expect(err.response.request.res.statusCode).to.equal(401);
+            done();
+          } else {
+            done(err);
+          }
+      });
+  }).timeout(1000);  
+
+
+  it('Correct authentication', done => {
+    request.post(`${baseUrl}/authentication/signin`).
+      set('Content-Type', 'application/json').
+      send('{"username":"service","password":"secret"}').
+      then(res => {
+        expect(res.status).to.equal(200);
+
+        request.get(`${baseUrl}/authentication/hassignedin`).
+          then(res => {
+            expect(res.status).to.equal(200);
+
+            done();
+          }).
+          catch(err => {
+            if (err && err.response && err.response.request && err.response.request.res) {
+              expect(err.response.request.res.statusCode).to.equal(401);
+              done();
+            } else {
+              done(err);
+            }
+          });
+
+      }).
+      catch(err => {
+        done(err);
+      });
+  }).timeout(1000);
+});
