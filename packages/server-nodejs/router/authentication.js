@@ -10,15 +10,18 @@ module.exports = ({
   res,
   handleError
 }) => {
-  let subreq = req.path.replace('authentication', '');
-  subreq = subreq.replaceAll('/', '');
+  let subreq = req.path.replace('/authentication/', '');
+  subreq = subreq.replace('/', '');
 
   config.logger.info(`Authentication request "${subreq}" requested by ${getClientIp(req)}`);
 
   switch(subreq) {
     case 'signin':
-      const { username, password } = req.body;
-      const user = config.users?.find( user => (user.username === username) && (user.password === password));
+      let { username, password } = req.body;
+      username = Buffer.from(username,'base64').toString();
+      password = Buffer.from(password,'base64').toString();
+      console.log(`username:${username} pasword:${password}`);
+      const user = config.users ? config.users.find( user => (user.username === username) && (user.password === password)) : false;
       if ( user ) {
         console.log(`200 username:${username} password:${password}`);
         req.session.user = {username: username, readOnly: user.readOnly};
@@ -28,10 +31,10 @@ module.exports = ({
         //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/WWW-Authenticate
         //https://stackoverflow.com/questions/23616371/basic-http-authentication-with-node-and-express-4
         if (config.users) {
-          console.log(`401 username:${username} password:${password}`);
-          res.set('WWW-Authenticate', 'Basic');
-          res.status(401).end();
+          console.log(`419 username:${username} password:${password}`);
+          res.status(419).end();
         } else {
+          res.json({username: ''});
           res.status(200).end();
         }
       }
@@ -43,14 +46,16 @@ module.exports = ({
       break;
 
     case 'hassignedin':
-      if (!config.users) {
-        res.status(200).end();
-      } else if (req.session.user) {
-        res.json({username: req.session.user.username});
-        res.status(200).end();
+      if (config.users) {
+        if ( req.session.user ) {
+          res.json({username: req.session.user.username});
+          res.status(200).end();
+        } else {
+          res.status(419).end();        
+        }       
       } else {
-        res.set('WWW-Authenticate', 'Basic');
-        res.status(401).end();
+        res.json({username: ''});
+        res.status(200).end();        
       }
       break;
 
