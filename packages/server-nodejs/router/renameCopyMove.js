@@ -8,7 +8,8 @@ const getClientIp = require('../utils/get-client-ip');
 const {
   checkName,
   id2path,
-  getResource
+  getResource,
+  isReadOnly
 } = require('./lib');
 
 const MAX_RETRIES = 3;
@@ -21,7 +22,14 @@ module.exports = ({
   handleError,
   path: relativeItemPath
 }) => {
-  if (config.readOnly) {
+  if (config.users && !!req.session.user) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+
+  if (isReadOnly(config, req.session)) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
@@ -143,6 +151,7 @@ module.exports = ({
   }(MAX_RETRIES)).
     then(_ => getResource({
       config,
+      session: req.session,
       parent: targetRelativePath,
       basename
     })).

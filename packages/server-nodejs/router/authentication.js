@@ -20,18 +20,16 @@ module.exports = ({
       let { username, password } = req.body;
       username = Buffer.from(username,'base64').toString();
       password = Buffer.from(password,'base64').toString();
-      console.log(`username:${username} pasword:${password}`);
+//      console.log(`username:${username} pasword:${password}`);
       const user = config.users ? config.users.find( user => (user.username === username) && (user.password === password)) : false;
       if ( user ) {
-        console.log(`200 username:${username} password:${password}`);
+//        console.log(`200 username:${username} password:${password}`);
         req.session.user = {username: username, readOnly: user.readOnly};
         res.json({username: user.username});
         res.status(200).end();
       } else {
-        //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/WWW-Authenticate
-        //https://stackoverflow.com/questions/23616371/basic-http-authentication-with-node-and-express-4
         if (config.users) {
-          console.log(`419 username:${username} password:${password}`);
+//          console.log(`419 username:${username} password:${password}`);
           res.status(419).end();
         } else {
           res.json({username: ''});

@@ -24,6 +24,13 @@ module.exports = ({ config, req, res, handleError }) => {
   const preview = req.query.preview === 'true';
   let reqPaths;
 
+  if (config.users && !!req.session.user) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+  
   try {
     reqPaths = ids.map(id => id2path(id));
   } catch (err) {

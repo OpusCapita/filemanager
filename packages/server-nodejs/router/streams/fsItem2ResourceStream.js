@@ -5,7 +5,7 @@ const { relative, sep } = require('path');
 const { getResource } = require('../lib');
 
 module.exports = class extends Transform {
-  constructor(config) {
+  constructor(config, session) {
     super({
       objectMode: true,
       highWaterMark: 16 // Max number of objects the buffer might contain.
@@ -13,6 +13,7 @@ module.exports = class extends Transform {
 
     this.isDestroyed = false; // Whether the stream has been destroyed by `destroy()` call.
     this.config = config;
+    this.session = session;
   }
 
   /**
@@ -26,6 +27,7 @@ module.exports = class extends Transform {
     // untill the buffer is drained.
     const resource = await getResource({
       config: this.config,
+      session: this.session,
       stats: item.stats,
       path: sep + relative(this.config.fsRoot, item.path) // `path.relative()` never starts/ends with `path.sep`.
     });

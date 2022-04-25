@@ -52,6 +52,21 @@ function createIncorrectId(dirId, addName) {
   return base64url(`${id2path(dirId)}/${addName}`);
 }
 
+describe('Authentication signin', () => {
+  it('Correct authentication', done => {
+    request.post(`${baseUrl}/authentication/signin`).
+      set('Content-Type', 'application/json').
+      send({username: btoa("service"),password: btoa("secret")}).
+      then(res => {
+        expect(res.status).to.equal(200);
+        done();
+      }).
+      catch(err => {
+        done(err);
+      });
+  }).timeout(1000);
+});
+
 describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
     request.
@@ -1658,10 +1673,6 @@ describe('Remove resources', () => {
 describe('Authentication tests', () => {
   it('Wrong authentication request', done => {
     request.get(`${baseUrl}/authentication/wrongcmd`).
-      // then(res => {
-      //   expect(res.status).to.equal(200);
-      //   done();
-      // }).
       catch(err => {
         if (err && err.response && err.response.request && err.response.request.res) {
           expect(err.response.request.res.statusCode).to.equal(404);
@@ -1684,7 +1695,7 @@ describe('Authentication tests', () => {
           }).
           catch(err => {
             if (err && err.response && err.response.request && err.response.request.res) {
-              expect(err.response.request.res.statusCode).to.equal(401);
+              expect(err.response.request.res.statusCode).to.equal(419);
               done();
             } else {
               done(err);
@@ -1707,7 +1718,7 @@ describe('Authentication tests', () => {
       }).      
       catch(err => {
           if (err && err.response && err.response.request && err.response.request.res) {
-            expect(err.response.request.res.statusCode).to.equal(401);
+            expect(err.response.request.res.statusCode).to.equal(419);
             done();
           } else {
             done(err);
@@ -1719,7 +1730,7 @@ describe('Authentication tests', () => {
   it('Correct authentication', done => {
     request.post(`${baseUrl}/authentication/signin`).
       set('Content-Type', 'application/json').
-      send('{"username":"service","password":"secret"}').
+      send({username: btoa("service"),password: btoa("secret")}).
       then(res => {
         expect(res.status).to.equal(200);
 
@@ -1731,7 +1742,7 @@ describe('Authentication tests', () => {
           }).
           catch(err => {
             if (err && err.response && err.response.request && err.response.request.res) {
-              expect(err.response.request.res.statusCode).to.equal(401);
+              expect(err.response.request.res.statusCode).to.equal(419);
               done();
             } else {
               done(err);

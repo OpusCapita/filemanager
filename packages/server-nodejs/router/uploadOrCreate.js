@@ -9,7 +9,8 @@ const getClientIp = require('../utils/get-client-ip');
 const {
   checkName,
   id2path,
-  getResource
+  getResource,
+  isReadOnly
 } = require('./lib');
 
 const {
@@ -98,7 +99,14 @@ const upload = multer({
   array('files');
 
 module.exports = ({ config, req, res, handleError }) => {
-  if (config.readOnly) {
+  if (config.users && !!req.session.user) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+    
+  if (isReadOnly(config, req.session)) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
@@ -142,6 +150,7 @@ module.exports = ({ config, req, res, handleError }) => {
         then(_ => fs.ensureDir(dirPath)).
         then(_ => getResource({
           config,
+          session: req.session,
           parent: reqParentPath,
           basename: name
         })).
@@ -160,6 +169,7 @@ module.exports = ({ config, req, res, handleError }) => {
       return Promise.all(
         req.files.map(({ filename }) => getResource({
           config,
+          session: req.session,
           parent: reqParentPath,
           basename: filename
         }))
