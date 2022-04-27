@@ -52,6 +52,7 @@ function createIncorrectId(dirId, addName) {
   return base64url(`${id2path(dirId)}/${addName}`);
 }
 
+var cookie = ''
 describe('Authentication signin', () => {
   it('Correct authentication', done => {
     request.post(`${baseUrl}/authentication/signin`).
@@ -59,6 +60,7 @@ describe('Authentication signin', () => {
       send({username: btoa("service"),password: btoa("secret")}).
       then(res => {
         expect(res.status).to.equal(200);
+        cookie = res.headers['set-cookie'] ? res.headers['set-cookie'][0] : '';
         done();
       }).
       catch(err => {
@@ -71,6 +73,7 @@ describe('Get resources metadata', () => {
   it('Get rootId', (done) => {
     request.
       get(`${baseUrl}/files`).
+      set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
 
@@ -96,6 +99,7 @@ describe('Get resources metadata', () => {
   it('Get root children', (done) => {
     request.
       get(`${baseUrl}/files/${rootId}/children`).
+      set('Cookie', cookie).
       query({ action: 'edit', city: 'London' }). // query string
       then(res => {
         let jsonData = res.body;
@@ -122,6 +126,7 @@ describe('Get resources metadata', () => {
   it('Get root children with query params', (done) => {
     request.
       get(`${baseUrl}/files/${rootId}/children`).
+      set('Cookie', cookie).
       query({ orderBy: 'name', orderDirection: 'ASC' }). // query string
       then(res => {
         let jsonData = res.body;
@@ -150,6 +155,7 @@ describe('Get resources metadata', () => {
   it('Get root children with incorrect orderBy', (done) => {
     request.
       get(`${baseUrl}/files/${rootId}/children`).
+      set('Cookie', cookie).
       query({ orderBy: 'nameOne' }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -167,6 +173,7 @@ describe('Get resources metadata', () => {
   it('Get root children with incorrect orderDirection', (done) => {
     request.
       get(`${baseUrl}/files/${rootId}/children`).
+      set('Cookie', cookie).
       query({ orderDirection: 'DSC' }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -184,6 +191,7 @@ describe('Get resources metadata', () => {
   it('Get workChildDir children', (done) => {
     request.
       get(`${baseUrl}/files/${workChildDirId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -209,6 +217,7 @@ describe('Get resources metadata', () => {
   it('Get children with incorrect id', (done) => {
     request.
       get(`${baseUrl}/files/${createIncorrectId(workChildDirId, 'incorrect_dir_name')}/children`).
+      set('Cookie', cookie).
       catch(err => {
         if (err && err.response && err.response.request.res) {
           expect(err.response.request.res.statusCode).to.equal(410);
@@ -225,6 +234,7 @@ describe('Get resources metadata', () => {
   it('Get workChildDir metadata', (done) => {
     request.
       get(`${baseUrl}/files/${workChildDirId}`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -243,6 +253,7 @@ describe('Get resources metadata', () => {
   it('Get workFile metadata', (done) => {
     request.
       get(`${baseUrl}/files/${workFileId}`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -265,6 +276,7 @@ describe('Search for files/dirs', () => {
 
     request.
       get(`${baseUrl}/files/${rootId}/search`).
+      set('Cookie', cookie).
       query({
         itemNameSubstring: nameSubstring
       }).
@@ -290,6 +302,7 @@ describe('Search for files/dirs', () => {
   it('Search with invalid id', done => {
     request.
       get(`${baseUrl}/files/${createIncorrectId(workChildDirId, 'incorrect_dir_name')}/search`).
+      set('Cookie', cookie).
       query({
         itemNameSubstring: 'name'
       }).
@@ -307,6 +320,7 @@ describe('Search for files/dirs', () => {
   it('Search in root directory for files with letter "c"', done => {
     request.
       get(`${baseUrl}/files/${rootId}/search`).
+      set('Cookie', cookie).
       query({
         itemNameSubstring: 'c'
       }).
@@ -324,6 +338,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring
         }).
@@ -350,6 +365,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemNameCaseSensitive: false
@@ -378,6 +394,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemNameCaseSensitive: true
@@ -402,6 +419,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemType: 'dir'
@@ -430,6 +448,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemType: 'file'
@@ -452,6 +471,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemType: 'file',
@@ -481,6 +501,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemType: 'file',
@@ -504,6 +525,7 @@ describe('Search for files/dirs', () => {
 
       request.
         get(`${baseUrl}/files/${rootId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: nameSubstring,
           itemType: 'file',
@@ -531,6 +553,7 @@ describe('Search for files/dirs', () => {
     it('Case-insensitive content search by default', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           fileContentSubstring: 'log'
         }).
@@ -554,6 +577,7 @@ describe('Search for files/dirs', () => {
     it('Case-insensitive content search', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           fileContentSubstring: 'log',
           fileContentCaseSensitive: 'false'
@@ -578,6 +602,7 @@ describe('Search for files/dirs', () => {
     it('Case-insensitive content + filename search', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           itemNameSubstring: 'hello',
           itemNameCaseSensitive: 'true',
@@ -599,6 +624,7 @@ describe('Search for files/dirs', () => {
     it('Case-sensitive content search', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           fileContentSubstring: 'log',
           fileContentCaseSensitive: 'true'
@@ -618,6 +644,7 @@ describe('Search for files/dirs', () => {
     it('Invalid content search for a dirs', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           fileContentSubstring: 'log',
           fileContentCaseSensitive: 'true',
@@ -637,6 +664,7 @@ describe('Search for files/dirs', () => {
     it('Invalid content search for a dirs/files', (done) => {
       request.
         get(`${baseUrl}/files/${workChildDirId}/search`).
+        set('Cookie', cookie).
         query({
           fileContentSubstring: 'log',
           fileContentCaseSensitive: 'true',
@@ -663,6 +691,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: newName }).
       then(res => {
         let jsonData = res.body;
@@ -687,6 +716,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: newName }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -708,6 +738,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: newName }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -728,6 +759,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: workChildDirName }).
       then(res => {
         let jsonData = res.body;
@@ -752,6 +784,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: newName }).
       then(res => {
         let jsonData = res.body;
@@ -775,6 +808,7 @@ describe('Rename resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ name: workFileName }).
       then(res => {
         let jsonData = res.body;
@@ -795,6 +829,7 @@ describe('Rename resources', () => {
   it('Check root dir', (done) => {
     request.
       get(`${baseUrl}/files/${rootId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -811,6 +846,7 @@ describe('Rename resources', () => {
   it('Check workChildDir', (done) => {
     request.
       get(`${baseUrl}/files/${workChildDirId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -837,6 +873,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -876,6 +913,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -915,6 +953,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -954,6 +993,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -992,6 +1032,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1014,6 +1055,7 @@ describe('Create dirs', () => {
       type: 'dir'
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1036,6 +1078,7 @@ describe('Create dirs', () => {
       name: 'new dir 1',
     };
     request(method, route).
+      set('Cookie', cookie).
       send(params).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1057,6 +1100,7 @@ describe('Create dirs', () => {
     let route = `${baseUrl}/files`;
 
     request.post(route).
+      set('Cookie', cookie).
       field('type', 'dir').
       field('name', 'new dir 1').
       field('parentId', newGrandchildId3).
@@ -1077,6 +1121,7 @@ describe('Create dirs', () => {
   it('Check newDir', done => {
     request.
       get(`${baseUrl}/files/${newDirId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
         newDirSize = jsonData.items.length;
@@ -1105,6 +1150,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ parents: [newGrandchildId1, workChildDirId] }).
       then(res => {
         let jsonData = res.body;
@@ -1138,6 +1184,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ parents: [newGrandchildId1, workChildDirId] }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1158,6 +1205,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ parents: [createIncorrectId(workChildDirId, 'incorrect_dir_name'), workChildDirId] }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1178,6 +1226,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send({ parents: [newGrandchildId1, createIncorrectId(workChildDirId, 'incorrect_dir_name')] }).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1203,6 +1252,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -1242,6 +1292,7 @@ describe('Copy resouces', () => {
 
     request(method, route).
     type('application/json').
+    set('Cookie', cookie).
     send(params).
     then(res => {
       let jsonData = res.body;
@@ -1272,6 +1323,7 @@ describe('Copy resouces', () => {
   it('Check workChildDir', done => {
     request.
       get(`${baseUrl}/files/${workChildDirId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1288,6 +1340,7 @@ describe('Copy resouces', () => {
   it('Check newGrandchildId1', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId1}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1304,6 +1357,7 @@ describe('Copy resouces', () => {
   it('Check newGrandchildId2', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId2}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1328,6 +1382,7 @@ describe('Move resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send(params).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1351,6 +1406,7 @@ describe('Move resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send(params).
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1374,6 +1430,7 @@ describe('Move resources', () => {
 
     request(method, route).
       type('application/json').
+      set('Cookie', cookie).
       send(params).
       then(res => {
         let jsonData = res.body;
@@ -1406,6 +1463,7 @@ describe('Move resources', () => {
   it('Check newGrandchildId1', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId1}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1422,6 +1480,7 @@ describe('Move resources', () => {
   it('Check newGrandchildId2', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId2}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1438,6 +1497,7 @@ describe('Move resources', () => {
   it('Check newGrandchildId3', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId3}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1455,7 +1515,7 @@ describe('Move resources', () => {
 describe('Download', () => {
   it('Download file', done => {
     const downloadUrl = `${baseUrl}/download?items=${copiedFileId3}`;
-    request.get(downloadUrl).
+    request.get(downloadUrl).set('Cookie', cookie).
       responseType('blob').
       then(res => {
         expect(res.status).to.equal(200);
@@ -1470,7 +1530,7 @@ describe('Download', () => {
 
   it('Download folder', done => {
     const downloadUrl = `${baseUrl}/download?items=${newGrandchildId3}`;
-    request.get(downloadUrl).
+    request.get(downloadUrl).set('Cookie', cookie).
       responseType('blob').
       then(res => {
         expect(res.status).to.equal(200);
@@ -1485,7 +1545,7 @@ describe('Download', () => {
 
   it('Download file with incorrect id', done => {
     const downloadUrl = `${baseUrl}/download?items=${createIncorrectId(newGrandchildId3, 'incorrect-dir')}`;
-    request.get(downloadUrl).
+    request.get(downloadUrl).set('Cookie', cookie).
       responseType('blob').
       catch(err => {
         if (err && err.response && err.response.request.res) {
@@ -1508,7 +1568,7 @@ describe('Upload file', () => {
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
     let route = `${baseUrl}/files`;
 
-    request.post(route).
+    request.post(route).set('Cookie', cookie).
       field('type', 'file').
       field('parentId', createIncorrectId(newGrandchildId3, 'incorrect_dir_name')).
       attach('files', file, fileName).
@@ -1532,7 +1592,8 @@ describe('Upload file', () => {
     let file = fs.readFileSync(`${workDirPath}/${fileName}`);
     let route = `${baseUrl}/files`;
 
-    request.post(route).
+    request.post(route).set('Cookie', cookie).
+      set('Cookie', cookie).
       field('type', 'file').
       field('parentId', newGrandchildId3).
       attach('files', file, fileName).
@@ -1567,7 +1628,7 @@ describe('Remove resources', () => {
   it('Remove file', done => {
     let route = `${baseUrl}/files/${copiedFileId3}`;
     let method = 'DELETE';
-    request(method, route).
+    request(method, route).set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
 
@@ -1581,6 +1642,7 @@ describe('Remove resources', () => {
   it('Check newGrandchildId3', done => {
     request.
       get(`${baseUrl}/files/${newGrandchildId3}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1598,6 +1660,7 @@ describe('Remove resources', () => {
     let route = `${baseUrl}/files/${createIncorrectId(newDirId, 'incorrect-dir')}`;
     let method = 'DELETE';
     request(method, route).
+      set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
 
@@ -1612,6 +1675,7 @@ describe('Remove resources', () => {
     let route = `${baseUrl}/files/${rootId}`;
     let method = 'DELETE';
     request(method, route).
+      set('Cookie', cookie).
       catch(err => {
         if (err && err.response && err.response.request.res) {
           expect(err.response.request.res.statusCode).to.equal(400);
@@ -1629,6 +1693,7 @@ describe('Remove resources', () => {
     let route = `${baseUrl}/files/${newGrandchildId3}`;
     let method = 'DELETE';
     request(method, route).
+      set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
 
@@ -1642,6 +1707,7 @@ describe('Remove resources', () => {
   it('Check newDir', done => {
     request.
       get(`${baseUrl}/files/${newDirId}/children`).
+      set('Cookie', cookie).
       then(res => {
         let jsonData = res.body;
 
@@ -1659,6 +1725,7 @@ describe('Remove resources', () => {
     let route = `${baseUrl}/files/${newDirId}`;
     let method = 'DELETE';
     request(method, route).
+      set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
 

@@ -66,7 +66,7 @@ module.exports = async ({
   handleError,
   path: userPath
 }) => {
-  if (config.users && !!req.session.user) {
+  if (config.users && req.session.user === undefined) {
     return handleError(Object.assign(
       new Error(`Session expired.`),
       { httpCode: 419 }
