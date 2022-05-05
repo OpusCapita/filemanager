@@ -104,6 +104,11 @@ class FileNavigator extends Component {
       const initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
       this.setState({ initializedCapabilities });
     }
+
+    if (this.props.signInRenderer !== nextProps.signInRenderer) {
+      this.setState( () => ({ apiSignedIn: false }));
+      this.monitorApiAvailability();
+    }
   }
 
   componentWillUnmount() {
@@ -165,14 +170,16 @@ class FileNavigator extends Component {
   };
 
   monitorApiAvailability = () => {
-    const { api } = this.props;
+    const { api, apiOptions, signInRenderer } = this.props;
 
-    this.apiAvailabilityTimeout = setTimeout(() => {
-      if (api.hasSignedIn()) {
+    this.apiAvailabilityTimeout = setTimeout( async () => {
+      let response = await api.hasSignedIn(apiOptions);
+      if (response) {
         this.setStateAsync({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
-        this.monitorApiAvailability();
+        if (signInRenderer === null)
+          this.monitorApiAvailability();
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };

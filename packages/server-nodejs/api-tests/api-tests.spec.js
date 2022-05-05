@@ -1740,6 +1740,7 @@ describe('Remove resources', () => {
 describe('Authentication tests', () => {
   it('Wrong authentication request', done => {
     request.get(`${baseUrl}/authentication/wrongcmd`).
+      set('Cookie', cookie).
       catch(err => {
         if (err && err.response && err.response.request && err.response.request.res) {
           expect(err.response.request.res.statusCode).to.equal(404);
@@ -1752,9 +1753,9 @@ describe('Authentication tests', () => {
 
   it('Check expired session', done => {
     request.get(`${baseUrl}/authentication/signout`).
+      set('Cookie', cookie).
       then(res => {
         expect(res.status).to.equal(200);
-
         request.get(`${baseUrl}/authentication/hassignedin`).
           then(res => {
             expect(res.status).to.equal(200);
