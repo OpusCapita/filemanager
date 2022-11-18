@@ -45,7 +45,8 @@ module.exports = ({
 
   const {
     parents: parentIds = [],
-    name: reqBasename
+    name: reqBasename,
+    socketId: socketId
   } = req.body;
 
   let basename = reqBasename;
@@ -62,7 +63,19 @@ module.exports = ({
   const absParentPaths = relativeParentPaths.map(relativeParentPath => path.join(config.fsRoot, relativeParentPath));
   let targetAbsPath, operation, targetRelativePath;
 
-  if (parentIds.length === 0) {
+  if (socketId) {
+      config.logger.info(`Edit ${absItemPath} requested by ${getClientIp(req)}`);
+      var socket = config.edsocket.of("/edward").sockets.get(socketId);
+
+      fs.readFile(absItemPath, 'utf8', (error, data) => {
+          if (error)
+              config.logger.error(error.message);
+          else
+              socket.emit('file', absItemPath, data);
+      });
+      res.status(200).end();
+      return;      
+  } else if (parentIds.length === 0) {
     config.logger.info(`Rename ${absItemPath} requested by ${getClientIp(req)}`);
 
     try {

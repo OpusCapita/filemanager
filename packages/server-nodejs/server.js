@@ -2,6 +2,8 @@
 const express = require('express');
 const filemanagerMiddleware = require('./middleware');
 const logger = require('./logger');
+const { createServer } = require("http");
+const io = require("socket.io");
 
 const app = express();
 
@@ -16,9 +18,13 @@ function run(config = require(server_config)) {
     next();
   });
 
+  const httpServer = createServer(app);
+  const io_socket = io(httpServer);
+  config.edsocket = io_socket;
+
   app.use(filemanagerMiddleware(config));
 
-  app.listen(port, host, function(err) {
+  httpServer.listen(port, host, function(err) {
     if (err) {
       logger.error(err);
     }
