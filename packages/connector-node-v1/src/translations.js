@@ -29,7 +29,8 @@ const translations = {
     fileSize: 'File size',
     lastModified: 'Last modified',
     reallyRemove: '{files} will be deleted. Do you really want to proceed?',
-    unableReadDir: 'Unable to read a directory.'
+    unableReadDir: 'Unable to read a directory.',
+    edit: 'Edit'
   },
   fr: {
     uploading: 'Ajout d\'un document en cours',

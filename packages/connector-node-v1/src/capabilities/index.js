@@ -4,9 +4,11 @@ import download from './download';
 import upload from './upload';
 import rename from './rename';
 import sort from './sort';
+import edit from './edit';
 
 const capabilities = [
   createFolder,
+  edit,
   rename,
   download,
   upload,

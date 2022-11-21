@@ -177,6 +177,12 @@ async function signOut(options) {
   }
 }
 
+async function loadFileContent(options, id, socketId) {
+  const route = `${options.apiRoot}/files/${id}`;
+  const method = 'PATCH';
+  return request(method, route).type('application/json').send({ socketId: socketId })
+}
+
 export default {
   init,
   hasSignedIn,
@@ -192,6 +198,7 @@ export default {
   renameResource,
   removeResources,
   uploadFileToId,
+  loadFileContent,
   signIn,
   signOut  
 };
