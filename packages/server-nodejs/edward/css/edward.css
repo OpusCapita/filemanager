@@ -1,0 +1,11 @@
+.edward-msg {
+    z-index             : 1;
+    background-color    : #7285b7;
+    color               : #d1f1a9;
+    position            : fixed;
+    left                : 40%;
+    top                 : 25px;
+    padding             : 5px;
+    opacity             : 0.9;
+    transition          : ease 0.5s;
+}

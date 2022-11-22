@@ -1,0 +1,14 @@
+{
+    "ini": [
+        ".editorconfig"
+    ],
+    
+    "json": [
+        ".eslintrc",
+        ".jshintrc",
+        ".yaspellerrc",
+        ".jscsrc",
+        ".babelrc",
+        ".bowerrc"
+    ]
+}

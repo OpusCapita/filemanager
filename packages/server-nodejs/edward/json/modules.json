@@ -1,0 +1,16 @@
+[{
+    "name": "socket",
+    "version": "4.1.3",
+    "local": "/socket.io/socket.io.js",
+    "remote": "https://cdnjs.cloudflare.com/ajax/libs/socket.io/{{ version }}/socket.io.js"
+}, {
+    "name": "ace",
+    "version": "1.4.12",
+    "local": "/modules/ace-builds/src-min/ace.js",
+    "remote": "//cdnjs.cloudflare.com/ajax/libs/ace/{{ version }}/ace.js"
+}, {
+    "name": "pako",
+    "version": "1.0.3",
+    "local": "/modules/pako/dist/pako.min.js",
+    "remote": "//cdnjs.cloudflare.com/ajax/libs/pako/{{ version }}/pako.min.js"
+}]

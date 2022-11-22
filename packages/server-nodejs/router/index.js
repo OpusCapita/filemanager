@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const edward = require('edward');
+const edward = require('../edward');
 
 const sessionAge = 24 * (60 * 60 * 1000); //24h
 
