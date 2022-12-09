@@ -100,11 +100,12 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
+async function uploadFileToId({ apiOptions, parentId, file, onProgress, overwrite }) {
   const route = `${apiOptions.apiRoot}/files`;
   return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
+    field('overwrite', overwrite === true ).
     attach('files', file.file, file.name).
     on('progress', event => {
       onProgress(event.percent);
@@ -177,12 +178,6 @@ async function signOut(options) {
   }
 }
 
-async function loadFileContent(options, id, socketId) {
-  const route = `${options.apiRoot}/files/${id}`;
-  const method = 'PATCH';
-  return request(method, route).type('application/json').send({ socketId: socketId })
-}
-
 export default {
   init,
   hasSignedIn,
@@ -198,7 +193,6 @@ export default {
   renameResource,
   removeResources,
   uploadFileToId,
-  loadFileContent,
   signIn,
   signOut  
 };

@@ -55,7 +55,7 @@ const upload = multer({
         catch(cb);
     },
     filename(req, file, cb) {
-      const { parentId } = req.body;
+      const { parentId, overwrite } = req.body;
 
       try {
         checkName(file.originalname);
@@ -77,22 +77,26 @@ const upload = multer({
         ));
       }
 
-      return fs.readdir(parentPath).
-        then(basenames => {
-          let basename = file.originalname;
+      if (overwrite === 'true') {
+        return cb(null, file.originalname);
+      } else {
+        return fs.readdir(parentPath).
+          then(basenames => {
+            let basename = file.originalname;
 
-          if (basenames.includes(basename)) {
-            const { name, ext } = path.parse(basename);
-            let suffix = 1;
+            if (basenames.includes(basename)) {
+              const { name, ext } = path.parse(basename);
+              let suffix = 1;
 
-            do {
-              basename = `${name} (${suffix++})${ext}`;
-            } while (basenames.includes(basename));
-          }
+              do {
+                basename = `${name} (${suffix++})${ext}`;
+              } while (basenames.includes(basename));
+            }
 
-          cb(null, basename);
-        }).
-        catch(cb);
+            cb(null, basename);
+          }).
+          catch(cb);
+      }
     }
   })
 }).

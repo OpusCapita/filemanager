@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const edward = require('../edward');
 
 const sessionAge = 24 * (60 * 60 * 1000); //24h
 
@@ -28,35 +27,6 @@ module.exports = config => {
   router.use(helmet.noCache());
   router.use(zip());
   router.use(bodyParser.json());
-
-  router.use(edward({
-    root: '/', // default
-    online: true, // default
-    diff: true, // default
-    zip: true, // default
-    dropbox: false, // optional
-    dropboxToken: 'token', // optional
-  }));
-
-  //https://stackoverflow.com/questions/6563885/how-do-i-get-a-list-of-connected-sockets-clients-with-socket-io
-  if (config.edsocket) {
-    const edSocket = edward.listen(config.edsocket);  
-  }
-  
-  // edSocket.on('connection', () => {
-  //   console.log(`edward socket connected!!!`);
-  //   const iterator = config.edsocket.of("/edward").sockets.keys();
-
-  //   for (const value of iterator) {
-  //     console.log(value);
-  //     var socket = config.edsocket.of("/edward").sockets.get(value);
-  //     socket.emit('file', 'FileName', 'AlataBalata:' + value);
-  //   }
-
-  //   console.log('XXXX:' + config.edsocket.engine.clientsCount);
-  //   //io.sockets.sockets.get(socketId);
-  //   //edSocket.emit('file', 'FileName', 'AlataBalata');
-  // });  
 
   let reqPath;
 

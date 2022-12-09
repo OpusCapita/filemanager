@@ -25,21 +25,22 @@ function handler(apiOptions, actions) {
     elementProps: {
       initialValue: getSelectedResources()[0].name,
       onHide: hideDialog,
-      onSubmit: async (name) => {
+      onSubmit: async (text) => {
+        const onProgress = (progress) => {};
         const selectedResources = getSelectedResources();
+//        alert('' + JSON.stringify(atob(selectedResources[0].id)));
         try {
-          const resourceChildren = await api.getChildrenForId(
-            apiOptions, { id: selectedResources[0].parentId }
-          );
-          const alreadyExists = resourceChildren.some(o => o.name === name);
-          if (alreadyExists) {
-            return getMessage('fileExist', { name });
-          } else {
-            hideDialog();
-            const result = await api.renameResource(apiOptions, selectedResources[0].id, name);
-            const resource = getResource();
-            navigateToDir(resource.id, result.body.id, false);
-          }
+          hideDialog();
+//          const result = await api.renameResource(apiOptions, selectedResources[0].id, name);
+          const resource = getResource();
+          var data = new Blob([text]);
+          const file = {
+            name: selectedResources[0].name,
+            file: data
+          };
+          const result = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress, overwrite: true });
+//          alert('111' + result.body.id);
+//          navigateToDir(resource.id, result.body.id, false);
           return null;
         } catch (err) {
           hideDialog();
@@ -63,9 +64,11 @@ function handler(apiOptions, actions) {
         }
         return null;
       },
-      onSocketConnected: async (socketId) => {
-        const selectedResources = getSelectedResources();
-        const result = await api.loadFileContent(apiOptions, selectedResources[0].id, socketId);
+      getFileContent: async () => {
+        const onProgress = (progress) => {};
+        const resources = getSelectedResources();
+        const content = await api.downloadResources({ resources, apiOptions, onProgress});
+        return content.text();
       },
       inputLabelText: getMessage('newName'),
       headerText: getMessage('edit') + ": " + getSelectedResources()[0].name,

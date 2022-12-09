@@ -191,7 +191,7 @@ const getResource = async ({
       canDelete: !!userParent && !isReadOnly(config, session),
       canRename: !!userParent && !isReadOnly(config, session),
       canCopy: !!userParent && !isReadOnly(config, session),
-      canEdit: stats && config.edsocket && stats.isFile() && !isReadOnly(config, session), // Only files can be edited
+      canEdit: stats && stats.isFile() && !isReadOnly(config, session), // Only files can be edited
       canDownload: stats && stats.isFile() // Only files can be downloaded
     }
   };

@@ -2,7 +2,18 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './EditDialog.less';
 import Dialog from '../Dialog';
-import {Helmet} from "react-helmet";
+import FileSaveConfirmDialog from '../FileSaveConfirmDialog'
+
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/snippets/javascript";
+import "ace-builds/src-noconflict/worker-javascript"
+import "ace-builds/src-noconflict/theme-monokai";
+//import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/src-min-noconflict/ext-searchbox";
+import "ace-builds/src-min-noconflict/ext-language_tools";
+
 
 const propTypes = {
   cancelButtonText: PropTypes.string,
@@ -13,11 +24,11 @@ const propTypes = {
   onHide: PropTypes.func,
   onSubmit: PropTypes.func,
   onValidate: PropTypes.func,
-  onSocketConnected: PropTypes.func,
+  getFileContent: PropTypes.func,
   submitButtonText: PropTypes.string
 };
 const defaultProps = {
-  cancelButtonText: 'Cancel',
+  cancelButtonText: 'Close',
   headerText: 'Set name',
   inputLabelText: '',
   initialValue: '',
@@ -25,7 +36,7 @@ const defaultProps = {
   onHide: () => {},
   onSubmit: () => {},
   onValidate: () => {},
-  onSocketConnected: () => {},
+  getFileContent: () => {},
   submitButtonText: 'Create'
 };
 
@@ -35,130 +46,99 @@ class EditDialog extends Component {
     super(props);
     this.state = {
       value: props.initialValue,
-      validationError: null,
-      valid: false
+      showSaveConfirmDialog: false,
+      editorText: ""
     };
-    window.onSocketConnected = props.onSocketConnected;
+    this.newText = null;
+    this.saveConfirmDialog = React.createElement(FileSaveConfirmDialog, { ...FileSaveConfirmDialog.defaultProps,
+                                                                          onSubmit: this.handleSubmit, 
+                                                                          onHide: this.handleHideSaveConfirmDialog,
+                                                                          onIgnore: this.handleSkipSaveAndClose,
+                                                                        });
   }
 
   componentDidMount() {
     this._isMounted = true
+    this.setText();
   }
 
   componentWillUnmount() {
     this._isMounted = false
-    window.edsocket.close();
   }
 
-  handleChange = async (e) => {
-    this.setState({ value: e.target.value });
-    const validationError = await this.props.onValidate(e.target.value);
+  setText = async (e) => {
+      let value = await this.props.getFileContent();
+      this.setState({ editorText: value });
+  } 
+
+  handleChange = async (value, event) => {
+    this.newText = value;
     if (this._isMounted) {
-      this.setState({ validationError, valid: !validationError });
-    }
-  }
 
-  handleKeyDown = async (e) => {
-    if (e.which === 13) { // Enter key
-      if (!this.state.validationError && this.state.value) {
-        this.handleSubmit(this.state.value);
-      }
-    }
-  }
-
-  handleSubmitButtonClick = async (e) => {
-    if (!this.state.validationError && this.state.value) {
-      this.handleSubmit(this.state.value);
     }
   }
 
   handleSubmit = async () => {
-    const validationError = await this.props.onSubmit(this.state.value);
+    if (this.newText) {
+      const validationError = await this.props.onSubmit(this.newText);
 
-    if (validationError && this._isMounted) {
-      this.setState({ validationError });
+      // if (validationError && this._isMounted) {
+      //   this.setState({ validationError });
+      // }
+      this.handleSkipSaveAndClose();
     }
   }
 
-  handleFocus = (e) => {
-    // Move caret to the end
-    const tmpValue = e.target.value;
-    e.target.value = ''; // eslint-disable-line no-param-reassign
-    e.target.value = tmpValue; // eslint-disable-line no-param-reassign
+  handleClose = async () => {
+    if (this._isMounted && this.newText) {
+      this.setState({ showSaveConfirmDialog: true, editorText: this.newText});
+    } else {
+      this.handleSkipSaveAndClose();
+    }
+  }
+
+  handleSkipSaveAndClose = async () => {
+      this.props.onHide();
+      this.newText = null;
+  }
+
+  handleHideSaveConfirmDialog = async () => {
+    if (this._isMounted)
+      this.setState({ showSaveConfirmDialog: false });
   }
 
   render() {
     const { onHide, headerText, inputLabelText, submitButtonText, cancelButtonText } = this.props;
-    const { value, validationError, valid } = this.state;
+    const { value, showSaveConfirmDialog } = this.state;
 
-    const showValidationErrorElement = typeof validationError === 'string' && validationError;
-    const validationErrorElement = (
-      <div
-        className={`
-          oc-fm--dialog__validation-error
-          ${showValidationErrorElement ? '' : 'oc-fm--dialog__validation-error--hidden'}
-        `}
-      >
-        {validationError || <span>&nbsp;</span>}
-      </div>
-    );
 
     return (
-      <Dialog className="oc-fm-edit-dialog" onHide={onHide}>
-        <div className="oc-edit--dialog__content" onKeyDown={this.handleKeyDown}>
+      <Dialog className="oc-fm-edit-dialog" onHide={this.handleClose}>
+        <div className="oc-edit--dialog__content">
+          {showSaveConfirmDialog ? (<div className="oc-fm--file-navigator__view-loading-overlay">{this.saveConfirmDialog}</div>) : null}
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
-          
-          <div className="edit-widget" data-name="js-edit"></div>
-          <Helmet>
-            <script>{`
-                  edward('[data-name="js-edit"]', (editor) => {
-                      editor
-                          .focus()
-                          .setOptions({
-                              fontSize: '16px',
-                              fontFamily: 'Droid Sans Mono',
-                          });
 
-                      editor._socket.on('connect', () => {
-                        //window.alert("sid:" + editor._socket.id);
-                        window.edsocket = editor._socket;
-                        window.onSocketConnected(editor._socket.id);                        
-                      });
-                  });
-            `}</script>
-          </Helmet>
-
-          {inputLabelText && (
-            <div className="oc-fm--dialog__input-label">{inputLabelText}</div>
-          )}
-
-          <input
-            ref={ref => (ref && ref.focus())}
-            spellCheck={false}
-            className={`
-              oc-fm--dialog__input
-              oc-fm--dialog__input--margin-bottom
-              ${validationError ? '' : 'oc-fm--dialog__input--error'}
-            `}
-            value={value}
+          <AceEditor
+            mode="javascript"
+            theme="monokai"
+            fontSize={16}
             onChange={this.handleChange}
-            onFocus={this.handleFocus}
+            name="UNIQUE_ID_OF_DIV"
+            value={this.state.editorText}
+            focus={true}
+            setOptions={{
+              useWorker: false,
+              tabSize: 2,
+              useSoftTabs: true,
+              navigateWithinSoftTabs: true
+            }}
           />
-          {validationErrorElement}
 
           <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
-            <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={onHide}>
+            <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={this.handleClose}>
               {cancelButtonText}
-            </button>
-            <button
-              type="button"
-              className={`oc-fm--dialog__button oc-fm--dialog__button--primary`}
-              onClick={this.handleSubmitButtonClick}
-              disabled={!valid}
-            >
-              {submitButtonText}
             </button>
           </div>
         </div>

@@ -8,6 +8,5 @@ module.exports = config => router({
   rootName: config.rootName,
   users: config.users,
   readOnly: config.readOnly,
-  edsocket: config.edsocket,
   logger: config.logger || logger
 });
