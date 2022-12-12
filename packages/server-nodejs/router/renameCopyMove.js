@@ -45,7 +45,7 @@ module.exports = ({
 
   const {
     parents: parentIds = [],
-    name: reqBasename,
+    name: reqBasename
   } = req.body;
 
   let basename = reqBasename;
