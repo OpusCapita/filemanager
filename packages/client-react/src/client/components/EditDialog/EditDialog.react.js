@@ -110,12 +110,14 @@ class EditDialog extends Component {
     return (
       <Dialog className="oc-fm-edit-dialog" onHide={this.handleClose}>
         <div className="oc-edit--dialog__content">
+          {showSaveConfirmDialog ? (<div className="oc-fm--file-navigator__view-loading-overlay">{this.saveConfirmDialog}</div>) : null}
+            
           <Svg
             className="oc-edit--dialog__close-icon"
             svg={icons.close}
             onClick={this.handleClose}
           />
-          {showSaveConfirmDialog ? (<div className="oc-fm--file-navigator__view-loading-overlay">{this.saveConfirmDialog}</div>) : null}
+          
           <div className="oc-fm--dialog__header">
             {headerText}
           </div>
@@ -127,7 +129,7 @@ class EditDialog extends Component {
             onChange={this.handleChange}
             name="UNIQUE_ID_OF_DIV"
             value={this.state.editorText}
-            focus={true}
+            focus={!showSaveConfirmDialog}
             width="100%"
             height="100%"
             setOptions={{

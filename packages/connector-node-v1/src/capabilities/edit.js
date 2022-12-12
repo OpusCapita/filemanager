@@ -31,7 +31,6 @@ function handler(apiOptions, actions) {
 //        alert('' + JSON.stringify(atob(selectedResources[0].id)));
         try {
           hideDialog();
-//          const result = await api.renameResource(apiOptions, selectedResources[0].id, name);
           const resource = getResource();
           var data = new Blob([text]);
           const file = {
@@ -39,8 +38,8 @@ function handler(apiOptions, actions) {
             file: data
           };
           const result = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress, overwrite: true });
-//          alert('111' + result.body.id);
-//          navigateToDir(resource.id, result.body.id, false);
+//          alert('111' + result.body[0].id);
+          navigateToDir(resource.id, selectedResources[0].id, false);
           return null;
         } catch (err) {
           hideDialog();
