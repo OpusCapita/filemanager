@@ -30,7 +30,8 @@ const translations = {
     lastModified: 'Last modified',
     reallyRemove: '{files} will be deleted. Do you really want to proceed?',
     unableReadDir: 'Unable to read a directory.',
-    edit: 'Edit'
+    edit: 'Edit',
+    file: 'File'
   },
   fr: {
     uploading: 'Ajout d\'un document en cours',

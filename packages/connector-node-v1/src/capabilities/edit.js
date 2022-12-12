@@ -70,10 +70,7 @@ function handler(apiOptions, actions) {
         const content = await api.downloadResources({ resources, apiOptions, onProgress});
         return content.text();
       },
-      inputLabelText: getMessage('newName'),
-      headerText: getMessage('edit') + ": " + getSelectedResources()[0].name,
-      submitButtonText: localeLabel,
-      cancelButtonText: getMessage('cancel')
+      headerText: getMessage('file') + ": " + getSelectedResources()[0].name
     }
   };
   showDialog(rawDialogElement);

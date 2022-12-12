@@ -1,6 +1,3 @@
-.set-name-dialog {
-}
-
 .oc-fm-edit-dialog {
   display: flex;
   justify-content: center;
@@ -34,6 +31,16 @@
   }
 }
 
+.oc-edit--dialog__close-icon {
+  width: 24px;
+  height: 24px;
+  position:absolute;
+  top: 29px;
+  right: 29px;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
 
 @font-face {
     font-family     : 'Droid Sans Mono';
@@ -50,9 +57,4 @@
                         local('Consolas');
     font-style      : normal;
     font-weight     : 400;
-}
-
-.edit-widget {
-    flex: 1 1 auto;
-    width: 100%;
 }

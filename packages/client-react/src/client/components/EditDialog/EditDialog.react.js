@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './EditDialog.less';
 import Dialog from '../Dialog';
-import FileSaveConfirmDialog from '../FileSaveConfirmDialog'
-
+import FileSaveConfirmDialog from '../FileSaveConfirmDialog';
 import AceEditor from "react-ace";
+import Svg from '@opuscapita/react-svg/lib/SVG';
+import icons from './icons-svg';
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/snippets/javascript";
@@ -16,28 +17,22 @@ import "ace-builds/src-min-noconflict/ext-language_tools";
 
 
 const propTypes = {
-  cancelButtonText: PropTypes.string,
   headerText: PropTypes.string,
-  inputLabelText: PropTypes.string,
   initialValue: PropTypes.string,
   onChange: PropTypes.func,
   onHide: PropTypes.func,
   onSubmit: PropTypes.func,
   onValidate: PropTypes.func,
   getFileContent: PropTypes.func,
-  submitButtonText: PropTypes.string
 };
 const defaultProps = {
-  cancelButtonText: 'Close',
   headerText: 'Set name',
-  inputLabelText: '',
   initialValue: '',
   onChange: () => {},
   onHide: () => {},
   onSubmit: () => {},
   onValidate: () => {},
   getFileContent: () => {},
-  submitButtonText: 'Create'
 };
 
 export default
@@ -59,14 +54,14 @@ class EditDialog extends Component {
 
   componentDidMount() {
     this._isMounted = true
-    this.setText();
+    this.initEditorText();
   }
 
   componentWillUnmount() {
     this._isMounted = false
   }
 
-  setText = async (e) => {
+  initEditorText = async (e) => {
       let value = await this.props.getFileContent();
       this.setState({ editorText: value });
   } 
@@ -108,13 +103,18 @@ class EditDialog extends Component {
   }
 
   render() {
-    const { onHide, headerText, inputLabelText, submitButtonText, cancelButtonText } = this.props;
-    const { value, showSaveConfirmDialog } = this.state;
+    const { onHide, headerText } = this.props;
+    const { showSaveConfirmDialog } = this.state;
 
 
     return (
       <Dialog className="oc-fm-edit-dialog" onHide={this.handleClose}>
         <div className="oc-edit--dialog__content">
+          <Svg
+            className="oc-edit--dialog__close-icon"
+            svg={icons.close}
+            onClick={this.handleClose}
+          />
           {showSaveConfirmDialog ? (<div className="oc-fm--file-navigator__view-loading-overlay">{this.saveConfirmDialog}</div>) : null}
           <div className="oc-fm--dialog__header">
             {headerText}
@@ -128,19 +128,15 @@ class EditDialog extends Component {
             name="UNIQUE_ID_OF_DIV"
             value={this.state.editorText}
             focus={true}
+            width="100%"
+            height="100%"
             setOptions={{
               useWorker: false,
-              tabSize: 2,
+              tabSize: 4,
               useSoftTabs: true,
               navigateWithinSoftTabs: true
             }}
           />
-
-          <div className="oc-fm--dialog__horizontal-group oc-fm--dialog__horizontal-group--to-right">
-            <button type="button" className="oc-fm--dialog__button oc-fm--dialog__button--default" onClick={this.handleClose}>
-              {cancelButtonText}
-            </button>
-          </div>
         </div>
       </Dialog>
     );
