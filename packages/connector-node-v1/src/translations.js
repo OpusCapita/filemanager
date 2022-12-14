@@ -31,6 +31,7 @@ const translations = {
     reallyRemove: '{files} will be deleted. Do you really want to proceed?',
     unableReadDir: 'Unable to read a directory.',
     edit: 'Edit',
+    view: 'View',
     file: 'File'
   },
   fr: {

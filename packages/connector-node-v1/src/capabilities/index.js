@@ -5,10 +5,12 @@ import upload from './upload';
 import rename from './rename';
 import sort from './sort';
 import edit from './edit';
+import view from './view';
 
 const capabilities = [
   createFolder,
   edit,
+  view,
   rename,
   download,
   upload,

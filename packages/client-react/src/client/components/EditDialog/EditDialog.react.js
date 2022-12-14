@@ -17,8 +17,8 @@ import "ace-builds/src-min-noconflict/ext-language_tools";
 
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   headerText: PropTypes.string,
-  initialValue: PropTypes.string,
   onChange: PropTypes.func,
   onHide: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -26,8 +26,8 @@ const propTypes = {
   getFileContent: PropTypes.func,
 };
 const defaultProps = {
-  headerText: 'Set name',
-  initialValue: '',
+  readOnly: false,
+  headerText: '',
   onChange: () => {},
   onHide: () => {},
   onSubmit: () => {},
@@ -40,7 +40,6 @@ class EditDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.initialValue,
       showSaveConfirmDialog: false,
       editorText: ""
     };
@@ -123,6 +122,7 @@ class EditDialog extends Component {
           </div>
 
           <AceEditor
+            readOnly={this.props.readOnly}
             mode="javascript"
             theme="monokai"
             fontSize={16}

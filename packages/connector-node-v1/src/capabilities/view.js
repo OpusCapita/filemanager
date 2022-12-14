@@ -4,7 +4,7 @@ import onFailError from '../utils/onFailError';
 import icons from '../icons-svg';
 import getMess from '../translations';
 
-const label = 'edit';
+const label = 'view';
 
 function handler(apiOptions, actions) {
   const {
@@ -18,41 +18,12 @@ function handler(apiOptions, actions) {
   } = actions;
 
   const getMessage = getMess.bind(null, apiOptions.locale);
-  const localeLabel = getMessage(label);
 
   const rawDialogElement = {
     elementType: 'EditDialog',
     elementProps: {
-      readOnly: false,
+      readOnly: true,
       onHide: hideDialog,
-      onSubmit: async (text) => {
-        const onProgress = (progress) => {};
-        const selectedResources = getSelectedResources();
-//        alert('' + JSON.stringify(atob(selectedResources[0].id)));
-        try {
-          hideDialog();
-          const resource = getResource();
-          var data = new Blob([text]);
-          const file = {
-            name: selectedResources[0].name,
-            file: data
-          };
-          const result = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress, overwrite: true });
-//          alert('111' + result.body[0].id);
-          navigateToDir(resource.id, selectedResources[0].id, false);
-          return null;
-        } catch (err) {
-          hideDialog();
-          onFailError({
-            getNotifications,
-            label: localeLabel,
-            notificationId: label,
-            updateNotifications
-          });
-          console.log(err);
-          return null
-        }
-      },
       getFileContent: async () => {
         const onProgress = (progress) => {};
         const resources = getSelectedResources();
@@ -70,13 +41,13 @@ export default (apiOptions, actions) => {
   const { getSelectedResources } = actions;
   return {
     id: label,
-    icon: { svg: icons.edit },
+    icon: { svg: icons.view },
     label: localeLabel,
     shouldBeAvailable: (apiOptions) => {
       const selectedResources = getSelectedResources();
       return (
         selectedResources.length === 1 &&
-        selectedResources.every(r => r.capabilities.canEdit)
+        selectedResources.every(r => r.capabilities.canDownload && !r.capabilities.canEdit)
       );
     },
     availableInContexts: ['row', 'toolbar'],

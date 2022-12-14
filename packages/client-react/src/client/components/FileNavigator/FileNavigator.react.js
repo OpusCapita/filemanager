@@ -307,7 +307,7 @@ class FileNavigator extends Component {
   };
 
   handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
-    const { loadingView } = this.state;
+    const { loadingView, initializedCapabilities } = this.state;
     const { id } = rowData;
 
     if (loadingView) {
@@ -317,6 +317,14 @@ class FileNavigator extends Component {
     const isDirectory = rowData.type === 'dir';
     if (isDirectory) {
       this.navigateToDir(id);
+    }
+
+    const isFile = rowData.type === 'file';
+    if (isFile) {
+      const { apiOptions } = this.props;
+      const fileOpenCapability = find(initializedCapabilities, (o) => (o.id === 'edit' || o.id === 'view') && o.shouldBeAvailable(apiOptions));
+      if (fileOpenCapability)
+        fileOpenCapability.handler();
     }
 
     this.focusView();
