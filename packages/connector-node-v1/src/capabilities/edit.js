@@ -20,6 +20,18 @@ function handler(apiOptions, actions) {
   const getMessage = getMess.bind(null, apiOptions.locale);
   const localeLabel = getMessage(label);
 
+  const selectedResources = getSelectedResources();
+  if (selectedResources[0].size / 1024 > 100) {
+    onFailError({
+      getNotifications,
+      label: localeLabel,
+      notificationId: label,
+      updateNotifications,
+      message: 'File cannot be loaded, max. size 100KB.'
+    });
+    return;
+  }
+  
   const rawDialogElement = {
     elementType: 'EditDialog',
     elementProps: {
