@@ -32,7 +32,8 @@ const translations = {
     unableReadDir: 'Unable to read a directory.',
     edit: 'Edit',
     view: 'View',
-    file: 'File'
+    file: 'File',
+    editFileLimit: 'File cannot be loaded, max. size {filesizelimit}KB.'
   },
   fr: {
     uploading: 'Ajout d\'un document en cours',

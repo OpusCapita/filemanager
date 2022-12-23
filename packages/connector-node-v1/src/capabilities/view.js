@@ -20,13 +20,14 @@ function handler(apiOptions, actions) {
   const getMessage = getMess.bind(null, apiOptions.locale);
 
   const selectedResources = getSelectedResources();
-  if (selectedResources[0].size / 1024 > 100) {
+  const filesizelimit = 100;
+  if (selectedResources[0].size / 1024 > filesizelimit) {
     onFailError({
       getNotifications,
       label: localeLabel,
       notificationId: label,
       updateNotifications,
-      message: 'File cannot be loaded, max. size 100KB.'
+      message: getMessage('editFileLimit', {filesizelimit})
     });
     return;
   }
