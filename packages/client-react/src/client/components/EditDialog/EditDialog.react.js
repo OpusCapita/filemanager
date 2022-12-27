@@ -6,19 +6,113 @@ import FileSaveConfirmDialog from '../FileSaveConfirmDialog';
 import AceEditor from "react-ace";
 import Svg from '@opuscapita/react-svg/lib/SVG';
 import icons from './icons-svg';
+import {getModeForPath, modes, modesByName} from "ace-builds/src-noconflict/ext-modelist";
+
+// const languages = [
+//   "javascript",
+//   "java",
+//   "python",
+//   "xml",
+//   "markdown",
+//   "json",
+//   "html",
+//   "typescript",
+//   "css",
+//   "text",
+//   "plain_text"
+// ];
+
+// languages.map(lang => {
+//   try {
+//     require(`ace-builds/src-noconflict/mode-${lang}`);
+//     require(`ace-builds/src-noconflict/snippets/${lang}`);
+//   } catch(ignore) {}
+// });
+
+// modes.map(mode => {
+//   try {
+//     require(`ace-builds/src-noconflict/mode-${mode.name}`);
+//     require(`ace-builds/src-noconflict/snippets/${mode.name}`);
+//   } catch(ignore) {}
+// });
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/snippets/javascript";
-import "ace-builds/src-noconflict/worker-javascript"
-import "ace-builds/src-noconflict/theme-monokai";
-//import "ace-builds/src-noconflict/ext-language_tools";
-import "ace-builds/src-min-noconflict/ext-searchbox";
-import "ace-builds/src-min-noconflict/ext-language_tools";
+
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/snippets/java";
+
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/snippets/python";
+
+import "ace-builds/src-noconflict/mode-xml";
+import "ace-builds/src-noconflict/snippets/xml";
+
+import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/snippets/json";
+
+import "ace-builds/src-noconflict/mode-html";
+import "ace-builds/src-noconflict/snippets/html";
+
+import "ace-builds/src-noconflict/mode-typescript";
+import "ace-builds/src-noconflict/snippets/typescript";
+
+import "ace-builds/src-noconflict/mode-css";
+import "ace-builds/src-noconflict/snippets/css";
+
+import "ace-builds/src-noconflict/mode-text";
+import "ace-builds/src-noconflict/snippets/text";
+
+import "ace-builds/src-noconflict/mode-plain_text";
+import "ace-builds/src-noconflict/snippets/plain_text";
+
+import  'ace-builds/src-noconflict/mode-makefile';
+import "ace-builds/src-noconflict/snippets/makefile";
+
+import  'ace-builds/src-noconflict/mode-markdown';
+import "ace-builds/src-noconflict/snippets/markdown";
+
+import  'ace-builds/src-noconflict/mode-lua';
+import "ace-builds/src-noconflict/snippets/lua";
+
+import  'ace-builds/src-noconflict/mode-jsx'
+import "ace-builds/src-noconflict/snippets/jsx";
+
+//import "ace-builds/src-noconflict/theme-monokai";
+import  'ace-builds/src-noconflict/theme-dracula';
+
+//import  'ace-builds/src-noconflict/ext-beautify';
+import  'ace-builds/src-noconflict/ext-code_lens';
+// import  'ace-builds/src-noconflict/ext-elastic_tabstops_lite';
+// import  'ace-builds/src-noconflict/ext-emmet';
+import  'ace-builds/src-noconflict/ext-error_marker';
+import  'ace-builds/src-noconflict/ext-hardwrap';
+import  'ace-builds/src-noconflict/ext-keybinding_menu';
+import  'ace-builds/src-noconflict/ext-language_tools';
+import  'ace-builds/src-noconflict/ext-linking';
+//import  'ace-builds/src-noconflict/ext-modelist';
+import  'ace-builds/src-noconflict/ext-options';
+import  'ace-builds/src-noconflict/ext-prompt';
+import  'ace-builds/src-noconflict/ext-rtl';
+import  'ace-builds/src-noconflict/ext-searchbox';
+import  'ace-builds/src-noconflict/ext-settings_menu';
+//import  'ace-builds/src-noconflict/ext-spellcheck';
+//import  'ace-builds/src-noconflict/ext-split';
+//import  'ace-builds/src-noconflict/ext-static_highlight';
+//import  'ace-builds/src-noconflict/ext-statusbar';
+import  'ace-builds/src-noconflict/ext-textarea';
+//import  'ace-builds/src-noconflict/ext-themelist';
+import  'ace-builds/src-noconflict/ext-whitespace';
+// import  'ace-builds/src-noconflict/keybinding-emacs';
+// import  'ace-builds/src-noconflict/keybinding-sublime';
+// import  'ace-builds/src-noconflict/keybinding-vim';
+// import  'ace-builds/src-noconflict/keybinding-vscode';
 
 
 const propTypes = {
   readOnly: PropTypes.bool,
   headerText: PropTypes.string,
+  fileName: PropTypes.string,
   onChange: PropTypes.func,
   onHide: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -28,6 +122,7 @@ const propTypes = {
 const defaultProps = {
   readOnly: false,
   headerText: '',
+  fileName: '',
   onChange: () => {},
   onHide: () => {},
   onSubmit: () => {},
@@ -41,7 +136,8 @@ class EditDialog extends Component {
     super(props);
     this.state = {
       showSaveConfirmDialog: false,
-      editorText: ""
+      editorText: "",
+      editorMode: "text"
     };
     this.newText = null;
     this.saveConfirmDialog = React.createElement(FileSaveConfirmDialog, { ...FileSaveConfirmDialog.defaultProps,
@@ -61,8 +157,9 @@ class EditDialog extends Component {
   }
 
   initEditorText = async (e) => {
+      let mode = getModeForPath(this.props.fileName).name;
       let value = await this.props.getFileContent();
-      this.setState({ editorText: value });
+      this.setState({ editorText: value, editorMode: mode });
   } 
 
   handleChange = async (value, event) => {
@@ -123,8 +220,8 @@ class EditDialog extends Component {
 
           <AceEditor
             readOnly={this.props.readOnly}
-            mode="javascript"
-            theme="monokai"
+            mode={this.state.editorMode}
+            theme="dracula"
             fontSize={16}
             onChange={this.handleChange}
             name="UNIQUE_ID_OF_DIV"

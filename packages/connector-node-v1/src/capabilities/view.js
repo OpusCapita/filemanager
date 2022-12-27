@@ -43,7 +43,8 @@ function handler(apiOptions, actions) {
         const content = await api.downloadResources({ resources, apiOptions, onProgress});
         return content.text();
       },
-      headerText: getMessage('file') + ": " + getSelectedResources()[0].name
+      headerText: getMessage('file') + ": " + getSelectedResources()[0].name,
+      fileName: getSelectedResources()[0].name
     }
   };
   showDialog(rawDialogElement);
