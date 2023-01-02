@@ -18,6 +18,7 @@ function handler(apiOptions, actions) {
   } = actions;
 
   const getMessage = getMess.bind(null, apiOptions.locale);
+  const localeLabel = getMessage(label);
 
   const selectedResources = getSelectedResources();
   const filesizelimit = 100;
