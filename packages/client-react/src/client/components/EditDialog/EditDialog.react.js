@@ -36,47 +36,48 @@ import {getModeForPath, modes, modesByName} from "ace-builds/src-noconflict/ext-
 //   } catch(ignore) {}
 // });
 
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/snippets/javascript";
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/snippets/javascript';
 
-import "ace-builds/src-noconflict/mode-java";
-import "ace-builds/src-noconflict/snippets/java";
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/snippets/java';
 
-import "ace-builds/src-noconflict/mode-python";
-import "ace-builds/src-noconflict/snippets/python";
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/snippets/python';
 
-import "ace-builds/src-noconflict/mode-xml";
-import "ace-builds/src-noconflict/snippets/xml";
+import 'ace-builds/src-noconflict/mode-xml';
+import 'ace-builds/src-noconflict/snippets/xml';
 
-import "ace-builds/src-noconflict/mode-json";
+import 'ace-builds/src-noconflict/mode-json';
 import "ace-builds/src-noconflict/snippets/json";
 
-import "ace-builds/src-noconflict/mode-html";
-import "ace-builds/src-noconflict/snippets/html";
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/snippets/html';
 
-import "ace-builds/src-noconflict/mode-typescript";
-import "ace-builds/src-noconflict/snippets/typescript";
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'ace-builds/src-noconflict/snippets/typescript';
 
-import "ace-builds/src-noconflict/mode-css";
-import "ace-builds/src-noconflict/snippets/css";
+import 'ace-builds/src-noconflict/mode-css';
+import 'ace-builds/src-noconflict/snippets/css';
 
-import "ace-builds/src-noconflict/mode-text";
-import "ace-builds/src-noconflict/snippets/text";
+import 'ace-builds/src-noconflict/mode-text';
+import 'ace-builds/src-noconflict/snippets/text';
 
-import "ace-builds/src-noconflict/mode-plain_text";
-import "ace-builds/src-noconflict/snippets/plain_text";
+import 'ace-builds/src-noconflict/mode-plain_text';
+import 'ace-builds/src-noconflict/snippets/plain_text';
 
-import  'ace-builds/src-noconflict/mode-makefile';
-import "ace-builds/src-noconflict/snippets/makefile";
+import 'ace-builds/src-noconflict/mode-makefile';
+import 'ace-builds/src-noconflict/snippets/makefile';
 
-import  'ace-builds/src-noconflict/mode-markdown';
-import "ace-builds/src-noconflict/snippets/markdown";
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/snippets/markdown';
 
-import  'ace-builds/src-noconflict/mode-lua';
-import "ace-builds/src-noconflict/snippets/lua";
+import 'ace-builds/src-noconflict/mode-lua';
+import 'ace-builds/src-noconflict/snippets/lua';
 
-import  'ace-builds/src-noconflict/mode-jsx'
-import "ace-builds/src-noconflict/snippets/jsx";
+import 'ace-builds/src-noconflict/mode-jsx'
+import 'ace-builds/src-noconflict/snippets/jsx';
+
 
 //import "ace-builds/src-noconflict/theme-monokai";
 import  'ace-builds/src-noconflict/theme-dracula';
@@ -157,9 +158,16 @@ class EditDialog extends Component {
   }
 
   initEditorText = async (e) => {
-      let mode = getModeForPath(this.props.fileName).name;
-      let value = await this.props.getFileContent();
-      this.setState({ editorText: value, editorMode: mode });
+    let value = await this.props.getFileContent();
+
+    let mode = getModeForPath(this.props.fileName).name;
+    try { //prevent exception on client, if not imported mode is used.
+      await import (`ace-builds/src-noconflict/mode-${mode}`);
+    } catch(error) {
+      mode = 'text';
+    }
+
+    this.setState({ editorText: value, editorMode: mode });
   } 
 
   handleChange = async (value, event) => {
