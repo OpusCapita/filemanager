@@ -500,6 +500,12 @@ class FileNavigator extends Component {
             locale={apiOptions.locale}
           />
         </div>
+        <div className="oc-fm--file-navigator__location-bar">
+          <LocationBar
+            items={locationItems}
+            loading={loadingResourceLocation}
+          />
+        </div>        
         <div className="oc-fm--file-navigator__view">
           <ListView
             rowContextMenuId={rowContextMenuId}
@@ -525,12 +531,6 @@ class FileNavigator extends Component {
               notifications={notifications}
             />
           </ListView>
-        </div>
-        <div className="oc-fm--file-navigator__location-bar">
-          <LocationBar
-            items={locationItems}
-            loading={loadingResourceLocation}
-          />
         </div>
         <ContextMenu
           triggerId={rowContextMenuId}
