@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   git: opuscapita/git@volatile
-  jira: circleci/jira@1.2.2
+  jira: circleci/jira@2.0
 
 aliases:
   - &save-cache-checksum
@@ -33,24 +33,30 @@ aliases:
       - ./packages/demoapp/node_modules
       - ~/.m2/repository
 
+  - &docker_auth
+    auth:
+      username: ${DOCKER_USER}
+      password: ${DOCKER_PASS}
+
+  - &default-context
+    context:
+      - shared-creds
+      
 executors:
   code:
     docker:
       - image: opuscapita/minsk-core-ci:5
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+        <<: *docker_auth
   deployment:
     docker:
       - image: opuscapita/minsk-core-ci:deploy
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+        <<: *docker_auth
 
 jobs:
   init:
     docker:
       - image: opuscapita/minsk-core-machineuser-env:2
+        <<: *docker_auth
     steps:
       - run: generate_bash_env_exports.sh CIRCLE_CI_TOKEN > ~/generated_bash_env
       - persist_to_workspace:
@@ -95,10 +101,12 @@ workflows:
   commit:
     jobs:
       - init:
+          <<: *default-context
           filters:
             tags:
               only: /.*/
       - build:
+          <<: *default-context
           requires:
             - init
           filters:
@@ -106,9 +114,11 @@ workflows:
               only: /.*/
           post-steps:
             - jira/notify:
-                token_name: "CIRCLE_CI_TOKEN"
+                pipeline_id: << pipeline.id >>
+                pipeline_number: << pipeline.number >>
 
       - deploy:
+          <<: *default-context
           requires:
             - init
             - build
