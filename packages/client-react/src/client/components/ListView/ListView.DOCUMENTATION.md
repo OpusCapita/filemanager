@@ -18,6 +18,7 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
 | onSort                         | func                    | ({ sortBy, sortDirection }) => {}                           |
 | onKeyDown                      | func                    | (e) => {}                                                   |
 | onRef                          | func                    | (ref) => {}                                                 |
+| dragUpload                     | func                    | () => {}                                                    |
 
 ### Code Example
 
@@ -29,6 +30,7 @@ ListView is a part of FileManger. Built using [react-virtualized](https://github
     onRowDoubleClick={(data) => console.log('double click', data)}
     onSelection={_scope.handleSelection}
     onSort={_scope.handleSort}
+    dragUpload={() => console.log('drag')}
     loading={false}
     selection={_scope.state.selection}
     sortBy={_scope.state.sortBy}

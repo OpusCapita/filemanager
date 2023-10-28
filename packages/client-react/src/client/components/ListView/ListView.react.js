@@ -48,7 +48,8 @@ const propTypes = {
   onSort: PropTypes.func,
   onKeyDown: PropTypes.func,
   onRef: PropTypes.func,
-  locale: PropTypes.string
+  locale: PropTypes.string,
+  dragUpload: PropTypes.func
 };
 const defaultProps = {
   rowContextMenuId: nanoid(),
@@ -168,6 +169,22 @@ class ListView extends Component {
     this.scrollToIndex(scrollToIndex);
   }
 
+  handleHighlight = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  handleUnhighlight = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  handleDropFile = (event, callback) => {
+    event.preventDefault()
+    event.stopPropagation()
+    callback({ action: 'drag' });
+  }
+
   render() {
     const {
       rowContextMenuId,
@@ -178,7 +195,8 @@ class ListView extends Component {
       loading,
       onRef,
       sortBy,
-      sortDirection
+      sortDirection,
+      dragUpload
     } = this.props;
 
     const {
@@ -221,6 +239,14 @@ class ListView extends Component {
               }) => (
                 <div
                   className="oc-fm--list-view"
+                  onDragEnter={(event) => {
+                    this.handleHighlight(event);
+                    this.handleDropFile(event, dragUpload)
+                  }}
+                  onDragOver={(event) => {
+                    this.handleHighlight(event);
+                  } }
+                  onDragLeave={this.handleUnhighlight}
                 >
                   <ScrollOnMouseOut
                     onCursorAbove={this.handleScrollTop}

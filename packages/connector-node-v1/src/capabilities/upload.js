@@ -10,7 +10,7 @@ import { normalizeResource } from '../utils/common';
 
 const label = 'upload';
 
-async function handler(apiOptions, actions) {
+async function handler(apiOptions, actions, typeAction) {
   const {
     navigateToDir,
     updateNotifications,
@@ -73,7 +73,7 @@ async function handler(apiOptions, actions) {
 
   const resource = getResource();
   try {
-    const file = await readLocalFile(true);
+    const file = await readLocalFile(typeAction);
     onStart({ name: file.name, size: file.file.size });
     const response = await api.uploadFileToId({ apiOptions, parentId: resource.id, file, onProgress });
     const newResource = normalizeResource(response.body[0]);
@@ -121,6 +121,6 @@ export default (apiOptions, actions) => {
       return resource.capabilities.canAddChildren
     },
     availableInContexts: ['files-view', 'new-button'],
-    handler: () => handler(apiOptions, actions)
+    handler: (typeAction) => handler(apiOptions, actions, typeAction)
   };
 }
