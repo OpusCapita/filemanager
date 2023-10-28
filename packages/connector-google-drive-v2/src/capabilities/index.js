@@ -5,8 +5,10 @@ import download from './download';
 import upload from './upload';
 import rename from './rename';
 import sort from './sort';
+import open from './open';
 
 const capabilities = [
+  open,
   createFolder,
   rename,
   download,
