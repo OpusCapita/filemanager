@@ -6,8 +6,15 @@ import { normalizeResource } from './utils/common';
  *
  * @returns {boolean}
  */
-function hasSignedIn() {
-  return true;
+async function hasSignedIn(options) {
+  const route = `${options.apiRoot}/authentication/hassignedin`;
+  try {
+    const response = await request.get(route);
+    const {username} = response.body;
+    return {username: username};
+  } catch (err) {
+    return false;
+  }
 }
 
 /**
@@ -18,7 +25,7 @@ function hasSignedIn() {
 function init() {
   return {
     apiInitialized: true,
-    apiSignedIn: true
+    apiSignedIn: false
   };
 }
 
@@ -93,11 +100,12 @@ async function getParentIdForResource(options, resource) {
   return resource.parentId;
 }
 
-async function uploadFileToId({ apiOptions, parentId, file, onProgress }) {
+async function uploadFileToId({ apiOptions, parentId, file, onProgress, overwrite }) {
   const route = `${apiOptions.apiRoot}/files`;
   return request.post(route).
     field('type', 'file').
     field('parentId', parentId).
+    field('overwrite', overwrite === true ).
     attach('files', file.file, file.name).
     on('progress', event => {
       onProgress(event.percent);
@@ -150,6 +158,26 @@ async function removeResources(options, selectedResources) {
   return Promise.all(selectedResources.map(resource => removeResource(options, resource)))
 }
 
+async function signIn(options, username, password) {
+  const route = `${options.apiRoot}/authentication/signin`;
+  try {
+    const response = await request.post(route).send({username: btoa(username), password: btoa(password)});
+    return {username: response.body.username};
+  } catch (err) {
+    return false;
+  }
+}
+
+async function signOut(options) {
+  const route = `${options.apiRoot}/authentication/signout`;
+  try {
+    await request.get(route);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export default {
   init,
   hasSignedIn,
@@ -164,5 +192,7 @@ export default {
   downloadResources,
   renameResource,
   removeResources,
-  uploadFileToId
+  uploadFileToId,
+  signIn,
+  signOut  
 };

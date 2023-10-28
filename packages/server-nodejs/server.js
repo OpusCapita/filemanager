@@ -5,7 +5,9 @@ const logger = require('./logger');
 
 const app = express();
 
-function run(config = require('./config/server-config')) {
+const server_config = process.env.SERVER_CONFIG ? process.env.SERVER_CONFIG : './config/server-config'
+
+function run(config = require(server_config)) {
   const host = config.host;
   const port = config.port;
 

@@ -13,6 +13,11 @@
     "pretest-restapi": "npm run prepare-demo",
     "test-restapi": "pm2 delete 'fmServer'; pm2 start start.js --name 'fmServer' && mocha --require config/test/mocha-setup.js --recursive api-tests/*.spec.js --reporter mocha-multi-reporters --reporter-options configFile=./config/test/reporters.json",
     "posttest-restapi": "rimraf test-files",
+
+    "pretest-restapi-users": "npm run prepare-demo",
+    "test-restapi-users": "pm2 delete 'fmServer'; SERVER_CONFIG=./config/server-config-users pm2 start start.js --name 'fmServer' && mocha --require config/test/mocha-setup.js api-tests/*.spec.js --reporter mocha-multi-reporters --reporter-options configFile=./config/test/reporters.json",
+    "posttest-restapi-users": "rimraf test-files",
+
     "build": "node -e \"console.log('Building \"$npm_package_name\" version \"$npm_package_version\"! ')\""
   },
   "publishConfig": {
@@ -27,6 +32,7 @@
     "body-parser": "1.18.3",
     "express": "4.16.3",
     "express-easy-zip": "1.1.4",
+    "express-session": "1.16.1",
     "fs-extra": "7.0.0",
     "helmet": "3.13.0",
     "isbinaryfile": "3.0.3",

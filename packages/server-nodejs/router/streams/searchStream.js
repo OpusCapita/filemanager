@@ -36,7 +36,7 @@ const {
  *          The param is ignored if `options.fileContentSubstring` is an empty string.
  * @returns {ReadableStream}
  */
-module.exports = (rootPath, config, {
+module.exports = (rootPath, config, session, {
   itemNameSubstring,
   itemNameCaseSensitive,
   itemType,
@@ -68,7 +68,7 @@ module.exports = (rootPath, config, {
     }));
   }
 
-  streams.push(new FsItem2ResourceStream(config));
+  streams.push(new FsItem2ResourceStream(config, session));
 
   streams.slice(1).forEach((targetStream, i) => {
     const sourceStream = streams[i];

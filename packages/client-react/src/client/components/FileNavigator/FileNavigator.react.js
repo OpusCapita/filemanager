@@ -104,6 +104,11 @@ class FileNavigator extends Component {
       const initializedCapabilities = capabilities(apiOptions, capabilitiesProps);
       this.setState({ initializedCapabilities });
     }
+
+    if (this.props.signInRenderer !== nextProps.signInRenderer) {
+      this.setState( () => ({ apiSignedIn: false }));
+      this.monitorApiAvailability();
+    }
   }
 
   componentWillUnmount() {
@@ -165,14 +170,16 @@ class FileNavigator extends Component {
   };
 
   monitorApiAvailability = () => {
-    const { api } = this.props;
+    const { api, apiOptions, signInRenderer } = this.props;
 
-    this.apiAvailabilityTimeout = setTimeout(() => {
-      if (api.hasSignedIn()) {
+    this.apiAvailabilityTimeout = setTimeout( async () => {
+      let response = await api.hasSignedIn(apiOptions);
+      if (response) {
         this.setStateAsync({ apiInitialized: true, apiSignedIn: true });
         this.handleApiReady();
       } else {
-        this.monitorApiAvailability();
+        if (signInRenderer === null)
+          this.monitorApiAvailability();
       }
     }, MONITOR_API_AVAILABILITY_TIMEOUT);
   };
@@ -300,7 +307,7 @@ class FileNavigator extends Component {
   };
 
   handleResourceItemDoubleClick = async ({ event, number, rowData }) => {
-    const { loadingView } = this.state;
+    const { loadingView, initializedCapabilities } = this.state;
     const { id } = rowData;
 
     if (loadingView) {
@@ -310,6 +317,14 @@ class FileNavigator extends Component {
     const isDirectory = rowData.type === 'dir';
     if (isDirectory) {
       this.navigateToDir(id);
+    }
+
+    const isFile = rowData.type === 'file';
+    if (isFile) {
+      const { apiOptions } = this.props;
+      const fileOpenCapability = find(initializedCapabilities, (o) => (o.id === 'edit' || o.id === 'view') && o.shouldBeAvailable(apiOptions));
+      if (fileOpenCapability)
+        fileOpenCapability.handler();
     }
 
     this.focusView();
@@ -485,6 +500,12 @@ class FileNavigator extends Component {
             locale={apiOptions.locale}
           />
         </div>
+        <div className="oc-fm--file-navigator__location-bar">
+          <LocationBar
+            items={locationItems}
+            loading={loadingResourceLocation}
+          />
+        </div>        
         <div className="oc-fm--file-navigator__view">
           <ListView
             rowContextMenuId={rowContextMenuId}
@@ -510,12 +531,6 @@ class FileNavigator extends Component {
               notifications={notifications}
             />
           </ListView>
-        </div>
-        <div className="oc-fm--file-navigator__location-bar">
-          <LocationBar
-            items={locationItems}
-            loading={loadingResourceLocation}
-          />
         </div>
         <ContextMenu
           triggerId={rowContextMenuId}

@@ -17,7 +17,9 @@ const {
 
 const {
   TYPE_FILE,
-  TYPE_DIR
+  TYPE_DIR,
+  TYPE_BROKEN_LINK,
+  TYPE_ENCODING_NAME_ERROR
 } = require('../constants');
 
 const
@@ -145,6 +147,7 @@ const checkName = name => {
  */
 const getResource = async ({
   config,
+  session,
   path: userPath, // path relative to config.fsRoot, path.sep for user root. Optional.
   parent: userParent, // path relative to config.fsRoot, null for user root. Optional.
   basename: userBasename, // null for user root. Optional.
@@ -171,9 +174,10 @@ const getResource = async ({
   let parent;
 
   ([stats, parent] = await Promise.all([ // eslint-disable-line no-param-reassign,prefer-const
-    stats || fs.stat(path.join(config.fsRoot, userPath)),
+    stats || fs.stat(path.join(config.fsRoot, userPath)).catch(() => {return fs.lstat(path.join(config.fsRoot, userPath)).catch(() => {return false;})}),
     userParent && getResource({
       config,
+      session,
       path: userParent
     })
   ]));
@@ -184,22 +188,26 @@ const getResource = async ({
     createdTime: stats.birthtime,
     modifiedTime: stats.mtime,
     capabilities: {
-      canDelete: !!userParent && !config.readOnly,
-      canRename: !!userParent && !config.readOnly,
-      canCopy: !!userParent && !config.readOnly,
-      canEdit: stats.isFile() && !config.readOnly, // Only files can be edited
-      canDownload: stats.isFile() // Only files can be downloaded
+      canDelete: !!userParent && !isReadOnly(config, session),
+      canRename: !!userParent && !isReadOnly(config, session),
+      canCopy: !!userParent && !isReadOnly(config, session),
+      canEdit: stats && stats.isFile() && !isReadOnly(config, session), // Only files can be edited
+      canDownload: stats && stats.isFile() // Only files can be downloaded
     }
   };
 
-  if (stats.isDirectory()) {
+  if (stats === false) {
+    resource.type = TYPE_ENCODING_NAME_ERROR;
+  } else if (stats.isDirectory()) {
     resource.type = TYPE_DIR;
     resource.capabilities.canListChildren = true;
-    resource.capabilities.canAddChildren = !config.readOnly;
-    resource.capabilities.canRemoveChildren = !config.readOnly;
+    resource.capabilities.canAddChildren = !isReadOnly(config, session);
+    resource.capabilities.canRemoveChildren = !isReadOnly(config, session);
   } else if (stats.isFile()) {
     resource.type = TYPE_FILE;
     resource.size = stats.size;
+  } else if (stats.isSymbolicLink()) {
+    resource.type = TYPE_BROKEN_LINK;
   } else {
     throw new Error(UNKNOWN_RESOURCE_TYPE_ERROR);
   }
@@ -254,6 +262,9 @@ const isBinaryFile = async filePath => {
   return _isBinaryFile(filePath);
 }
 
+const isReadOnly = (config, session) => {
+  return config.users ? (session.user ? session.user.readOnly : config.readOnly) : config.readOnly;
+}
 
 module.exports = {
   UNKNOWN_RESOURCE_TYPE_ERROR,
@@ -264,5 +275,6 @@ module.exports = {
   getResource,
   handleError,
   isBinaryFile,
-  fsCaseSensitive
+  fsCaseSensitive,
+  isReadOnly
 }

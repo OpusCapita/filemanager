@@ -12,10 +12,18 @@ module.exports = ({
   handleError,
   path: userPath
 }) => {
+  if (config.users && req.session.user === undefined) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+    
   config.logger.info(`Stat for ${path.join(config.fsRoot, userPath)} requested by ${getClientIp(req)}`);
 
   getResource({
     config,
+    session: req.session,
     path: userPath
   }).
     then(resource => res.json(resource)).
