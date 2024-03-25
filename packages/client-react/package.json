@@ -61,7 +61,7 @@
     "eslint": "4.17.0",
     "eslint-config-opuscapita": "2.0.1",
     "eslint-plugin-react": "7.7.0",
-    "express": "4.16.2",
+    "express": "4.19.2",
     "file-loader": "0.10.1",
     "ignore-styles": "5.0.1",
     "jsdom": "9.12.0",
