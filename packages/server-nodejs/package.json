@@ -25,7 +25,7 @@
     "base64url": "3.0.0",
     "binaryextensions": "2.1.1",
     "body-parser": "1.18.3",
-    "express": "4.16.3",
+    "express": "4.19.2",
     "express-easy-zip": "1.1.4",
     "fs-extra": "7.0.0",
     "helmet": "3.13.0",
