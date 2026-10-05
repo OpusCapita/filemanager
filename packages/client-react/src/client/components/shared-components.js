@@ -9,6 +9,8 @@ import Notification from './Notification';
 import NotificationProgressItem from './NotificationProgressItem';
 import ProgressIcon from './ProgressIcon';
 import SetNameDialog from './SetNameDialog';
+import EditDialog from './EditDialog';
+import PlotlyDialog from './PlotlyDialog';
 import { Column } from 'react-virtualized';
 
 export default {
@@ -23,5 +25,7 @@ export default {
   Notification,
   NotificationProgressItem,
   ProgressIcon,
-  SetNameDialog
+  SetNameDialog,
+  EditDialog,
+  PlotlyDialog
 };

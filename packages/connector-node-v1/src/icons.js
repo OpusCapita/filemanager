@@ -1,6 +1,8 @@
 import icons from './icons-svg';
 
 const dirIcon = icons.folder;
+const brokenLinkIcon = icons.brokenLink;
+const encodingNameError = icons.encodingNameError;
 const soundFileIcon = icons.volumeUp;
 const pictureFileIcon = icons.image;
 const videoFileIcon = icons.ondemandVideo;
@@ -23,6 +25,10 @@ function matchFileExtensions(filename, extensions) {
 export function getIcon(resource) {
   if (resource.type === 'dir') {
     return { svg: dirIcon, fill: defaultFillColor };
+  } else if (resource.type === 'brokenlink') {
+    return { svg: brokenLinkIcon, fill: defaultFillColor };
+  } else if (resource.type === 'encodingnameerror') {
+    return { svg: encodingNameError, fill: defaultFillColor };
   } else if (matchFileExtensions(resource.name, soundFilesExtensions)) {
     return { svg: soundFileIcon, fill: `#e53935` };
   } else if (matchFileExtensions(resource.name, pictureFilesExtensions)) {

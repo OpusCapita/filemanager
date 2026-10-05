@@ -4,6 +4,10 @@ const path = require('path');
 const fs = require('fs-extra');
 const getClientIp = require('../utils/get-client-ip');
 
+const {
+  isReadOnly
+} = require('./lib');
+
 module.exports = ({
   config,
   req,
@@ -11,7 +15,14 @@ module.exports = ({
   handleError,
   path: userPath
 }) => {
-  if (config.readOnly) {
+  if (config.users && req.session.user === undefined) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+    
+  if (isReadOnly(config, req.session)) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }

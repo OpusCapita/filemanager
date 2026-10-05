@@ -19,6 +19,13 @@ module.exports = ({
 }) => {
   let sorter;
 
+  if (config.users && req.session.user === undefined) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }  
+
   try {
     sorter = getSorter({
       caseSensitive: false,
@@ -31,13 +38,14 @@ module.exports = ({
 
   const absPath = path.join(config.fsRoot, userPath);
   config.logger.info(`Children for ${absPath} requested by ${getClientIp(req)}`);
-
+  
   return fs.readdir(absPath).
     then(basenames => Promise.all(
       basenames.
         map(
           basename => getResource({
             config,
+            session: req.session,
             parent: userPath,
             basename
           }).

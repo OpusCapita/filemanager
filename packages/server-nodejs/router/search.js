@@ -66,6 +66,13 @@ module.exports = async ({
   handleError,
   path: userPath
 }) => {
+  if (config.users && req.session.user === undefined) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+    
   if (req.query.cacheId) {
     const searchStream = gCache[req.query.cacheId];
 
@@ -194,7 +201,7 @@ module.exports = async ({
   config.logger.info(`Search inside ${absPath} requested by ${getClientIp(req)}`);
 
   try {
-    const searchStream = getSearchStream(absPath, config, {
+    const searchStream = getSearchStream(absPath, config, req.session, {
       itemNameSubstring,
       itemNameCaseSensitive,
       itemType,

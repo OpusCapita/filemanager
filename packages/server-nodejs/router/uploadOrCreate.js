@@ -9,7 +9,8 @@ const getClientIp = require('../utils/get-client-ip');
 const {
   checkName,
   id2path,
-  getResource
+  getResource,
+  isReadOnly
 } = require('./lib');
 
 const {
@@ -54,7 +55,7 @@ const upload = multer({
         catch(cb);
     },
     filename(req, file, cb) {
-      const { parentId } = req.body;
+      const { parentId, overwrite } = req.body;
 
       try {
         checkName(file.originalname);
@@ -76,29 +77,40 @@ const upload = multer({
         ));
       }
 
-      return fs.readdir(parentPath).
-        then(basenames => {
-          let basename = file.originalname;
+      if (overwrite === 'true') {
+        return cb(null, file.originalname);
+      } else {
+        return fs.readdir(parentPath).
+          then(basenames => {
+            let basename = file.originalname;
 
-          if (basenames.includes(basename)) {
-            const { name, ext } = path.parse(basename);
-            let suffix = 1;
+            if (basenames.includes(basename)) {
+              const { name, ext } = path.parse(basename);
+              let suffix = 1;
 
-            do {
-              basename = `${name} (${suffix++})${ext}`;
-            } while (basenames.includes(basename));
-          }
+              do {
+                basename = `${name} (${suffix++})${ext}`;
+              } while (basenames.includes(basename));
+            }
 
-          cb(null, basename);
-        }).
-        catch(cb);
+            cb(null, basename);
+          }).
+          catch(cb);
+      }
     }
   })
 }).
   array('files');
 
 module.exports = ({ config, req, res, handleError }) => {
-  if (config.readOnly) {
+  if (config.users && req.session.user === undefined) {
+    return handleError(Object.assign(
+      new Error(`Session expired.`),
+      { httpCode: 419 }
+    ));    
+  }
+    
+  if (isReadOnly(config, req.session)) {
     return handleError(Object.assign(
       new Error(`File Manager is in read-only mode`),
       { httpCode: 403 }
@@ -142,6 +154,7 @@ module.exports = ({ config, req, res, handleError }) => {
         then(_ => fs.ensureDir(dirPath)).
         then(_ => getResource({
           config,
+          session: req.session,
           parent: reqParentPath,
           basename: name
         })).
@@ -160,6 +173,7 @@ module.exports = ({ config, req, res, handleError }) => {
       return Promise.all(
         req.files.map(({ filename }) => getResource({
           config,
+          session: req.session,
           parent: reqParentPath,
           basename: filename
         }))

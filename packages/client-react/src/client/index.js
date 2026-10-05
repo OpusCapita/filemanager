@@ -3,6 +3,7 @@
 module.exports = {
   FileNavigator: require('./components/FileNavigator').default,
   FileManager: require('./components/FileManager').default,
+  MultiUserAccessFileManager: require('./components/MultiUserAccessFileManager').default,
   HeaderCell: require('./components/HeaderCell').default,
   LoadingCell: require('./components/LoadingCell').default,
   NameCell: require('./components/NameCell').default,

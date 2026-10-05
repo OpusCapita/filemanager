@@ -1,0 +1,61 @@
+.oc-fm-edit-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  width: 92%;
+  height: 92%;
+//  width: calc(100% - 10px);
+//  height: calc(100% - 10px);
+  border-radius: 4px;
+  background: #fff;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px, rgba(0, 0, 0, 0.15) 0px 1px 4px;
+
+  &:focus {
+    outline:none;
+  }
+}
+
+.oc-edit--dialog__content {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.oc-edit--dialog__close-icon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+@font-face {
+    font-family     : 'Droid Sans Mono';
+    src             : url(https://themes.googleusercontent.com/static/fonts/droidsansmono/v5/ns-m2xQYezAtqh7ai59hJTwtzT4qNq-faudv5qbO9-U.eot);
+    src             :
+        local('Droid Sans Mono'),
+        local('DroidSansMono'),
+        url(/font/DroidSansMono.eot) format('embedded-opentype'),
+        url(https://themes.googleusercontent.com/static/fonts/droidsansmono/v5/ns-m2xQYezAtqh7ai59hJTwtzT4qNq-faudv5qbO9-U.eot?#iefix) format('embedded-opentype'),
+                        url(https://themes.googleusercontent.com/static/fonts/droidsansmono/v5/ns-m2xQYezAtqh7ai59hJTwtzT4qNq-faudv5qbO9-U.eot) format('embedded-opentype'),
+                        url(/font/DroidSansMono.woff2) format('woff2'),
+        url(/font/DroidSansMono.woff) format('woff'),
+        url(https://themes.googleusercontent.com/static/fonts/droidsansmono/v5/ns-m2xQYezAtqh7ai59hJUYuTAAIFFn5GTWtryCmBQ4.woff) format('woff'),
+                        local('Consolas');
+    font-style      : normal;
+    font-weight     : 400;
+}

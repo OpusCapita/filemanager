@@ -53,7 +53,7 @@ module.exports = class extends Transform {
    *          or the file's extracted text if it is binary and the module knows how to extract text
    *          from this kind of binary files.
    */
-  async getReadStreamBuilder(filePath) {
+  getReadStreamBuilder(filePath) {
     return new Promise(async (resolve, reject) => { // eslint-disable-line consistent-return
       if (extname(filePath).slice(1).toLowerCase() === 'pdf') {
         const pdfParser = new PdfParser(undefined, 1);
@@ -66,7 +66,7 @@ module.exports = class extends Transform {
 
       try {
         if (await isBinaryFile(filePath)) {
-          return resolve();
+          return resolve(null);
         }
       } catch (err) {
         // Ignore the error and try to read the file as UTF8-encoded.
@@ -109,77 +109,74 @@ module.exports = class extends Transform {
    * The stream will handle items in a sequence, i.e.`_transform()` will never be invoked again with the next file,
    * until the previous invocation completes by executing `done()` callback.
    */
-  async _transform(file, encoding, done) { // eslint-disable-line consistent-return
-    let readStreamBuilder;
+  _transform(file, encoding, done) { // eslint-disable-line consistent-return
+    let readStreamBuilder;  
 
-    try {
-      readStreamBuilder = await this.getReadStreamBuilder(file.path);
-    } catch (err) {
-      // Log error and get next file for content analysis.
-      this.config.logger.error(
-        `Error searching file "${file.path}": ${err}` + '\n' + (err.stack && err.stack.split('\n'))
-      );
+    readStreamBuilder = this.getReadStreamBuilder(file.path);
 
-      return done(null);
-    }
+    readStreamBuilder.then(createReadStream => { 
+      if (!createReadStream || this.isDestroyed) {
+        return done(null);
+      } else {
+        let chunkPrefix = '';
 
-    if (!readStreamBuilder || this.isDestroyed) {
-      return done(null);
-    }
+        this.readStream =  createReadStream();
+        
+        this.readStream.
+          /*
+           * "If a file is read till its end, the 'end' event occurs followed by 'close'. And if a file is not entirely
+           * read - for instance, because of an error or upon calling the `destroy()` method - there will be no 'end'
+           * because the file hasn't been ended. But the 'close' event is always ensured upon a file closure."
+           * https://www.reddit.com/user/soshace/comments/91kq9a/20_nodejs_lessons_data_streams_in_nodejs/
+           */
+          on('close', _ => done(null)).
+          on('end', _ => done(null)).
+          on('error', err => {
+            // Use `this.emit('error',err,file)` instead of `done(err,file)` since the later causes 'data' event to occur.
+            this.emit('error', err, file);
 
-    let chunkPrefix = '';
+            // XXX: contrary to the above quote, neither 'close' nor 'end' event is never emitted in case of 'error' event
+            //      => call `done()` here as well as in 'close' event listener.
+            done(null);
+          }).
+          on('readable', _ => {
+            let chunk;
+            while ((chunk = this.readStream.read()) !== null) { // eslint-disable-line no-cond-assign
+              chunk = chunkPrefix + (this.options.caseSensitive ?
+                chunk :
+                chunk.toLowerCase()
+              );
+              
+              if (chunk.includes(this.str)) {
+                done(file);
+                break;
+              }
 
-    this.readStream = readStreamBuilder().
-      /*
-       * "If a file is read till its end, the 'end' event occurs followed by 'close'. And if a file is not entirely
-       * read - for instance, because of an error or upon calling the `destroy()` method - there will be no 'end'
-       * because the file hasn't been ended. But the 'close' event is always ensured upon a file closure."
-       * https://www.reddit.com/user/soshace/comments/91kq9a/20_nodejs_lessons_data_streams_in_nodejs/
-       */
-      on('close', _ => done(null)).
-      on('end', _ => done(null)).
-      on('error', err => {
-        // Use `this.emit('error',err,file)` instead of `done(err,file)` since the later causes 'data' event to occur.
-        this.emit('error', err, file);
+              chunkPrefix = chunk.slice(1 - this.str.length);
+            }
+          });
 
-        // XXX: contrary to the above quote, neither 'close' nor 'end' event is never emitted in case of 'error' event
-        //      => call `done()` here as well as in 'close' event listener.
-        done(null);
-      }).
-      on('readable', _ => {
-        let chunk;
+        done = ((done, invoked) => satisfactoryFile => { // eslint-disable-line no-param-reassign
+          if (invoked) { return; }
 
-        while ((chunk = this.readStream.read()) !== null) { // eslint-disable-line no-cond-assign
-          chunk = chunkPrefix + (this.options.caseSensitive ?
-            chunk :
-            chunk.toLowerCase()
-          );
+          if (!this.isDestroyed) {
+            if (satisfactoryFile) {
+              this.push(satisfactoryFile);
+            }
 
-          if (chunk.includes(this.str)) {
-            done(file);
-            break;
+            invoked = true; // eslint-disable-line no-param-reassign
+            this.readStream.removeAllListeners();
+            this.readStream.destroy(); // Implicitly emits 'close' event.
+            this.readStream = undefined;
           }
 
-          chunkPrefix = chunk.slice(1 - this.str.length);
-        }
-      });
-
-    done = ((done, invoked) => satisfactoryFile => { // eslint-disable-line no-param-reassign
-      if (invoked) { return; }
-
-      if (!this.isDestroyed) {
-        if (satisfactoryFile) {
-          this.push(satisfactoryFile);
-        }
-
-        invoked = true; // eslint-disable-line no-param-reassign
-        this.readStream.removeAllListeners();
-        this.readStream.destroy(); // Implicitly emits 'close' event.
-        this.readStream = undefined;
+          done(null);
+        })(done);
       }
-
-      done(null);
-    })(done);
+    }).catch( err => {
+      this.config.logger.error(`Error searching file "${file.path}": ${err}` + '\n' + (err.stack && err.stack.split('\n')));
+      return done(null);
+    })
   }
 
   _destroy(err, done) {

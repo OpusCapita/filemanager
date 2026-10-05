@@ -4,7 +4,10 @@ const helmet = require('helmet');
 const zip = require('express-easy-zip'); // 'node-archiver', 'zipstream' or 'easyzip'  may be used instead.
 const bodyParser = require('body-parser');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
+
+const sessionAge = 24 * (60 * 60 * 1000); //24h
 
 const {
   id2path,
@@ -13,6 +16,8 @@ const {
 
 module.exports = config => {
   const router = express.Router();
+
+  router.use(session({secret: 'top secret', resave: false, saveUninitialized: false, cookie: { maxAge: sessionAge }}));
 
   router.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,POST,HEAD,OPTIONS,PUT,PATCH,DELETE');
@@ -68,6 +73,10 @@ module.exports = config => {
 
   router.route('/download').
     get(connect('./download'));
+
+  router.route('/authentication/*').
+    get(connect('./authentication', _ => ({}))).
+    post(connect('./authentication', _ => ({})));
 
   router.use((err, req, res, next) => handleError({ config, req, res })(err));
   return router;
